@@ -1,7 +1,7 @@
 "use strict";
 const test = require("node:test");
 const assert = require("node:assert/strict");
-const { check, wordCount, plain, CHAPTER_IDS } = require("./check-v3.js");
+const { check, wordCount, plain, prose, mentions, CHAPTER_IDS } = require("./check-v3.js");
 
 // A minimal valid data set: one entry per chapter, each absorbing one v1 block.
 function fixture() {
@@ -92,4 +92,109 @@ test("a glossary term missing from the page is reported", () => {
   const { v1, v3 } = fixture();
   v3.guides.glossary.push({ term: "Zygomorphic (Z)", def: "d", entry: "e0" });
   assert.ok(check(v1, v3).some((e) => e.includes("glossary Zygomorphic (Z): term does not appear")));
+});
+
+const pad = (n) => Array(n).fill("word").join(" ");
+
+test("levels 1 and 2 pass at exactly 150 words", () => {
+  const { v1, v3 } = fixture();
+  v3.entries.e0.how = [pad(146)]; // kitchen, short, example and forYou add the other 4
+  assert.deepEqual(check(v1, v3), []);
+});
+
+test("levels 1 and 2 fail at 151 words", () => {
+  const { v1, v3 } = fixture();
+  v3.entries.e0.how = [pad(147)];
+  assert.ok(check(v1, v3).includes("entry e0: levels 1 and 2 have 151 words, limit 150"));
+});
+
+test("the core path passes at exactly 2500 words and fails at 2501", () => {
+  const { v1, v3 } = fixture();
+  v3.hero.line = pad(2445); // with the rest of the fixture the core path is then exactly 2500
+  assert.deepEqual(check(v1, v3), []);
+  v3.hero.line = pad(2446);
+  assert.ok(check(v1, v3).includes("core path: 2501 words, limit 2500"));
+});
+
+test("a glossary term that only matches a v1 block id is reported", () => {
+  const { v1, v3 } = fixture();
+  v3.guides.glossary.push({ term: "B0", def: "d", entry: "e0" });
+  assert.ok(check(v1, v3).includes("glossary B0: term does not appear on the page"));
+});
+
+test("a glossary term inside a longer word is reported", () => {
+  const { v1, v3 } = fixture();
+  v3.entries.e0.how = ["Average results."];
+  v3.guides.glossary.push({ term: "RAG", def: "d", entry: "e0" });
+  assert.ok(check(v1, v3).includes("glossary RAG: term does not appear on the page"));
+});
+
+test("a glossary term with no words to look for is reported", () => {
+  const { v1, v3 } = fixture();
+  v3.guides.glossary.push({ term: "(Z)", def: "d", entry: "e0" });
+  assert.ok(check(v1, v3).includes("glossary (Z): term has no words to look for"));
+});
+
+test("a glossary term passes on its plural", () => {
+  const { v1, v3 } = fixture();
+  v3.entries.e0.how = ["Agents work."];
+  v3.guides.glossary.push({ term: "Agent", def: "d", entry: "e0" });
+  assert.deepEqual(check(v1, v3), []);
+});
+
+test("malformed data is reported, not thrown", () => {
+  const { v1, v3 } = fixture();
+  v3.guides.learn.push({ title: "G" });
+  v3.guides.glossary.push({ def: "d", entry: "e0" });
+  v3.entries.e1 = null;
+  v3.guides.build.flows = [{ name: "F", route: [null, { e: "e0" }] }];
+  let errors;
+  assert.doesNotThrow(() => { errors = check(v1, v3); });
+  assert.ok(errors.includes("learn G: missing items"));
+  assert.ok(errors.includes("glossary entry without term"));
+  assert.ok(errors.includes("entry e1: is not an object"));
+});
+
+test("chapters out of order are reported", () => {
+  const { v1, v3 } = fixture();
+  [v3.chapters[0], v3.chapters[1]] = [v3.chapters[1], v3.chapters[0]];
+  assert.ok(check(v1, v3).some((e) => e.startsWith("chapters: expected chef, counter")));
+});
+
+test("an unknown related id is reported", () => {
+  const { v1, v3 } = fixture();
+  v3.entries.e0.related = ["nope"];
+  assert.ok(check(v1, v3).includes("entry e0: unknown related nope"));
+});
+
+test("a missing sources entry is reported", () => {
+  const { v1, v3 } = fixture();
+  delete v3.sources.e1;
+  assert.ok(check(v1, v3).includes("sources: missing e1"));
+});
+
+test("mentions matches the head as a whole word, ignoring case", () => {
+  assert.equal(mentions("The RAG pipeline", "RAG"), true);
+  assert.equal(mentions("the rag pipeline", "RAG"), true);
+  assert.equal(mentions("Average results", "RAG"), false);
+  assert.equal(mentions("an agentic loop", "Agent"), false);
+});
+
+test("mentions accepts the plural forms s and es", () => {
+  assert.equal(mentions("two agents", "Agent"), true);
+  assert.equal(mentions("two boxes", "Box"), true);
+});
+
+test("mentions drops a trailing parenthetical and refuses an empty head", () => {
+  assert.equal(mentions("zygomorphic shapes", "Zygomorphic (Z)"), true);
+  assert.equal(mentions("anything at all", "(Z)"), false);
+  assert.equal(mentions("anything at all", "   "), false);
+});
+
+test("prose keeps visible text and leaves out identifier fields", () => {
+  const { v3 } = fixture();
+  const text = prose(v3);
+  assert.ok(text.includes("idea"));
+  assert.ok(!text.includes("b0"));
+  assert.ok(!text.includes("chef"));
 });

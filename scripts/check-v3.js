@@ -38,6 +38,34 @@ function eachString(value, fn, at) {
   else if (value && typeof value === "object") Object.keys(value).forEach((k) => eachString(value[k], fn, at + "." + k));
 }
 
+// Keys whose string values are identifiers or metadata, not visible text.
+const PROSE_SKIP_KEYS = new Set(["from", "related", "chapter", "entries", "id", "zone", "figure", "n"]);
+function collectProse(value, out) {
+  if (typeof value === "string") out.push(plain(value).toLowerCase());
+  else if (Array.isArray(value)) value.forEach((v) => collectProse(v, out));
+  else if (value && typeof value === "object") Object.keys(value).forEach((k) => { if (!PROSE_SKIP_KEYS.has(k)) collectProse(value[k], out); });
+}
+// Lower-case visible text of the chapters, entries and recap, with identifier fields left out.
+function prose(v3) {
+  const out = [];
+  collectProse(v3.chapters, out);
+  collectProse(v3.entries, out);
+  collectProse(v3.recap, out);
+  return out.join(" \n ");
+}
+// The word a glossary term stands for: the term without a trailing parenthetical, trimmed, lower-cased.
+function headOf(term) {
+  return String(term || "").replace(/\s*\(.*\)\s*$/, "").trim().toLowerCase();
+}
+function escapeRegExp(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); }
+// True when the term's head appears in text as a whole word, optionally in the plural (s or es).
+function mentions(text, term) {
+  const head = headOf(term);
+  if (!head) return false;
+  const re = new RegExp("(?<![\\p{L}\\p{N}])" + escapeRegExp(head) + "(?:s|es)?(?![\\p{L}\\p{N}])", "u");
+  return re.test(String(text).toLowerCase());
+}
+
 function check(v1, v3) {
   const errors = [];
   const err = (msg) => errors.push(msg);
@@ -63,6 +91,7 @@ function check(v1, v3) {
   if (ids.length > LIMITS.entries) err("entries: " + ids.length + ", limit " + LIMITS.entries);
   ids.forEach((id) => {
     const e = entries[id];
+    if (!e || typeof e !== "object") { err("entry " + id + ": is not an object"); return; }
     const homes = chapters.filter((c) => (c.entries || []).indexOf(id) !== -1);
     if (homes.length !== 1) err("entry " + id + ": listed in " + homes.length + " chapters, expected 1");
     else if (e.chapter !== homes[0].id) err("entry " + id + ": chapter is " + e.chapter + " but listed in " + homes[0].id);
@@ -80,7 +109,7 @@ function check(v1, v3) {
 
   // 3. Every v1 block maps to exactly one entry
   const owner = {};
-  ids.forEach((id) => (entries[id].from || []).forEach((b) => { (owner[b] = owner[b] || []).push(id); }));
+  ids.forEach((id) => ((entries[id] || {}).from || []).forEach((b) => { (owner[b] = owner[b] || []).push(id); }));
   Object.keys(v1.blocks).forEach((b) => {
     const o = owner[b] || [];
     if (o.length !== 1) err("v1 block " + b + ": mapped to " + (o.length ? o.join(", ") : "no entry"));
@@ -94,12 +123,12 @@ function check(v1, v3) {
     while ((m = re.exec(s))) if (!has(m[1])) err(at + ": unknown link [[" + m[1] + "]]");
   }, "AE3");
   (v3.recap || []).forEach((r, i) => (r.entries || []).forEach((id) => { if (!has(id)) err("recap " + (i + 1) + ": unknown entry " + id); }));
-  (g.glossary || []).forEach((t) => { if (t.entry && !has(t.entry)) err("glossary " + t.term + ": unknown entry " + t.entry); });
+  (g.glossary || []).forEach((t) => { if (t && t.entry && !has(t.entry)) err("glossary " + t.term + ": unknown entry " + t.entry); });
   ((g.compare || {}).rows || []).forEach((r) => { if (!has(r.entry)) err("compare " + r.name + ": unknown entry " + r.entry); });
   const b = g.build || {};
   (b.recipe || []).forEach((r) => (r.entries || []).forEach((id) => { if (!has(id)) err("recipe " + r.title + ": unknown entry " + id); }));
   (b.patterns || []).forEach((p) => (p.entries || []).forEach((id) => { if (!has(id)) err("pattern " + p.id + ": unknown entry " + id); }));
-  (b.flows || []).forEach((f) => (f.route || []).forEach((st) => { if (!has(st.e)) err("flow " + f.name + ": unknown entry " + st.e); }));
+  (b.flows || []).forEach((f) => ((f && f.route) || []).forEach((st) => { if (st && !has(st.e)) err("flow " + f.name + ": unknown entry " + st.e); }));
   (b.protocols || []).forEach((p) => { if (p.entry && !has(p.entry)) err("protocol " + p.name + ": unknown entry " + p.entry); });
 
   // 5. Budgets
@@ -110,7 +139,10 @@ function check(v1, v3) {
   if ((v3.recap || []).length !== LIMITS.recap) err("recap: expected " + LIMITS.recap + " items");
   if ((v3.guideList || []).length > LIMITS.guides) err("guides: " + v3.guideList.length + ", limit " + LIMITS.guides);
   if ((g.glossary || []).length > LIMITS.glossary) err("glossary: " + g.glossary.length + " terms, limit " + LIMITS.glossary);
-  (g.learn || []).forEach((grp) => { if (grp.items.length > LIMITS.learnPerGroup) err("learn " + grp.title + ": " + grp.items.length + " items, limit " + LIMITS.learnPerGroup); });
+  (g.learn || []).forEach((grp) => {
+    if (!grp || !Array.isArray(grp.items)) { err("learn " + ((grp && grp.title) || "(untitled)") + ": missing items"); return; }
+    if (grp.items.length > LIMITS.learnPerGroup) err("learn " + grp.title + ": " + grp.items.length + " items, limit " + LIMITS.learnPerGroup);
+  });
 
   // 6. Sources and facts
   const src = v3.sources || {};
@@ -126,24 +158,27 @@ function check(v1, v3) {
     });
   });
 
-  // 7. Glossary terms must appear in the v3 text
-  const corpus = [];
-  eachString({ c: v3.chapters, e: v3.entries, r: v3.recap }, (s) => corpus.push(plain(s).toLowerCase()), "");
-  const text = corpus.join(" \n ");
+  // 7. Glossary terms must appear in the v3 text as whole words
+  const body = prose(v3);
   (g.glossary || []).forEach((t) => {
-    const head = t.term.replace(/\s*\(.*\)\s*$/, "").toLowerCase();
-    if (text.indexOf(head) === -1) err("glossary " + t.term + ": term does not appear on the page");
+    if (!t || !t.term) { err("glossary entry without term"); return; }
+    if (!headOf(t.term)) { err("glossary " + t.term + ": term has no words to look for"); return; }
+    if (!mentions(body, t.term)) err("glossary " + t.term + ": term does not appear on the page");
   });
 
   return errors;
 }
 
-module.exports = { CHAPTER_IDS, LIMITS, plain, wordCount, check, loadV1, loadV3 };
+module.exports = { CHAPTER_IDS, LIMITS, plain, wordCount, prose, mentions, check, loadV1, loadV3 };
 
 if (require.main === module) {
   const root = path.resolve(__dirname, "..");
-  let errors;
-  try { errors = check(loadV1(root), loadV3(root)); } catch (e) { errors = ["could not load data: " + e.message]; }
+  let errors = [];
+  let v1, v3;
+  try { v1 = loadV1(root); v3 = loadV3(root); } catch (e) { errors = ["could not load data: " + e.message]; }
+  if (!errors.length) {
+    try { errors = check(v1, v3); } catch (e) { errors = ["checker crashed: " + e.message]; }
+  }
   if (errors.length) { console.error(errors.length + " problem(s):\n- " + errors.join("\n- ")); process.exit(1); }
   console.log("v3-alpha content checks passed.");
 }
