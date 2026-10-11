@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Agentic AI, Explained</title>
+  <meta name="description" content="An interactive map of every building block of agentic AI as of October 2026: models, providers, harnesses, the agent loop, context engineering, skills, playbooks, RAG, MCP, tools, sub-agents, hooks, guardrails, evals and more. Each block explains when to use it and links to vetted sources.">
+  <meta name="theme-color" content="#f3f5f9" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0d1220" media="(prefers-color-scheme: dark)">
+  <link rel="canonical" href="https://veniplex.github.io/ai-explained/">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Agentic AI, Explained">
+  <meta property="og:description" content="Every building block of an AI agent on one map: what it is, when it enters a run, and where to learn more. Snapshot: October 2026.">
+  <meta property="og:url" content="https://veniplex.github.io/ai-explained/">
+  <meta property="og:image" content="https://veniplex.github.io/ai-explained/assets/img/og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="assets/fonts/atkinson-next-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/barlow-condensed-700-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <script>
+    /* Apply a saved theme before first paint to avoid a flash. */
+    try { var t = localStorage.getItem("ae-theme"); if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t); } catch (e) {}
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#map">Skip to the map</a>
+
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="#top" aria-label="Agentic AI, Explained: back to top">
+        <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7" fill="currentColor"/><path d="M24 16A8 8 0 1 1 22.13 10.86" fill="none" stroke="var(--paper)" stroke-width="2.6" stroke-linecap="round"/><path d="M18.2 10.2L22.13 10.86L22.13 6.86" fill="none" stroke="var(--paper)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="16" cy="16" r="3.2" fill="var(--z-harness)"/></svg>
+        <span>Agentic AI<span class="brand-text-long">, Explained</span></span>
+      </a>
+      <nav class="site-nav" aria-label="Sections">
+        <ul>
+          <li><a href="#map">Map</a></li>
+          <li><a href="#run">One run</a></li>
+          <li><a href="#context">Context</a></li>
+          <li><a href="#compare">Compare</a></li>
+          <li><a href="#decide">When to use</a></li>
+          <li><a href="#patterns">Patterns</a></li>
+          <li><a href="#build">Build a flow</a></li>
+          <li><a href="#protocols">Protocols</a></li>
+          <li><a href="#reference">Reference</a></li>
+          <li><a href="#glossary">Glossary</a></li>
+          <li><a href="#learn">Learn</a></li>
+        </ul>
+      </nav>
+      <button class="icon-btn" id="theme-toggle" type="button" aria-label="Switch colour theme" title="Switch colour theme">
+        <svg class="theme-icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>
+        <svg class="theme-icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- Hero -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="wrap hero-grid">
+        <div>
+          <span class="stamp"><span class="stamp-dot" aria-hidden="true"></span>Snapshot: October 2026 · open source · no tracking</span>
+          <h1 id="hero-title">Every building block of an AI agent, on one map</h1>
+          <p class="lede">An agent is a language model that uses tools in a loop until a goal is reached. Everything else you hear about (skills, playbooks, MCP, RAG, memory, hooks, sub-agents) exists to give that loop the right context, the right capabilities and the right limits. This page shows each block, where it sits, and the moment it enters a run.</p>
+          <div class="formula" role="note" aria-label="Formula: agent equals model plus harness (loop, context, control) plus tools plus know-how">
+            <span class="t">agent</span> <span class="op">=</span>
+            <span class="t t-model">model</span> <span class="op">+</span>
+            <span class="t t-harness">harness</span><span class="op">(</span><span class="t t-harness">loop</span> <span class="op">·</span> <span class="t t-harness">context</span> <span class="op">·</span> <span class="t t-control">control</span><span class="op">)</span> <span class="op">+</span>
+            <span class="t t-tools">tools</span> <span class="op">+</span>
+            <span class="t t-know">know-how</span>
+            <span class="cap">The model decides what to do next. The harness does everything else.</span>
+          </div>
+          <div class="hero-actions">
+            <button class="btn btn-primary" type="button" id="hero-play">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg>
+              Follow one run
+            </button>
+            <a class="btn" href="#map">Explore the map</a>
+            <a class="btn" href="#build">Build your own flow</a>
+          </div>
+        </div>
+        <div>
+          <p class="insights-title">Five ideas that explain most of it</p>
+          <ol class="insights">
+            <li><span class="n">1</span><strong>The model is stateless.</strong><span class="d">On every turn the harness re-sends the whole context. Anything not in that request does not exist for the model.</span></li>
+            <li><span class="n">2</span><strong>Context is the bottleneck.</strong><span class="d">Quality drops as the context window fills. Skills, sub-agents, compaction and RAG are all ways to load the right tokens at the right time.</span></li>
+            <li><span class="n">3</span><strong>Prompts suggest; code enforces.</strong><span class="d">Instructions guide behaviour. Hooks, permissions and sandboxes guarantee it.</span></li>
+            <li><span class="n">4</span><strong>Start simple and climb only with evidence.</strong><span class="d">A single call beats a workflow, and a workflow beats an autonomous agent, until your evals show otherwise.</span></li>
+            <li><span class="n">5</span><strong>Give the agent a way to check its work.</strong><span class="d">Tests, linters, screenshots and reviewers turn plausible output into verified output.</span></li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- Map -->
+    <section class="section" id="map" aria-labelledby="map-title">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">The map</span>
+          <h2 id="map-title">The building blocks and how they connect</h2>
+          <p class="lede">The harness sits in the middle. The model, tools, knowledge and other agents plug into it. The control layer checks every action, and operations watch everything. Click a block for its definition, when to use it and vetted sources, or press play to follow one run.</p>
+        </div>
+
+        <div class="map-tools">
+          <div class="search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg>
+            <label class="visually-hidden" for="block-search">Find a building block</label>
+            <input id="block-search" type="search" placeholder="Find a block: try “memory”, “MCP”, “playbook”…" autocomplete="off">
+            <div class="search-status" id="search-status" aria-live="polite"></div>
+          </div>
+          <div class="legend" id="legend" role="group" aria-label="Zone colours"></div>
+        </div>
+
+        <section class="player is-idle" id="player" aria-label="Walkthrough of one agent run">
+          <div class="player-top">
+            <div class="player-controls">
+              <button class="pbtn" type="button" id="p-prev" aria-label="Previous step" title="Previous step (←)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+              </button>
+              <button class="pbtn pbtn-play" type="button" id="p-play" aria-label="Play walkthrough" title="Play / pause">
+                <svg class="i-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg>
+                <svg class="i-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" hidden><path d="M6 4.5h4.2v15H6zM13.8 4.5H18v15h-4.2z"/></svg>
+              </button>
+              <button class="pbtn" type="button" id="p-next" aria-label="Next step" title="Next step (→)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+              </button>
+              <button class="pbtn" type="button" id="p-reset" aria-label="Show the whole map" title="Show the whole map">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+              </button>
+            </div>
+            <div class="player-title">
+              <span class="step-count" id="p-count">16 steps</span>
+              <span class="step-name" id="p-name">Follow one run through the map</span>
+            </div>
+          </div>
+          <div class="route" id="route" role="group" aria-label="Steps"></div>
+          <p class="player-text" id="p-text" aria-live="polite"></p>
+          <div class="player-chips" id="p-chips"></div>
+        </section>
+
+        <div class="map" id="map-grid">
+          <noscript><p class="note">The interactive map needs JavaScript. All content is also in <code>assets/js/data.js</code>.</p></noscript>
+        </div>
+
+        <h3 class="steps-title" id="run">One run, step by step</h3>
+        <p class="lede">What happens, in order, when an agent works on a task. Steps 4 to 9 repeat many times; that repetition is the agent loop.</p>
+        <ol class="steps" id="steps"></ol>
+      </div>
+    </section>
+
+    <!-- Context window -->
+    <section class="section" id="context" aria-labelledby="context-title">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">Inside the context window</span>
+          <h2 id="context-title">What the model actually sees</h2>
+          <p class="lede">The context window is the agent's entire working memory for a turn. These bars show what fills it during a long task, as illustrative shares of a 200,000-token window. Compare the middle bar with the bottom one: that difference is context engineering.</p>
+        </div>
+        <div class="ctx-wrap" id="ctx"></div>
+      </div>
+    </section>
+
+    <!-- Compare -->
+    <section class="section" id="compare" aria-labelledby="compare-title">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">Easily confused</span>
+          <h2 id="compare-title">Skill, tool, MCP server, plugin, hook: what is the difference?</h2>
+          <p class="lede">They all extend an agent, but they are triggered by different parties, enter the context at different moments and cost different amounts of it. Only some of them are deterministic.</p>
+        </div>
+        <div class="table-scroll" id="compare-table"></div>
+        <p class="note" style="margin-top:12px">Context cost refers to tokens in the model's context window. “Deterministic” means the behaviour is guaranteed by code rather than by the model's judgement. For a worked example, watch Anthropic's <a href="https://www.youtube.com/watch?v=mWvtOHlZM-I" target="_blank" rel="noopener">Tool, skill, or subagent? Decomposing an agent that outgrew its prompt</a> (2026).</p>
+      </div>
+    </section>
+
+    <!-- Decide -->
+    <section class="section" id="decide" aria-labelledby="decide-title">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">Which block when?</span>
+          <h2 id="decide-title">Start from what you need, not from the newest acronym</h2>
+          <p class="lede">Find your goal on the left and use the block on the right. Click any block to read more.</p>
+        </div>
+        <div class="decide" id="decide-list"></div>
+      </div>
+    </section>
+
+    <!-- Patterns -->
+    <section class="section" id="patterns" aria-labelledby="patterns-title">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">Patterns</span>
+          <h2 id="patterns-title">From fixed workflows to agent teams</h2>
+          <p class="lede">Most production systems combine a handful of patterns. They are ordered by autonomy: the further down, the more the model decides and the less predictable cost and behaviour become. Pick the first one that solves your problem.</p>
+        </div>
+        <div class="patterns" id="pattern-list"></div>
+        <p class="note" style="margin-top:14px">Pattern names follow Anthropic's <a href="https://www.anthropic.com/engineering/building-effective-agents" target="_blank" rel="noopener">Building effective agents</a> (2024) and its multi-agent research write-up (2025).</p>
+      </div>
+    </section>
+
+    <!-- Build -->
+    <section class="section" id="build" aria-labelledby="build-title">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">Build your own flow</span>
+          <h2 id="build-title">The current recipe, step by step</h2>
+          <p class="lede">How experienced teams build agentic workflows in 2026, distilled from vendor engineering guides, research and practice. Use it as a starting point and adapt it to your own evals.</p>
+        </div>
+        <div class="build-grid">
+          <div>
+            <h3 class="subhead">The complexity ladder</h3>
+            <p class="note" style="margin-bottom:8px">Start on the lowest rung that could work. Climb only when your evals show the current rung fails.</p>
+            <ol class="ladder" id="ladder"></ol>
+          </div>
+          <div>
+            <h3 class="subhead">Twelve steps to a reliable flow</h3>
+            <ol class="recipe" id="recipe"></ol>
+          </div>
+        </div>
+
+        <h3 class="subhead" style="margin-top:56px">Four example flows</h3>
+        <p class="lede" style="margin-bottom:16px">Typical routes through the map. Each stop is a building block; click it to read more.</p>
+        <div class="flows" id="flows"></div>
+
+        <h3 class="subhead" style="margin-top:56px">Common mistakes and what to do instead</h3>
+        <div class="pairs" id="pairs"></div>
+
+        <h3 class="subhead" style="margin-top:56px">Pre-launch checklist</h3>
+        <div class="checklist" id="checklist"></div>
+        <div class="checklist-meta"><span id="check-count">0 of 0 done</span><button class="link-btn" type="button" id="check-reset">Clear all</button></div>
+      </div>
+    </section>
+
+    <!-- Protocols -->
+    <section class="section" id="protocols" aria-labelledby="protocols-title">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">Open protocols &amp; standards</span>
+          <h2 id="protocols-title">The plumbing that lets agents work together</h2>
+          <p class="lede">Interoperability now runs on a few open standards, most of them governed by foundations rather than by a single vendor. Each one connects a different pair of things.</p>
+        </div>
+        <div class="table-scroll" id="protocol-table"></div>
+      </div>
+    </section>
+
+    <!-- Reference -->
+    <section class="section" id="reference" aria-labelledby="reference-title">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">Reference</span>
+          <h2 id="reference-title">Every building block, in detail</h2>
+          <p class="lede">The same content as the map, grouped by zone for reading and searching. Open any block to see when to use it, what to watch out for, current practice and sources.</p>
+        </div>
+        <div id="reference-list"></div>
+      </div>
+    </section>
+
+    <!-- Glossary -->
+    <section class="section" id="glossary" aria-labelledby="glossary-title">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">Glossary</span>
+          <h2 id="glossary-title">The vocabulary, A to Z</h2>
+        </div>
+        <div class="gloss-tools">
+          <div class="search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg>
+            <label class="visually-hidden" for="gloss-search">Filter the glossary</label>
+            <input id="gloss-search" type="search" placeholder="Filter terms" autocomplete="off">
+          </div>
+          <span class="note" id="gloss-count"></span>
+        </div>
+        <div class="gloss" id="gloss-list"></div>
+      </div>
+    </section>
+
+    <!-- Learn -->
+    <section class="section" id="learn" aria-labelledby="learn-title">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">Learn more</span>
+          <h2 id="learn-title">Where to go deeper</h2>
+          <p class="lede">Talks, courses, books and papers from the people who build and research these systems. Every link was checked when this snapshot was made.</p>
+        </div>
+        <div class="learn-grid" id="learn-list"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-grid">
+      <div>
+        <h2>About this page</h2>
+        <p>A free, open-source explainer of agentic AI as of <strong id="snapshot-date">October 2026</strong>. The field moves fast: product names and versions change, but the building blocks and the reasons behind them change slowly. Definitions follow the cited primary sources (vendor documentation, specifications and peer-reviewed or widely cited papers).</p>
+        <p>Found an error or a broken link? <a id="repo-link" href="https://github.com/veniplex/ai-explained" target="_blank" rel="noopener">Open an issue or pull request on GitHub</a>. All content lives in one file, <code>assets/js/data.js</code>.</p>
+        <p>Last updated: <time datetime="2026-10-11">11 October 2026</time>.</p>
+      </div>
+      <div>
+        <h2>Privacy</h2>
+        <ul>
+          <li>No cookies, no analytics, no tracking.</li>
+          <li>Fonts are self-hosted, so no requests go to third parties.</li>
+          <li>Videos are plain links rather than embeds.</li>
+          <li>Your theme choice and checklist are stored only in your own browser.</li>
+        </ul>
+        <p style="margin-top:12px">Typefaces: Barlow Condensed and Atkinson Hyperlegible Next &amp; Mono, under the SIL Open Font License.</p>
+      </div>
+    </div>
+  </footer>
+
+  <div class="drawer-scrim" id="drawer-scrim" hidden></div>
+  <aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title" hidden>
+    <div class="drawer-head">
+      <span class="drawer-zone" id="drawer-zone"></span>
+      <h2 class="drawer-title" id="drawer-title">Details</h2>
+      <button class="icon-btn drawer-close" type="button" id="drawer-close" aria-label="Close details">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <div class="drawer-body" id="drawer-body"></div>
+    <div class="drawer-nav">
+      <button type="button" id="drawer-prev"></button>
+      <button type="button" id="drawer-next"></button>
+    </div>
+  </aside>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>
