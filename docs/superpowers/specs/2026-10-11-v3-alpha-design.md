@@ -1,4 +1,4 @@
-# v2-alpha: a guided path instead of a 42-block map
+# v3-alpha: a guided path instead of a 42-block map
 
 Date: 2026-10-11 · Status: approved for spec, awaiting spec review
 
@@ -29,16 +29,17 @@ v1-alpha is accurate and well sourced, but too much for someone who knows nothin
 
 In scope:
 
-- New self-contained folder `v2-alpha/` next to `v1-alpha/`. Fonts, `rough.js`, favicon and the base CSS tokens are copied from v1-alpha.
+- New self-contained folder `v3-alpha/` next to `v1-alpha/` (`v2-alpha/` belongs to another workstream). Fonts, `rough.js`, favicon and the stylesheet base are copied from v1-alpha; styling follows v1's design system (`DESIGN.md`: tokens, shared classes, naming), copied to `v3-alpha/DESIGN.md` with a short section on what v3 adds.
+- Content lives in `v3-alpha/assets/js/data/` (several files, no `data.js`); `scripts/check-v3.js` checks it, next to the existing `scripts/validate-data.js`.
 - New content file, new rendering, new check script.
-- After v2-alpha is complete: the root `index.html` forwards to `v2-alpha/`, and the root README lists both versions.
+- After v3-alpha is complete: the root `index.html` forwards to `v3-alpha/`, and the root README lists both versions.
 
 Out of scope:
 
 - Any change to `v1-alpha/`. It stays online as the full reference.
 - A German version or a language switch.
 - New illustrations beyond rough.js shapes and small inline SVG icons in the existing style.
-- A new Open Graph image (v2 copies v1's `og.png` for now).
+- A new Open Graph image (v3 copies v1's `og.png` for now).
 - A build step, a framework, analytics, cookies or external requests.
 
 ## 4. The running example
@@ -70,7 +71,7 @@ The page is one long scroll. Each chapter has the same shape:
 
 Chapter 4 ends on the milestone line: **model + context + tools + loop = agent.**
 
-After the epilogue comes **"The whole kitchen"**: the complete hub map (section 8), followed by **"5 things to remember"**, the five big ideas from v1-alpha rewritten to point at v2 entries.
+After the epilogue comes **"The whole kitchen"**: the complete hub map (section 8), followed by **"5 things to remember"**, the five big ideas from v1-alpha rewritten to point at v3 entries.
 
 ### Figures inside the story
 
@@ -82,9 +83,9 @@ After the epilogue comes **"The whole kitchen"**: the complete hub map (section 
 
 ### 6.1 Mapping from v1-alpha
 
-Every one of the 42 v1 block ids maps to exactly one v2 entry. The `from` field of each entry records this, and the check script enforces it.
+Every one of the 42 v1 block ids maps to exactly one v3 entry. The `from` field of each entry records this, and the check script enforces it.
 
-| v2 entry id | Name | Chapter | Merges v1 ids |
+| v3 entry id | Name | Chapter | Merges v1 ids |
 | --- | --- | --- | --- |
 | `model` | Language model (LLM) | 1 | `model`, `fine-tuning` |
 | `reasoning` | Reasoning (thinking models) | 1 | `reasoning` |
@@ -136,7 +137,7 @@ Opened from the header menu as full-height sheets, as in v1-alpha.
 
 | Guide | Content | Built from v1 |
 | --- | --- | --- |
-| Easily confused | Skill vs. tool vs. MCP vs. plugin vs. hook vs. instructions vs. memory, as a table | `compare` (rows re-pointed to v2 entries) |
+| Easily confused | Skill vs. tool vs. MCP vs. plugin vs. hook vs. instructions vs. memory, as a table | `compare` (rows re-pointed to v3 entries) |
 | Build your own | The ladder (single prompt → agent team), the recipe, patterns, protocols and the checklist, condensed | `ladder`, `recipe`, `patterns`, `protocols`, `checklist`, `flows` |
 | Glossary | Only terms that occur on the page or in entries, about 50 | `glossary` (filtered, re-pointed) |
 | Learn more | Curated talks, courses, papers; at most 5 items per group, beginners first | `learn` |
@@ -182,7 +183,7 @@ Removed: the guides Story (it is now the page), Five ideas (now the recap), Step
 | --- | --- |
 | `#ch-1` … `#ch-7`, `#ch-e` | a chapter |
 | `#map` | the hub map |
-| `#e-skills` | an entry's drawer (any v2 entry id) |
+| `#e-skills` | an entry's drawer (any v3 entry id) |
 | `#guide-glossary` | a guide: `compare`, `build`, `glossary`, `learn`, `about` |
 
 ### 8.5 Kept from v1-alpha
@@ -191,10 +192,10 @@ Keyboard use (`/` focuses search, `Esc` closes drawer or sheet), "reduce motion"
 
 ## 9. Data model
 
-`v2-alpha/assets/js/data.js` defines `window.AE2`:
+`v3-alpha/assets/js/data.js` defines `window.AE3`:
 
 ```js
-window.AE2 = {
+window.AE3 = {
   meta:     { updated, snapshot, repo, v1 },            // v1: "../v1-alpha/"
   hero:     { title, line },
   example:  { task, short },
@@ -216,11 +217,11 @@ window.AE2 = {
 
 ### 10.1 Check script
 
-`tools/check-v2.js`, run with `node tools/check-v2.js` from the repo root; exits non-zero on any failure. It checks:
+`scripts/check-v3.js`, run with `node scripts/check-v3.js` from the repo root; exits non-zero on any failure. It checks:
 
-1. Every v1 block id appears in exactly one v2 entry's `from`.
+1. Every v1 block id appears in exactly one v3 entry's `from`.
 2. Every entry belongs to exactly one chapter, and every chapter's entries exist.
-3. Every `[[id]]`, `related` id, recap id, glossary id and compare row resolves to a v2 entry.
+3. Every `[[id]]`, `related` id, recap id, glossary id and compare row resolves to a v3 entry.
 4. Budgets: core path (hero, chapters, recap) at most 2,500 words; levels 1 and 2 of each entry at most 150 words; at most 4 entries introduced per chapter; at most 22 entries; at most 5 guides.
 5. Each source has `title`, `by`, `url` and `year`, and no URL repeats within an entry.
 
@@ -240,7 +241,7 @@ Through the local preview (`python -m http.server`):
 - The core path reads in about 12 minutes (at most 2,500 words).
 - Each chapter introduces at most 4 new terms, each explained where it first appears.
 - At most 22 entries and 5 guides; every v1 term remains findable through an entry's `includes` or search.
-- `node tools/check-v2.js` passes; all browser checks in 10.2 pass.
+- `node scripts/check-v3.js` passes; all browser checks in 10.2 pass.
 
 ## 12. Risks
 
