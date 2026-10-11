@@ -7,6 +7,7 @@ A static, hand-drawn interactive map of agentic AI, published with GitHub Pages.
 - `v1-alpha/`, … — one self-contained site per version. Old versions stay online unchanged. The root `index.html` forwards to the newest version and keeps the `#hash`.
 - `<version>/assets/js/data.js` — **all content**: zones, connectors, blocks, walkthrough steps, story, guides, `SOURCES` (links per block) and `FACTS` (dated status notes per block).
 - `<version>/assets/js/app.js` — rendering and interaction (plain ES5-style JS in an IIFE, no frameworks). `style.css` holds the layout and themes.
+- `<version>/DESIGN.md` — the design system: tokens, shared classes (`.btn`, `.eyebrow`, `.badge`, `.card`, `.zdot`…) and naming rules. Use tokens, not raw values, in `style.css`.
 - `assets/vendor/` (rough.js) and `assets/fonts/` are third-party files with their licences. Never edit them.
 - `.github/workflows/pages.yml` deploys the whole repository root on every push to `main`.
 

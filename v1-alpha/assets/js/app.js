@@ -522,7 +522,7 @@
   function blkItem(id) {
     var b = BLOCKS[id];
     return h("li", null, h("button", { class: "blk", type: "button", "data-block": id },
-      h("i", { class: "blk-dot", "aria-hidden": "true" }), h("span", { class: "blk-t" }, b.label || b.name)));
+      h("i", { class: "zdot blk-dot", "aria-hidden": "true" }), h("span", { class: "blk-t" }, b.label || b.name)));
   }
   function zoneHead(z) {
     return h("div", { class: "zone-head" },
@@ -552,7 +552,7 @@
       zoneHead(z),
       loopBtn,
       h("div", { class: "groups" }, z.groups.map(function (g) {
-        return h("div", { class: "group" }, h("span", { class: "group-name" }, g.name), h("ul", { class: "blk-list" }, g.blocks.map(blkItem)));
+        return h("div", { class: "group" }, h("span", { class: "eyebrow group-name" }, g.name), h("ul", { class: "blk-list" }, g.blocks.map(blkItem)));
       })),
       controlEl());
     el.appendChild(doodleSvg("harness", "zone-doodle", 9, animate ? DELAY.harness + 0.45 : null));
@@ -598,11 +598,11 @@
       // Moving dots, shown while the walkthrough uses this connection.
       var off = c.dir === "both" ? 4 : 0;
       if (axis === "h") {
-        svg.appendChild(s("path", { class: "flow", d: "M" + (x1 + 12) + " " + (y1 - off) + "H" + (x2 - 12) }));
-        if (off) svg.appendChild(s("path", { class: "flow rev", d: "M" + (x1 + 12) + " " + (y1 + off) + "H" + (x2 - 12) }));
+        svg.appendChild(s("path", { class: "conn-flow", d: "M" + (x1 + 12) + " " + (y1 - off) + "H" + (x2 - 12) }));
+        if (off) svg.appendChild(s("path", { class: "conn-flow conn-flow-rev", d: "M" + (x1 + 12) + " " + (y1 + off) + "H" + (x2 - 12) }));
       } else {
-        svg.appendChild(s("path", { class: "flow", d: "M" + (x1 - off) + " " + (y1 + 10) + "V" + (y2 - 10) }));
-        if (off) svg.appendChild(s("path", { class: "flow rev", d: "M" + (x1 + off) + " " + (y1 + 10) + "V" + (y2 - 10) }));
+        svg.appendChild(s("path", { class: "conn-flow", d: "M" + (x1 - off) + " " + (y1 + 10) + "V" + (y2 - 10) }));
+        if (off) svg.appendChild(s("path", { class: "conn-flow conn-flow-rev", d: "M" + (x1 + off) + " " + (y1 + 10) + "V" + (y2 - 10) }));
       }
     });
   }
@@ -616,7 +616,7 @@
   }
   var ICON_PLAY = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg>';
   var ICON_HAT = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.5 14.5C5 14 3.8 11.7 4.8 9.8c.9-1.7 3-2.1 4.3-1.1C9.8 6.7 10.8 5.8 12 5.8s2.2.9 2.9 2.9c1.3-1 3.4-.6 4.3 1.1 1 1.9-.2 4.2-2.7 4.7"/><path d="M7.5 14.5v4h9v-4"/><path d="M7.5 16.3h9"/></svg>';
-  function iconSpan(svgText) { var sp = h("span", { class: "btn-icon", "aria-hidden": "true" }); sp.innerHTML = svgText; return sp.firstChild; }
+  function iconSvg(svgText) { var sp = document.createElement("span"); sp.innerHTML = svgText; return sp.firstChild; }
 
   var LOOP_LABEL = "The agent loop: the harness assembles the context, the model decides, the action is checked, the tool runs and its result is added to the context; then the next turn starts. A reply without a tool call ends the loop with the final answer. Open the agent loop.";
   var LOOP = null;
@@ -628,11 +628,11 @@
       h("span", { class: "cap-hint" }, "Tap any block to open it."));
     var ctas = h("div", { class: "map-ctas" },
       h("div", { class: "cta", "data-area": "cta-l", style: delayStyle("ctas") },
-        h("button", { class: "btn btn-ink", type: "button", id: "btn-play", "data-tour": "0" }, iconSpan(ICON_PLAY), "Watch one run"),
+        h("button", { class: "btn btn-ink", type: "button", id: "btn-play", "data-tour": "0" }, iconSvg(ICON_PLAY), "Watch one run"),
         h("span", { class: "cta-note" }, D.steps.length + " steps, from the task to the result"),
         ctaArrow(5)),
       h("div", { class: "cta", "data-area": "cta-r", style: delayStyle("ctas") },
-        h("button", { class: "btn", type: "button", id: "btn-story", "data-guide": "story" }, iconSpan(ICON_HAT), "Explain it like I'm 5"),
+        h("button", { class: "btn", type: "button", id: "btn-story", "data-guide": "story" }, iconSvg(ICON_HAT), "Explain it like I'm 5"),
         h("span", { class: "cta-note" }, "the same map, as a restaurant kitchen"),
         ctaArrow(8)));
     var stamp = h("div", { class: "map-stamp", "data-area": "stamp", style: delayStyle("stamp") },
@@ -934,9 +934,9 @@
     return h("ul", { class: "links" }, links.map(function (l) {
       var meta = [l.by, l.year].filter(Boolean).join(" · ");
       return h("li", null,
-        h("span", { class: "lt " + (l.type || "") }, TYPE_LABEL[l.type] || l.type || "Link"),
+        h("span", { class: "badge link-type" + (l.type ? " link-type-" + l.type : "") }, TYPE_LABEL[l.type] || l.type || "Link"),
         h("a", { href: l.url, target: "_blank", rel: "noopener" }, l.title),
-        h("span", { class: "lm" }, meta + (l.note ? (meta ? " · " : "") + l.note : "")));
+        h("span", { class: "link-meta" }, meta + (l.note ? (meta ? " · " : "") + l.note : "")));
     }));
   }
   function section(title, body) {
@@ -945,19 +945,19 @@
   }
   function bulletList(items, cls) {
     if (!items || !items.length) return null;
-    return h("ul", { class: "bd-list " + (cls || "") }, items.map(function (t) { return h("li", null, rich(t)); }));
+    return h("ul", { class: "bd-list" + (cls ? " bd-list-" + cls : "") }, items.map(function (t) { return h("li", null, rich(t)); }));
   }
   function stepChips(idx, title) {
     if (!idx || !idx.length) return null;
     return h("div", { class: "enter" },
-      h("span", { class: "def-label" }, title),
+      h("span", { class: "eyebrow def-label" }, title),
       h("div", { class: "enter-steps" }, idx.map(function (i) {
-        return h("button", { class: "step-chip", type: "button", "data-step": i, title: "Show step " + (i + 1) + " on the map" }, h("b", null, pad2(i + 1)), D.steps[i].title);
+        return h("button", { class: "step-chip", type: "button", "data-step": i, title: "Show step " + (i + 1) + " on the map" }, h("b", { class: "badge badge-clay" }, pad2(i + 1)), D.steps[i].title);
       })));
   }
   function eli5Card(text, zid, label) {
     var card = h("div", { class: "eli5", "data-zone": zid },
-      h("div", null, h("span", { class: "eli5-label" }, label || "Like I'm 5"), h("p", { class: "eli5-text" }, rich(text))),
+      h("div", null, h("span", { class: "eyebrow eli5-label" }, label || "Like I'm 5"), h("p", { class: "eli5-text" }, rich(text))),
       doodleSvg(zid, "eli5-doodle", 13, animate ? 0.15 : null));
     sketchBox(card, { seed: 29 + zid.length, boil: false, sw: 1.3 });
     return card;
@@ -966,9 +966,9 @@
     var b = BLOCKS[id];
     var wrap = h("div", { class: "bd", "data-zone": b.zone });
     if (b.eli5) wrap.appendChild(eli5Card(b.eli5, b.zone));
-    wrap.appendChild(h("p", { class: "def" }, h("span", { class: "def-label" }, "In one sentence"), rich(b.short)));
+    wrap.appendChild(h("p", { class: "def" }, h("span", { class: "eyebrow def-label" }, "In one sentence"), rich(b.short)));
     wrap.appendChild(stepChips(b._steps, "Where it enters a run"));
-    var deep = h("div", { class: "deep" }, h("p", { class: "deep-title" }, "The details"));
+    var deep = h("div", { class: "deep" }, h("p", { class: "eyebrow deep-title" }, "The details"));
     if (b.what) deep.appendChild(section("What it is", h("div", { class: "prose" }, [].concat(b.what).map(function (p) { return h("p", null, rich(p)); }))));
     deep.appendChild(section("Use it when", bulletList(b.when)));
     deep.appendChild(section("Watch out", bulletList(b.avoid, "warn")));
@@ -989,20 +989,20 @@
     var z = ZONES[zid];
     var wrap = h("div", { class: "bd", "data-zone": zid });
     wrap.appendChild(eli5Card(z.eli5, zid));
-    wrap.appendChild(h("p", { class: "def" }, h("span", { class: "def-label" }, "In one sentence"), rich(z.tag)));
+    wrap.appendChild(h("p", { class: "def" }, h("span", { class: "eyebrow def-label" }, "In one sentence"), rich(z.tag)));
     var links = D.connectors.filter(function (c) { return c.from === zid || c.to === zid; });
     if (zid === "control") links = [];
     var linkBox = zid === "control"
       ? h("p", { class: "prose-s" }, "Part of the ", h("button", { class: "link-btn", type: "button", "data-zone-open": "harness" }, "harness"), ": it checks every tool call before and after it runs.")
       : links.length ? h("ul", { class: "conn-list" }, links.map(function (c) {
-        return h("li", null, h("button", { type: "button", "data-conn-open": c.id }, h("b", null, c.label), h("span", null, rich(c.text))));
+        return h("li", null, h("button", { class: "card", type: "button", "data-conn-open": c.id }, h("b", null, c.label), h("span", null, rich(c.text))));
       })) : null;
     wrap.appendChild(section("How it connects", linkBox));
     var ids = zoneBlocks(z);
     if (zid === "harness") ids = ids.concat(ZONES.control.blocks);
     wrap.appendChild(section("Its building blocks", h("ul", { class: "zone-view-blocks" }, ids.map(function (bid) {
       var b = BLOCKS[bid];
-      return h("li", null, h("button", { type: "button", "data-block": bid, "data-zone": b.zone }, h("i", { "aria-hidden": "true" }), h("b", null, b.name), h("span", null, rich(b.short))));
+      return h("li", null, h("button", { type: "button", "data-block": bid, "data-zone": b.zone }, h("i", { class: "zdot", "aria-hidden": "true" }), h("b", null, b.name), h("span", null, rich(b.short))));
     }))));
     wrap.appendChild(copyRow("#zone-" + zid));
     return wrap;
@@ -1012,7 +1012,7 @@
     var other = c.from === "harness" ? c.to : c.from;
     var wrap = h("div", { class: "bd", "data-zone": other });
     wrap.appendChild(eli5Card(c.eli5, other));
-    wrap.appendChild(h("p", { class: "def" }, h("span", { class: "def-label" }, "What flows here"), rich(c.text)));
+    wrap.appendChild(h("p", { class: "def" }, h("span", { class: "eyebrow def-label" }, "What flows here"), rich(c.text)));
     var idx = D.steps.map(function (st, i) { return (st.conn || []).indexOf(cid) !== -1 ? i : -1; }).filter(function (i) { return i >= 0; });
     wrap.appendChild(stepChips(idx, "When it is used in a run"));
     wrap.appendChild(section("It connects", h("div", { class: "chips" }, [zoneChip(c.from), zoneChip(c.to)])));
@@ -1041,7 +1041,7 @@
     drawer.setAttribute("data-zone", o.zone);
     var eb = $("#drawer-eyebrow");
     clear(eb);
-    eb.appendChild(h("i", { "aria-hidden": "true" }));
+    eb.appendChild(h("i", { class: "zdot", "aria-hidden": "true" }));
     eb.appendChild(document.createTextNode(o.eyebrow));
     $("#drawer-title").textContent = o.title;
     body.appendChild(o.body);
@@ -1200,7 +1200,7 @@
       title.textContent = sl.title;
       clear(text); text.appendChild(rich(sl.text));
       clear(blocks);
-      blocks.appendChild(h("span", null, "On the map"));
+      blocks.appendChild(h("span", { class: "eyebrow" }, "On the map"));
       blocks.appendChild(h("div", { class: "chips" }, sl.blocks.map(chip)));
       prev.disabled = k === 0;
       next.textContent = k === n - 1 ? "Explore the map →" : "Next →";
@@ -1219,13 +1219,13 @@
   }
   function renderIdeas() {
     return h("ol", { class: "ideas" }, D.ideas.map(function (it, i) {
-      return h("li", null, h("span", { class: "n", "aria-hidden": "true" }, String(i + 1)), h("h3", null, it.t), h("p", null, rich(it.d)),
+      return h("li", null, h("span", { class: "idea-num", "aria-hidden": "true" }, String(i + 1)), h("h3", null, it.t), h("p", null, rich(it.d)),
         h("div", { class: "chips" }, (it.blocks || []).map(chip)));
     }));
   }
   function renderSteps() {
     return h("ol", { class: "steps-list" }, D.steps.map(function (st, i) {
-      return h("li", { class: i >= 3 && i <= 9 ? "in-loop" : null },
+      return h("li", { class: i >= 3 && i <= 9 ? "is-in-loop" : null },
         h("span", { class: "num" }, pad2(i + 1)),
         h("div", null,
           h("h3", null, st.title, h("button", { class: "link-btn", type: "button", "data-step": i }, "Show on the map")),
@@ -1240,7 +1240,7 @@
       var bar = h("div", { class: "ctx-bar", role: "img", "aria-label": row.title + ": " + row.segs.map(function (sg) { return sg.label + " " + sg.pct + "%"; }).join(", ") });
       row.segs.forEach(function (sg) {
         bar.appendChild(h("div", {
-          class: "ctx-seg" + (sg.cls ? " " + sg.cls : ""), "data-zone": sg.zone || "start", title: sg.label + ": about " + sg.pct + "% of the window",
+          class: "ctx-seg" + (sg.cls ? " ctx-seg-" + sg.cls : ""), "data-zone": sg.zone || "start", title: sg.label + ": about " + sg.pct + "% of the window",
           style: "flex: 0 0 " + sg.pct + "%"
         }, sg.pct >= 7 ? sg.label : ""));
       });
@@ -1253,7 +1253,7 @@
         subs = h("div", { class: "ctx-sub" }, h("span", null, row.subs.label),
           row.subs.bars.map(function (sb) {
             return h("span", { class: "ctx-mini", title: sb.title, role: "img", "aria-label": sb.title },
-              sb.segs.map(function (sg) { return h("span", { class: "ctx-seg" + (sg.cls ? " " + sg.cls : ""), "data-zone": sg.zone || "start", style: "flex: 0 0 " + sg.pct + "%" }); }));
+              sb.segs.map(function (sg) { return h("span", { class: "ctx-seg" + (sg.cls ? " ctx-seg-" + sg.cls : ""), "data-zone": sg.zone || "start", style: "flex: 0 0 " + sg.pct + "%" }); }));
           }));
       }
       var brk = h("p", { class: "ctx-break" }, row.segs.filter(function (sg) { return !/free/.test(sg.cls || ""); }).map(function (sg) {
@@ -1292,17 +1292,17 @@
           r.cells.map(function (cell, i) {
             if (i === c.detCol) {
               var cls = /^yes/i.test(cell) ? "yes" : /^no/i.test(cell) ? "no" : "part";
-              return h("td", null, h("span", { class: "tag " + cls }, cell));
+              return h("td", null, h("span", { class: "tag tag-" + cls }, cell));
             }
             return h("td", null, rich(cell));
           }));
       })));
-    return h("div", null, h("div", { class: "table-scroll" }, tbl), g.note ? h("p", { class: "sheet-note" }, rich(g.note)) : null);
+    return h("div", null, h("div", { class: "card table-scroll" }, tbl), g.note ? h("p", { class: "sheet-note" }, rich(g.note)) : null);
   }
   function renderDecide() {
     return h("div", { class: "decide" }, D.decide.map(function (d) {
-      return h("div", { class: "decide-item" },
-        h("p", { class: "need" }, h("span", { class: "need-pre" }, "I want my agent to "), d.need),
+      return h("div", { class: "card decide-item" },
+        h("p", { class: "need" }, h("span", { class: "eyebrow need-pre" }, "I want my agent to "), d.need),
         h("div", { class: "use" }, h("span", { class: "arrow", "aria-hidden": "true" }, "→"), h("span", { class: "visually-hidden" }, "Use: "), d.use.map(chip)),
         h("p", { class: "why" }, rich(d.why)));
     }));
@@ -1343,13 +1343,13 @@
     return svg;
   }
   function meter(n) {
-    return h("span", { class: "meter", role: "img", "aria-label": n + " of 5" }, [1, 2, 3, 4, 5].map(function (k) { return h("i", { class: k <= n ? "on" : null }); }));
+    return h("span", { class: "meter", role: "img", "aria-label": n + " of 5" }, [1, 2, 3, 4, 5].map(function (k) { return h("i", { class: k <= n ? "is-on" : null }); }));
   }
   function renderPatterns() {
     var g = D.guides.patterns;
     return h("div", null,
       h("div", { class: "patterns" }, D.patterns.map(function (p) {
-        return h("figure", { class: "pattern", id: "pattern-" + p.id },
+        return h("figure", { class: "card pattern", id: "pattern-" + p.id },
           h("div", { class: "pattern-head" }, h("h3", null, p.name), h("span", { class: "kind" }, p.kind)),
           patternSvg(p),
           h("figcaption", { class: "visually-hidden" }, p.alt),
@@ -1371,7 +1371,7 @@
         h("h3", { class: "subhead" }, "The complexity ladder"),
         h("p", { class: "sub-lede" }, "Start on the lowest rung that could work. Climb only when your evals show the current rung fails."),
         h("ol", { class: "ladder" }, D.ladder.map(function (r, i) {
-          return h("li", { class: "rung" },
+          return h("li", { class: "card rung" },
             h("span", { class: "lvl" }, "Level", h("b", null, String(i))),
             h("h4", null, r.name), h("p", null, rich(r.what)),
             h("p", { class: "climb" }, h("b", null, "Climb when: "), rich(r.climb)));
@@ -1387,15 +1387,15 @@
       var route = h("div", { class: "flow-route" });
       f.route.forEach(function (stop, i) {
         if (i) route.appendChild(h("span", { class: "sep", "aria-hidden": "true" }, "→"));
-        route.appendChild(h("span", { class: "stage" }, chip(stop.b), stop.n ? h("span", { class: "stage-note" }, stop.n) : null));
+        route.appendChild(h("span", { class: "flow-stop" }, chip(stop.b), stop.n ? h("span", { class: "flow-stop-note" }, stop.n) : null));
       });
-      return h("article", { class: "flow" }, h("h4", null, f.name), h("p", null, rich(f.goal)), route, f.why ? h("p", null, rich(f.why)) : null);
+      return h("article", { class: "card flow" }, h("h4", null, f.name), h("p", null, rich(f.goal)), route, f.why ? h("p", null, rich(f.why)) : null);
     })));
     root.appendChild(h("h3", { class: "subhead" }, "Common mistakes and what to do instead"));
     root.appendChild(h("div", { class: "pairs" }, D.pairs.map(function (p) {
-      return h("div", { class: "pair" },
-        h("div", { class: "bad" }, h("span", { class: "visually-hidden" }, "Mistake: "), rich(p.bad)),
-        h("div", { class: "good" }, h("span", { class: "visually-hidden" }, "Instead: "), rich(p.good)));
+      return h("div", { class: "card pair" },
+        h("div", { class: "pair-bad" }, h("span", { class: "visually-hidden" }, "Mistake: "), rich(p.bad)),
+        h("div", { class: "pair-good" }, h("span", { class: "visually-hidden" }, "Instead: "), rich(p.good)));
     })));
     root.appendChild(h("h3", { class: "subhead" }, "Pre-launch checklist"));
     var saved = {};
@@ -1441,7 +1441,7 @@
             return h("a", { href: src, target: "_blank", rel: "noopener", class: "proto-link", "aria-label": "Source " + (j + 1) + " for " + p.name }, "[" + (j + 1) + "]");
           })) : null))];
       })));
-    return h("div", { class: "table-scroll" }, tbl);
+    return h("div", { class: "card table-scroll" }, tbl);
   }
   function renderBlocksIndex() {
     return h("div", { class: "index" }, D.zones.map(function (z) {
@@ -1450,7 +1450,7 @@
         h("p", null, z.nick),
         h("ul", { class: "zone-view-blocks" }, zoneBlocks(z).map(function (bid) {
           var b = BLOCKS[bid];
-          return h("li", null, h("button", { type: "button", "data-block": bid, "data-zone": b.zone }, h("i", { "aria-hidden": "true" }), h("b", null, b.name), h("span", null, rich(b.short))));
+          return h("li", null, h("button", { type: "button", "data-block": bid, "data-zone": b.zone }, h("i", { class: "zdot", "aria-hidden": "true" }), h("b", null, b.name), h("span", null, rich(b.short))));
         })));
     }));
   }
@@ -1484,14 +1484,14 @@
     return h("div", null,
       h("div", { class: "gloss-tools" },
         h("div", { class: "search-field" },
-          iconSpan('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg>'),
+          iconSvg('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg>'),
           h("label", { class: "visually-hidden", for: "gloss-search" }, "Filter the glossary"), input),
         countEl),
       listEl);
   }
   function renderLearn() {
     return h("div", { class: "learn-grid" }, D.learn.map(function (grp) {
-      return h("div", { class: "learn-col" + (grp.wide ? " wide" : "") }, h("h3", null, grp.title), grp.intro ? h("p", null, grp.intro) : null, linkList(grp.items));
+      return h("div", { class: "learn-col" + (grp.wide ? " learn-col-wide" : "") }, h("h3", null, grp.title), grp.intro ? h("p", null, grp.intro) : null, linkList(grp.items));
     }));
   }
   function renderAbout() {
@@ -1537,7 +1537,7 @@
       byName[g.group].push(id);
     });
     groups.forEach(function (name) {
-      var box = h("div", { class: "menu-group" }, h("h2", null, name));
+      var box = h("div", { class: "menu-group" }, h("h2", { class: "eyebrow" }, name));
       if (name === groups[0]) {
         box.appendChild(h("button", { class: "menu-item", type: "button", "data-tour": "0" }, h("b", null, "Watch one run"), h("span", null, "The walkthrough, on the map")));
       }
@@ -1703,7 +1703,7 @@
     sHits.slice(0, 8).forEach(function (id, i) {
       var b = BLOCKS[id];
       sList.appendChild(h("li", null, h("button", { type: "button", "data-block": id, "data-zone": b.zone, class: i === 0 ? "is-first" : null },
-        h("i", { "aria-hidden": "true" }), h("b", null, b.name), h("span", null, rich(b.short)))));
+        h("i", { class: "zdot", "aria-hidden": "true" }), h("b", null, b.name), h("span", null, rich(b.short)))));
     });
     sList.hidden = false;
     status.textContent = !sHits.length ? "No block matches." : sHits.length + (sHits.length === 1 ? " block matches" : " blocks match") + ". Press Enter to open " + BLOCKS[sHits[0]].name + ", or the down arrow to choose.";
@@ -1767,13 +1767,19 @@
   }
 
   /* ---------- Theme -------------------------------------------------------------- */
+  // The <head> script always sets data-theme, so the stylesheet needs no media query.
   function initTheme() {
+    var root = document.documentElement;
     $("#theme-toggle").addEventListener("click", function () {
-      var root = document.documentElement, explicit = root.getAttribute("data-theme");
-      var dark = explicit ? explicit === "dark" : !!(window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches);
-      var nextTheme = dark ? "light" : "dark";
+      var nextTheme = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
       root.setAttribute("data-theme", nextTheme);
       store("ae-theme", nextTheme);
+    });
+    // Without a saved choice, follow the system setting when it changes.
+    var mq = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)");
+    if (mq && mq.addEventListener) mq.addEventListener("change", function (e) {
+      var saved = store("ae-theme");
+      if (saved !== "light" && saved !== "dark") root.setAttribute("data-theme", e.matches ? "dark" : "light");
     });
   }
 

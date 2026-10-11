@@ -21,8 +21,14 @@
   <link rel="preload" href="assets/fonts/dm-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="assets/css/style.css">
   <script>
-    /* Apply a saved theme before first paint to avoid a flash. */
-    try { var t = localStorage.getItem("ae-theme"); if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t); } catch (e) {}
+    /* Set the theme before first paint: the saved choice, else the system setting.
+       The stylesheet reads only data-theme, so this always sets it. */
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem("ae-theme"); } catch (e) {}
+      if (t !== "light" && t !== "dark") t = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      document.documentElement.setAttribute("data-theme", t);
+    })();
   </script>
 </head>
 <body>
@@ -31,11 +37,11 @@
   <header class="bar">
     <a class="brand" href="./" aria-label="Agentic AI, Explained: home">
       <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
-        <path class="bm-ring" d="M25.6 12.4C23.9 7.6 18.6 5 13.8 6.6 8.9 8.2 6.3 13.6 7.9 18.5c1.6 4.9 6.9 7.6 11.8 6 2.6-.9 4.6-2.8 5.6-5.2"/>
-        <path class="bm-ring" d="M26.6 6.8l-.9 5.8-5.6-1.6"/>
-        <circle class="bm-dot" cx="16.6" cy="16" r="3.4"/>
+        <path class="brand-ring" d="M25.6 12.4C23.9 7.6 18.6 5 13.8 6.6 8.9 8.2 6.3 13.6 7.9 18.5c1.6 4.9 6.9 7.6 11.8 6 2.6-.9 4.6-2.8 5.6-5.2"/>
+        <path class="brand-ring" d="M26.6 6.8l-.9 5.8-5.6-1.6"/>
+        <circle class="brand-dot" cx="16.6" cy="16" r="3.4"/>
       </svg>
-      <span class="brand-title">Agentic AI<span class="bt-tail">, <em>explained</em></span></span>
+      <span class="brand-title">Agentic AI<span class="brand-tail">, <em>explained</em></span></span>
     </a>
     <span class="brand-sub">Every building block on one map · October 2026</span>
 
@@ -53,9 +59,9 @@
         <ul class="search-results" id="search-results" hidden></ul>
         <p class="visually-hidden" id="search-status" aria-live="polite"></p>
       </div>
-      <button class="bar-btn" type="button" id="menu-btn" aria-expanded="false" aria-controls="menu">
+      <button class="btn btn-ghost" type="button" id="menu-btn" aria-expanded="false" aria-controls="menu">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6.5h16M4 12h16M4 17.5h10"/></svg>
-        <span class="bar-btn-label">Guides</span>
+        <span class="btn-label">Guides</span>
       </button>
       <button class="icon-btn" id="theme-toggle" type="button" aria-label="Switch colour theme" title="Switch colour theme">
         <svg class="theme-icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>
@@ -78,7 +84,7 @@
 
   <section class="player" id="player" aria-label="Walkthrough of one agent run" hidden>
     <div class="player-head">
-      <span class="player-count" id="p-count">Step 01 / 16</span>
+      <span class="badge badge-clay player-count" id="p-count">Step 01 / 16</span>
       <h2 class="player-title" id="p-title">A task arrives</h2>
       <button class="icon-btn" type="button" id="p-close" aria-label="Close the walkthrough" title="Close (Esc)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
@@ -87,14 +93,14 @@
     <div class="player-text" id="p-text" aria-live="polite"></div>
     <div class="player-foot">
       <div class="player-ctrl">
-        <button class="pbtn" type="button" id="p-prev" aria-label="Previous step" title="Previous step (←)">
+        <button class="icon-btn icon-btn-outline" type="button" id="p-prev" aria-label="Previous step" title="Previous step (←)">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
         </button>
-        <button class="pbtn pbtn-main" type="button" id="p-play" aria-label="Pause" title="Play / pause (space)">
+        <button class="icon-btn icon-btn-ink" type="button" id="p-play" aria-label="Pause" title="Play / pause (space)">
           <svg class="i-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" hidden><path d="M7 4.5v15l13-7.5z"/></svg>
           <svg class="i-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 4.5h4.2v15H6zM13.8 4.5H18v15h-4.2z"/></svg>
         </button>
-        <button class="pbtn" type="button" id="p-next" aria-label="Next step" title="Next step (→)">
+        <button class="icon-btn icon-btn-outline" type="button" id="p-next" aria-label="Next step" title="Next step (→)">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
         </button>
       </div>
@@ -107,7 +113,7 @@
 
   <aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title" tabindex="-1" hidden>
     <div class="drawer-head">
-      <span class="drawer-eyebrow" id="drawer-eyebrow"></span>
+      <span class="eyebrow drawer-eyebrow" id="drawer-eyebrow"></span>
       <h2 class="drawer-title" id="drawer-title">Details</h2>
       <button class="icon-btn drawer-close" type="button" id="drawer-close" aria-label="Close details">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
@@ -123,7 +129,7 @@
   <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title" hidden>
     <div class="sheet-panel" tabindex="-1">
       <div class="sheet-head">
-        <p class="sheet-eyebrow" id="sheet-eyebrow"></p>
+        <p class="eyebrow sheet-eyebrow" id="sheet-eyebrow"></p>
         <h2 class="sheet-title" id="sheet-title">Guide</h2>
         <p class="sheet-lede" id="sheet-lede"></p>
         <button class="icon-btn sheet-close" type="button" id="sheet-close" aria-label="Close and return to the map">
