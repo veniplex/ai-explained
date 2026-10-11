@@ -14,38 +14,45 @@ window.AE = (function () {
      Zones: the regions of the map. "blocks" sets the order of chips inside a zone.
      ------------------------------------------------------------------------- */
   var zones = [
-    { id: "start", name: "Start & finish", short: "Start & finish", tag: "Where work comes in and where results go out.", blocks: ["triggers", "surfaces"] },
-    { id: "model", name: "Model layer", short: "Model", tag: "The reasoning engine, and who serves it to you.", blocks: ["model", "reasoning", "context-window", "provider", "fine-tuning"],
-      link: { conn: "c-api", arrow: "⇄", text: "Linked to the harness by API calls: the full context goes in, a reply or a tool call comes out." } },
-    { id: "harness", name: "Harness", short: "Harness", tag: "The agent runtime. It runs the loop, assembles the context, executes tools and keeps state.",
+    { id: "start", name: "Start & finish", nick: "orders in, dishes out", eli5: "Every job starts with an order and ends with a dish served. This is where work comes in and where results go out.", short: "Start & finish", tag: "Where work comes in and where results go out.", blocks: ["triggers", "surfaces"] },
+    { id: "model", name: "Model layer", nick: "the chef's brain", eli5: "The thinking part. It reads what is on the counter, thinks, and decides the next move. The provider is the agency you hire it through.", short: "Model", tag: "The reasoning engine, and who serves it to you.", blocks: ["model", "reasoning", "context-window", "provider", "fine-tuning"] },
+    { id: "harness", name: "Harness", nick: "the kitchen", eli5: "Everything around the chef. It lays out the counter, runs the cook, taste and adjust loop, uses the tools and keeps notes.", short: "Harness", tag: "The agent runtime. It runs the loop, assembles the context, executes tools and keeps state.",
       groups: [
         { name: "Loop & runtime", blocks: ["harness", "agent-loop", "planning", "sdk"] },
         { name: "Context assembly", blocks: ["system-prompt", "instructions", "context-engineering", "compaction", "memory"] }
       ] },
-    { id: "control", name: "Control layer", short: "Control", tag: "Checks every action before and after it runs. Part of the harness.", blocks: ["permissions", "hooks", "guardrails", "hitl", "security"] },
-    { id: "know", name: "Know-how & knowledge", short: "Know-how", tag: "What gets loaded into the context, and when.", blocks: ["skills", "playbooks", "commands", "plugins", "rag", "embeddings", "search"],
-      link: { conn: "c-ctx", arrow: "→", text: "Feeds the harness's context: always (instruction files), on demand (skills) or by retrieval (RAG, search)." } },
-    { id: "tools", name: "Tools & environment", short: "Tools", tag: "What the agent can do, and where it does it.", blocks: ["tools", "mcp", "sandbox", "computer-use"],
-      link: { conn: "c-tool", arrow: "⇄", text: "Called by the harness: a tool call goes out, a result comes back into the context." } },
-    { id: "orch", name: "Orchestration", short: "Orchestration", tag: "How work is split across calls, agents and time.", blocks: ["workflows", "subagents", "multi-agent", "a2a", "long-running", "verification"],
-      link: { conn: "c-dele", arrow: "⇄", text: "Driven by the harness: tasks are delegated, condensed results come back." } },
-    { id: "ops", name: "Operations", short: "Operations", tag: "Measure, observe, budget and govern everything above.", blocks: ["evals", "observability", "cost", "governance"],
-      link: { conn: "c-ops", arrow: "⇅", text: "Watches the harness: traces and costs go out, fixes and improvements come back." } }
+    { id: "control", name: "Control layer", nick: "locks and alarms", eli5: "Rules the kitchen enforces whatever the chef thinks: keys for the cupboards, alarms that always ring, checks at the pass, and a person's nod for risky moves.", short: "Control", tag: "Checks every action before and after it runs. Part of the harness.", blocks: ["permissions", "hooks", "guardrails", "hitl", "security"] },
+    { id: "know", name: "Know-how & knowledge", nick: "cookbooks and recipe cards", eli5: "What the kitchen knows: house rules, recipe cards, checklists and a library to look things up. Each is brought to the counter only when it is needed.", short: "Know-how", tag: "What gets loaded into the context, and when.", blocks: ["skills", "playbooks", "commands", "plugins", "rag", "embeddings", "search"] },
+    { id: "tools", name: "Tools & environment", nick: "knives, pots and the oven", eli5: "Everything the chef can act with, one standard plug for new appliances, and a safe test kitchen to use them in.", short: "Tools", tag: "What the agent can do, and where it does it.", blocks: ["tools", "mcp", "sandbox", "computer-use"] },
+    { id: "orch", name: "Orchestration", nick: "the kitchen brigade", eli5: "How big orders are split: assembly lines, helpers, whole teams of cooks, other restaurants, and the night shift.", short: "Orchestration", tag: "How work is split across calls, agents and time.", blocks: ["workflows", "subagents", "multi-agent", "a2a", "long-running", "verification"] },
+    { id: "ops", name: "Operations", nick: "critics, cameras and the bill", eli5: "Watching from the outside: scoring the food, recording every step, counting the cost and following the health code.", short: "Operations", tag: "Measure, observe, budget and govern everything above.", blocks: ["evals", "observability", "cost", "governance"] }
   ];
 
   var connectors = [
-    { id: "c-task", vertical: true, dir: "both", label: "task in · result out" },
-    { id: "c-api", dir: "both", label: "API call", sub: "context in, reply out" },
-    { id: "c-ctx", dir: "right", label: "into context", sub: "always, on demand, retrieved" },
-    { id: "c-tool", dir: "both", label: "tool call", sub: "call out, result in" },
-    { id: "c-dele", dir: "both", label: "delegate", sub: "task out, summary in" },
-    { id: "c-ops", vertical: true, dir: "both", label: "traces out · fixes in" }
+    { id: "c-task", vertical: true, dir: "both", label: "task in · result out", from: "start", to: "harness",
+      text: "A person or a system hands the harness a task. The final answer, file or pull request goes back out through a surface, and anything irreversible waits for a person.",
+      eli5: "The order ticket comes in; the finished dish goes out." },
+    { id: "c-api", dir: "both", label: "API call", sub: "context in, reply out", from: "harness", to: "model",
+      text: "The harness calls the model through the provider's API: the full context goes in, a reply or a tool call comes out. The model keeps no state between calls.",
+      eli5: "The kitchen shows the chef the whole counter; the chef says what to do next." },
+    { id: "c-ctx", dir: "right", label: "into context", sub: "always, on demand, retrieved", from: "know", to: "harness",
+      text: "Know-how enters the context only when it is needed: a skill when its description matches the task, a command or playbook when someone invokes it, and documents when RAG or search retrieves them.",
+      eli5: "Recipe cards and library pages are brought to the counter when they are needed." },
+    { id: "c-tool", dir: "both", label: "tool call", sub: "call out, result in", from: "harness", to: "tools",
+      text: "The model asks for an action; the harness checks it, runs the tool and appends the result to the context.",
+      eli5: "The chef asks for a tool to be used; the result comes back to the counter." },
+    { id: "c-dele", dir: "both", label: "delegate", sub: "task out, summary in", from: "harness", to: "orch",
+      text: "The harness hands tasks to workflows, sub-agents or other agents. They work in their own context and return condensed results.",
+      eli5: "The chef hands a sub-task to a helper and gets back one finished bowl." },
+    { id: "c-ops", vertical: true, dir: "both", label: "traces out · fixes in", from: "harness", to: "ops",
+      text: "Operations watch every run: traces, scores and costs go out; better instructions, skills, tools and limits come back.",
+      eli5: "Critics and cameras watch the kitchen; their notes make it better." }
   ];
 
   /* ---------------------------------------------------------------------------
      Building blocks. Fields:
        name, label (short chip label), aka (search synonyms), short (one sentence),
-       analogy, what (paragraphs), when, avoid, sota (current practice), examples,
+       eli5 (the kitchen picture, shown first), what (paragraphs), when, avoid, sota (current practice), examples,
        related, links (filled from SOURCES below), facts (dated status notes).
      ------------------------------------------------------------------------- */
   var blocks = {
@@ -55,7 +62,7 @@ window.AE = (function () {
       name: "Triggers & events", label: "Triggers & events",
       aka: ["schedule", "cron", "webhook", "event", "ci", "github actions", "slack", "background", "automation"],
       short: "What starts a run: a person's message, a schedule, a webhook, a failing build, a new ticket or an email.",
-      analogy: "the doorbell. It decides who is at the door and what they brought with them.",
+      eli5: "The order bell. A guest orders, a timer rings or a delivery arrives, and the kitchen starts cooking. Some orders come from people, others from a clock or another machine.",
       what: [
         "Every run begins with a trigger. Interactive triggers come from a person: a chat message, a command in the IDE or terminal, a mention in team chat. Automated triggers come from systems: a cron schedule, a webhook (new ticket, new pull request), a CI event (failing build), a file landing in storage, or another agent.",
         "The trigger decides what the run starts with (the issue text, the error log, the email) and whether a human is watching. Unattended triggers therefore need tighter permissions, budgets and sandboxing than interactive ones."
@@ -82,7 +89,7 @@ window.AE = (function () {
       name: "Surfaces & interfaces", label: "Surfaces & interfaces",
       aka: ["ui", "chat", "ide", "cli", "terminal", "desktop", "browser", "slack", "generative ui", "ag-ui", "mcp apps", "agent client protocol", "acp"],
       short: "Where people meet the agent: chat apps, IDEs, terminals, desktop apps, browsers, team chat or an API. Also where results land.",
-      analogy: "the shop front. The same kitchen can serve a restaurant, a delivery app and a catering order.",
+      eli5: "Where the food is served: the dining room, the takeaway window, the delivery app. One kitchen can cook for all of them at once.",
       what: [
         "A surface is the user interface around a harness. The same agent can appear in a chat app, an IDE panel, a terminal, a desktop app, an agentic browser, team chat, or behind an API in your own product.",
         "Surfaces shape what the agent can see (the open file, the current web page, a selection), how it asks for approval, and how results are shown: diffs, documents, previews or interactive UI. Open protocols now connect surfaces and agents: the Agent Client Protocol (editors and coding agents), AG-UI (agent back ends and app front ends) and MCP Apps (interactive UI inside chat)."
@@ -110,7 +117,7 @@ window.AE = (function () {
       name: "Foundation model (LLM)", label: "Foundation model",
       aka: ["llm", "large language model", "gpt", "claude", "gemini", "llama", "transformer", "open weights", "frontier model", "slm"],
       short: "The neural network that turns input tokens into output tokens. It reasons, writes and decides which tool to call, but it only sees what is in its context.",
-      analogy: "the engine. Powerful on its own, useless without a car around it.",
+      eli5: "The chef's brain. It has read millions of recipes and decides what to do next. But it remembers nothing from yesterday and only knows what is on the counter right now.",
       what: [
         "A large language model is a transformer network trained on huge amounts of text, code and often images and audio to predict the next token. Post-training (instruction tuning, reinforcement learning from human and AI feedback) then teaches it to follow instructions, use tools and behave safely.",
         "In an agent, the model is the decision-maker. On every turn it reads the full context and replies with text or with a structured tool call. Models differ in capability, speed, price, context length, modalities and licence: closed models are used through an API, open-weight models can also be run on your own hardware."
@@ -138,7 +145,7 @@ window.AE = (function () {
       name: "Reasoning & thinking", label: "Reasoning & thinking",
       aka: ["thinking", "extended thinking", "chain of thought", "cot", "test-time compute", "effort", "reasoning model", "o-series", "budget"],
       short: "Models that think before they answer by spending extra tokens on step-by-step reasoning. You trade cost and latency for accuracy.",
-      analogy: "scratch paper. The more of it you allow, the harder the problems you can solve, and the longer it takes.",
+      eli5: "The chef stops to think before cooking. An easy dish needs a moment; a tricky new one needs a long think. Thinking takes time, but fewer dishes get burnt.",
       what: [
         "Reasoning models are trained with reinforcement learning to produce a chain of thought before the final answer. Spending more compute at inference time (test-time compute) reliably improves results on maths, coding and multi-step problems.",
         "Most APIs now expose an effort or thinking level (for example from low to max) rather than a raw token budget. Thinking tokens are billed as output even when they are hidden. In agents, models also think between tool calls (interleaved thinking), which helps them reflect on a surprising result before choosing the next action."
@@ -165,7 +172,7 @@ window.AE = (function () {
       name: "Context window & tokens", label: "Context window",
       aka: ["tokens", "tokenizer", "context length", "stateless", "working memory", "context rot", "lost in the middle", "1m context"],
       short: "The model's working memory, measured in tokens. Everything the agent knows in the moment must fit here, and the API is stateless.",
-      analogy: "a desk. Only what lies on the desk can be used, and a cluttered desk slows everything down.",
+      eli5: "The counter. Everything the chef needs must be on it, and it has a fixed size. A cluttered counter makes even a great chef slow and sloppy.",
       what: [
         "Models read and write tokens, which are pieces of words (in English roughly three quarters of a word each). The context window is the maximum number of tokens one request can hold, including the reply. In 2026 about one million tokens is standard for frontier models; many smaller and older models offer 128,000 to 200,000.",
         "Model APIs are **stateless**: on every turn the harness sends the entire conversation again, including the system prompt, tool definitions, history and tool results. Longer contexts cost more, run slower and degrade quality, an effect researchers call “lost in the middle” and “context rot”. A bigger window is not automatically better."
@@ -191,7 +198,7 @@ window.AE = (function () {
       name: "Providers & inference platforms", label: "Providers & platforms",
       aka: ["api", "inference", "anthropic", "openai", "google", "bedrock", "vertex", "azure", "foundry", "openrouter", "litellm", "ollama", "vllm", "hosting", "gateway", "router", "eu", "data residency"],
       short: "Who runs the model for you: the lab's own API, a cloud platform, a host for open models, or your own hardware.",
-      analogy: "the power company. Same electricity, different contracts, prices, regions and reliability.",
+      eli5: "The agency that sends you the chef. You can book the same chef through different agencies, with different prices, opening hours and rules about where they may work.",
       what: [
         "A provider serves model inference over an API and handles scaling, rate limits, billing, data retention and regional hosting. The options are first-party APIs from the labs, hyperscaler platforms that offer many models with enterprise controls, specialised hosts for open-weight models, local runtimes, and gateways that put one API in front of many providers.",
         "The provider is invisible to the model but matters a lot to you: it determines which features arrive first, your data-protection terms, where data is processed (for example EU regions), and what happens during an outage."
@@ -220,7 +227,7 @@ window.AE = (function () {
       name: "Fine-tuning & post-training", label: "Fine-tuning",
       aka: ["training", "sft", "rlhf", "dpo", "lora", "qlora", "rft", "reinforcement fine-tuning", "distillation", "post-training", "alignment"],
       short: "Changing the model's weights with your own examples. The last lever to pull, after prompting, context and tools.",
-      analogy: "sending an employee on a training course, rather than giving them a better briefing.",
+      eli5: "Sending the chef to cooking school to master one cuisine. It costs time and money, and most of the time better recipe cards would have done the job.",
       what: [
         "Post-training turns a raw pre-trained model into a helpful assistant: supervised fine-tuning on examples, reinforcement learning from human feedback (RLHF) and from AI feedback (for example Constitutional AI). As a builder you can go further: supervised fine-tuning on your own examples, preference tuning (DPO), reinforcement fine-tuning against graders, or distillation from a large model into a small one.",
         "Parameter-efficient methods such as LoRA make fine-tuning open-weight models affordable. Fine-tuning teaches form, style and narrow skills. It is a poor way to add facts that change; use [[rag]] for those."
@@ -250,7 +257,7 @@ window.AE = (function () {
       name: "Harness (agent runtime)", label: "Harness",
       aka: ["runtime", "scaffold", "scaffolding", "agent framework", "claude code", "codex", "gemini cli", "cursor", "copilot", "devin", "openhands", "goose", "cline", "harness engineering", "coding agent"],
       short: "The software around the model that turns it into an agent. It runs the loop, assembles the context, executes tools, enforces permissions and manages memory.",
-      analogy: "the car around the engine: steering, brakes, dashboard, fuel system. The same engine performs very differently in different cars.",
+      eli5: "The kitchen around the chef. It hands over ingredients, runs the oven, enforces the rules and cleans up. A great chef in a bad kitchen still struggles.",
       what: [
         "The model only predicts tokens; the harness does everything else. It builds each request (system prompt, instruction files, tool definitions, history), calls the model, parses tool calls, runs them in a sandbox or through MCP, feeds the results back, compacts the context when it fills up, enforces permissions and hooks, spawns sub-agents, saves checkpoints and shows progress on a surface.",
         "Harness quality is a large part of agent quality: the same model scores very differently in different harnesses. **Harness engineering** is the practice of shaping this environment (tools, documentation, feedback loops, guardrails) so that agents can do reliable work."
@@ -278,7 +285,7 @@ window.AE = (function () {
       name: "Agent loop (think, act, observe)", label: "Agent loop",
       aka: ["react", "loop", "tool loop", "agentic loop", "turn", "reason act", "observation"],
       short: "The core cycle: the model reasons, calls a tool, reads the result, and repeats until the goal is met or a limit is reached.",
-      analogy: "a cook tasting the soup: taste, adjust, taste again, until it is right.",
+      eli5: "Taste, adjust, taste again. The chef cooks a little, checks the result and decides the next move, over and over, until the dish is right.",
       what: [
         "Research introduced the loop as ReAct (reasoning plus acting). It is simple: the model receives the context, then either answers or emits a tool call; the harness runs the tool and appends the result (the observation); repeat.",
         "The loop ends when the model gives a final answer, a stop hook ends it, a person interrupts, or a budget for turns, tokens, time or money runs out. Almost everything else in agentic AI is about giving this loop better context, better tools and better limits."
@@ -304,7 +311,7 @@ window.AE = (function () {
       name: "Planning & task lists", label: "Planning & to-dos",
       aka: ["plan mode", "todo", "to-do list", "task list", "decomposition", "spec", "tree of thoughts", "plan and solve"],
       short: "Breaking a goal into steps before acting, and keeping a visible to-do list while working.",
-      analogy: "a checklist on a clipboard: it keeps a long job on track and shows everyone how far it got.",
+      eli5: "The prep list on the wall. Before a big order, the chef writes down every step and ticks them off, so nothing is forgotten halfway through.",
       what: [
         "Agents plan explicitly (write a plan and ask for approval) or implicitly (choose the next step each turn). Many harnesses offer a **plan mode**: read-only exploration that ends in a plan a person reviews before anything changes.",
         "During work, a to-do tool lets the agent keep and update a task list. This keeps long tasks on track, shows progress, and doubles as a record when the context is compacted. Research on task decomposition (Plan-and-Solve, Tree of Thoughts, ReWOO) shows that planning improves multi-step success."
@@ -332,7 +339,7 @@ window.AE = (function () {
       name: "Agent SDKs & frameworks", label: "Agent SDKs",
       aka: ["framework", "library", "langgraph", "langchain", "crewai", "autogen", "semantic kernel", "agent framework", "adk", "agents sdk", "claude agent sdk", "pydantic ai", "vercel ai sdk", "strands", "agentcore", "mastra", "smolagents", "llamaindex"],
       short: "Libraries for building agents and harnesses in code. The loop, tool calls, memory, multi-agent handoffs and tracing come built in.",
-      analogy: "a kit car: the chassis and engine mounts are done, you build the rest to fit your purpose.",
+      eli5: "A kitchen in a box. The plumbing, stove and shelves come ready-made; you arrange them for the kind of food you want to cook.",
       what: [
         "When you build an agent into a product, an SDK saves you from rewriting the loop, tool execution, streaming, retries, state and tracing. Vendor SDKs are tuned to their own platforms but are often usable with other models. Open frameworks add graph-based control flow, typed outputs or a particular language ecosystem.",
         "Managed agent runtimes go one step further and host your agent with identity, memory, sandboxed tools and observability built in."
@@ -359,7 +366,7 @@ window.AE = (function () {
       name: "System prompt & prompt engineering", label: "System prompt",
       aka: ["prompt", "prompt engineering", "instructions", "role", "persona", "few-shot", "examples", "xml tags"],
       short: "The standing instructions that define the agent's role, rules, tone and output format. Written once by the builder, sent with every call.",
-      analogy: "the job description and house rules handed to a new colleague on day one.",
+      eli5: "The chef's job description, read at the start of every shift: who we cook for, the house style, and what we never serve.",
       what: [
         "The system prompt sits at the very top of the context. It sets the role, goals, constraints, guidance on when to use which tool, and the output format.",
         "Prompt engineering still matters: be clear and specific, give examples, structure the prompt with headings or tags, and explain why a rule exists. For agents it is part of the broader [[context-engineering]]. Aim for the right altitude: neither brittle if-then logic nor vague platitudes."
@@ -386,7 +393,7 @@ window.AE = (function () {
       name: "Instruction files (AGENTS.md and friends)", label: "Instruction files",
       aka: ["agents.md", "claude.md", "gemini.md", "rules", "cursor rules", "copilot instructions", "custom instructions", "project memory", "readme for agents"],
       short: "Plain Markdown files in your project or home folder that the harness loads automatically at session start: build commands, conventions, do's and don'ts.",
-      analogy: "the onboarding note taped to the monitor: how we build, where things are, what not to touch.",
+      eli5: "The house rules taped to the kitchen wall: where the pans are, how we plate, what not to touch. Every new cook reads them first.",
       what: [
         "Instruction files are a persistent briefing for the agent: how to build and test, coding conventions, architecture notes, where things live, what to avoid. **AGENTS.md** is the cross-tool open format, now stewarded by the Agentic AI Foundation under the Linux Foundation. Many harnesses also read their own file, such as `CLAUDE.md`, `GEMINI.md`, Cursor rules or Copilot instructions.",
         "They are loaded at the start of every session, so every line costs context on every turn. They can be layered: a global file for personal preferences, a project file shared by the team, and files in sub-folders for local rules."
@@ -413,7 +420,7 @@ window.AE = (function () {
       name: "Context engineering", label: "Context engineering",
       aka: ["context", "context management", "progressive disclosure", "just in time", "context rot", "attention budget", "write select compress isolate"],
       short: "Deciding exactly which tokens the model sees at each step. The most important skill in building agents.",
-      analogy: "a good briefing: everything the expert needs, nothing they don't, in the right order.",
+      eli5: "Mise en place. Before cooking starts, everything the chef needs is prepared and laid out in order, and nothing else is on the counter.",
       what: [
         "Context engineering is prompt engineering grown up for agents: curating the full set of tokens in the context window across many turns, including instructions, tools, examples, retrieved knowledge, history and tool results.",
         "Because attention is a finite budget and quality degrades as the context grows, the goal is the smallest set of high-signal tokens that lets the model take the next step well. Core techniques: progressive disclosure (load details only when needed), just-in-time retrieval, [[compaction]], structured notes and [[memory]], [[subagents]] for isolation, and tools that return concise results."
@@ -439,7 +446,7 @@ window.AE = (function () {
       name: "Compaction & context editing", label: "Compaction",
       aka: ["compact", "summarize", "summarisation", "context editing", "clear tool results", "auto-compact", "context reset"],
       short: "When the context window fills up, the harness summarises or prunes old turns so the agent can keep working.",
-      analogy: "turning a stack of meeting notes into a one-page summary before the next meeting.",
+      eli5: "Clearing the counter in the middle of a busy night. The scraps go, and a short note says what is already done, so cooking can go on.",
       what: [
         "Long runs eventually hit the context limit. **Compaction** replaces older history with a condensed summary (decisions made, open problems, files touched) and keeps recent turns word for word. **Context editing** removes stale items automatically, for example old tool results the agent no longer needs.",
         "Some harnesses compact automatically near the limit; others let you trigger it with a command. Good compaction preserves what matters for the next steps. Poor compaction makes the agent forget decisions or redo work."
@@ -465,7 +472,7 @@ window.AE = (function () {
       name: "Memory", label: "Memory",
       aka: ["long-term memory", "short-term memory", "episodic", "semantic", "procedural", "notes", "progress file", "memory tool", "remember", "mem0", "letta", "memgpt"],
       short: "What persists beyond one context window: facts, preferences, past decisions and progress the agent can recall later.",
-      analogy: "a notebook the agent keeps between shifts, so the next shift does not start from zero.",
+      eli5: "A notebook in the kitchen drawer. The chef writes down what worked and what the regulars like, so tomorrow's shift does not start from zero.",
       what: [
         "Inside a run, the context window is short-term memory. Long-term memory lives outside it and is loaded when relevant: files the agent reads and writes (notes, progress logs, instruction files), dedicated memory tools and stores, or vector and graph databases.",
         "Research borrowed a taxonomy from cognitive science: **episodic** memory (what happened), **semantic** memory (facts) and **procedural** memory (how to do things, which in practice means instruction files and [[skills]])."
@@ -493,7 +500,7 @@ window.AE = (function () {
       name: "Permissions & approval modes", label: "Permissions",
       aka: ["allow", "deny", "ask", "approval", "auto mode", "yolo", "least privilege", "allowlist", "policy", "trusted folders"],
       short: "Rules for what the agent may do on its own, what needs approval, and what is forbidden.",
-      analogy: "a key card: some doors open, some need a guard's sign-off, some never open.",
+      eli5: "Some cupboards are open, some need the manager's key, and the knife safe stays locked. The kitchen decides, not the chef.",
       what: [
         "Harnesses check every tool call against a policy: allow, ask or deny, often by tool and argument pattern (allow running tests, ask before pushing, deny reading `.env`). Modes range from read-only planning, through asking every time, to automatic approval inside a sandbox. Some harnesses add classifier-based modes that approve routine actions and stop risky ones.",
         "Permissions are deterministic. Unlike a prompt, the model cannot talk its way past them."
@@ -519,7 +526,7 @@ window.AE = (function () {
       name: "Hooks", label: "Hooks",
       aka: ["lifecycle", "pretooluse", "posttooluse", "stop hook", "sessionstart", "events", "deterministic", "automation", "callbacks"],
       short: "Scripts the harness runs automatically at fixed moments, such as before a tool call, after an edit, or when the agent wants to stop. Guarantees, not suggestions.",
-      analogy: "tripwires and autopilot rules: they fire every time, whatever the driver thinks.",
+      eli5: "The smoke alarm and the kitchen timer. They go off every single time, whatever the chef thinks, so some rules can never be forgotten.",
       what: [
         "Hooks are deterministic extensions of the agent lifecycle. The harness fires events (for example session start, prompt submitted, before a tool call, after a tool call, before compaction, stop) and runs your scripts.",
         "A hook can block an action (editing protected files), change its input, add context (today's ticket), format code after every edit, run tests before the agent is allowed to finish, notify a person, or write an audit log."
@@ -546,7 +553,7 @@ window.AE = (function () {
       name: "Guardrails", label: "Guardrails",
       aka: ["safety", "content filter", "moderation", "pii", "jailbreak", "validation", "classifier", "llama guard", "nemo guardrails", "prompt shields"],
       short: "Checks that run alongside the agent to catch unsafe, off-topic or malformed inputs and outputs.",
-      analogy: "the barriers on a mountain road: you hope never to touch them.",
+      eli5: "The checker at the pass. They look at every order coming in and every plate going out, and stop anything that should not leave the kitchen.",
       what: [
         "Guardrails validate on the way in and on the way out. Input checks catch jailbreaks, prompt injection, off-topic requests and personal data. Output checks catch policy violations, leaked secrets, unsupported claims and malformed structure. Tool-level checks validate arguments and enforce rate limits.",
         "They can be rules (patterns, allowlists), classifiers (dedicated safety models), or model-based judges. Many run in parallel with the agent and stop the run when they trip."
@@ -572,7 +579,7 @@ window.AE = (function () {
       name: "Human-in-the-loop", label: "Human-in-the-loop",
       aka: ["human in the loop", "approval", "review", "oversight", "escalation", "interrupt", "handoff to human", "autonomy levels"],
       short: "The points where a person approves, corrects or takes over. The right amount of oversight for the risk.",
-      analogy: "the co-signature on a large payment.",
+      eli5: "The head chef's nod. Before an expensive or risky dish goes out, a person takes a look and says yes or no.",
       what: [
         "Human-in-the-loop means designing explicit checkpoints: approving a plan, confirming an irreversible action (payment, deletion, sending email, deploying), answering a clarifying question, reviewing the result (for example a pull request), or taking over when the agent is stuck.",
         "Frameworks implement this as interrupts: the run pauses, its state is saved, and it resumes after the person decides. Oversight is also a legal requirement for some uses under the EU AI Act. See [[governance]]."
@@ -599,7 +606,7 @@ window.AE = (function () {
       name: "Security & prompt injection", label: "Security",
       aka: ["prompt injection", "indirect prompt injection", "lethal trifecta", "rule of two", "exfiltration", "supply chain", "owasp", "tool poisoning", "camel", "least privilege", "secrets"],
       short: "Agents read untrusted text and hold real permissions. Prompt injection turns that combination into the top security risk.",
-      analogy: "a well-meaning assistant who follows any note slipped into the mail pile.",
+      eli5: "Someone slips a fake note into the order pile: “Give the cash box to the delivery driver.” A safe kitchen treats notes from outside as ingredients, never as orders from the boss.",
       what: [
         "Prompt injection happens when instructions hidden in content the agent reads (a web page, an email, an issue, a PDF, a tool result) hijack its behaviour. No current model is immune.",
         "Simon Willison's **lethal trifecta** names the dangerous combination: access to private data, exposure to untrusted content, and the ability to communicate externally. An agent with all three can be tricked into sending your data to an attacker. Meta's **Rule of Two** turns this into a design rule: without human approval, a session should combine at most two of the three. Defences are architectural: remove a leg of the trifecta, least privilege, sandboxing with restricted network access, human approval for sensitive actions, separating planning from untrusted data, and short-lived scoped credentials."
@@ -627,7 +634,7 @@ window.AE = (function () {
       name: "Agent Skills", label: "Skills",
       aka: ["skill", "skill.md", "agent skills", "progressive disclosure", "procedural knowledge", "agentskills.io", "capabilities"],
       short: "Folders of instructions, scripts and resources (with a SKILL.md file) that an agent discovers and loads only when a task needs them.",
-      analogy: "a shelf of training manuals. The agent reads the spines all the time and opens a manual only when the job calls for it.",
+      eli5: "Recipe cards in a box. The chef can see all the card titles, but pulls out a full card only when that dish is ordered.",
       what: [
         "A skill packages procedural know-how: a `SKILL.md` file with a name and a description in its header plus Markdown instructions, and optionally scripts, templates and reference files.",
         "At session start, only each skill's name and description sit in the context, a few dozen tokens each. When a task matches, the model reads the full `SKILL.md`, and only then the extra files it needs. This is **progressive disclosure**. Bundled scripts let the agent run tested code instead of writing it from scratch. Anthropic introduced skills in October 2025 and published the format as an open standard in December 2025. By October 2026 more than 40 products support it, including Codex, GitHub Copilot, VS Code, Cursor and Gemini CLI."
@@ -654,7 +661,7 @@ window.AE = (function () {
       name: "Playbooks & runbooks", label: "Playbooks",
       aka: ["playbook", "runbook", "sop", "standard operating procedure", "procedure", "checklist", "recipe", "devin playbooks", "ace"],
       short: "A written, step-by-step procedure for a recurring task: what to do, in what order, with which checks, and what counts as done.",
-      analogy: "the airline checklist pilots run before take-off, whoever is flying.",
+      eli5: "The banquet checklist. For a big, important job, the kitchen follows the same tested steps in the same order, every time.",
       what: [
         "“Playbook” is a practitioner term rather than one formal standard. It means a reusable, human-readable procedure that an agent (or a person) follows for a class of tasks, such as triaging an incident, onboarding a customer or migrating a service. A good playbook states the goal, inputs, steps, decision points, checks, escalation rules and the definition of done.",
         "In practice, playbooks are implemented as a [[skills|skill]], a [[commands|slash command]], a prompt template or a workflow definition. Some products use the name directly: Devin has Playbooks. Research such as ACE (Agentic Context Engineering) treats an agent's context as an evolving playbook that it refines from its own successes and failures."
@@ -680,7 +687,7 @@ window.AE = (function () {
       name: "Slash commands & prompt templates", label: "Slash commands",
       aka: ["slash command", "/command", "prompt template", "custom prompt", "prompt file", "saved prompt", "mcp prompts", "macro"],
       short: "Saved prompts you trigger by name, such as /review or /release-notes. A shortcut for instructions you would otherwise type every time.",
-      analogy: "a speed-dial button.",
+      eli5: "The “the usual, please” button. One short word starts a whole order that was written down in advance.",
       what: [
         "A slash command expands a stored template, usually a Markdown file with optional arguments, into the prompt. Unlike skills, which the model can pick up on its own, commands are normally invoked explicitly by the user.",
         "They are ideal for recurring requests and team conventions. MCP servers can also offer prompts that clients show as commands. In 2026 most harnesses folded custom commands into skills: a skill can be invoked by name like a command, and Codex, Cursor and VS Code steer users from their old prompt files to skills."
@@ -705,7 +712,7 @@ window.AE = (function () {
       name: "Plugins & extensions", label: "Plugins",
       aka: ["plugin", "extension", "marketplace", "bundle", "package", "apps", "chatgpt apps", "gemini extensions"],
       short: "Installable bundles that package skills, commands, sub-agents, hooks and MCP servers, so a whole setup can be shared with one install.",
-      analogy: "a toolbox: a set of tools that belong together, ready to hand to a colleague.",
+      eli5: "A station in a box, like a pizza corner with its own recipe cards, tools and alarms, ready to set up in any kitchen.",
       what: [
         "As setups grow (a few MCP servers, skills, hooks and sub-agent definitions), plugins make them portable: one versioned package that a team installs, often from a marketplace hosted in a Git repository.",
         "Ecosystems use different names (plugins, extensions, apps), and an open packaging standard, Agent Plugins 1.0, now lets one package work across VS Code, GitHub Copilot, Cursor and others. A plugin is a distribution mechanism, not a new capability: what it contains still behaves like skills, tools and hooks."
@@ -729,7 +736,7 @@ window.AE = (function () {
       name: "Retrieval-augmented generation (RAG)", label: "RAG",
       aka: ["retrieval", "retrieval augmented generation", "rag", "knowledge base", "grounding", "chunking", "reranking", "graphrag", "agentic rag", "contextual retrieval", "citations"],
       short: "Look up relevant passages in your knowledge base and put them into the context before the model answers.",
-      analogy: "an open-book exam: the model may look things up instead of answering from memory.",
+      eli5: "Looking it up in the cookbook library. Instead of guessing from memory, the chef fetches the right pages and lays them on the counter.",
       what: [
         "RAG grounds the model in your own data without retraining it. The classic pipeline splits documents into chunks, turns each chunk into an [[embeddings|embedding]], and stores them in an index. At question time it retrieves the most relevant chunks (ideally combining semantic and keyword search, then reranking) and inserts them into the prompt with their sources.",
         "In agents, retrieval becomes a tool the model calls when it needs to, as often as it needs to (agentic RAG). Variants include contextual retrieval (adding document context to each chunk before indexing) and GraphRAG (building a knowledge graph to answer questions about a whole collection)."
@@ -756,7 +763,7 @@ window.AE = (function () {
       name: "Embeddings & vector search", label: "Embeddings",
       aka: ["embedding", "vector", "vector database", "vector db", "semantic search", "similarity", "cosine", "pgvector", "pinecone", "weaviate", "qdrant", "milvus", "chroma", "hybrid search", "bm25"],
       short: "Lists of numbers that capture meaning. Texts with similar meaning get similar vectors, so you can search by meaning instead of keywords.",
-      analogy: "a map where related ideas are placed close together.",
+      eli5: "A library sorted by taste. Similar recipes sit next to each other, so you can find “something like this” even without knowing its name.",
       what: [
         "An embedding model maps text (or images, or code) to a vector of hundreds to thousands of numbers. Similar meanings land close together in that space, typically measured by cosine similarity. Vector databases index millions of vectors for fast approximate nearest-neighbour search.",
         "Embeddings power semantic search, RAG, de-duplication, clustering, recommendations and memory retrieval. Combine them with keyword search for exact terms such as product codes or error numbers."
@@ -782,7 +789,7 @@ window.AE = (function () {
       name: "Agentic search & web search", label: "Agentic & web search",
       aka: ["agentic search", "grep", "glob", "web search", "browsing", "deep research", "research", "grounding", "citations", "browsecomp"],
       short: "Letting the agent find information itself, by searching files, browsing the web and refining queries, instead of relying on a pre-built index.",
-      analogy: "a detective following leads, rather than a librarian fetching pre-filed folders.",
+      eli5: "A walk through the market. The chef goes from stall to stall, follows tips, and keeps looking until the right ingredient turns up.",
       what: [
         "In agentic search the model uses ordinary tools such as listing files, grep, reading files, web search and fetching pages, step by step, and refines its queries as it learns. Coding agents often prefer this to a vector index: it is always up to date, precise for identifiers, and needs no indexing pipeline.",
         "Web search tools ground answers in current information with citations. Deep-research systems run long agentic search sessions, often with several agents in parallel, and synthesise a report."
@@ -810,7 +817,7 @@ window.AE = (function () {
       name: "Tools & function calling", label: "Tools",
       aka: ["tool use", "function calling", "functions", "tool call", "json schema", "structured outputs", "api", "tool search", "programmatic tool calling", "aci"],
       short: "Functions the model can ask the harness to run: search, read a file, query a database, send a message. The model decides; the harness executes.",
-      analogy: "the agent's hands. The brain decides what to grab; the hands do the grabbing.",
+      eli5: "Knives, pots and the oven. The chef decides what to do, the tools do it, and the chef sees what happened.",
       what: [
         "A tool is described to the model by a name, a description and a JSON Schema for its parameters. When the model wants to use it, it emits a structured tool call (name plus arguments). The harness runs the actual code and returns the result as a new message. The model never executes anything itself.",
         "Tools come built in (shell, file editing, web search, code execution), from [[mcp|MCP servers]], or from your own code. Tool design is user-experience design for models: clear names, a focused purpose, helpful error messages and concise, high-signal output."
@@ -837,7 +844,7 @@ window.AE = (function () {
       name: "Model Context Protocol (MCP)", label: "MCP",
       aka: ["model context protocol", "mcp server", "mcp client", "connector", "connectors", "integration", "usb-c", "resources", "mcp apps", "registry"],
       short: "The open standard for connecting agents to tools and data. Write an integration once as an MCP server and use it in any MCP-capable harness.",
-      analogy: "USB-C for AI: one plug shape, many devices.",
+      eli5: "A standard plug socket. Any appliance with the right plug works in any kitchen, so nobody has to rewire the wall for a new blender.",
       what: [
         "MCP defines how a host application (the harness) connects, through MCP clients, to MCP servers that expose **tools** (actions), **resources** (data) and **prompts** (templates). Servers run locally over standard input/output or remotely over HTTP, with OAuth-based authorisation.",
         "Anthropic introduced MCP in November 2024. It was adopted across the industry and donated to the Agentic AI Foundation under the Linux Foundation in December 2025. The current revision (2026-07-28) made the core protocol stateless and moved optional features, such as long-running tasks and interactive interfaces (MCP Apps), into formal extensions. Chat products often present MCP servers as “connectors” or “apps”."
@@ -863,7 +870,7 @@ window.AE = (function () {
       name: "Sandbox & code execution", label: "Sandbox",
       aka: ["sandbox", "container", "vm", "microvm", "docker", "devcontainer", "code interpreter", "code execution", "isolation", "e2b", "firecracker", "gvisor", "egress"],
       short: "An isolated computer (a container or micro-VM) where the agent can run code, use a terminal and edit files without endangering your real systems.",
-      analogy: "a lab with blast-proof walls: experiment freely, nothing escapes.",
+      eli5: "A test kitchen with tiled walls. The chef can try anything; spills and small fires stay inside and are easy to clean up.",
       what: [
         "Agents become far more capable when they can execute code: run tests, analyse data, convert files, install packages. A sandbox limits the blast radius with file-system isolation (only the project folder), network isolation (only allowlisted domains), resource limits and disposable environments.",
         "Options range from operating-system sandboxing on your laptop, to containers and dev containers, to cloud micro-VMs that start per task. With a good sandbox you can safely let the agent work with far fewer approval prompts."
@@ -889,7 +896,7 @@ window.AE = (function () {
       name: "Computer & browser use", label: "Computer use",
       aka: ["computer use", "browser use", "gui agent", "operator", "screenshot", "click", "rpa", "playwright", "web agent", "chrome", "atlas"],
       short: "Agents that look at screenshots and control a mouse and keyboard, or a browser, to operate software that has no API.",
-      analogy: "remote-controlling a colleague's screen.",
+      eli5: "Using a machine that has no plug: the chef reads the dials and presses the buttons by hand, like a person would. Slower, but it works almost anywhere.",
       what: [
         "Computer-use models look at the screen, reason about what is there, and emit actions such as click, type and scroll. Browser agents do the same inside a web browser, often combining screenshots with the page structure.",
         "This lets agents use legacy applications and ordinary websites. It is slower, costlier and more fragile than an API, and web pages are a major prompt-injection channel."
@@ -917,7 +924,7 @@ window.AE = (function () {
       name: "Workflow patterns", label: "Workflow patterns",
       aka: ["workflow", "prompt chaining", "chaining", "routing", "parallelization", "orchestrator-workers", "evaluator-optimizer", "pipeline", "dag", "n8n"],
       short: "Predefined paths where your code orchestrates model calls: predictable, testable and cheap. Use them whenever you already know the steps.",
-      analogy: "an assembly line, as opposed to a craftsman deciding each step.",
+      eli5: "An assembly line. Each station does one job, in the same order every time. Perfect when the dish never changes.",
       what: [
         "Anthropic's widely cited distinction: **workflows** orchestrate models and tools through predefined code paths, while **agents** let the model direct its own process. Five workflow patterns cover most needs: prompt chaining, routing, parallelization, orchestrator-workers and evaluator-optimizer. See the [[workflows|patterns section]] below the map.",
         "Workflows and agents combine: an agent can be one step of a workflow, and a workflow can be a tool that an agent calls."
@@ -941,7 +948,7 @@ window.AE = (function () {
       name: "Sub-agents", label: "Sub-agents",
       aka: ["subagent", "sub agent", "delegation", "task tool", "agent as tool", "context isolation", "helper agent", "parallel agents"],
       short: "A helper agent with its own fresh context window. It gets one focused job and returns only a condensed result.",
-      analogy: "sending an assistant to the archive: they read a hundred files and come back with one page.",
+      eli5: "A helper who preps in their own corner and hands back one finished bowl. The chef's counter stays clean.",
       what: [
         "The main agent delegates a self-contained task (explore the codebase, research a question, review a diff) to a sub-agent. The sub-agent works in its own context, possibly reading many files or pages, and returns a short summary, so the main context stays clean.",
         "Sub-agents can have their own instructions, tool permissions and model (for example a cheaper one), and several can run in parallel."
@@ -968,7 +975,7 @@ window.AE = (function () {
       name: "Multi-agent systems & agent teams", label: "Multi-agent",
       aka: ["multi agent", "multi-agent", "agent team", "agent teams", "swarm", "handoff", "orchestrator", "lead agent", "crew", "society of agents"],
       short: "Several agents working together, a lead coordinating specialists or peers handing off work, for problems too big or broad for one.",
-      analogy: "a project team with a lead, rather than one person doing everything.",
+      eli5: "The kitchen brigade. A head chef splits a big order among station chefs who cook at the same time, then puts the plates together.",
       what: [
         "Common architectures: **orchestrator-workers** (a lead agent plans, spawns parallel sub-agents and synthesises), **handoffs** (an agent transfers the conversation to a specialist), and **teams** (peers sharing a task list and messaging each other).",
         "They shine on broad, parallelisable work such as research. Anthropic reported that its multi-agent research system beat a single agent by about 90% on an internal research evaluation, while using roughly 15 times the tokens of a chat. They struggle with tightly coupled tasks: a 2026 Google study found that every multi-agent setup it tested made strictly sequential tasks worse. Typical failures are miscommunication, duplicated work and conflicting decisions."
@@ -995,7 +1002,7 @@ window.AE = (function () {
       name: "Agent2Agent protocol (A2A)", label: "A2A",
       aka: ["agent2agent", "agent to agent", "agent card", "interoperability", "acp", "cross-vendor agents"],
       short: "An open protocol for agents built by different vendors to discover each other and collaborate on tasks. MCP connects agents to tools; A2A connects agents to agents.",
-      analogy: "a common business language that lets two companies' assistants work together without sharing their internal files.",
+      eli5: "Two restaurants sharing one order form. One kitchen can ask another for a dish without either of them seeing the other's recipes.",
       what: [
         "With A2A, an agent publishes an **Agent Card** describing its skills and endpoint. A client agent sends it tasks and receives messages, status updates and resulting artefacts over standard web protocols, including streaming and push notifications.",
         "The remote agent stays opaque: it does not expose its internal tools, memory or prompts. Google launched A2A in April 2025 and moved it to the Linux Foundation in June 2025."
@@ -1019,7 +1026,7 @@ window.AE = (function () {
       name: "Long-running & background agents", label: "Long-running agents",
       aka: ["background agent", "cloud agent", "async agent", "autonomous", "durable execution", "checkpoint", "ralph", "ralph loop", "time horizon", "overnight"],
       short: "Agents that work for hours or across many sessions, often in the cloud while you do something else, and return a pull request, report or result.",
-      analogy: "a contractor who works overnight and leaves a progress report on your desk.",
+      eli5: "The night shift. It works for hours while you sleep and leaves a note in the morning about what got done.",
       what: [
         "The length of tasks agents can complete on their own has grown quickly. METR measured the length of tasks frontier agents finish with 50% success doubling about every seven months between 2019 and 2025, and faster since; for early 2026 it estimated roughly 12 hours of human work, with wide uncertainty.",
         "Long runs need support from the harness: durable state and checkpoints, progress files and task lists that survive context resets, frequent commits, tests as ground truth, compaction and budgets. Background agents run in cloud sandboxes, are triggered from chat, issues or schedules, and report back asynchronously. A popular minimalist technique is the **Ralph loop**: run the same agent prompt again and again against a spec and a progress file until the work is done."
@@ -1045,7 +1052,7 @@ window.AE = (function () {
       name: "Verification & self-correction", label: "Verification",
       aka: ["tests", "testing", "self-correction", "reflection", "reflexion", "self-refine", "critic", "reviewer", "evaluator", "llm as judge", "tdd", "check work"],
       short: "Giving the agent a way to check its own work, with tests, linters, screenshots or a reviewer agent, and to fix what fails.",
-      analogy: "a carpenter's spirit level: you don't trust your eye, you check.",
+      eli5: "Tasting before serving, and a thermometer in the roast. Don't trust that it looks done: check.",
       what: [
         "Agents are far more reliable when they get ground-truth feedback: compilers, unit tests, type checkers, linters, rendering the interface and looking at a screenshot, validating output against a schema, or a second model reviewing against explicit criteria (the evaluator-optimizer pattern).",
         "Research on self-reflection (Reflexion, Self-Refine) shows that feedback loops improve results. It also shows that models cannot reliably correct their own reasoning without an external signal, so prefer objective checks."
@@ -1072,7 +1079,7 @@ window.AE = (function () {
       name: "Evals & benchmarks", label: "Evals",
       aka: ["evaluation", "eval", "benchmark", "swe-bench", "terminal-bench", "tau-bench", "gaia", "osworld", "llm as a judge", "error analysis", "regression", "metr", "pass@k"],
       short: "Systematic tests of AI behaviour. Public benchmarks compare models; your own evals tell you whether your agent actually works.",
-      analogy: "exams with an answer key, taken again after every change to the curriculum.",
+      eli5: "The food critic with a score sheet. After every change to the menu, they taste the same dishes again and say whether things got better.",
       what: [
         "An eval runs the agent on a set of tasks and grades the results: with code (exact checks, unit tests, checking the final state of a system), with a model judge using a rubric, or with human review. For agents, grade the outcome (was the bug fixed, was the record updated correctly?) and, where useful, the path (sensible tool use, number of turns, cost).",
         "Public benchmarks for software engineering, terminal work, tool use, browsing and computer use, plus METR's time horizons, track progress across models. Your own eval set, built from real tasks and real failures, guides your decisions."
@@ -1099,7 +1106,7 @@ window.AE = (function () {
       name: "Observability & tracing", label: "Observability",
       aka: ["tracing", "traces", "spans", "logging", "monitoring", "opentelemetry", "otel", "langfuse", "langsmith", "phoenix", "telemetry", "dashboards"],
       short: "Recording every model call, tool call, token count, cost and latency of every run, so you can see what the agent actually did.",
-      analogy: "the flight recorder.",
+      eli5: "Cameras in the kitchen and a log of every step. When a dish goes wrong, you can rewind and see exactly where.",
       what: [
         "Agent runs are long, branching and non-deterministic, so logging only the final answer is not enough. Tracing records each step as a span: prompts, model responses, tool calls with arguments and results, sub-agent runs, errors, timing, tokens and cost, arranged on a timeline you can inspect.",
         "OpenTelemetry's semantic conventions for generative AI standardise these signals across vendors. Traces feed debugging, error analysis, evals, cost control and audits."
@@ -1125,7 +1132,7 @@ window.AE = (function () {
       name: "Cost & latency optimisation", label: "Cost & latency",
       aka: ["cost", "price", "tokens", "latency", "speed", "prompt caching", "caching", "batch", "routing", "cheaper", "budget", "effort"],
       short: "Agents can use a lot of tokens. Caching, the right model for each step, batching and a lean context keep them fast and affordable.",
-      analogy: "fuel efficiency: same journey, very different bills depending on how you drive.",
+      eli5: "The grocery bill and the waiting time. With good planning, the same dish costs less and arrives sooner.",
       what: [
         "Agent cost is roughly tokens per turn, times turns, times price, and it grows quickly because the whole context is re-sent every turn. The biggest levers are prompt caching (re-use the unchanged prefix at a fraction of the price and latency), routing easy steps to smaller models, right-sizing reasoning effort, a lean context (compaction, sub-agents, concise tool output, tool search), batch APIs for jobs that can wait, and parallel tool calls to cut waiting time.",
         "Measure cost per successful task. A cheaper model that needs three attempts is not cheaper."
@@ -1151,7 +1158,7 @@ window.AE = (function () {
       name: "Governance & regulation", label: "Governance",
       aka: ["eu ai act", "ai act", "compliance", "gdpr", "nist", "ai rmf", "iso 42001", "policy", "audit", "risk management", "regulation", "dsgvo"],
       short: "Policies, documentation and legal duties around AI agents: who may deploy what, with which oversight, records and risk controls.",
-      analogy: "the building code: it doesn't build the house, but it decides what is allowed to stand.",
+      eli5: "The health code and the inspector's visit. They don't cook anything, but they decide what the kitchen may serve, and they check.",
       what: [
         "Governance turns safety practice into accountable process: an inventory of agents and their permissions, risk assessment, data protection (GDPR), human oversight, logging and incident response, and vendor management.",
         "Key frameworks: the **EU AI Act** (prohibitions since February 2025, duties for general-purpose AI models since August 2025, generally applicable since August 2026; the 2026 Digital Omnibus moved high-risk obligations to December 2027 and August 2028), the **NIST AI Risk Management Framework** with its generative AI profile, **ISO/IEC 42001** for AI management systems, and agent-specific guidance such as Singapore's Model AI Governance Framework for Agentic AI."
@@ -1176,7 +1183,7 @@ window.AE = (function () {
 
   /* ---------------------------------------------------------------------------
      The walkthrough: one run, step by step. "blocks" are highlighted on the map,
-     "conn" are the active connectors, "loop" animates the loop diagram.
+     "conn" are the active connectors, "station" parks the token of the loop diagram.
      ------------------------------------------------------------------------- */
   var steps = [
     { title: "A task arrives",
@@ -1184,44 +1191,44 @@ window.AE = (function () {
       blocks: ["triggers", "surfaces"], conn: ["c-task"] },
     { title: "The harness sets the stage",
       text: "Before the model sees anything, the harness assembles the starting context: the system prompt, instruction files such as AGENTS.md, relevant memory, the **names and one-line descriptions** of available skills, and tool definitions from built-in tools and connected MCP servers. Session-start hooks can add live information.",
-      blocks: ["harness", "system-prompt", "instructions", "memory", "skills", "tools", "mcp", "hooks"], conn: ["c-ctx"] },
+      blocks: ["harness", "system-prompt", "instructions", "memory", "skills", "tools", "mcp", "hooks"], conn: ["c-ctx"], station: "assemble" },
     { title: "The request is expanded",
       text: "If the person invoked a slash command or picked a playbook, its template expands into the prompt. A hook can validate or enrich the prompt before it is sent.",
-      blocks: ["commands", "playbooks", "hooks"], conn: ["c-ctx"] },
+      blocks: ["commands", "playbooks", "hooks"], conn: ["c-ctx"], station: "assemble" },
     { title: "The model is called",
       text: "The harness sends the **entire** context to the model through the provider's API. The model is stateless and sees only this request. The unchanged prefix comes from the prompt cache, which saves cost and time.",
-      blocks: ["model", "provider", "context-window", "cost"], conn: ["c-api"], loop: true },
+      blocks: ["model", "provider", "context-window", "cost"], conn: ["c-api"], station: "model" },
     { title: "Think and plan",
       text: "The model reasons about the task. For anything non-trivial it drafts a plan or a to-do list. In plan mode a person approves the plan before anything changes.",
-      blocks: ["reasoning", "planning", "hitl"], conn: ["c-api"], loop: true },
+      blocks: ["reasoning", "planning", "hitl"], conn: ["c-api"], station: "model" },
     { title: "Load know-how on demand",
       text: "The task matches a skill's description, so the model reads that skill's SKILL.md, and later only the scripts or reference files it needs. Expertise enters the context exactly when it is useful: progressive disclosure.",
-      blocks: ["skills", "playbooks", "context-engineering"], conn: ["c-ctx"], loop: true },
+      blocks: ["skills", "playbooks", "context-engineering"], conn: ["c-ctx"], station: "assemble" },
     { title: "Gather knowledge",
       text: "The agent looks things up: it searches and reads files, queries a RAG index of company documents, searches the web, or reads data from an MCP server. The findings enter the context with their sources.",
-      blocks: ["search", "rag", "embeddings", "mcp"], conn: ["c-ctx", "c-tool"], loop: true },
+      blocks: ["search", "rag", "embeddings", "mcp"], conn: ["c-ctx", "c-tool"], station: "run" },
     { title: "Request an action",
       text: "The model emits a structured tool call: a tool name and JSON arguments. Before anything runs, the harness checks permissions (allow, ask or deny), runs pre-tool hooks and applies guardrails. Untrusted content in the context is a reason to ask a person first.",
-      blocks: ["tools", "permissions", "hooks", "guardrails", "security"], conn: ["c-tool"], loop: true },
+      blocks: ["tools", "permissions", "hooks", "guardrails", "security"], conn: ["c-tool"], station: "check" },
     { title: "Execute in a safe place",
       text: "The harness executes the call: a shell command in the sandbox, an API call through an MCP server, or clicks through computer use. The result comes back as an observation and is appended to the context. Post-tool hooks run, for example to format edited code.",
-      blocks: ["sandbox", "mcp", "computer-use", "hooks"], conn: ["c-tool"], loop: true },
+      blocks: ["sandbox", "mcp", "computer-use", "hooks"], conn: ["c-tool"], station: "run" },
     { title: "Loop",
       text: "The model reads the result and decides what to do next: another tool call, a fix, or the final answer. Steps 4 to 9 repeat, often dozens of times. Budgets for turns, tokens and time keep the loop bounded.",
       note: "This repetition is the agent loop. Everything before it prepares the loop; everything after it checks and improves the loop.",
-      blocks: ["agent-loop", "model", "reasoning"], conn: ["c-api", "c-tool"], loop: true },
+      blocks: ["agent-loop", "model", "reasoning"], conn: ["c-api", "c-tool"], station: "result" },
     { title: "Delegate",
       text: "For broad or separable sub-tasks, the agent starts sub-agents with fresh context windows, or hands a task to another organisation's agent via A2A. They work in parallel and return condensed results, so the main context stays clean.",
-      blocks: ["subagents", "multi-agent", "a2a", "workflows"], conn: ["c-dele"] },
+      blocks: ["subagents", "multi-agent", "a2a", "workflows"], conn: ["c-dele"], station: "run" },
     { title: "Keep the context healthy",
       text: "As the window fills, the harness compacts older turns into a summary and clears stale tool results. The agent writes progress notes and decisions to memory files, so nothing important is lost.",
-      blocks: ["compaction", "context-engineering", "memory", "context-window"], conn: [] },
+      blocks: ["compaction", "context-engineering", "memory", "context-window"], conn: [], station: "assemble" },
     { title: "Verify the work",
       text: "Before declaring success, the agent checks its work against ground truth: it runs tests and linters, renders the interface, validates the output format, or asks a reviewer agent. Failures send it back into the loop.",
-      blocks: ["verification", "sandbox", "guardrails"], conn: ["c-tool"] },
+      blocks: ["verification", "sandbox", "guardrails"], conn: ["c-tool"], station: "run" },
     { title: "Hand over the result",
       text: "The agent delivers an answer, a document or a pull request. A stop hook can refuse to let it finish until the checks pass. Irreversible or external actions (merge, send, pay) wait for human approval.",
-      blocks: ["surfaces", "hitl", "hooks"], conn: ["c-task"] },
+      blocks: ["surfaces", "hitl", "hooks"], conn: ["c-task"], station: "exit" },
     { title: "Measure and improve",
       text: "Every step was traced: tokens, cost, tool calls, errors. Evals score the outcome. You review failures and improve instructions, skills, tools and permissions, and the agent's memory carries lessons into the next run.",
       blocks: ["observability", "evals", "cost", "skills", "playbooks", "instructions"], conn: ["c-ops"] },
@@ -2392,6 +2399,277 @@ var learn = [
     "wide": true
   }
 ];
+
+  /* ---------------------------------------------------------------------------
+     The ELI5 story: nine pictures of the kitchen. "id" picks the drawing in app.js.
+     ------------------------------------------------------------------------- */
+  var story = [
+    {
+      "id": "order",
+      "zone": "start",
+      "title": "An order comes in",
+      "text": "Every agent run starts with an order. A person types a request, or a timer, a webhook or a failing build rings the bell. The order says what to cook and where to serve it.",
+      "blocks": [
+        "triggers",
+        "surfaces"
+      ]
+    },
+    {
+      "id": "chef",
+      "zone": "model",
+      "title": "The chef thinks",
+      "text": "The chef is the model. It has read millions of recipes and is very good at deciding the next step. But it remembers nothing between orders and only sees what is on the counter.",
+      "blocks": [
+        "model",
+        "reasoning",
+        "provider"
+      ]
+    },
+    {
+      "id": "counter",
+      "zone": "harness",
+      "title": "The counter is small",
+      "text": "Everything the chef can use has to fit on the counter: the order, the house rules, notes and every result so far. The kitchen around the chef, the harness, decides what goes on it and clears it when it gets full.",
+      "blocks": [
+        "context-window",
+        "harness",
+        "context-engineering",
+        "compaction"
+      ]
+    },
+    {
+      "id": "cards",
+      "zone": "know",
+      "title": "Recipe cards and a library",
+      "text": "House rules hang on the wall. Recipe cards wait in a box until a dish needs them. When the chef doesn't know something, the kitchen looks it up in the library instead of guessing.",
+      "blocks": [
+        "instructions",
+        "skills",
+        "rag",
+        "search"
+      ]
+    },
+    {
+      "id": "tools",
+      "zone": "tools",
+      "title": "Tools, and one plug for all",
+      "text": "The chef decides, the tools do the work: knives, pots, the oven. New appliances use one standard plug, MCP, and risky experiments happen in a tiled test kitchen, the sandbox.",
+      "blocks": [
+        "tools",
+        "mcp",
+        "sandbox"
+      ]
+    },
+    {
+      "id": "locks",
+      "zone": "control",
+      "title": "Locks and alarms",
+      "text": "Some cupboards need the manager's key, the smoke alarm always goes off, and risky dishes need the head chef's nod. The kitchen enforces these rules; they don't depend on the chef's good intentions.",
+      "blocks": [
+        "permissions",
+        "hooks",
+        "guardrails",
+        "hitl",
+        "security"
+      ]
+    },
+    {
+      "id": "taste",
+      "zone": "harness",
+      "title": "Taste, adjust, taste again",
+      "text": "The chef cooks a little, tastes, and decides the next move. This repeats, often dozens of times, until the dish is right. That repetition is the agent loop, and the tasting is verification.",
+      "blocks": [
+        "agent-loop",
+        "verification",
+        "planning"
+      ]
+    },
+    {
+      "id": "helpers",
+      "zone": "orch",
+      "title": "Helpers for big orders",
+      "text": "A big order gets split up. Helpers prep in their own corners and each hands back one finished bowl, so the chef's counter stays clean. Dishes that never change run like an assembly line.",
+      "blocks": [
+        "subagents",
+        "multi-agent",
+        "workflows"
+      ]
+    },
+    {
+      "id": "critics",
+      "zone": "ops",
+      "title": "Critics, cameras and the bill",
+      "text": "A good kitchen keeps getting better. Critics score the dishes after every change, cameras record each step, someone watches the bill, and the inspector checks the rules.",
+      "blocks": [
+        "evals",
+        "observability",
+        "cost",
+        "governance"
+      ]
+    }
+  ];
+
+  /* Five ideas that explain most of it. */
+  var ideas = [
+    {
+      "t": "The model is stateless.",
+      "d": "On every turn the harness re-sends the whole context. Anything not in that request does not exist for the model.",
+      "blocks": [
+        "model",
+        "context-window",
+        "harness"
+      ]
+    },
+    {
+      "t": "Context is the bottleneck.",
+      "d": "Quality drops as the context window fills. Skills, sub-agents, compaction and RAG are all ways to load the right tokens at the right time.",
+      "blocks": [
+        "context-engineering",
+        "skills",
+        "subagents",
+        "compaction",
+        "rag"
+      ]
+    },
+    {
+      "t": "Prompts suggest; code enforces.",
+      "d": "Instructions guide behaviour. Hooks, permissions and sandboxes guarantee it.",
+      "blocks": [
+        "instructions",
+        "hooks",
+        "permissions",
+        "sandbox"
+      ]
+    },
+    {
+      "t": "Start simple and climb only with evidence.",
+      "d": "A single call beats a workflow, and a workflow beats an autonomous agent, until your evals show otherwise.",
+      "blocks": [
+        "workflows",
+        "agent-loop",
+        "evals"
+      ]
+    },
+    {
+      "t": "Give the agent a way to check its work.",
+      "d": "Tests, linters, screenshots and reviewers turn plausible output into verified output.",
+      "blocks": [
+        "verification",
+        "sandbox",
+        "hooks"
+      ]
+    }
+  ];
+
+  /* Guides: the panels that open from the menu. "menu" and "hint" label the menu entry. */
+  var guides = {
+    "story": {
+      "group": "Start here",
+      "menu": "The story, like I'm 5",
+      "hint": "Nine pictures, two minutes",
+      "eyebrow": "Explain it like I'm 5",
+      "title": "An AI agent is a restaurant kitchen",
+      "lede": "Nine small pictures. After them, every block on the map will make sense."
+    },
+    "ideas": {
+      "group": "Start here",
+      "menu": "Five big ideas",
+      "hint": "What explains most of it",
+      "eyebrow": "Five big ideas",
+      "title": "Five ideas that explain most of it",
+      "lede": "An agent is a language model that uses tools in a loop until a goal is reached. Everything else you hear about exists to give that loop the right context, the right capabilities and the right limits."
+    },
+    "steps": {
+      "group": "Start here",
+      "menu": "One run, step by step",
+      "hint": "All 16 steps as a list",
+      "eyebrow": "One run, step by step",
+      "title": "What happens when an agent works on a task",
+      "lede": "The sixteen steps of a typical run, in order. Steps 4 to 9 repeat many times; that repetition is the agent loop. Press “Show on the map” to see which blocks are active."
+    },
+    "context": {
+      "group": "Understand",
+      "menu": "Inside the context window",
+      "hint": "What the model actually sees",
+      "eyebrow": "Inside the context window",
+      "title": "What the model actually sees",
+      "lede": "The context window is the agent's entire working memory for a turn. These bars show what fills it during a long task, as illustrative shares of a 200,000-token window. Compare the middle bar with the bottom one: that difference is context engineering."
+    },
+    "compare": {
+      "group": "Understand",
+      "menu": "Easily confused",
+      "hint": "Skill vs. tool vs. MCP vs. plugin vs. hook",
+      "eyebrow": "Easily confused",
+      "title": "Skill, tool, MCP server, plugin, hook: what is the difference?",
+      "lede": "They all extend an agent, but they are triggered by different parties, enter the context at different moments and cost different amounts of it. Only some of them are deterministic.",
+      "note": "Context cost refers to tokens in the model's context window. “Deterministic” means the behaviour is guaranteed by code rather than by the model's judgement. For a worked example, watch Anthropic's [Tool, skill, or subagent? Decomposing an agent that outgrew its prompt](https://www.youtube.com/watch?v=mWvtOHlZM-I) (2026)."
+    },
+    "patterns": {
+      "group": "Understand",
+      "menu": "Patterns",
+      "hint": "From fixed workflows to agent teams",
+      "eyebrow": "Patterns",
+      "title": "From fixed workflows to agent teams",
+      "lede": "Most production systems combine a handful of patterns. They are ordered by autonomy: the further down, the more the model decides and the less predictable cost and behaviour become. Pick the first one that solves your problem.",
+      "note": "Pattern names follow Anthropic's [Building effective agents](https://www.anthropic.com/engineering/building-effective-agents) (2024) and its multi-agent research write-up (2025)."
+    },
+    "protocols": {
+      "group": "Understand",
+      "menu": "Protocols & standards",
+      "hint": "MCP, A2A, AGENTS.md, Agent Skills…",
+      "eyebrow": "Open protocols & standards",
+      "title": "The plumbing that lets agents work together",
+      "lede": "Interoperability now runs on a few open standards, most of them governed by foundations rather than by a single vendor. Each one connects a different pair of things."
+    },
+    "decide": {
+      "group": "Build",
+      "menu": "Which block when?",
+      "hint": "Start from what you need",
+      "eyebrow": "Which block when?",
+      "title": "Start from what you need, not from the newest acronym",
+      "lede": "Find your goal, then open the block next to it."
+    },
+    "build": {
+      "group": "Build",
+      "menu": "Build your own flow",
+      "hint": "Ladder, recipe, examples, checklist",
+      "eyebrow": "Build your own flow",
+      "title": "The current recipe, step by step",
+      "lede": "How experienced teams build agentic workflows in 2026, distilled from vendor engineering guides, research and practice. Use it as a starting point and adapt it to your own evals."
+    },
+    "blocks": {
+      "group": "Look up",
+      "menu": "All 42 blocks",
+      "hint": "Every block with its definition",
+      "eyebrow": "All building blocks",
+      "title": "Every block, grouped by zone",
+      "lede": "The same blocks as on the map, with their one-sentence definitions. Open any block for the simple picture, the details and the sources."
+    },
+    "glossary": {
+      "group": "Look up",
+      "menu": "Glossary",
+      "hint": "The vocabulary, A to Z",
+      "eyebrow": "Glossary",
+      "title": "The vocabulary, A to Z",
+      "lede": ""
+    },
+    "learn": {
+      "group": "Look up",
+      "menu": "Learn more",
+      "hint": "Talks, courses, books, papers",
+      "eyebrow": "Learn more",
+      "title": "Where to go deeper",
+      "lede": "Talks, courses, books and papers from the people who build and research these systems. Every link was checked when this snapshot was made."
+    },
+    "about": {
+      "group": "Look up",
+      "menu": "About this map",
+      "hint": "Sources, privacy, credits",
+      "eyebrow": "About",
+      "title": "About this map",
+      "lede": ""
+    }
+  };
 
   /* ---------------------------------------------------------------------------
      Sources per block (verified when the snapshot was made)
@@ -5600,6 +5878,7 @@ var learn = [
   return {
     meta: meta, zones: zones, connectors: connectors, blocks: blocks, steps: steps, context: context,
     compare: compare, decide: decide, patterns: patterns, ladder: ladder, recipe: recipe, flows: flows,
-    pairs: pairs, checklist: checklist, protocols: protocols, glossary: glossary, learn: learn
+    pairs: pairs, checklist: checklist, protocols: protocols, glossary: glossary, learn: learn,
+    story: story, ideas: ideas, guides: guides
   };
 })();

@@ -1,22 +1,30 @@
 # Agentic AI, Explained
 
-An interactive, single-page map of every building block of agent-based AI work, as of **October 2026**: models, providers, harnesses, the agent loop, context engineering, instruction files, skills, playbooks, slash commands, plugins, RAG, embeddings, MCP, tools, sandboxes, computer use, sub-agents, multi-agent systems, A2A, hooks, permissions, guardrails, security, evals, observability, cost and governance.
+A hand-drawn, interactive map of every building block of agent-based AI work, as of **October 2026**: models, providers, harnesses, the agent loop, context engineering, instruction files, skills, playbooks, slash commands, plugins, RAG, embeddings, MCP, tools, sandboxes, computer use, sub-agents, multi-agent systems, A2A, hooks, permissions, guardrails, security, evals, observability, cost and governance.
 
-For each block the page explains what it is, when to use it, what to watch out for, current practice, and the exact moment it enters an agent run. Every block links to vetted sources: official documentation, specifications, peer-reviewed or widely cited papers, and talks from established channels (Andrej Karpathy, 3Blue1Brown, IBM Technology, Stanford, DeepLearning.AI, Anthropic, OpenAI, Google and others).
+The entry page is only the map. Everything else opens when you interact with it:
+
+- **Tap a block** for a simple picture first ("like I'm 5", told as a restaurant kitchen), then the precise definition, the moment it enters an agent run, when to use it, what to watch out for, current practice, dated status notes and vetted sources.
+- **Tap a zone title** for what the zone does and how it connects to the harness; **tap an arrow** for what flows along it.
+- **Watch one run** plays a 16-step walkthrough on the map: the active blocks light up, the arrows carry moving dots and the agent loop in the middle follows along.
+- **Explain it like I'm 5** opens a nine-picture story of the whole system.
+- **Guides** opens the deeper material: five big ideas, the steps as a list, what fills the context window, easily confused concepts (skill vs. tool vs. MCP vs. plugin vs. hook), patterns from prompt chaining to agent teams, protocols and standards, which block to use when, a build-your-own-flow guide with a checklist, all blocks, a glossary and curated learning resources.
+
+Sources are official documentation, specifications, peer-reviewed or widely cited papers, and talks from established channels (Andrej Karpathy, 3Blue1Brown, IBM Technology, Stanford, DeepLearning.AI, Anthropic, OpenAI, Google and others).
 
 **Live site:** https://veniplex.github.io/ai-explained/ (after GitHub Pages is enabled, see below)
 
-## What's on the page
+## Deep links
 
-- **The map:** all 42 building blocks in seven zones around the harness, with labelled connections. Click any block for details.
-- **One run, step by step:** a 16-step walkthrough that highlights which blocks are active at each moment of a run.
-- **Inside the context window:** what fills the model's working memory during a long task, with and without context engineering.
-- **Easily confused:** skill vs. tool vs. MCP server vs. plugin vs. hook vs. sub-agent, compared side by side.
-- **Which block when?:** start from a goal and find the block to use.
-- **Patterns:** from prompt chaining to multi-agent teams, each with a small diagram.
-- **Build your own flow:** the complexity ladder, a 12-step recipe, four example flows, common mistakes and a pre-launch checklist.
-- **Protocols & standards:** MCP, A2A, AGENTS.md, Agent Skills, MCP Apps, AG-UI, Agent Client Protocol and more, with their current status.
-- **Reference, glossary and learning resources.**
+Every view has its own address, so you can share exactly what you are looking at:
+
+| Link | Opens |
+| --- | --- |
+| `#block-mcp` | the details of one block (any block id from `data.js`) |
+| `#zone-know` | a zone: `start`, `model`, `harness`, `control`, `know`, `tools`, `orch`, `ops` |
+| `#link-api` | a connection: `task`, `api`, `ctx`, `tool`, `dele`, `ops` |
+| `#step-8` | the walkthrough at step 8 (1 to 16) |
+| `#story`, `#ideas`, `#steps`, `#context`, `#compare`, `#patterns`, `#protocols`, `#decide`, `#build`, `#blocks`, `#glossary`, `#learn`, `#about` | a guide |
 
 ## Publish it with GitHub Pages (free)
 
@@ -30,17 +38,20 @@ The site is plain HTML, CSS and JavaScript. There is no build step and nothing t
 
 The `.nojekyll` file tells GitHub Pages to serve the files as they are.
 
-To preview locally, open `index.html` in a browser, or run any static server in this folder, for example `python3 -m http.server`.
+To preview locally, run any static server in this folder, for example `python3 -m http.server`, and open the address it prints.
 
 ## Edit the content
 
-All text, building blocks, walkthrough steps, tables and links live in one file: [`assets/js/data.js`](assets/js/data.js). Edit it and reload the page; no build is needed.
+All text, building blocks, walkthrough steps, story pictures' captions, tables and links live in one file: [`assets/js/data.js`](assets/js/data.js). Edit it and reload the page; no build is needed.
 
-- Each building block has a `name`, a one-sentence `short` definition, `what`, `when`, `avoid`, `sota` (current practice), `examples` and `related` blocks.
+- Each building block has a `name`, a short `label` for the map, an `eli5` sentence (the kitchen picture shown first), a one-sentence `short` definition, `what`, `when`, `avoid`, `sota` (current practice), `examples` and `related` blocks.
+- Zones have a `nick` (their kitchen nickname) and an `eli5` sentence; connectors have a `text` and an `eli5` sentence.
+- Walkthrough steps list the `blocks` and connectors (`conn`) they light up, and the `station` where the loop diagram's token rests.
+- `story`, `ideas` and `guides` hold the story slides, the five big ideas and the titles of every guide.
 - Sources per block are in the `SOURCES` object, and dated status notes in `FACTS`.
-- Inline markup in strings: `` `code` ``, `**bold**`, and `[[block-id]]` or `[[block-id|label]]` to link to another block.
+- Inline markup in strings: `` `code` ``, `**bold**`, `[[block-id]]` or `[[block-id|label]]` to link to another block, and `[text](https://…)` for an external link.
 
-Layout and styling are in `assets/css/style.css`; rendering and interaction are in `assets/js/app.js`.
+Layout and styling are in `assets/css/style.css`; rendering, the hand-drawn sketches and all interaction are in `assets/js/app.js`.
 
 ## How sources were chosen
 
@@ -51,10 +62,15 @@ Layout and styling are in `assets/css/style.css`; rendering and interaction are 
 
 Found an error or a broken link? Please open an issue or a pull request.
 
-## Privacy
+## Accessibility and privacy
 
-No cookies, no analytics and no external requests. Fonts are self-hosted and videos are plain links, not embeds. The theme choice and the checklist are stored only in the visitor's own browser (`localStorage`).
+- Works with keyboard only: `/` focuses the search, arrow keys step through the walkthrough and the story, `Esc` closes whatever is open.
+- Respects "reduce motion": the drawings appear without animation and the loop stands still.
+- Light and dark themes follow your system setting, with a manual switch.
+- No cookies, no analytics and no external requests. Fonts and scripts are self-hosted and videos are plain links, not embeds. The theme choice and the checklist are stored only in the visitor's own browser (`localStorage`).
 
 ## Credits
 
-Typefaces: [Barlow Condensed](https://github.com/jpt/barlow) and [Atkinson Hyperlegible Next & Mono](https://github.com/googlefonts/atkinson-hyperlegible-next), licensed under the SIL Open Font License 1.1 (license files in `assets/fonts/`).
+- Typefaces: [Source Serif 4](https://github.com/adobe-fonts/source-serif), [DM Sans](https://github.com/googlefonts/dm-fonts) and [DM Mono](https://github.com/googlefonts/dm-mono), licensed under the SIL Open Font License 1.1 (license files in `assets/fonts/`).
+- Hand-drawn shapes: [rough.js](https://github.com/rough-stuff/rough) by Preet Shihn, MIT licence (`assets/vendor/`).
+- An independent project, not affiliated with any company or product mentioned on the page.
