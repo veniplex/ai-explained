@@ -10,4 +10,4 @@ An interactive, hand-drawn map of the building blocks of agentic AI (snapshot: O
 
 The site root (https://veniplex.github.io/ai-explained/) forwards to the newest version. Each version is a self-contained static site in its own folder; see its README for details.
 
-GitHub Pages: **Settings → Pages → Deploy from a branch → `main` / `(root)`**.
+GitHub Pages: **Settings → Pages → Build and deployment → Source: GitHub Actions**. The workflow in `.github/workflows/pages.yml` publishes the site on every push to `main`.
