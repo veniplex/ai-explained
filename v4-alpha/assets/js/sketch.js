@@ -366,6 +366,15 @@
         { t: "circle", a: [24, 29, 5], fill: "ink", r: 0.3 }, { t: "line", a: [24, 31, 24, 36], sw: 2 }
       ];
     },
+    counter: function () {
+      return [
+        { t: "poly", a: [[8, 6], [26, 6]].concat(teeth(8, 26, 26, 4, 3)), fill: "paper" },
+        { t: "line", a: [12, 12, 22, 12], sw: 1.2 }, { t: "line", a: [12, 17, 20, 17], sw: 1.2 },
+        { t: "path", a: "M28 31C28 24 32 21 36 21C40 21 44 24 44 31Z", fill: "zm" },
+        { t: "circle", a: [36, 18, 3], fill: "ink", r: 0.3 },
+        { t: "rect", a: [4, 31, 42, 6], fill: "paper" }, { t: "line", a: [8, 41, 42, 41], sw: 1.6 }
+      ];
+    },
     know: function () {
       return [
         { t: "path", a: "M24 13C19 10 12 9 6 11V38C12 36 19 37 24 40Z", fill: "paper" },
@@ -475,7 +484,7 @@
   // `chapter` (optional) picks the technical symbol of a chapter; otherwise the zone's one.
   function doodleSvg(zid, cls, seed, animDelay, chapter) {
     var svg = s("svg", { class: cls || "zone-doodle", viewBox: "0 0 48 48", "aria-hidden": "true", focusable: "false" });
-    var shapes = modeGet() === "technical" ? TICON[TCHAPTER[chapter] || TZONE[zid]] : DOODLE[zid];
+    var shapes = modeGet() === "technical" ? TICON[TCHAPTER[chapter] || TZONE[zid]] : (DOODLE[chapter] || DOODLE[zid]);
     if (shapes) sketchInto(svg, shapes(), seed || 3, { base: { r: 0.7, bow: 0.8 }, anim: animDelay != null, delay: animDelay || 0, stagger: 0.05 });
     return svg;
   }
