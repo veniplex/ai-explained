@@ -10,7 +10,7 @@ window.AE3 = window.AE3 || {};
   AE3.hero = {
     title: "How an AI agent works",
     line: "An AI agent is like a chef who has read every cookbook, remembers nothing, and cooks step by step with the tools you hand over.",
-    minutes: 12
+    minutes: 9
   };
 
   AE3.example = {
@@ -50,9 +50,9 @@ window.AE3 = window.AE3 || {};
       kitchen: "Give the chef knives, pots and an oven, and talk turns into cooking. New appliances all use one standard plug, so any of them can be connected.",
       real: [
         "A **tool** is something the model can ask to have done: search the web, read a file, add a row to a spreadsheet, send an email. The model does not press any buttons itself. It writes a short, structured request (which tool, with which inputs), the software around it runs the tool, and the result goes back on the counter.",
-        "**MCP**, the Model Context Protocol, is the standard plug for tools. A company writes one MCP connection for its app, and every AI app that speaks MCP can use it. That is why assistants can now connect to your calendar, your files or your company's systems."
+        "**MCP**, the Model Context Protocol, is the standard plug for tools. A company writes one MCP server for its app (apps often list these as connectors), and every AI app that speaks MCP can use it. That is why assistants can now connect to your calendar, your files or your company's systems."
       ],
-      example: "Now the model can search live flight prices and open your travel sheet through an MCP connection. For the first time, the prices are real.",
+      example: "Now the model can search live flight prices and open your travel sheet through an MCP connector. For the first time, the prices are real.",
       figure: null,
       entries: ["tools", "mcp"]
     },
@@ -72,7 +72,7 @@ window.AE3 = window.AE3 || {};
     {
       id: "recipes", n: 5, zone: "know", title: "Recipe cards and a notebook", term: "Know-how and memory",
       problem: "The agent works, but it does not know how you like things done, it forgets everything by next time, and on long jobs the counter fills up.",
-      kitchen: "House rules hang on the wall. Recipe cards wait in a box until a dish needs them. A library answers questions, and a notebook keeps what should not be forgotten.",
+      kitchen: "House rules are laid on the counter at the start of every shift. Recipe cards wait in a box until a dish needs them. A library answers questions, and a notebook keeps what should not be forgotten.",
       real: [
         "**Instruction files** are house rules in plain text that the harness puts on the counter at the start of every new chat or job. **Skills** are recipe cards: step-by-step know-how for one kind of task, loaded only when a task needs it, so they take almost no space until then.",
         "To learn facts it was never trained on, the agent **looks things up**: it searches the web, your files or a company knowledge base. **Memory** keeps notes from one chat or job to the next, and when the counter gets full, the harness summarises older steps to make room."
@@ -82,9 +82,9 @@ window.AE3 = window.AE3 || {};
       entries: ["instructions", "skills", "knowledge", "memory"]
     },
     {
-      id: "locks", n: 6, zone: "control", title: "Locks and the head chef's nod", term: "Guardrails",
+      id: "locks", n: 6, zone: "control", title: "Locks and your OK", term: "Guardrails",
       problem: "The agent now acts in the real world. Mistakes cost money, and some of what it reads was written to fool it.",
-      kitchen: "Some cupboards need a key, the smoke alarm sounds whenever there is smoke, risky dishes need the head chef's nod, and experiments happen in a sealed test kitchen.",
+      kitchen: "Some cupboards need a key, the smoke alarm sounds whenever there is smoke, risky dishes wait until you say yes, and experiments happen in a sealed test kitchen.",
       real: [
         "**Permissions** decide what the agent may do on its own, what needs your approval and what is forbidden. A **sandbox** is a sealed computer where the agent can run code without touching anything else. **Hooks** and guardrails are automatic checks that run at fixed moments, whatever the model thinks.",
         "The biggest danger is **prompt injection**: text the agent reads, such as a web page, an email or a document, that contains hidden instructions. A model cannot reliably tell your instructions from an attacker's. So the rule is simple: prompts suggest, code enforces. Real limits sit in the harness, not only in the instructions."

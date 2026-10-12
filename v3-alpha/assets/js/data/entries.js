@@ -113,7 +113,7 @@ window.AE3.entries = {
     kitchen: "Knives, pots and an oven: they turn the chef's talk into cooking.",
     short: "A tool is something the model can ask to have done, such as a web search or a new row in a spreadsheet.",
     how: [
-      "The model writes a structured request: which tool, with which inputs. The harness, the software around the model, runs the tool and puts the result into the context. Tools can search, handle files, run code or work inside other apps. As a last resort, computer use lets the model click and type on a screen like a person, but slower and less reliably."
+      "The model writes a structured request: which tool, with which inputs. The harness, the software around the model, runs the tool and puts the result into the context. Tools can search, handle files, run code or work inside other apps. As a last resort, computer use lets the model ask for clicks and typing on screen, which the harness carries out, slower and less reliably."
     ],
     example: "A flight search returns today's real prices; a spreadsheet tool writes the cheapest three into your travel sheet.",
     forYou: [
@@ -127,7 +127,7 @@ window.AE3.entries = {
         "Computer use means the model looks at screenshots and replies with clicks, typing and scrolling; browser agents do the same inside a web browser. This reaches old applications and ordinary websites, but it is slower, costlier and more fragile than an API, and web pages are a major route for [[security|prompt injection]] (hidden instructions in text the agent reads). Prefer APIs and MCP, then the page structure, then full-screen control. Require confirmation for purchases, logins and messages, and run it in a [[sandbox]] or a separate browser profile."
       ],
       includes: [
-        { name: "Computer & browser use", text: "The model looks at the screen and clicks, types and scrolls like a person, to use software or websites that offer no other way in." }
+        { name: "Computer & browser use", text: "The model looks at the screen and asks for clicks, typing and scrolling, which the harness carries out, to use software or websites that offer no other way in." }
       ]
     },
     related: ["mcp", "agent-loop", "permissions", "sandbox"],
@@ -219,12 +219,12 @@ window.AE3.entries = {
   /* ---- Chapter 5: recipe cards and a notebook ---- */
   "instructions": {
     chapter: "recipes", name: "Instruction files", label: "Instruction files",
-    kitchen: "House rules on the kitchen wall, read again before every shift.",
+    kitchen: "House rules, laid on the counter at the start of every shift.",
     short: "Instruction files hold standing rules in plain text. The harness puts them in the context at the start of every new chat or job.",
     how: [
       "They are written in Markdown, plain text with a little formatting for headings and lists. Agents that write code read files such as AGENTS.md or CLAUDE.md; chat apps offer the same idea as custom instructions. Typical contents are house rules, how a project is organised and your preferences. They sit in the context on every request, so every line takes up room: keep them short."
     ],
-    example: "A house rule says “aisle seat, and no airlines that charge for cabin bags”, so searches take it into account without you repeating it.",
+    example: "An instruction file says “aisle seat, and no airlines that charge for cabin bags”, so searches take it into account without you repeating it.",
     forYou: [
       "Write down the rules you keep repeating, in a few short lines.",
       "When the agent makes the same mistake twice, add one precise line."
@@ -278,7 +278,7 @@ window.AE3.entries = {
     how: [
       "Often the agent simply searches the web or your files, as you would, and tries better search words if the first ones fail. RAG (retrieval-augmented generation) is used for large document collections: before the model answers, a search fetches the best-matching passages and adds them to the context. That search often uses embeddings, lists of numbers that capture meaning, so texts with similar meaning are found even when the words differ."
     ],
-    example: "The agent looks up the airline's baggage rules and checks your company's travel policy before it suggests a flight.",
+    example: "Before it suggests a flight, the agent looks up the airline's baggage rules instead of guessing them.",
     forYou: [
       "Ask for sources, and open one or two to check them.",
       "Answers are only as good as the documents behind them."
@@ -326,10 +326,10 @@ window.AE3.entries = {
     from: ["memory", "compaction"]
   },
 
-  /* ---- Chapter 6: locks and the head chef's nod ---- */
+  /* ---- Chapter 6: locks and your OK ---- */
   "permissions": {
     chapter: "locks", name: "Permissions & approval", label: "Permissions",
-    kitchen: "Some cupboards need a key, and risky dishes wait for the head chef's nod.",
+    kitchen: "Some cupboards need a key, and risky dishes wait until you say yes.",
     short: "Permissions decide what an agent may do alone, what needs your approval and what is forbidden.",
     how: [
       "The harness, the app around the model, checks every action: allowed, ask first, or denied. Approval modes range from asking every time to approving routine actions automatically. You can step in at chosen points to approve, correct or take over. Anything that cannot be undone or that reaches the outside world, such as a payment or an email, should wait for a person.",

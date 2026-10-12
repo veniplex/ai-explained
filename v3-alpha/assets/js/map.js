@@ -86,7 +86,7 @@
   var STATIONS = [
     { id: "fill", name: ["Fill", "the counter"], sub: "task, rules, results" },
     { id: "decide", name: ["Model", "decides"], sub: "answer, or use a tool?" },
-    { id: "check", name: ["Check", "the action"], sub: "permissions, hooks" },
+    { id: "check", name: ["Check", "the action"], sub: "is it allowed?" },
     { id: "run", name: ["Run", "the tool"], sub: "search, sheet, code" },
     { id: "add", name: ["Add", "the result"], sub: "back onto the counter" }
   ];

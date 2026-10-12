@@ -38,7 +38,8 @@ window.AE3.sources = {
       "reinforcement fine-tuning",
       "distillation",
       "post-training",
-      "alignment"
+      "alignment",
+      "ai model"
     ],
     "facts": [
       {
@@ -924,7 +925,10 @@ window.AE3.sources = {
       "evaluator",
       "llm as judge",
       "tdd",
-      "check work"
+      "check work",
+      "agent",
+      "ai agent",
+      "agentic"
     ],
     "facts": [
       {
@@ -1212,7 +1216,11 @@ window.AE3.sources = {
       "agentcore",
       "mastra",
       "smolagents",
-      "llamaindex"
+      "llamaindex",
+      "chatgpt",
+      "claude",
+      "gemini",
+      "app"
     ],
     "facts": [
       {
@@ -2385,7 +2393,7 @@ window.AE3.sources = {
         "source": "https://www.anthropic.com/engineering/claude-code-auto-mode"
       },
       {
-        "text": "The same study found that about 73% of tool calls on Anthropic's API involve a human in the loop and only about 0.8% of actions look irreversible.",
+        "text": "Anthropic's February 2026 study of agent autonomy also found that about 73% of tool calls on its API involve a human in the loop and only about 0.8% of actions look irreversible.",
         "source": "https://www.anthropic.com/research/measuring-agent-autonomy"
       }
     ],
