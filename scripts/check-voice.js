@@ -64,10 +64,11 @@ function lintTechText(value, at, err) {
 
 function checkKitchenChapter(id, c, err) {
   const at = "kitchen.chapters." + id, B = BUDGET.kChapter;
-  ["title", "problem", "lead", "example"].forEach((f) => { if (!c || !c[f] || typeof c[f] !== "string") err(at + ": missing " + f); });
+  // The kitchen `problem` is optional: v6-alpha shows one shared problem line (the technical one) above both voices.
+  ["title", "lead", "example"].concat(c && c.problem !== undefined ? ["problem"] : []).forEach((f) => { if (!c || !c[f] || typeof c[f] !== "string") err(at + ": missing " + f); });
   if (!c || !Array.isArray(c.text) || c.text.length < 1 || c.text.length > 3) { err(at + ": text needs 1 to 3 paragraphs"); return; }
   if (words(c.title) > B.title) err(at + ".title: " + words(c.title) + " words, limit " + B.title);
-  if (words(c.problem) > B.problem) err(at + ".problem: " + words(c.problem) + " words, limit " + B.problem);
+  if (c.problem !== undefined && words(c.problem) > B.problem) err(at + ".problem: " + words(c.problem) + " words, limit " + B.problem);
   if (words(c.lead) > B.lead) err(at + ".lead: " + words(c.lead) + " words, limit " + B.lead);
   c.text.forEach((p, i) => { if (words(p) > B.textEach) err(at + ".text[" + i + "]: " + words(p) + " words, limit " + B.textEach); });
   if (wordsOf(c.text) > B.textTotal) err(at + ".text: " + wordsOf(c.text) + " words in all, limit " + B.textTotal);
