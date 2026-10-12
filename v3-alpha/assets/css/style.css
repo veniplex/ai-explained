@@ -1048,7 +1048,42 @@ tbody th { font-weight: 600; }
 /* ---------- Print: the text and the whole kitchen ---------------------------- */
 @media print {
   .bar, .menu, .scrim, .drawer, .sheet, .skip-link, .story-map, .mini-map, .hero-actions { display: none !important; }
-  body { background: #fff; }
+  /* A dark theme still prints on white paper: put the light colours back. */
+  :root[data-theme="dark"] {
+    color-scheme: light;
+    --paper: #faf9f5;
+    --paper-2: #f0eee6;
+    --paper-3: #e8e5da;
+    --surface: #ffffff;
+    --ink: #141413;
+    --ink-2: #3d3d3a;
+    --ink-3: #6b6a65;
+    --ink-hover: #2f2e2b;
+    --rule: #e3e1d8;
+    --rule-strong: #cfccc0;
+    --focus: #2c6fbb;
+    --scrim: rgba(20, 20, 19, 0.32);
+    --shadow: 0 2px 6px rgba(20, 20, 19, 0.06), 0 18px 48px rgba(20, 20, 19, 0.14);
+    --clay: #d97757;
+    --clay-ink: #9e4a2d;
+    --clay-soft: #f6e0d4;
+    --clay-mid: #e9a385;
+    --sk-ink: #141413;
+    --sk-paper: #fffdf8;
+    --ok: #4d6b2f; --ok-soft: #e5e9d3;
+    --bad: #983e5c; --bad-soft: #f4dee5;
+    --part: #855628; --part-soft: #f2e6cd;
+    --z-start: #5f5d57; --t-start: #ebe7dc; --m-start: #cdc5b2;
+    --z-model: #5b5486; --t-model: #e4e1f0; --m-model: #b9b3d8;
+    --z-harness: #9e4a2d; --t-harness: #f7e3d8; --m-harness: #e9a385;
+    --z-control: #983e5c; --t-control: #f4dee5; --m-control: #dfa6b9;
+    --z-know: #56652c; --t-know: #e5e9d3; --m-know: #b8c38a;
+    --z-tools: #855628; --t-tools: #f2e6cd; --m-tools: #dbb586;
+    --z-orch: #2f6190; --t-orch: #dce8f3; --m-orch: #9cc0df;
+    --z-ops: #386857; --t-ops: #dceae3; --m-ops: #a3c8b8;
+    --hl-mix: 100%;
+  }
+  body { background: var(--paper); }
   .story { display: block; }
   .chapter, .zone { break-inside: avoid; }
 }
