@@ -4,17 +4,21 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Agentic AI, Explained</title>
-  <meta name="description" content="An interactive, hand-drawn map of the building blocks of agentic AI. Work in progress.">
+  <meta name="description" content="How AI agents work, explained for beginners as one hand-drawn kitchen. Work in progress.">
   <meta property="og:title" content="Agentic AI, Explained">
-  <meta property="og:image" content="https://veniplex.github.io/ai-explained/v1-alpha/assets/img/og.png">
+  <meta property="og:image" content="https://veniplex.github.io/ai-explained/v3-alpha/assets/img/og.png">
   <meta name="twitter:card" content="summary_large_image">
-  <link rel="canonical" href="https://veniplex.github.io/ai-explained/v1-alpha/">
-  <link rel="icon" href="v1-alpha/assets/img/favicon.svg" type="image/svg+xml">
-  <meta http-equiv="refresh" content="0; url=v1-alpha/">
-  <!-- Forward to the newest version and keep deep links such as #block-mcp. -->
-  <script>location.replace("v1-alpha/" + location.hash);</script>
+  <link rel="canonical" href="https://veniplex.github.io/ai-explained/v3-alpha/">
+  <link rel="icon" href="v3-alpha/assets/img/favicon.svg" type="image/svg+xml">
+  <meta http-equiv="refresh" content="0; url=v3-alpha/">
+  <!-- Forward to the newest version. Links made for v1-alpha (such as #block-mcp) keep going to v1-alpha. -->
+  <script>
+    var h = location.hash;
+    var v1 = /^#(block-|zone-|link-|step-|(story|ideas|steps|context|compare|patterns|protocols|decide|build|blocks|glossary|learn|about)$)/.test(h);
+    location.replace((v1 ? "v1-alpha/" : "v3-alpha/") + h);
+  </script>
 </head>
 <body>
-  <p>Forwarding to the newest version: <a href="v1-alpha/">v1-alpha</a>.</p>
+  <p>Forwarding to the newest version: <a href="v3-alpha/">v3-alpha</a>. The first version is still at <a href="v1-alpha/">v1-alpha</a>.</p>
 </body>
 </html>
