@@ -27,6 +27,13 @@ A static, hand-drawn interactive map of agentic AI, published with GitHub Pages.
 - Accessibility promises: works with the keyboard alone (`/` focuses search, `Esc` closes; in v1, arrow keys step through the walkthrough and story), respects reduced motion, light and dark themes.
 - Deep links are public URLs: v1's `#block-<id>`, `#zone-<id>`, `#link-<id>`, `#step-<n>`, `#<guide>` and v3's and v4's `#ch-<n>`, `#ch-e`, `#map`, `#e-<id>`, `#guide-<id>`. Don't rename ids without a reason.
 
+## Privacy (public repository)
+
+- Never put personal information in source files, docs, commit messages or PR titles and bodies: no real names or emails, no local paths (`C:\Users\…`, `/home/…`, scratch folders with a user name), no machine or user names.
+- Never link to personal or internal places: no claude.ai session or project links, no private tools. Public source citations on the site are content and stay.
+- So leave out the `Claude-Session:` trailer and any session link in commits and PR bodies; a plain `Co-Authored-By` line is fine. Don't add a "Requested by <name>" line or a project-thread link to PR bodies.
+- Before opening a PR, run `git diff origin/main -- . ':!CLAUDE.md' | grep -nEi 'claude\.ai|C:\\|/Users/|/home/|@[a-z]+\.'` and clean up what it finds.
+
 ## Commands
 
 - Validate content: `node scripts/validate-data.js [version]`. A PostToolUse hook runs it after every edit to `data.js`, and `node --check` after any JS edit.
