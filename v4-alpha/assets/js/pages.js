@@ -70,7 +70,9 @@
       ]);
     } else {
       sk.append(wrap, [
-        h("p", { class: "def" }, h("span", { class: "eyebrow def-label" }, u.entryLead), rich(v.line)),
+        h("div", { class: "def-row", "data-zone": c.zone },
+          h("p", { class: "def" }, h("span", { class: "eyebrow def-label" }, u.entryLead), rich(v.line)),
+          sk.doodleSvg(c.zone, "def-icon", 13, undefined, e.chapter)),
         section(u.how, paras(v.how)),
         section(u.ex, h("p", { class: "bd-example" }, rich(v.example))),
         section(u.forYou, bullets(v.forYou)),

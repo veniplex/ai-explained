@@ -1062,7 +1062,17 @@ a.formula-part:hover { color: var(--ink); }
 .deeper-title { margin: 22px 0 0; font: 600 var(--fs-xl)/1.3 var(--serif); }
 
 /* Technical voice: no pictures. */
-html[data-mode="technical"] .zone-doodle, html[data-mode="technical"] .eli5-doodle, html[data-mode="technical"] .pic { display: none; }
+html[data-mode="technical"] .pic { display: none; }
+.ch-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+.ch-icon { flex: none; width: 64px; height: 64px; overflow: visible; margin-top: 4px; }
+.def-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }
+.def-icon { flex: none; width: 64px; height: 64px; overflow: visible; }
+.formula-icon { width: 30px; height: 30px; margin-right: 8px; overflow: visible; flex: none; }
+.formula-part { align-items: center; }
+@media (max-width: 760px) {
+  .ch-icon, .def-icon { width: 48px; height: 48px; }
+  .formula-icon { display: none; }
+}
 
 @media (max-width: 760px) {
   .bar .mode-label { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
