@@ -40,7 +40,7 @@
     D.figures.contextBars.forEach(function (row, ri) {
       var bar = h("div", { class: "ctx-bar", role: "img", "aria-label": row.title + ": " + row.segs.map(function (sg) { return sg.label + " " + sg.pct + "%"; }).join(", ") });
       row.segs.forEach(function (sg) {
-        bar.appendChild(h("div", { class: "ctx-seg" + (sg.cls ? " ctx-seg-" + sg.cls : ""), "data-zone": sg.zone || "start", style: "flex: 0 0 " + sg.pct + "%" }, sg.pct >= 9 ? sg.label : ""));
+        bar.appendChild(h("div", { class: "ctx-seg" + (sg.cls ? " ctx-seg-" + sg.cls : ""), "data-zone": sg.zone || "start", style: "flex: 0 0 " + sg.pct + "%" }, sg.pct >= 15 ? sg.label : ""));
       });
       sk.sketchOutline(bar, 400 + ri * 9);
       root.appendChild(h("div", { class: "ctx-row" },
@@ -77,7 +77,10 @@
   function hub() {
     var map = V3.map.create({ layout: "hub", ring: true, stage: 8 });
     var count = Object.keys(D.entries).length;
-    var sources = Object.keys(D.sources).reduce(function (n, id) { return n + D.sources[id].sources.length; }, 0);
+    // Count each source once, however many entries cite it.
+    var seen = {};
+    Object.keys(D.sources).forEach(function (id) { D.sources[id].sources.forEach(function (s) { seen[s.url] = true; }); });
+    var sources = Object.keys(seen).length;
     return h("section", { class: "hub", id: "map", "aria-labelledby": "hub-title", tabindex: "-1" },
       h("div", { class: "hub-head" },
         h("p", { class: "eyebrow" }, "The whole kitchen"),

@@ -824,7 +824,7 @@ tbody th { font-weight: 600; }
 
 /* Hero */
 .hero {
-  max-width: 1180px; margin: 0 auto; min-height: calc(100svh - var(--bar-h) - 40px);
+  max-width: 1180px; margin: 0 auto; min-height: calc(100svh - var(--bar-h));
   display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: clamp(24px, 5vw, 72px); align-items: center;
   padding-block: 32px;
 }
@@ -846,7 +846,7 @@ tbody th { font-weight: 600; }
   display: grid; grid-template-columns: minmax(34rem, 1fr) minmax(0, 1.05fr); gap: clamp(28px, 4vw, 64px); align-items: start;
 }
 .chapters { min-width: 0; }
-.chapter { max-width: 640px; padding-block: clamp(48px, 9vh, 96px); border-top: 1px solid var(--rule); scroll-margin-top: calc(var(--bar-h) + 8px); }
+.chapter { max-width: 640px; padding-block: clamp(48px, 9vh, 96px); border-top: 1px solid var(--rule); }
 .chapter:first-child { border-top: 0; }
 .chapter:focus { outline: none; }
 .chapter > .eyebrow { color: var(--zc); }
@@ -868,6 +868,7 @@ tbody th { font-weight: 600; }
 .ctx-wrap { gap: 24px; }
 .ctx-title { margin-bottom: 8px; font: 600 var(--fs-lg)/1.3 var(--serif); }
 .ctx-bar { min-width: 0; height: 46px; }
+.ctx-seg { white-space: nowrap; text-overflow: ellipsis; }
 .ctx-row .cap { font-size: var(--fs-md); }
 
 /* The map beside the chapters (wide screens) and the small sketches inside them (narrow screens) */
@@ -958,7 +959,7 @@ tbody th { font-weight: 600; }
 .kmap-mini .you-text, .kmap-mini .you-text b { font-size: var(--fs-sm); }
 
 /* Hub, recap and stamp */
-.hub { padding-block: clamp(56px, 10vh, 120px) 40px; border-top: 1px solid var(--rule); scroll-margin-top: var(--bar-h); }
+.hub { padding-block: clamp(56px, 10vh, 120px) 40px; border-top: 1px solid var(--rule); }
 .hub:focus { outline: none; }
 .hub-head { max-width: 1400px; margin: 0 auto 28px; }
 .hub-head .eyebrow { color: var(--clay-ink); }
@@ -1038,10 +1039,11 @@ tbody th { font-weight: 600; }
   .ch-kitchen { grid-template-columns: 1fr; }
   .ch-kitchen .pic { max-width: 280px; }
   .ch-problem { font-size: var(--fs-lg); }
+  .ctx-seg { font-size: 0; }
   .ch-real p:not(.eyebrow) { font-size: var(--fs-base); }
   .kmap-hub { grid-template-columns: minmax(0, 1fr); grid-template-areas: "you" "chef" "kitchen" "tools" "recipes" "helpers" "ops"; }
 }
-@media (max-width: 360px) {
+@media (max-width: 480px) {
   .brand-tail { display: none; }
 }
 
