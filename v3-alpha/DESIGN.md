@@ -11,7 +11,7 @@ The script in the `<head>` of `index.html` always sets `data-theme` before first
 | Token | Use |
 | --- | --- |
 | `--paper`, `--paper-2`, `--paper-3` | page, hover and quiet fills, tracks |
-| `--surface` | cards, menus, the player |
+| `--surface` | cards, menus, buttons |
 | `--ink`, `--ink-2`, `--ink-3` | text: primary, body, meta. `--ink-3` passes 4.5:1 on `--paper`, `--paper-2` and `--surface` (not on `--paper-3`, which is for tracks only) |
 | `--rule`, `--rule-strong` | borders and dividers |
 | `--focus` | focus rings |
@@ -50,7 +50,7 @@ Weights: 400, 500, 600, and 650 for bold. Tracking: `--track-caps` for uppercase
 - **Spacing:** a 2px grid. 1–3px values are only for optical nudges.
 - **Dots:** `--dot` (9px) and `--dot-ring` (1.6px).
 - **Motion:** easing `--ease`; durations `--dur-fast` (hover), `--dur-base` (small moves, fades), `--dur-slow` (panels), `--dur-reveal` (first-paint fades), `--dur-draw` (sketch strokes, connector flow), `--dur-boil` (line boil). `prefers-reduced-motion` cuts all of them.
-- **Layers:** `--z-player` < `--z-bar` < `--z-scrim` < `--z-menu` < `--z-sheet` < `--z-drawer` < `--z-skip`. Small local values (-1, 0, 2) are only used inside an isolated stacking context.
+- **Layers:** `--z-bar` < `--z-scrim` < `--z-menu` < `--z-sheet` < `--z-drawer` < `--z-skip`. Small local values (-1, 0, 2) are only used inside an isolated stacking context.
 
 ## Shared pieces
 
@@ -66,11 +66,11 @@ Weights: 400, 500, 600, and 650 for bold. Tracking: `--track-caps` for uppercase
 | `.card` | bordered panel on `--surface`; each use sets its own padding |
 | `.zdot` | zone dot; needs a `data-zone` ancestor |
 
-Every button has hover, active (1px press), focus-visible (the global ring) and disabled (35% opacity, no pointer events) states. Dot-sized controls (story dots, walkthrough steps) get a hit area at least 24px tall; on narrow screens the walkthrough steps rely on Previous and Next as the full-size equivalent.
+Every button has hover, active (1px press), focus-visible (the global ring) and disabled (35% opacity, no pointer events) states. A control that looks smaller than 24px still gets a hit area at least 24px tall. (v1's player, story dots and walkthrough steps are not part of v3.)
 
 ## Naming
 
-- State: `is-*` or `has-*` (`is-open`, `is-on`, `is-in-loop`, `has-player`), or an ARIA attribute where one exists (`aria-current`, `aria-expanded`).
+- State: `is-*` (`is-open`, `is-on`, `is-selected`), or an ARIA attribute where one exists (`aria-current`, `aria-expanded`).
 - Variant: the base class plus a suffix (`btn-ink`, `tag-yes`, `ctx-seg-strong`, `bd-list-warn`, `link-type-video`).
 - Short prefixes in use: `blk` block on the map, `bd` block details in the drawer, `lp` agent-loop drawing, `pd` pattern diagram, `sk` sketch layer, `ctx` context-window bars, `conn` connector.
 
