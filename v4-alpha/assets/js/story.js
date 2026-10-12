@@ -26,12 +26,12 @@
   }
 
   // The technical voice shows the four parts instead of the kitchen picture. Each part leads to its chapter.
-  var FORMULA = [["Model", "ch-1", "model"], ["Context", "ch-2", "harness"], ["Tools", "ch-3", "tools"], ["Loop", "ch-4", "harness"]];
+  var FORMULA = [["Model", "ch-1", "model", "chef"], ["Context", "ch-2", "harness", "counter"], ["Tools", "ch-3", "tools", "tools"], ["Loop", "ch-4", "harness", "loop"]];
   function formula() {
     var parts = [];
     FORMULA.forEach(function (p, i) {
       if (i) parts.push(h("span", { class: "formula-op", "aria-hidden": "true" }, "+"));
-      parts.push(h("a", { class: "zone formula-part", href: "#" + p[1], "data-go": p[1], "data-zone": p[2] }, p[0]));
+      parts.push(h("a", { class: "zone formula-part", href: "#" + p[1], "data-go": p[1], "data-zone": p[2] }, sk.doodleSvg(p[2], "formula-icon", 21 + i, undefined, p[3]), p[0]));
     });
     parts.push(h("span", { class: "formula-op", "aria-hidden": "true" }, "="));
     parts.push(h("span", { class: "zone formula-part formula-agent", "data-zone": "start" }, "Agent"));
@@ -85,8 +85,9 @@
     var id = anchor(c), t = voice.chapter(c), u = voice.ui(), kitchen = voice.kitchen();
     var eyebrow = (c.n === 8 ? "Epilogue" : "Chapter " + c.n) + (t.term ? " · " + t.term : "");
     return h("section", { class: "chapter", id: id, "data-n": c.n, "data-zone": c.zone, "aria-labelledby": id + "-t", tabindex: "-1" },
-      h("p", { class: "eyebrow" }, eyebrow),
-      h("h2", { class: "ch-title", id: id + "-t" }, t.title),
+      h("div", { class: "ch-head" },
+        h("div", null, h("p", { class: "eyebrow" }, eyebrow), h("h2", { class: "ch-title", id: id + "-t" }, t.title)),
+        kitchen ? null : sk.doodleSvg(c.zone, "ch-icon", 31 + c.n, undefined, c.id)),
       h("div", { class: "mini-map", "data-mini": c.n, inert: true, "aria-hidden": "true" }),
       h("p", { class: "ch-problem" }, rich(t.problem)),
       kitchen ? h("div", { class: "ch-kitchen" }, picture(PIC_FOR[c.id], c.zone),

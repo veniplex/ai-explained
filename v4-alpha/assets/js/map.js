@@ -30,7 +30,7 @@
     var c = CH[cid];
     var el = h("section", { class: "zone" + (cls ? " " + cls : ""), "data-zone": c.zone, "data-area": area, "data-from": c.n, "data-ch": c.n },
       head(c), h("ul", { class: "blk-list" + (cls === "zone-row" ? " blk-row" : "") }, c.entries.map(blk)));
-    if (!opts.mini) el.appendChild(sk.doodleSvg(c.zone, "zone-doodle", 3 + area.length));
+    if (!opts.mini) el.appendChild(sk.doodleSvg(c.zone, "zone-doodle", 3 + area.length, undefined, c.id));
     sk.sketchBox(el, { seed: 11 + area.length * 17 });
     return el;
   }
@@ -47,7 +47,7 @@
     var el = h("section", { class: "zone zone-kitchen", "data-zone": "harness", "data-area": "kitchen", "data-from": counter.n });
     var top = h("div", { class: "kitchen-head", "data-from": loop.n, "data-ch": loop.n },
       head(loop), h("ul", { class: "blk-list blk-row" }, loop.entries.map(blk)),
-      opts.mini ? null : sk.doodleSvg("harness", "zone-doodle", 9));
+      opts.mini ? null : sk.doodleSvg("harness", "zone-doodle", 9, undefined, "loop"));
     var cnt = h("section", { class: "counter", "data-zone": "harness", "data-from": counter.n, "data-ch": counter.n },
       head(counter), h("ul", { class: "blk-list blk-row" }, counter.entries.map(blk)));
     sk.sketchBox(cnt, { seed: 131, radius: 12, fill: "paper" });
