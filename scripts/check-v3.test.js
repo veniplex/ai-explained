@@ -198,3 +198,29 @@ test("prose keeps visible text and leaves out identifier fields", () => {
   assert.ok(!text.includes("b0"));
   assert.ok(!text.includes("chef"));
 });
+
+test("prose counts the compare and build guides but not the glossary or learn list", () => {
+  const { v3 } = fixture();
+  v3.guides.compare.rows.push({ name: "Alphafoo", entry: "e0", cells: ["Betabar"] });
+  v3.guides.build.patterns.push({ id: "gammabaz", name: "Deltaqux", entries: ["e1"], svg: { nodes: [{ t: "Epsilonzed" }] }, alt: "Zetahum" });
+  v3.guides.build.protocols.push({ name: "Etapow", url: "https://thetaurl.example", sources: ["https://iotasrc.example"], entry: "e2" });
+  v3.guides.build.flows.push({ name: "Kappaflow", route: [{ e: "e3", n: 1 }] });
+  v3.guides.glossary.push({ term: "Muterm", def: "Nudefinition", entry: "e0" });
+  v3.guides.learn.push({ title: "Xigroup", items: [{ title: "Omicronbook", url: "https://pisrc.example" }] });
+  const text = prose(v3);
+  ["alphafoo", "betabar", "deltaqux", "zetahum", "etapow", "kappaflow"].forEach((w) => assert.ok(text.includes(w), w));
+  ["gammabaz", "epsilonzed", "thetaurl", "iotasrc", "muterm", "nudefinition", "xigroup", "omicronbook", "pisrc"].forEach((w) => assert.ok(!text.includes(w), w));
+});
+
+test("a glossary term that appears only in a build pattern name passes", () => {
+  const { v1, v3 } = fixture();
+  v3.guides.build.patterns.push({ id: "chaining", name: "Prompt chaining", entries: ["e0"] });
+  v3.guides.glossary.push({ term: "Prompt chaining", def: "A fixed series of model calls.", entry: "e0" });
+  assert.deepEqual(check(v1, v3), []);
+});
+
+test("a glossary term that appears only in its own definition is still reported", () => {
+  const { v1, v3 } = fixture();
+  v3.guides.glossary.push({ term: "Zorkmid", def: "A Zorkmid is a made-up coin.", entry: "e0" });
+  assert.ok(check(v1, v3).includes("glossary Zorkmid: term does not appear on the page"));
+});

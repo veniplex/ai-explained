@@ -39,18 +39,22 @@ function eachString(value, fn, at) {
 }
 
 // Keys whose string values are identifiers or metadata, not visible text.
-const PROSE_SKIP_KEYS = new Set(["from", "related", "chapter", "entries", "id", "zone", "figure", "n"]);
+const PROSE_SKIP_KEYS = new Set(["from", "related", "chapter", "entries", "id", "zone", "figure", "n", "entry", "e", "url", "sources", "svg"]);
 function collectProse(value, out) {
   if (typeof value === "string") out.push(plain(value).toLowerCase());
   else if (Array.isArray(value)) value.forEach((v) => collectProse(v, out));
   else if (value && typeof value === "object") Object.keys(value).forEach((k) => { if (!PROSE_SKIP_KEYS.has(k)) collectProse(value[k], out); });
 }
-// Lower-case visible text of the chapters, entries and recap, with identifier fields left out.
+// Lower-case visible text of the page: chapters, entries, recap and the compare and build guides, with
+// identifier fields left out. The glossary (its own definitions) and the learn list do not count as page text.
 function prose(v3) {
   const out = [];
+  const guides = v3.guides || {};
   collectProse(v3.chapters, out);
   collectProse(v3.entries, out);
   collectProse(v3.recap, out);
+  collectProse(guides.compare, out);
+  collectProse(guides.build, out);
   return out.join(" \n ");
 }
 // The word a glossary term stands for: the term without a trailing parenthetical, trimmed, lower-cased.

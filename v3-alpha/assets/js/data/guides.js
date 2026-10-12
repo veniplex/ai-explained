@@ -1429,7 +1429,7 @@ window.AE3.guides = {
       },
       {
         "k": "trifecta",
-        "t": "No session combines private data, untrusted content and outbound communication without a human gate."
+        "t": "No chat or job combines private data, untrusted content and outbound communication without a human gate."
       },
       {
         "k": "supply",
@@ -1469,23 +1469,13 @@ window.AE3.guides = {
       "entry": "agent-loop"
     },
     {
-      "term": "Agent Card",
-      "def": "A2A's machine-readable description of an agent: what it can do, where to reach it and how to authenticate.",
-      "entry": "team"
-    },
-    {
       "term": "Agent loop",
       "def": "The repeated cycle of model reasoning, tool call and observation that drives an agent.",
       "entry": "agent-loop"
     },
     {
-      "term": "Agent SDK",
-      "def": "A library that provides the agent loop, tool execution, state and tracing for building agents in code.",
-      "entry": "harness"
-    },
-    {
       "term": "Agent teams",
-      "def": "Several full agent sessions coordinated by a lead that share a task list and message each other, unlike sub-agents, which only report back to their caller.",
+      "def": "Several full agents coordinated by a lead that share a task list and message each other, unlike sub-agents, which only report back to their caller.",
       "entry": "team"
     },
     {
@@ -1512,11 +1502,6 @@ window.AE3.guides = {
       "entry": "instructions"
     },
     {
-      "term": "Attention",
-      "def": "The transformer mechanism that lets each token weigh every other token in the context. Its finite capacity is one reason long contexts degrade.",
-      "entry": "model"
-    },
-    {
       "term": "Background agent",
       "def": "An agent that runs asynchronously, often in a cloud sandbox, and reports back with a result such as a pull request.",
       "entry": "background"
@@ -1527,19 +1512,9 @@ window.AE3.guides = {
       "entry": "evals"
     },
     {
-      "term": "BM25",
-      "def": "A classic keyword-ranking algorithm, often combined with embeddings in hybrid search.",
-      "entry": "knowledge"
-    },
-    {
       "term": "Chain of thought",
       "def": "The intermediate reasoning steps a model writes before its final answer.",
       "entry": "reasoning"
-    },
-    {
-      "term": "Checkpoint",
-      "def": "A saved snapshot of an agent's conversation or files that lets you rewind or resume.",
-      "entry": "background"
     },
     {
       "term": "Coding agent",
@@ -1622,18 +1597,8 @@ window.AE3.guides = {
       "entry": "model"
     },
     {
-      "term": "Handoff",
-      "def": "Transferring a conversation or task from one agent to another, more specialised agent.",
-      "entry": "team"
-    },
-    {
       "term": "Harness",
       "def": "The runtime around a model that runs the loop, manages the context, executes tools and enforces rules.",
-      "entry": "harness"
-    },
-    {
-      "term": "Harness engineering",
-      "def": "Designing an agent's environment (tools, documentation, tests, feedback loops and constraints) so that agents can do reliable work.",
       "entry": "harness"
     },
     {
@@ -1647,29 +1612,9 @@ window.AE3.guides = {
       "entry": "permissions"
     },
     {
-      "term": "Hybrid search",
-      "def": "Combining semantic (embedding) search with keyword search for better retrieval.",
-      "entry": "knowledge"
-    },
-    {
-      "term": "Inference",
-      "def": "Running a trained model to produce output. Providers bill it per token.",
-      "entry": "cost"
-    },
-    {
       "term": "Instruction file",
-      "def": "A Markdown file of project or user instructions that a harness loads at session start, such as AGENTS.md or CLAUDE.md.",
+      "def": "A Markdown file of project or user instructions that a harness loads at the start of every chat or job, such as AGENTS.md or CLAUDE.md.",
       "entry": "instructions"
-    },
-    {
-      "term": "Interleaved thinking",
-      "def": "Reasoning a model does between tool calls, not only before its first reply.",
-      "entry": "reasoning"
-    },
-    {
-      "term": "JSON Schema",
-      "def": "A standard way to describe the structure of JSON data; used to define tool parameters and structured outputs.",
-      "entry": "tools"
     },
     {
       "term": "Lethal trifecta",
@@ -1707,9 +1652,39 @@ window.AE3.guides = {
       "entry": "evals"
     },
     {
-      "term": "Observation",
-      "def": "The result of a tool call, fed back into the context for the model's next step.",
-      "entry": "agent-loop"
+      "term": "Orchestrator-workers",
+      "def": "A pattern in which a lead model breaks a task down at run time and delegates the parts to workers.",
+      "entry": "team"
+    },
+    {
+      "term": "Parallelization",
+      "def": "Running independent sub-tasks, or several attempts at one task, at the same time.",
+      "entry": "team"
+    },
+    {
+      "term": "Permission mode",
+      "def": "A harness setting that decides which actions an agent may take without asking first.",
+      "entry": "permissions"
+    },
+    {
+      "term": "Playbook",
+      "def": "A written, reusable procedure for a recurring task, with steps, checks and a definition of done.",
+      "entry": "skills"
+    },
+    {
+      "term": "Plugin",
+      "def": "An installable bundle of skills, commands, sub-agents, hooks and MCP servers.",
+      "entry": "skills"
+    },
+    {
+      "term": "Prompt caching",
+      "def": "Re-using the processed form of an unchanged prompt prefix, which cuts cost and latency.",
+      "entry": "cost"
+    },
+    {
+      "term": "Prompt chaining",
+      "def": "A workflow that splits a task into fixed, sequential calls with checks between them.",
+      "entry": "team"
     },
     {
       "term": "Prompt injection",
@@ -1717,9 +1692,24 @@ window.AE3.guides = {
       "entry": "security"
     },
     {
+      "term": "RAG (retrieval-augmented generation)",
+      "def": "Retrieving relevant passages from a knowledge base and adding them to the prompt before the model answers.",
+      "entry": "knowledge"
+    },
+    {
+      "term": "ReAct",
+      "def": "Reason plus act: the 2022 research pattern of interleaving reasoning with tool actions, the template for today's agent loop.",
+      "entry": "agent-loop"
+    },
+    {
       "term": "Reasoning model",
       "def": "A model trained to think step by step before answering, trading extra tokens for accuracy.",
       "entry": "reasoning"
+    },
+    {
+      "term": "Routing",
+      "def": "A workflow that classifies an input and sends it to a specialised path or model.",
+      "entry": "team"
     },
     {
       "term": "Sandbox",
@@ -1729,6 +1719,11 @@ window.AE3.guides = {
     {
       "term": "Skill",
       "def": "A folder with a SKILL.md file and optional scripts and resources that an agent loads on demand.",
+      "entry": "skills"
+    },
+    {
+      "term": "Slash command",
+      "def": "A saved prompt template invoked by name, such as /review. In most harnesses custom commands are now written as skills.",
       "entry": "skills"
     },
     {
@@ -1750,6 +1745,11 @@ window.AE3.guides = {
       "term": "Tool",
       "def": "A function the model can request. The harness executes it and returns the result.",
       "entry": "tools"
+    },
+    {
+      "term": "Transformer",
+      "def": "The neural-network architecture behind modern language models, built on attention.",
+      "entry": "model"
     },
     {
       "term": "Workflow",
