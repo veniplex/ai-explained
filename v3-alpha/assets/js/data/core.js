@@ -75,7 +75,7 @@ window.AE3 = window.AE3 || {};
       kitchen: "House rules hang on the wall. Recipe cards wait in a box until a dish needs them. A library answers questions, and a notebook keeps what should not be forgotten.",
       real: [
         "**Instruction files** are house rules in plain text that the harness puts on the counter at the start of every new chat or job. **Skills** are recipe cards: step-by-step know-how for one kind of task, loaded only when a task needs it, so they take almost no space until then.",
-        "To learn facts it was never trained on, the agent **looks things up**: it searches the web, your files or a company knowledge base. **Memory** keeps notes across sessions, and when the counter gets full, the harness summarises older steps to make room."
+        "To learn facts it was never trained on, the agent **looks things up**: it searches the web, your files or a company knowledge base. **Memory** keeps notes from one chat or job to the next, and when the counter gets full, the harness summarises older steps to make room."
       ],
       example: "A house rule says “aisle seat, and no airlines that charge for cabin bags”. A recipe card explains how to compare total prices including bags. The airline's baggage rules are looked up, not guessed. Next time, the agent remembers your home airport.",
       figure: null,
@@ -120,7 +120,7 @@ window.AE3 = window.AE3 || {};
   ];
 
   AE3.recap = [
-    { t: "The model remembers nothing.", d: "It sees only what is on the counter right now: what it learned in training, plus whatever the app sends with this request.", entries: ["model", "context"] },
+    { t: "The model remembers nothing.", d: "It sees only what is on the counter right now, plus what it learned in training. The app sends what it needs with each request.", entries: ["model", "context"] },
     { t: "Context is the bottleneck.", d: "Quality drops as the counter fills. Skills, looking things up and memory bring the right things at the right time; helpers keep the counter clean.", entries: ["context", "skills", "knowledge", "memory", "team"] },
     { t: "Prompts suggest; code enforces.", d: "Instructions guide the agent. Permissions, hooks and sandboxes enforce the limits.", entries: ["instructions", "permissions", "hooks", "sandbox"] },
     { t: "Start simple.", d: "A single prompt beats a fixed workflow, and a fixed workflow beats an agent that picks its own steps, until tests show you need more.", entries: ["team", "agent-loop", "evals"] },

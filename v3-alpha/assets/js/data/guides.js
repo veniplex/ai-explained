@@ -32,7 +32,7 @@ window.AE3.guides = {
         "cells": [
           "Markdown file in the project or home folder (AGENTS.md, CLAUDE.md…)",
           "The harness loads it automatically",
-          "At session start",
+          "At the start of every chat or job",
           "Always paid; keep it short",
           "No",
           "Build commands, conventions, project map"
@@ -42,9 +42,9 @@ window.AE3.guides = {
         "name": "Memory",
         "entry": "memory",
         "cells": [
-          "Facts and notes kept across sessions",
+          "Facts and notes kept from one chat or job to the next",
           "The agent writes it; the harness or agent reads it",
-          "At session start or when recalled",
+          "At the start of a chat or job, or when recalled",
           "Varies with what is recalled",
           "No",
           "Preferences, decisions, progress"
@@ -1852,7 +1852,7 @@ window.AE3.guides = {
     },
     {
       "title": "Free courses",
-      "intro": "Structured learning with exercises, from beginner to advanced.",
+      "intro": "Free courses, easiest first.",
       "items": [
         {
           "type": "course",
@@ -2003,19 +2003,19 @@ window.AE3.guides = {
         },
         {
           "type": "paper",
-          "title": "Language Models are Few-Shot Learners",
-          "by": "Brown et al.",
-          "year": 2020,
-          "url": "https://arxiv.org/abs/2005.14165",
-          "note": "GPT-3: scale unlocks in-context learning from a few examples in the prompt."
-        },
-        {
-          "type": "paper",
           "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
           "by": "Lewis et al.",
           "year": 2020,
           "url": "https://arxiv.org/abs/2005.11401",
           "note": "The original RAG paper: pair a retriever with a generator for grounded answers."
+        },
+        {
+          "type": "paper",
+          "title": "Chain-of-Thought Prompting Elicits Reasoning in Large Language Models",
+          "by": "Wei et al.",
+          "year": 2022,
+          "url": "https://arxiv.org/abs/2201.11903",
+          "note": "Prompting for intermediate reasoning steps markedly improves multi-step problem solving."
         },
         {
           "type": "paper",
@@ -2027,11 +2027,11 @@ window.AE3.guides = {
         },
         {
           "type": "paper",
-          "title": "Chain-of-Thought Prompting Elicits Reasoning in Large Language Models",
-          "by": "Wei et al.",
+          "title": "ReAct: Synergizing Reasoning and Acting in Language Models",
+          "by": "Yao et al.",
           "year": 2022,
-          "url": "https://arxiv.org/abs/2201.11903",
-          "note": "Prompting for intermediate reasoning steps markedly improves multi-step problem solving."
+          "url": "https://arxiv.org/abs/2210.03629",
+          "note": "Interleaves reasoning traces with tool actions; the template for today's agent loop."
         }
       ]
     }
