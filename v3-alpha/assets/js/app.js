@@ -11,6 +11,7 @@
   /* ---------- Indexes ---------------------------------------------------------- */
   var ENTRIES = D.entries, ORDER = [], CHAP = {};
   D.chapters.forEach(function (c) { CHAP[c.id] = c; c.entries.forEach(function (id) { ORDER.push(id); }); });
+  function hasEntry(id) { return Object.prototype.hasOwnProperty.call(ENTRIES, id); }
   function chapterOf(id) { return CHAP[ENTRIES[id].chapter]; }
   function chLabel(c) { return c.n === 8 ? "Epilogue" : "Chapter " + c.n; }
   function guideMeta(id) { return D.guideList.filter(function (g) { return g.id === id; })[0]; }
@@ -112,7 +113,7 @@
   function neighbour(list, id, step) { var k = list.indexOf(id); return list[(k + step + list.length) % list.length]; }
   function openEntry(id, opts) {
     opts = opts || {};
-    if (!ENTRIES[id]) return;
+    if (!hasEntry(id)) return;
     var c = chapterOf(id), prev = neighbour(ORDER, id, -1), next = neighbour(ORDER, id, 1);
     var body = $("#drawer-body");
     sk.unwatchWithin(body);
@@ -131,20 +132,21 @@
     $$(".blk.is-selected").forEach(function (x) { x.classList.remove("is-selected"); });
     $$('.blk[data-entry="' + id + '"]').forEach(function (x) { x.classList.add("is-selected"); });
     sk.flashDraw(body, 1500);
-    showDrawer("#e-" + id, opts.fromHash);
+    showDrawer("#e-" + id, opts.fromHash, opts.returnTo);
   }
-  function showDrawer(hash, fromHash) {
+  function showDrawer(hash, fromHash, returnTo) {
     var wasOpen = drawerOpen;
     closeMenu();
     if (!drawerOpen) {
-      drawerReturn = document.activeElement;
+      drawerReturn = returnTo || document.activeElement;
       drawer.hidden = false;
       void drawer.offsetWidth;
       drawer.classList.add("is-open");
       drawerOpen = true;
       syncScrim();
     }
-    drawer.focus({ preventScroll: true });
+    // Stepping through entries keeps focus on the button that was pressed; it moves only when that button is gone.
+    if (!wasOpen || !drawer.contains(document.activeElement)) drawer.focus({ preventScroll: true });
     if (!fromHash) setHash(hash, wasOpen);
     else lastHash = location.hash;
   }
@@ -168,6 +170,8 @@
     opts = opts || {};
     var g = guideMeta(id), render = V3.guides.render[id];
     if (!g || !render) return;
+    // Capture the return target before the menu closes: a hidden menu item cannot take focus back.
+    var returnTo = !menu.hidden || menu.contains(document.activeElement) ? menuBtn : document.activeElement;
     closeMenu();
     if (drawerOpen) closeDrawer({ fromHash: true, noFocus: true });
     $("#sheet-eyebrow").textContent = g.eyebrow;
@@ -182,7 +186,7 @@
     body.scrollTop = 0;
     var wasOpen = sheetOpen;
     if (!sheetOpen) {
-      sheetReturn = document.activeElement;
+      sheetReturn = returnTo;
       sheet.hidden = false;
       void sheet.offsetWidth;
       sheet.classList.add("is-open");
@@ -258,9 +262,13 @@
       var score = terms.reduce(function (a, t) { return a + (title.indexOf(t) !== -1 ? 2 : 1) + (sk.norm(e.label).indexOf(t) === 0 ? 2 : 0); }, 0);
       hits.push({ kind: "entry", id: id, score: score });
     });
+    // One row per entry: a glossary term is listed only when no row for its entry exists yet.
+    var seen = {};
+    hits.forEach(function (x) { seen[x.id] = true; });
     (D.guides.glossary || []).forEach(function (g) {
       var name = sk.norm(g.term);
-      if (!g.entry || !ENTRIES[g.entry] || !terms.every(function (t) { return name.indexOf(t) !== -1; })) return;
+      if (!g.entry || !hasEntry(g.entry) || seen[g.entry] === true || !terms.every(function (t) { return name.indexOf(t) !== -1; })) return;
+      seen[g.entry] = true;
       hits.push({ kind: "term", id: g.entry, term: g, score: 1.5 });
     });
     hits.sort(function (a, b) { return b.score - a.score; });
@@ -279,7 +287,8 @@
         h("span", null, rich(hit.kind === "term" ? hit.term.def : e.short)))));
     });
     sList.hidden = false;
-    status.textContent = !sHits.length ? "Nothing matches." : sHits.length + (sHits.length === 1 ? " match" : " matches") + ". Press Enter to open the first, or the down arrow to choose.";
+    var shown = Math.min(sHits.length, 8);
+    status.textContent = !sHits.length ? "Nothing matches." : shown + (shown === 1 ? " match" : " matches") + (sHits.length > shown ? " shown, " + (sHits.length - shown) + " more" : "") + ". Press Enter to open the first, or the down arrow to choose.";
   }
   function applySearch() {
     sHits = find(sInput.value);
@@ -296,8 +305,18 @@
     renderResults();
   }
   function closeSearchUI() { sWrap.classList.remove("is-open"); sList.hidden = true; }
+  // Ends a search before an entry opens and says where focus goes when that entry's drawer closes:
+  // the field if it is on screen, otherwise the magnifier button (the field is hidden on narrow screens).
+  function leaveSearch() {
+    clearSearch();
+    closeSearchUI();
+    return getComputedStyle($(".search-field", sWrap)).display !== "none" ? sInput : $("#search-open");
+  }
   function initSearch() {
     sInput.addEventListener("input", applySearch);
+    // Some browsers (Safari, Firefox on macOS) do not focus a button on mousedown, so the field's focusout would hide
+    // the list before the click lands. Keeping the mousedown from moving focus lets the click through.
+    sList.addEventListener("mousedown", function (e) { e.preventDefault(); });
     sInput.addEventListener("focus", function () { if (sInput.value.trim()) renderResults(); });
     sInput.addEventListener("keydown", function (e) {
       if (e.key === "ArrowDown") {
@@ -305,7 +324,7 @@
         if (first) { first.focus(); e.preventDefault(); }
       } else if (e.key === "Enter") {
         var hit = sHits[0];
-        if (hit) { clearSearch(); closeSearchUI(); openEntry(hit.id); }
+        if (hit) openEntry(hit.id, { returnTo: leaveSearch() });
         e.preventDefault();
       } else if (e.key === "Escape") {
         clearSearch(); closeSearchUI(); sInput.blur();
@@ -362,8 +381,8 @@
       if ((el = t.closest("[data-go]"))) { goTo(el.getAttribute("data-go")); return; }
       if ((el = t.closest("[data-ch-go]"))) { var n = +el.getAttribute("data-ch-go"); goTo(n === 8 ? "ch-e" : "ch-" + n); return; }
       if ((el = t.closest("[data-entry]"))) {
-        if (el.closest("#search-results")) { clearSearch(); closeSearchUI(); }
-        openEntry(el.getAttribute("data-entry"));
+        var back = el.closest("#search-results") ? leaveSearch() : null;
+        openEntry(el.getAttribute("data-entry"), { returnTo: back });
         return;
       }
       if (!menu.hidden && !menu.contains(t) && !menuBtn.contains(t)) closeMenu();
@@ -383,7 +402,7 @@
       }
       if (e.key === "Tab" && (drawerOpen || sheetOpen)) { trapTab(e); return; }
       if (typing) return;
-      if (e.key === "/" && !drawerOpen && !sheetOpen) {
+      if (e.key === "/" && !e.ctrlKey && !e.metaKey && !e.altKey && !drawerOpen && !sheetOpen) {
         e.preventDefault();
         if (getComputedStyle($(".search-field", sWrap)).display === "none") sWrap.classList.add("is-open");
         sInput.focus();
@@ -401,9 +420,10 @@
   function fromHash() {
     if (location.hash === lastHash && (drawerOpen || sheetOpen || !location.hash)) return;
     lastHash = location.hash;
-    var hsh = decodeURIComponent((location.hash || "").slice(1)), m;
+    var hsh = "", m;
+    try { hsh = decodeURIComponent((location.hash || "").slice(1)); } catch (err) { hsh = ""; }
     if (!hsh) { closeDrawer({ fromHash: true, noFocus: true }); closeSheet({ fromHash: true, noFocus: true }); return; }
-    if ((m = hsh.match(/^e-([a-z0-9-]+)$/)) && ENTRIES[m[1]]) { openEntry(m[1], { fromHash: true }); return; }
+    if ((m = hsh.match(/^e-([a-z0-9-]+)$/)) && hasEntry(m[1])) { openEntry(m[1], { fromHash: true }); return; }
     if ((m = hsh.match(/^guide-([a-z]+)$/)) && guideMeta(m[1])) {
       if (drawerOpen) closeDrawer({ fromHash: true, noFocus: true });
       openGuide(m[1], { fromHash: true });
