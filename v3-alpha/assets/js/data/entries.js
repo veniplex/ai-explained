@@ -156,5 +156,173 @@ window.AE3.entries = {
     },
     related: ["tools", "security", "harness"],
     from: ["mcp"]
+  },
+
+  /* ---- Chapter 4: taste, adjust, taste again ---- */
+  "agent-loop": {
+    chapter: "loop", name: "Agent loop", label: "Agent loop",
+    kitchen: "The chef cooks, tastes and adjusts, again and again, until the dish is right.",
+    short: "The cycle that turns a model into an agent: look, act, see the result, repeat.",
+    how: [
+      "The model looks at its context and picks a tool to use. The harness (the app around the model) runs it and adds the result. The model looks again, until it reaches the goal and answers, or hits a limit on steps, time or money.",
+      "On long jobs, agents keep a to-do list. They should also check their work, by running tests or reading results back, because errors add up: if each step goes right 95% of the time, a 10-step job goes right only about 60% of the time."
+    ],
+    example: "It searches flights, finds May 3 fully booked, tries nearby days, fills your travel sheet and reads it back.",
+    forYou: [
+      "Say what “done” looks like.",
+      "Ask the agent to check its work."
+    ],
+    deeper: {
+      details: [
+        "Research introduced the loop as ReAct (reasoning plus acting). On each turn the model either answers or asks for a tool call; the harness runs the tool and appends the result, called the observation. The loop ends with a final answer, a stop [[hooks|hook]], a person interrupting, or a budget for turns, tokens, time or money running out. Current models think between tool calls and can make several calls in one turn.",
+        "Agents plan explicitly (a written plan a person approves) or implicitly (choosing the next step each turn). Many harnesses offer plan mode: read-only exploring that ends in a plan you review before anything changes. A to-do list keeps long tasks on track and survives when older steps are summarised ([[memory|compaction]]). Skip plans for small tasks, and update them when reality changes.",
+        "Agents become more reliable with ground-truth feedback, outside checks that show what actually happened: compilers, tests, linters (automatic style and error checkers), a screenshot of the result, a schema check, or a second model reviewing against explicit criteria. Models cannot reliably correct their own reasoning without such a signal, so avoid self-review in the same context. Do not let the agent edit tests to make them pass; protect them with [[hooks]] or [[permissions]].",
+        "Use the loop for open-ended tasks whose steps cannot be known in advance, and a fixed [[team|workflow]] where a fixed sequence would do. Always set stop conditions and budgets: clear, checkable goals make the loop converge; vague goals make it wander."
+      ],
+      includes: [
+        { name: "Planning & task lists", text: "Breaking a goal into steps before acting, and keeping a visible to-do list while working." },
+        { name: "Verification & self-correction", text: "Giving the agent a way to check its own work, with tests, screenshots or a reviewer, and to fix what fails." }
+      ]
+    },
+    related: ["harness", "tools", "reasoning", "evals"],
+    from: ["agent-loop", "planning", "verification"]
+  },
+
+  "harness": {
+    chapter: "loop", name: "Harness (the agent app)", label: "Harness",
+    kitchen: "The kitchen around the chef: it lays out the counter, runs the appliances and enforces the rules.",
+    short: "The harness is the app around the model: it runs the agent loop and does what the model cannot.",
+    how: [
+      "The model only writes text. The harness runs the loop, builds the context, runs the tools the model asks for, enforces permissions (what the agent may do alone and what needs your OK) and keeps track of progress. You meet harnesses in chat apps, code editors, terminals (text windows for commands), browsers and team chat. The same model behaves differently in different harnesses."
+    ],
+    example: "The travel app is the harness: it runs the searches and holds the booking until you say OK.",
+    forYou: [
+      "Pick the harness for the job: a chat app for questions, a coding agent for software, a browser agent for websites.",
+      "To compare models fairly, try them in the same app."
+    ],
+    deeper: {
+      details: [
+        "The model only predicts tokens; the harness does everything else. It builds each request (system prompt, instruction files, tool definitions, history), calls the model, reads its tool calls, runs them in a [[sandbox]] or through [[mcp|MCP]], feeds the results back, compacts the context when it fills up, enforces [[permissions]] and [[hooks]], starts sub-agents and saves checkpoints.",
+        "Harness quality is a large part of agent quality: the same model scores very differently in different harnesses, so keep one constant when you compare the other. Harness engineering shapes the environment (tools, documentation, fast tests, guardrails) so agents can do reliable work. Customise an existing harness through instruction files, [[skills]], MCP servers, hooks and permissions rather than forking it (copying and changing its code).",
+        "A surface is where people meet the harness: a chat app, an IDE (a code editor), a terminal, a desktop app, a browser, team chat or an API in your own product. It shapes what the agent sees (the open file, the current page), how it asks for approval and how results appear. Good surfaces show actions, sources and costs. Every page a browser agent reads can carry a [[security|prompt injection]].",
+        "To put an agent into your own product, use an agent SDK (a code library with the loop, tool calls, state and tracing built in) or a managed runtime that also hosts it. For simple cases, a direct API call and a short loop is often clearer, and open protocols such as MCP avoid lock-in."
+      ],
+      includes: [
+        { name: "Surfaces & interfaces", text: "Where people meet the agent: chat apps, IDEs, terminals, desktop apps, browsers, team chat or an API." },
+        { name: "Agent SDKs & frameworks", text: "Code libraries for building agents and harnesses, with the loop, tool calls and tracing built in." }
+      ]
+    },
+    related: ["agent-loop", "context", "permissions", "model"],
+    from: ["harness", "surfaces", "sdk"]
+  },
+
+  /* ---- Chapter 5: recipe cards and a notebook ---- */
+  "instructions": {
+    chapter: "recipes", name: "Instruction files", label: "Instruction files",
+    kitchen: "House rules on the kitchen wall, read again before every shift.",
+    short: "Instruction files hold standing rules in plain text. The harness puts them in the context at the start of every new chat or job.",
+    how: [
+      "They are written in Markdown, plain text with a little formatting for headings and lists. Agents that write code read files such as AGENTS.md or CLAUDE.md; chat apps offer the same idea as custom instructions. Typical contents are house rules, how a project is organised and your preferences. They sit in the context on every request, so every line takes up room: keep them short."
+    ],
+    example: "A house rule says “aisle seat, and no airlines that charge for cabin bags”, so every search follows it without you repeating it.",
+    forYou: [
+      "Write down the rules you keep repeating, in a few short lines.",
+      "When the agent makes the same mistake twice, add one precise line."
+    ],
+    deeper: {
+      details: [
+        "Instruction files are a standing briefing: how to build and test, conventions, a map of the project, what to avoid. AGENTS.md is the open format shared across agent apps, now stewarded by the Agentic AI Foundation under the Linux Foundation. Many harnesses also read their own file, such as `CLAUDE.md`, `GEMINI.md`, Cursor rules or Copilot instructions.",
+        "Files can be layered: a global file for personal preferences, a project file the team shares in its code repository, and files in sub-folders for local rules. They load at the start of every chat or job, so every line costs context on every turn.",
+        "Keep them short and specific; models skim past long or auto-generated files. Put task-specific procedures into [[skills]], which load only when needed, and link to documentation instead of pasting it in. Treat the file like code: review it, prune it and test whether it actually changes behaviour.",
+        "Measure the effect. A 2026 study found that generic overviews of a repository add cost without improving results, while precise instructions are followed."
+      ],
+      includes: []
+    },
+    related: ["prompt", "skills", "memory"],
+    from: ["instructions"]
+  },
+
+  "skills": {
+    chapter: "recipes", name: "Skills & saved prompts", label: "Skills",
+    kitchen: "Recipe cards in a box: the chef takes one out only when a dish needs it.",
+    short: "A skill is written know-how for one kind of task. The agent loads it only when that task comes up.",
+    how: [
+      "A skill is a folder with a SKILL.md file: step-by-step instructions in plain text, sometimes with small programs the agent can run. Until a task needs it, only its name and a one-line description sit in the context, so even many skills take little room. Since December 2025 the format has been an open standard that many apps support. You can often start one by name, like a saved prompt."
+    ],
+    example: "A recipe card explains how to compare total prices including bags. It loads only when the agent compares flights.",
+    forYou: [
+      "Turn a procedure you repeat into a skill, and say when to use it.",
+      "Install skills only from sources you trust: they can contain code."
+    ],
+    deeper: {
+      details: [
+        "A skill packages procedural know-how: a `SKILL.md` file with a name and a description in its header plus Markdown instructions, and optionally scripts, templates and reference files. At the start of a chat or job only each skill's name and description sit in the context, a few dozen tokens each. When a task matches, the model reads the full `SKILL.md`, and only then the extra files it needs. This is called progressive disclosure.",
+        "Anthropic introduced skills in October 2025 and published the format as an open standard in December 2025. By October 2026 more than 40 products support it, including Codex, GitHub Copilot, VS Code, Cursor and Gemini CLI.",
+        "Use skills for repeatable procedures, for company conventions too large for the [[instructions|instruction file]], and for helper scripts, so the agent runs tested code instead of writing it from scratch. Write the description for triggering (“Use when…”), because it decides whether the skill loads. Keep `SKILL.md` focused, move details into referenced files, keep skills in version control and test them with [[evals]].",
+        "Read skills from untrusted sources before installing them, since they can contain code. Turn successful work and existing procedures into skills, and share them through plugins."
+      ],
+      includes: [
+        { name: "Playbooks & runbooks", text: "A written, step-by-step procedure for a recurring task, with checks and a definition of done. Best stored as a skill." },
+        { name: "Slash commands & prompt templates", text: "Saved prompts you start by name, such as /review. In 2026 most harnesses folded them into skills." },
+        { name: "Plugins & extensions", text: "Installable bundles of skills, commands, sub-agents, hooks and MCP servers, so a whole setup can be shared with one install." }
+      ]
+    },
+    related: ["instructions", "tools", "team"],
+    from: ["skills", "playbooks", "commands", "plugins"]
+  },
+
+  "knowledge": {
+    chapter: "recipes", name: "Looking things up (search & RAG)", label: "Looking things up",
+    kitchen: "A library next door: when the chef lacks a fact, it is looked up, not guessed.",
+    short: "Looking things up gives the agent facts it was never trained on, from the web, your files or a company knowledge base.",
+    how: [
+      "Often the agent simply searches the web or your files, as you would, and tries better search words if the first ones fail. RAG (retrieval-augmented generation) is used for large document collections: before the model answers, a search fetches the best-matching passages and adds them to the context. That search often uses embeddings, lists of numbers that capture meaning, so texts with similar meaning are found even when the words differ."
+    ],
+    example: "The agent looks up the airline's baggage rules and checks your company's travel policy before it suggests a flight.",
+    forYou: [
+      "Ask for sources, and open one or two to check them.",
+      "Answers are only as good as the documents behind them."
+    ],
+    deeper: {
+      details: [
+        "RAG grounds the model in your own data without retraining it. The classic pipeline splits documents into chunks, turns each chunk into an embedding and stores them in an index. At question time it retrieves the best-matching chunks, ideally combining meaning and keyword search and then reranking (sorting the hits again), and adds them to the prompt with their sources. In agents, retrieval becomes a tool the model calls as often as it needs (agentic RAG).",
+        "An embedding is a vector of hundreds to thousands of numbers; similar meanings land close together, and vector databases search millions of them quickly. Embeddings miss exact identifiers such as product codes or error numbers, so pair them with keyword search such as BM25 (hybrid search), and never mix embeddings from different models in one index.",
+        "In agentic search the model uses ordinary tools (listing files, grep for text search, reading files, web search, fetching pages) and refines its queries as it learns. Coding agents often prefer it to an index: it is always up to date, exact for names and needs no indexing pipeline. Deep research runs long searches, often with several agents in parallel, and writes a report.",
+        "Use RAG for large, private or changing collections and for answers that need citations, not for collections that fit in the context. Measure whether the right passages come back, check the citations, and keep untrusted pages away from a chat or job that also holds sensitive access ([[security]])."
+      ],
+      includes: [
+        { name: "Retrieval-augmented generation (RAG)", text: "Looking up relevant passages in your knowledge base and putting them into the context before the model answers." },
+        { name: "Embeddings & vector search", text: "Lists of numbers that capture meaning, so texts can be searched by meaning instead of exact words." },
+        { name: "Agentic search & web search", text: "The agent searches files and the web itself with ordinary tools, refining its queries as it goes, instead of using a pre-built index." }
+      ]
+    },
+    related: ["context", "memory", "tools", "mcp"],
+    from: ["rag", "embeddings", "search"]
+  },
+
+  "memory": {
+    chapter: "recipes", name: "Memory & compaction", label: "Memory",
+    kitchen: "The chef's notebook keeps what should not be forgotten, and old scraps are cleared off the counter to make room.",
+    short: "The model remembers nothing between requests, so memory means notes kept outside the context and loaded again when needed.",
+    how: [
+      "Memory holds things like your preferences, decisions already made and progress on a long job. The harness saves these notes in files or a database and puts the relevant ones back into the context in a later chat or job. Compaction solves a different problem: on a long job the context fills up, so the harness summarises or removes older steps and keeps the latest ones word for word."
+    ],
+    example: "Next time, the agent remembers your home airport. On a long job, thirty flight searches shrink to one line each.",
+    forYou: [
+      "Check what your assistant remembers about you, and delete what it should not keep."
+    ],
+    deeper: {
+      details: [
+        "Inside a run, the context window is short-term memory. Long-term memory lives outside it and is loaded when relevant: files the agent reads and writes (notes, progress logs, [[instructions|instruction files]]), memory tools and stores, or vector and graph databases. Research borrowed three kinds from cognitive science: episodic (what happened), semantic (facts) and procedural (how to do things, in practice instruction files and [[skills]]).",
+        "File-based memory, such as Markdown notes, progress logs and git history, is simple, transparent and works across harnesses; memory tools in APIs let the agent create, read and update its own memory files. Do not remember everything: stale or wrong memories mislead the agent. Store personal data only with consent, retention rules and a way to delete it, and make memory visible and editable.",
+        "Compaction replaces older history with a summary (decisions made, open problems, files touched) and keeps recent turns word for word. Context editing removes stale items automatically, such as old tool results. Some harnesses compact automatically near the limit, others on command, and APIs offer it on the server side.",
+        "Poor compaction makes the agent forget decisions or redo work. Keep error details it still needs, let users say what to keep, and pair compaction with a progress file and version control, so a fresh context can pick up where the old one stopped."
+      ],
+      includes: [
+        { name: "Compaction & context editing", text: "When the context fills up, the harness summarises older steps or removes stale ones so the agent can keep working." }
+      ]
+    },
+    related: ["context", "instructions", "knowledge"],
+    from: ["memory", "compaction"]
   }
 };
