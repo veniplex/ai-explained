@@ -1484,26 +1484,17 @@ window.AE3.guides = {
       "entry": "harness"
     },
     {
+      "term": "Agent teams",
+      "def": "Several full agent sessions coordinated by a lead that share a task list and message each other, unlike sub-agents, which only report back to their caller.",
+      "entry": "team"
+    },
+    {
       "term": "Agentic AI",
       "def": "Umbrella term for AI systems that pursue goals with some autonomy by planning and taking actions, rather than only answering questions."
     },
     {
       "term": "Agentic AI Foundation (AAIF)",
       "def": "The Linux Foundation body, formed in December 2025, that hosts MCP, AGENTS.md, goose, A2A and other open agent projects."
-    },
-    {
-      "term": "Agentic engineering",
-      "def": "Professional software development with coding agents, where people stay responsible for reviewed, production-quality results. Often contrasted with vibe coding."
-    },
-    {
-      "term": "Agent teams",
-      "def": "Several full agent sessions coordinated by a lead that share a task list and message each other, unlike sub-agents, which only report back to their caller.",
-      "entry": "team"
-    },
-    {
-      "term": "Auto mode",
-      "def": "A permission mode in which a classifier model approves or blocks the agent's actions instead of asking the person each time.",
-      "entry": "permissions"
     },
     {
       "term": "Agentic RAG",
@@ -1524,11 +1515,6 @@ window.AE3.guides = {
       "term": "Attention",
       "def": "The transformer mechanism that lets each token weigh every other token in the context. Its finite capacity is one reason long contexts degrade.",
       "entry": "model"
-    },
-    {
-      "term": "Augmented LLM",
-      "def": "A model enhanced with retrieval, tools and memory: the basic building block of agentic systems.",
-      "entry": "team"
     },
     {
       "term": "Background agent",
@@ -1554,16 +1540,6 @@ window.AE3.guides = {
       "term": "Checkpoint",
       "def": "A saved snapshot of an agent's conversation or files that lets you rewind or resume.",
       "entry": "background"
-    },
-    {
-      "term": "Chunking",
-      "def": "Splitting documents into passages before embedding them for retrieval.",
-      "entry": "knowledge"
-    },
-    {
-      "term": "Code mode",
-      "def": "See programmatic tool calling.",
-      "entry": "tools"
     },
     {
       "term": "Coding agent",
@@ -1601,29 +1577,9 @@ window.AE3.guides = {
       "entry": "context"
     },
     {
-      "term": "Cosine similarity",
-      "def": "A measure of how closely two embedding vectors point in the same direction; used to rank search results.",
-      "entry": "knowledge"
-    },
-    {
       "term": "Deep research",
       "def": "Long-running agentic search that reads many sources and synthesises a report with citations.",
       "entry": "knowledge"
-    },
-    {
-      "term": "Distillation",
-      "def": "Training a smaller model to imitate the outputs of a larger one.",
-      "entry": "model"
-    },
-    {
-      "term": "DPO (Direct Preference Optimization)",
-      "def": "A fine-tuning method that learns from pairs of preferred and rejected answers, without a separate reward model.",
-      "entry": "model"
-    },
-    {
-      "term": "Durable execution",
-      "def": "Running workflows so that their progress survives crashes and restarts and resumes where it stopped.",
-      "entry": "background"
     },
     {
       "term": "Effort",
@@ -1646,29 +1602,14 @@ window.AE3.guides = {
       "entry": "team"
     },
     {
-      "term": "Few-shot prompting",
-      "def": "Including a handful of examples in the prompt to show the desired behaviour.",
-      "entry": "prompt"
-    },
-    {
       "term": "Fine-tuning",
       "def": "Further training a model's weights on your own examples.",
-      "entry": "model"
-    },
-    {
-      "term": "Foundation model",
-      "def": "A large model trained on broad data that can be adapted to many tasks.",
       "entry": "model"
     },
     {
       "term": "Function calling",
       "def": "Another name for tool use: the model returns a structured request to call a function, which your code executes.",
       "entry": "tools"
-    },
-    {
-      "term": "Grounding",
-      "def": "Tying a model's answer to verifiable sources such as retrieved documents or search results.",
-      "entry": "knowledge"
     },
     {
       "term": "Guardrails",
@@ -1711,11 +1652,6 @@ window.AE3.guides = {
       "entry": "knowledge"
     },
     {
-      "term": "Indirect prompt injection",
-      "def": "Malicious instructions hidden in content the agent reads, such as a web page or an email, rather than typed by the user.",
-      "entry": "security"
-    },
-    {
       "term": "Inference",
       "def": "Running a trained model to produce output. Providers bill it per token.",
       "entry": "cost"
@@ -1746,23 +1682,8 @@ window.AE3.guides = {
       "entry": "model"
     },
     {
-      "term": "LLM-as-a-judge",
-      "def": "Using a language model with a rubric to grade outputs. Its verdicts must be checked against human judgement.",
-      "entry": "evals"
-    },
-    {
-      "term": "LoRA",
-      "def": "Low-Rank Adaptation: fine-tuning a small set of added weights instead of the whole model.",
-      "entry": "model"
-    },
-    {
       "term": "MCP (Model Context Protocol)",
       "def": "Open standard for connecting AI applications to tools, data and prompts through MCP servers.",
-      "entry": "mcp"
-    },
-    {
-      "term": "MCP host and client",
-      "def": "The host is the AI application, for example a harness. It runs one MCP client for each server it connects to.",
       "entry": "mcp"
     },
     {
@@ -1781,74 +1702,14 @@ window.AE3.guides = {
       "entry": "team"
     },
     {
-      "term": "Observation",
-      "def": "The result of a tool call, fed back into the context for the model's next step.",
-      "entry": "agent-loop"
-    },
-    {
       "term": "Observability",
       "def": "Recording traces, metrics and logs of agent runs so you can inspect and improve them.",
       "entry": "evals"
     },
     {
-      "term": "Open-weight model",
-      "def": "A model whose trained weights are published, so it can be run and fine-tuned on your own infrastructure.",
-      "entry": "model"
-    },
-    {
-      "term": "Orchestrator-workers",
-      "def": "A pattern in which a lead model breaks a task down at run time and delegates the parts to workers.",
-      "entry": "team"
-    },
-    {
-      "term": "Parallelization",
-      "def": "Running independent sub-tasks, or several attempts at one task, at the same time.",
-      "entry": "team"
-    },
-    {
-      "term": "Permission mode",
-      "def": "A harness setting that decides which actions an agent may take without asking first.",
-      "entry": "permissions"
-    },
-    {
-      "term": "Plan mode",
-      "def": "A read-only harness mode in which the agent explores and proposes a plan before changing anything.",
+      "term": "Observation",
+      "def": "The result of a tool call, fed back into the context for the model's next step.",
       "entry": "agent-loop"
-    },
-    {
-      "term": "Playbook",
-      "def": "A written, reusable procedure for a recurring task, with steps, checks and a definition of done.",
-      "entry": "skills"
-    },
-    {
-      "term": "Plugin",
-      "def": "An installable bundle of skills, commands, sub-agents, hooks and MCP servers.",
-      "entry": "skills"
-    },
-    {
-      "term": "Programmatic tool calling",
-      "def": "Letting the model write code that calls tools, so large intermediate results stay out of the context. Also called code mode.",
-      "entry": "tools"
-    },
-    {
-      "term": "Progressive disclosure",
-      "def": "Loading information in layers: first a short description, the details only when needed. The core idea behind Agent Skills.",
-      "entry": "skills"
-    },
-    {
-      "term": "Prompt caching",
-      "def": "Re-using the processed form of an unchanged prompt prefix, which cuts cost and latency.",
-      "entry": "cost"
-    },
-    {
-      "term": "Prompt chaining",
-      "def": "A workflow that splits a task into fixed, sequential calls with checks between them.",
-      "entry": "team"
-    },
-    {
-      "term": "Prompt engineering",
-      "def": "Writing instructions, examples and structure that get the best results from a model.",
-      "entry": "prompt"
     },
     {
       "term": "Prompt injection",
@@ -1856,59 +1717,9 @@ window.AE3.guides = {
       "entry": "security"
     },
     {
-      "term": "RAG (retrieval-augmented generation)",
-      "def": "Retrieving relevant passages from a knowledge base and adding them to the prompt before the model answers.",
-      "entry": "knowledge"
-    },
-    {
-      "term": "Ralph loop",
-      "def": "Running the same agent prompt over and over against a spec and a progress file until the work is done. Named by Geoffrey Huntley.",
-      "entry": "background"
-    },
-    {
-      "term": "ReAct",
-      "def": "Reason plus act: the 2022 research pattern of interleaving reasoning with tool actions, the template for today's agent loop.",
-      "entry": "agent-loop"
-    },
-    {
       "term": "Reasoning model",
       "def": "A model trained to think step by step before answering, trading extra tokens for accuracy.",
       "entry": "reasoning"
-    },
-    {
-      "term": "Reranker",
-      "def": "A model that re-orders retrieved results by relevance before they go into the prompt.",
-      "entry": "knowledge"
-    },
-    {
-      "term": "Resource (MCP)",
-      "def": "Data that an MCP server exposes for reading, such as a file or a database record.",
-      "entry": "mcp"
-    },
-    {
-      "term": "RLHF",
-      "def": "Reinforcement learning from human feedback: training a model towards the answers people prefer.",
-      "entry": "model"
-    },
-    {
-      "term": "Reward hacking",
-      "def": "An agent pursuing the score rather than the intended task, for example by reading hidden test answers. A reason to check evals for cheating.",
-      "entry": "evals"
-    },
-    {
-      "term": "Routine",
-      "def": "A saved agent configuration that runs in the cloud when a schedule, an API call or an event triggers it.",
-      "entry": "background"
-    },
-    {
-      "term": "Routing",
-      "def": "A workflow that classifies an input and sends it to a specialised path or model.",
-      "entry": "team"
-    },
-    {
-      "term": "Rule of Two",
-      "def": "Meta's guideline that, without human approval, an agent session should combine at most two of: untrusted input, access to sensitive data or systems, and the ability to change things or communicate externally.",
-      "entry": "security"
     },
     {
       "term": "Sandbox",
@@ -1921,26 +1732,6 @@ window.AE3.guides = {
       "entry": "skills"
     },
     {
-      "term": "Slash command",
-      "def": "A saved prompt template invoked by name, such as /review. In most harnesses custom commands are now written as skills.",
-      "entry": "skills"
-    },
-    {
-      "term": "Spec-driven development",
-      "def": "Writing a specification first and letting agents implement and test against it.",
-      "entry": "agent-loop"
-    },
-    {
-      "term": "Stateless API",
-      "def": "An API that keeps no memory between calls; the client re-sends the whole conversation each time.",
-      "entry": "context"
-    },
-    {
-      "term": "Structured outputs",
-      "def": "Constraining a model's reply to valid JSON that matches a given schema.",
-      "entry": "tools"
-    },
-    {
       "term": "Sub-agent",
       "def": "A helper agent with its own fresh context window that handles one delegated task.",
       "entry": "team"
@@ -1951,16 +1742,6 @@ window.AE3.guides = {
       "entry": "prompt"
     },
     {
-      "term": "Test-time compute",
-      "def": "Extra computation spent while answering, for example longer reasoning, to improve accuracy.",
-      "entry": "reasoning"
-    },
-    {
-      "term": "Time horizon",
-      "def": "METR's measure of agent capability: the length of tasks, in human working time, that an agent completes with 50% success.",
-      "entry": "background"
-    },
-    {
       "term": "Token",
       "def": "The unit models read and write, roughly three quarters of an English word.",
       "entry": "context"
@@ -1969,35 +1750,6 @@ window.AE3.guides = {
       "term": "Tool",
       "def": "A function the model can request. The harness executes it and returns the result.",
       "entry": "tools"
-    },
-    {
-      "term": "Tool poisoning",
-      "def": "Hiding malicious instructions in a tool's description or output to manipulate the agent.",
-      "entry": "security"
-    },
-    {
-      "term": "Tool search",
-      "def": "Loading tool definitions on demand by searching for them, instead of putting every tool into the context.",
-      "entry": "tools"
-    },
-    {
-      "term": "Trace and span",
-      "def": "A trace records one agent run; it consists of timed steps called spans, such as model calls and tool calls.",
-      "entry": "evals"
-    },
-    {
-      "term": "Transformer",
-      "def": "The neural-network architecture behind modern language models, built on attention.",
-      "entry": "model"
-    },
-    {
-      "term": "Vector database",
-      "def": "A database that indexes embeddings for fast similarity search.",
-      "entry": "knowledge"
-    },
-    {
-      "term": "Vibe coding",
-      "def": "Building software by prompting an AI and accepting its output without closely reading the code. Coined by Andrej Karpathy in February 2025."
     },
     {
       "term": "Workflow",
