@@ -4,6 +4,7 @@
    guided: has the guided path (#ch-1 …), so a chapter link carries over. pages: has a page per term and per guide (terms/<id>/, guides/<id>/). */
 window.AE_VERSIONS = {
   list: [
+    { id: "v8-alpha", note: "The comic as one strip that grows from left to right", guided: true, pages: false },
     { id: "v7-alpha", note: "A hand-drawn comic that plays panel by panel", guided: true, pages: false },
     { id: "v6-alpha", note: "The map in the middle, with arrows from both voices", guided: true, pages: true },
     { id: "v5-alpha", note: "Kitchen and technical words side by side", guided: true, pages: true },
