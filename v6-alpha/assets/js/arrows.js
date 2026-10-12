@@ -39,27 +39,58 @@
     return best;
   }
 
-  function arrow(g, x1, y1, x2, y2, dir, token) {
-    var k = Math.max(24, Math.abs(x2 - x1) * 0.55), w = wobble(token, 5);
-    var d = "M" + x1.toFixed(1) + " " + y1.toFixed(1) +
-      "C" + (x1 + dir * k).toFixed(1) + " " + (y1 + w).toFixed(1) + " " + (x2 - dir * k).toFixed(1) + " " + (y2 - w).toFixed(1) + " " + x2.toFixed(1) + " " + y2.toFixed(1);
-    g.appendChild(s("path", { class: "arrow-line", d: d }));
-    // The head: two short strokes, a little off from the line, like a pen would leave them.
+  // The two strokes of the head: a little off from the line, like a pen would leave them.
+  function headPath(x2, y2, dir) {
     var a = 0.5, l = 9;
-    g.appendChild(s("path", { class: "arrow-line arrow-head", d:
-      "M" + (x2 - dir * l * Math.cos(a)).toFixed(1) + " " + (y2 - l * Math.sin(a)).toFixed(1) + "L" + x2.toFixed(1) + " " + y2.toFixed(1) +
-      "L" + (x2 - dir * l * Math.cos(a)).toFixed(1) + " " + (y2 + l * Math.sin(a) + 1).toFixed(1) }));
+    return "M" + (x2 - dir * l * Math.cos(a)).toFixed(1) + " " + (y2 - l * Math.sin(a)).toFixed(1) + "L" + x2.toFixed(1) + " " + y2.toFixed(1) +
+      "L" + (x2 - dir * l * Math.cos(a)).toFixed(1) + " " + (y2 + l * Math.sin(a) + 1).toFixed(1);
+  }
+  function linePath(x1, y1, x2, y2, dir, token) {
+    var k = Math.max(24, Math.abs(x2 - x1) * 0.55), w = wobble(token, 5);
+    return "M" + x1.toFixed(1) + " " + y1.toFixed(1) +
+      "C" + (x1 + dir * k).toFixed(1) + " " + (y1 + w).toFixed(1) + " " + (x2 - dir * k).toFixed(1) + " " + (y2 - w).toFixed(1) + " " + x2.toFixed(1) + " " + y2.toFixed(1);
+  }
+
+  // Every arrow (and the dot it starts from) is kept between frames and only moved while the same passage points, so
+  // scrolling slides it along. When another passage takes over, the old arrows fade away and the new ones are drawn in,
+  // stroke by stroke (style.css). Passages are told apart by a number given to them the first time they point.
+  var serial = 0;
+  function idOf(el) { if (!el._arrowId) el._arrowId = ++serial; return el._arrowId; }
+  function still() { return window.matchMedia("(prefers-reduced-motion: reduce)").matches; }
+
+  function put(it, key, make, update) {
+    var node = it.kept[key];
+    if (!node) {
+      node = it.kept[key] = make();
+      node.classList.add("is-new");
+      it.svg.appendChild(node);
+      setTimeout(function () { node.classList.remove("is-new"); }, 900);
+    }
+    update(node);
+    node._seen = it.frame;
+  }
+  function retire(it) {
+    Object.keys(it.kept).forEach(function (key) {
+      var node = it.kept[key];
+      if (node._seen === it.frame) return;
+      delete it.kept[key];
+      if (still()) { node.remove(); return; }
+      node.classList.add("is-leaving");
+      setTimeout(function () { node.remove(); }, 320);
+    });
   }
 
   function clearArrows(it) {
     clear(it.svg);
+    it.kept = {};
     $$(".is-ref", it.el).forEach(function (el) { el.classList.remove("is-ref"); });
     $$(".passage.is-focus", it.el).forEach(function (el) { el.classList.remove("is-focus"); });
     it.drawn = false;
   }
 
   function draw(it, box, bar, vh) {
-    var probe = bar + (vh - bar) * 0.4, g = s("g"), refs = [];
+    var probe = bar + (vh - bar) * 0.4, refs = [];
+    it.frame++;
     ["kitchen", "technical"].forEach(function (side, si) {
       var col = $(".voice-" + side, it.el);
       if (!col) return;
@@ -72,8 +103,7 @@
       // Start at the reading line, but never above or below the passage or the column it is in.
       var lo = Math.max(pr.top, cr.top + 16, bar + 10), hi = Math.min(pr.bottom, cr.bottom - 16, vh - 10);
       var y1 = lo > hi ? clamp((pr.top + pr.bottom) / 2, cr.top + 16, cr.bottom - 16) : clamp(probe, lo, hi);
-      var x1 = (dir === 1 ? cr.right : cr.left) - box.left;
-      var ends = [];
+      var x1 = (dir === 1 ? cr.right : cr.left) - box.left, y1b = y1 - box.top, ends = [], who = side + idOf(pick);
       pick.getAttribute("data-points").split(" ").forEach(function (token) {
         var el = resolve(it, token), r = el && el.getBoundingClientRect();
         if (!r || !r.width || !r.height) return;
@@ -81,11 +111,21 @@
         ends.push({ token: token, x: (dir === 1 ? r.left - 6 : r.right + 6) - box.left, y: r.top + r.height / 2 - box.top });
       });
       if (!ends.length) return;
-      g.appendChild(s("circle", { class: "arrow-dot", cx: x1.toFixed(1), cy: (y1 - box.top).toFixed(1), r: 4 }));
-      ends.forEach(function (e) { arrow(g, x1, y1 - box.top, e.x, e.y, dir, e.token + side); });
+      put(it, who + "-dot", function () { return s("circle", { class: "arrow-dot", r: 4 }); },
+        function (n) { n.setAttribute("cx", x1.toFixed(1)); n.setAttribute("cy", y1b.toFixed(1)); });
+      ends.forEach(function (e) {
+        put(it, who + "-" + e.token, function () {
+          var g = s("g", { class: "arrow" });
+          g.appendChild(s("path", { class: "arrow-line arrow-stem", pathLength: "1" }));
+          g.appendChild(s("path", { class: "arrow-line arrow-head" }));
+          return g;
+        }, function (n) {
+          n.firstChild.setAttribute("d", linePath(x1, y1b, e.x, e.y, dir, e.token + side));
+          n.lastChild.setAttribute("d", headPath(e.x, e.y, dir));
+        });
+      });
     });
-    clear(it.svg);
-    it.svg.appendChild(g);
+    retire(it);
     $$(".is-ref", it.el).forEach(function (el) { if (refs.indexOf(el) === -1) el.classList.remove("is-ref"); });
     refs.forEach(function (el) { el.classList.add("is-ref"); });
     it.drawn = true;
@@ -110,7 +150,7 @@
 
   // `spread` holds a .voice-kitchen, a .voice-technical and the middle. `onShow` runs once, the first time the spread is on screen.
   function add(spread, opts) {
-    var it = { el: spread, svg: s("svg", { class: "arrows", "aria-hidden": "true", focusable: "false" }), onShow: opts && opts.onShow, shown: false, drawn: false, hover: {} };
+    var it = { el: spread, svg: s("svg", { class: "arrows", "aria-hidden": "true", focusable: "false" }), onShow: opts && opts.onShow, shown: false, drawn: false, hover: {}, kept: {}, frame: 0 };
     spread.appendChild(it.svg);
     // The passage under the pointer or holding the keyboard focus is the one that points.
     function hold(e) {

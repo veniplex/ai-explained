@@ -239,24 +239,29 @@
     ];
     if (layout === "hub") CONNS.forEach(function (c) { parts.push(conn(c)); });
     sk.append(root, parts);
+    root._reserve = layout === "spine";
     var api = { el: root, setStage: function (stage, current) { setStage(root, stage, current); } };
-    api.setStage(opts.stage || 8, opts.current == null ? null : opts.current);
+    api.setStage(opts.stage == null ? 8 : opts.stage, opts.current == null ? null : opts.current);
     return api;
   }
 
   // Show pieces up to chapter `stage`; mark chapter `current` and dim the ones before it.
   // Pieces that appear after the first render draw themselves in (unless motion is reduced).
+  // In the "spine" layout the pieces up to `current` keep their place from the start (invisible until their turn), so the
+  // spread does not change height, and the text below does not jump, when the new piece grows.
   function setStage(root, stage, current) {
-    var animate = !!root._staged && !sk.reduced();
+    var animate = !!root._staged && !sk.reduced(), reserve = root._reserve && current != null;
     function flash(el) {
       el.classList.add("is-drawing");
       setTimeout(function () { el.classList.remove("is-drawing"); }, 1900);
     }
     root.setAttribute("data-stage", stage);
     $$("[data-from]", root).forEach(function (el) {
-      var show = +el.getAttribute("data-from") <= stage;
-      if (show && el.hidden && animate) flash(el);
-      el.hidden = !show;
+      var from = +el.getAttribute("data-from"), show = from <= stage, held = !show && reserve && from <= current;
+      var was = el.hidden || el.classList.contains("is-unborn");
+      if (show && was && animate) flash(el);
+      el.hidden = !show && !held;
+      el.classList.toggle("is-unborn", held);
     });
     $$("[data-ch]", root).forEach(function (el) {
       var n = +el.getAttribute("data-ch");
@@ -265,6 +270,7 @@
     });
     var kit = $(".zone-kitchen", root), framed = stage >= CH.loop.n;
     kit.classList.toggle("is-framed", framed);
+    kit.classList.toggle("is-reserved", reserve && !framed && current >= CH.loop.n);
     if (framed && !kit._frame) {
       kit._frame = true;
       if (animate) flash(kit);
