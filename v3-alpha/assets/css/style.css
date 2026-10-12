@@ -998,7 +998,7 @@ tbody th { font-weight: 600; }
   .kmap-hub > .conn { display: none; }
 }
 /* Narrow or short screens: one column with a small map in each chapter; the sticky map would not fit. */
-@media (max-width: 1023px), (max-height: 739px) {
+@media (max-width: 1023px), (max-height: 659px) {
   .story { grid-template-columns: minmax(0, 1fr); }
   .story-map { display: none; }
   .mini-map { display: block; margin-top: 20px; }
