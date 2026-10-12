@@ -77,7 +77,7 @@ window.AE3 = window.AE3 || {};
         "**Instruction files** are house rules in plain text that the harness puts on the counter at the start of every new chat or job. **Skills** are recipe cards: step-by-step know-how for one kind of task, loaded only when a task needs it, so they take almost no space until then.",
         "To learn facts it was never trained on, the agent **looks things up**: it searches the web, your files or a company knowledge base. **Memory** keeps notes from one chat or job to the next, and when the counter gets full, the harness summarises older steps to make room."
       ],
-      example: "A house rule says “aisle seat, and no airlines that charge for cabin bags”. A recipe card explains how to compare total prices including bags. The airline's baggage rules are looked up, not guessed. Next time, the agent remembers your home airport.",
+      example: "An instruction file says “aisle seat, and no airlines that charge for cabin bags”. A skill explains how to compare total prices including bags. The airline's baggage rules are looked up, not guessed. Next time, the agent remembers your home airport.",
       figure: null,
       entries: ["instructions", "skills", "knowledge", "memory"]
     },
