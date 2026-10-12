@@ -193,7 +193,7 @@
           listEl.appendChild(dl);
         }
         dl.appendChild(h("div", { class: "gloss-entry" }, h("dt", null, e.term),
-          h("dd", null, rich(e.def), e.entry && D.entries[e.entry] ? h("button", { class: "link-btn", type: "button", "data-entry": e.entry }, "Open") : null)));
+          h("dd", null, rich(e.def), e.entry && D.entries[e.entry] ? h("button", { class: "link-btn", type: "button", "data-entry": e.entry, "aria-label": "Open " + e.term }, "Open") : null)));
       });
       if (!shown.length) listEl.appendChild(h("p", { class: "gloss-empty" }, "No term matches “" + input.value + "”."));
       countEl.textContent = shown.length + " of " + terms.length + " terms";
