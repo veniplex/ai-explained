@@ -35,11 +35,12 @@ function pageFor(home, dir, kind, id, title, description) {
   html = swap(html, /<meta property="og:title" content="[^"]*">/, '<meta property="og:title" content="' + esc(title) + '">');
   html = swap(html, /<meta property="og:description" content="[^"]*">/, '<meta property="og:description" content="' + esc(description) + '">');
   html = swap(html, /<meta property="og:url" content="[^"]*">/, '<meta property="og:url" content="' + SITE + dir + "/" + where + '">');
-  // Everything the home page loads from assets/ or links to in the folder above is two levels further away.
+  // Everything the home page loads from the folder above (the other versions, versions.js, version-switcher.js) is two levels further away,
+  // and so is everything it loads from assets/. The first rewrite must come before the second, which also produces "../".
+  html = html.replace(/(href|src)="\.\.\//g, '$1="../../../');
   html = html.replace(/(href|src)="assets\//g, '$1="../../assets/');
   html = swap(html, '<a class="brand" href="./"', '<a class="brand" href="../../"');
   html = swap(html, '<body data-page="home" data-base="">', '<body data-page="' + kind + '" data-id="' + id + '" data-base="../../">');
-  html = swap(html, '<a href="../v1-alpha/">', '<a href="../../../v1-alpha/">');
   return html;
 }
 

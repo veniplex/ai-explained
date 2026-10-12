@@ -6,19 +6,21 @@
   <title>Agentic AI, Explained</title>
   <meta name="description" content="How AI agents work, explained for beginners as one hand-drawn kitchen. Work in progress.">
   <meta property="og:title" content="Agentic AI, Explained">
-  <meta property="og:image" content="https://veniplex.github.io/ai-explained/v4-alpha/assets/img/og.png">
+  <meta property="og:image" content="https://veniplex.github.io/ai-explained/og.png">
   <meta name="twitter:card" content="summary_large_image">
-  <link rel="canonical" href="https://veniplex.github.io/ai-explained/v4-alpha/">
-  <link rel="icon" href="v4-alpha/assets/img/favicon.svg" type="image/svg+xml">
-  <meta http-equiv="refresh" content="0; url=v4-alpha/">
+  <link rel="canonical" href="https://veniplex.github.io/ai-explained/">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <!-- The newest version is the first entry of versions.js, so a new version is added in that one place. -->
+  <script src="versions.js"></script>
   <!-- Forward to the newest version. Links made for v1-alpha (such as #block-mcp) keep going to v1-alpha. -->
   <script>
     var h = location.hash;
     var v1 = /^#(block-|zone-|link-|step-|(story|ideas|steps|context|compare|patterns|protocols|decide|build|blocks|glossary|learn|about)$)/.test(h);
-    location.replace((v1 ? "v1-alpha/" : "v4-alpha/") + h);
+    var newest = window.AE_VERSIONS && window.AE_VERSIONS.list[0].id;
+    if (v1 || newest) location.replace((v1 ? "v1-alpha" : newest) + "/" + h);
   </script>
 </head>
 <body>
-  <p>Forwarding to the newest version: <a href="v4-alpha/">v4-alpha</a>. The first version is still at <a href="v1-alpha/">v1-alpha</a>.</p>
+  <p>Forwarding to the newest version. <noscript>This needs JavaScript. All versions are listed in the <a href="https://github.com/veniplex/ai-explained">GitHub repository</a>.</noscript></p>
 </body>
 </html>
