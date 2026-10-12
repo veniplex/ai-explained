@@ -7,7 +7,7 @@
   var V3 = window.V3, sk = V3.sk, D = window.AE3;
   var h = sk.h, rich = sk.rich, $ = sk.$, $$ = sk.$$;
   // Wide and tall enough for the sticky map beside the chapters; the same breakpoint as the narrow block in style.css.
-  var WIDE = "(min-width: 1024px) and (min-height: 740px)";
+  var WIDE = "(min-width: 1024px) and (min-height: 660px)";
   var ZONE = {};
   D.chapters.forEach(function (c) { c.entries.forEach(function (id) { ZONE[id] = c.zone; }); });
   // Which kitchen picture (from v1-alpha's story) illustrates which chapter.
@@ -111,7 +111,7 @@
       inner.style.zoom = "";
       if (!window.matchMedia(WIDE).matches || !("zoom" in inner.style)) return;
       var avail = window.innerHeight - $(".bar").offsetHeight - 40, natural = inner.offsetHeight;
-      if (natural > avail) inner.style.zoom = Math.max(0.7, avail / natural).toFixed(3);
+      if (natural > avail) inner.style.zoom = Math.max(0.68, avail / natural).toFixed(3);
     }
     function set(n) {
       if (n === current) return;
