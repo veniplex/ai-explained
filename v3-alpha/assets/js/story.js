@@ -6,7 +6,8 @@
 
   var V3 = window.V3, sk = V3.sk, D = window.AE3;
   var h = sk.h, rich = sk.rich, $ = sk.$, $$ = sk.$$;
-  var WIDE = "(min-width: 1024px)";
+  // Wide and tall enough for the sticky map beside the chapters; the same breakpoint as the narrow block in style.css.
+  var WIDE = "(min-width: 1024px) and (min-height: 740px)";
   var ZONE = {};
   D.chapters.forEach(function (c) { c.entries.forEach(function (id) { ZONE[id] = c.zone; }); });
   // Which kitchen picture (from v1-alpha's story) illustrates which chapter.
@@ -131,20 +132,14 @@
     requestAnimationFrame(fit);
   }
 
-  // Narrow screens: each chapter gets its own small "map so far", built when it comes near.
-  function lazyMinis(chapters) {
-    var boxes = $$(".mini-map", chapters);
-    function build(box) {
-      if (box._built) return;
-      box._built = true;
+  // Narrow or short screens: each chapter gets its own small "map so far". All of them are built up front, so
+  // nothing above the reader changes height while scrolling back up (Safari has no scroll anchoring).
+  // Where they are hidden (wide screens) they cost little: the sketches draw only at a non-zero size.
+  function buildMinis(chapters) {
+    $$(".mini-map", chapters).forEach(function (box) {
       var n = +box.getAttribute("data-mini");
       box.appendChild(V3.map.create({ layout: "tall", mini: true, ring: false, stage: n, current: n }).el);
-    }
-    if (!("IntersectionObserver" in window)) { boxes.forEach(build); return; }
-    var io = new IntersectionObserver(function (list) {
-      list.forEach(function (en) { if (en.isIntersecting) { build(en.target); io.unobserve(en.target); } });
-    }, { rootMargin: "600px 0px" });
-    boxes.forEach(function (b) { io.observe(b); });
+    });
   }
 
   function render(main) {
@@ -153,7 +148,7 @@
     var aside = h("aside", { class: "story-map", "aria-label": "The map so far" }, h("div", { class: "story-map-inner" }, sticky.el));
     sk.append(main, [hero(), h("div", { class: "story" }, chapters, aside), hub()]);
     track(chapters, sticky, aside);
-    lazyMinis(chapters);
+    buildMinis(chapters);
   }
 
   V3.story = { render: render };

@@ -22,12 +22,26 @@
   var sheet = $("#sheet"), sheetOpen = false, sheetId = null, sheetReturn = null, GCACHE = {};
   var menu = $("#menu"), menuBtn = $("#menu-btn");
 
+  // An entry or a guide that the page opened gets its own history entry, marked { v3overlay: true }.
+  // Swapping one for another (Previous, Next, Related, another guide) keeps the mark; deep-linked ones have none.
+  function isOverlayHash(hash) { return /^#(e|guide)-/.test(hash || ""); }
+  function isOverlayEntry() { return !!(history.state && history.state.v3overlay); }
   function setHash(hash, replace) {
     if ((location.hash || "") === (hash || "")) return;
     var url = hash ? hash : location.pathname + location.search;
-    try { history[replace ? "replaceState" : "pushState"]({}, "", url); } catch (e) { if (hash) location.hash = hash; }
+    var state = isOverlayHash(hash) && (!replace || isOverlayEntry()) ? { v3overlay: true } : null;
+    try { history[replace ? "replaceState" : "pushState"](state, "", url); } catch (e) { if (hash) location.hash = hash; }
     lastHash = location.hash;
   }
+  // Closing from the page steps back over the entries the page pushed, so Back never lands on a closed drawer.
+  // While a step back is under way, `unwindTo` holds the hash to land on and `afterUnwind` what to do then.
+  var unwindTo = null, afterUnwind = [];
+  function leaveTo(hash) {
+    if (unwindTo !== null) { unwindTo = hash; return; }
+    if (isOverlayEntry() && (location.hash || "") !== hash) { unwindTo = hash; history.back(); }
+    else setHash(hash, true);
+  }
+  function whenSettled(fn) { if (unwindTo === null) fn(); else afterUnwind.push(fn); }
   function syncScrim() {
     var on = drawerOpen || sheetOpen;
     if (on) {
@@ -158,7 +172,7 @@
     $$(".blk.is-selected").forEach(function (x) { x.classList.remove("is-selected"); });
     setTimeout(function () { if (!drawerOpen) drawer.hidden = true; }, sk.reduced() ? 0 : 320);
     syncScrim();
-    if (!opts.fromHash) setHash(underlyingHash(), true);
+    if (!opts.fromHash) leaveTo(underlyingHash());
     if (!opts.noFocus) {
       var back = sheetOpen && drawerReturn && !sheet.contains(drawerReturn) ? $("#sheet-close") : drawerReturn;
       if (back && document.contains(back)) back.focus({ preventScroll: true });
@@ -207,7 +221,7 @@
     sheet.classList.remove("is-open");
     setTimeout(function () { if (!sheetOpen) sheet.hidden = true; }, sk.reduced() ? 0 : 380);
     syncScrim();
-    if (!opts.fromHash) setHash("", true);
+    if (!opts.fromHash) leaveTo("");
     if (!opts.noFocus && sheetReturn && document.contains(sheetReturn)) sheetReturn.focus({ preventScroll: true });
   }
 
@@ -240,8 +254,11 @@
     closeMenu();
     if (drawerOpen) closeDrawer({ noFocus: true });
     if (sheetOpen) closeSheet({ noFocus: true });
-    el.scrollIntoView({ behavior: sk.reduced() ? "auto" : "smooth", block: "start" });
-    el.focus({ preventScroll: true });
+    // Stepping back through history restores the old scroll position, so scroll once that is done.
+    whenSettled(function () {
+      el.scrollIntoView({ behavior: sk.reduced() ? "auto" : "smooth", block: "start" });
+      el.focus({ preventScroll: true });
+    });
   }
 
   /* ---------- Search: entries, merged v1 terms and glossary terms ------------------ */
@@ -304,7 +321,12 @@
     $$(".kmap .blk.is-match").forEach(function (b) { b.classList.remove("is-match"); });
     renderResults();
   }
-  function closeSearchUI() { sWrap.classList.remove("is-open"); sList.hidden = true; }
+  // The magnifier button (narrow screens) shows and hides the field; aria-expanded follows.
+  function setSearchOpen(open) {
+    sWrap.classList.toggle("is-open", open);
+    $("#search-open").setAttribute("aria-expanded", open ? "true" : "false");
+  }
+  function closeSearchUI() { setSearchOpen(false); sList.hidden = true; }
   // Ends a search before an entry opens and says where focus goes when that entry's drawer closes:
   // the field if it is on screen, otherwise the magnifier button (the field is hidden on narrow screens).
   function leaveSearch() {
@@ -313,6 +335,7 @@
     return getComputedStyle($(".search-field", sWrap)).display !== "none" ? sInput : $("#search-open");
   }
   function initSearch() {
+    setSearchOpen(false);
     sInput.addEventListener("input", applySearch);
     // Some browsers (Safari, Firefox on macOS) do not focus a button on mousedown, so the field's focusout would hide
     // the list before the click lands. Keeping the mousedown from moving focus lets the click through.
@@ -346,11 +369,11 @@
     });
     $("#search-open").addEventListener("click", function () {
       var open = !sWrap.classList.contains("is-open");
-      sWrap.classList.toggle("is-open", open);
+      setSearchOpen(open);
       if (open) sInput.focus(); else clearSearch();
     });
     document.addEventListener("pointerdown", function (e) {
-      if (!sWrap.contains(e.target)) { sList.hidden = true; if (!sInput.value) sWrap.classList.remove("is-open"); }
+      if (!sWrap.contains(e.target)) { sList.hidden = true; if (!sInput.value) setSearchOpen(false); }
     });
   }
 
@@ -404,7 +427,7 @@
       if (typing) return;
       if (e.key === "/" && !e.ctrlKey && !e.metaKey && !e.altKey && !drawerOpen && !sheetOpen) {
         e.preventDefault();
-        if (getComputedStyle($(".search-field", sWrap)).display === "none") sWrap.classList.add("is-open");
+        if (getComputedStyle($(".search-field", sWrap)).display === "none") setSearchOpen(true);
         sInput.focus();
       }
     });
@@ -417,7 +440,21 @@
   }
 
   /* ---------- Deep links ---------------------------------------------------------------- */
-  function fromHash() {
+  function fromHash(ev) {
+    if (unwindTo !== null) {
+      // A close from the page is stepping back: the page already shows the right thing, only the address catches up.
+      // Each step fires popstate and then hashchange; only popstate moves on, so no step is taken twice.
+      if (ev && ev.type === "hashchange") return;
+      if (isOverlayEntry() && (location.hash || "") !== unwindTo) { history.back(); return; }
+      var target = unwindTo, todo = afterUnwind;
+      unwindTo = null; afterUnwind = [];
+      // Landed on a deep-linked entry or guide that is now closed: drop its hash instead of going back further.
+      if (isOverlayHash(location.hash) && location.hash !== target) setHash(target, true);
+      lastHash = location.hash;
+      todo.forEach(function (fn) { fn(); });
+      return;
+    }
+    var prev = lastHash;
     if (location.hash === lastHash && (drawerOpen || sheetOpen || !location.hash)) return;
     lastHash = location.hash;
     var hsh = "", m;
@@ -425,6 +462,8 @@
     if (!hsh) { closeDrawer({ fromHash: true, noFocus: true }); closeSheet({ fromHash: true, noFocus: true }); return; }
     if ((m = hsh.match(/^e-([a-z0-9-]+)$/)) && hasEntry(m[1])) { openEntry(m[1], { fromHash: true }); return; }
     if ((m = hsh.match(/^guide-([a-z]+)$/)) && guideMeta(m[1])) {
+      // Back from an entry opened over this guide: close the entry and leave the guide as it is, scroll included.
+      if (sheetOpen && sheetId === m[1]) { closeDrawer({ fromHash: true }); return; }
       if (drawerOpen) closeDrawer({ fromHash: true, noFocus: true });
       openGuide(m[1], { fromHash: true });
       return;
@@ -432,8 +471,9 @@
     if (/^(ch-[1-7]|ch-e|map)$/.test(hsh)) {
       closeDrawer({ fromHash: true, noFocus: true });
       closeSheet({ fromHash: true, noFocus: true });
+      // Scroll only when the address moved to this place, not when Back returns here from an entry or a guide.
       var el = document.getElementById(hsh);
-      if (el) el.scrollIntoView({ block: "start" });
+      if (el && location.hash !== prev && !isOverlayHash(prev)) el.scrollIntoView({ block: "start" });
     }
   }
 
