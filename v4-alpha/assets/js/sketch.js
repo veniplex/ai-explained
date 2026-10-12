@@ -398,9 +398,85 @@
       ];
     }
   };
-  function doodleSvg(zid, cls, seed, animDelay) {
+  // The technical voice has no kitchen picture, but it keeps the small drawings, as plain symbols of the same things:
+  // a neural net, a context window, a wrench, a loop, a document, a shield, a tree of agents, a chart. By zone for the
+  // map, and by chapter where two chapters share a zone (the counter and the loop).
+  function netNodes() {
+    var out = [], L = [[10, 14], [10, 34]], M = [[24, 9], [24, 24], [24, 39]], R = [[38, 24]];
+    L.forEach(function (p) { M.forEach(function (q) { out.push({ t: "line", a: [p[0], p[1], q[0], q[1]], sw: 1 }); }); });
+    M.forEach(function (q) { out.push({ t: "line", a: [q[0], q[1], 38, 24], sw: 1 }); });
+    L.concat(M, R).forEach(function (p, i) { out.push({ t: "circle", a: [p[0], p[1], 8], fill: i < 2 ? "paper" : "zm", sw: 1.3 }); });
+    return out;
+  }
+  var TICON = {
+    terminal: function () {
+      return [
+        { t: "rect", a: [5, 9, 38, 30], fill: "paper" }, { t: "line", a: [5, 17, 43, 17], sw: 1.3 },
+        { t: "path", a: "M11 23l5 4-5 4", sw: 2 }, { t: "line", a: [20, 32, 31, 32], sw: 2 }
+      ];
+    },
+    net: netNodes,
+    window: function () {
+      return [
+        { t: "rect", a: [6, 7, 36, 34], fill: "paper" }, { t: "line", a: [6, 14, 42, 14], sw: 1.3 },
+        { t: "line", a: [11, 20, 37, 20], sw: 1.3 }, { t: "line", a: [11, 25, 31, 25], sw: 1.3 }, { t: "line", a: [11, 30, 34, 30], sw: 1.3 },
+        { t: "rect", a: [11, 34, 26, 3], fill: "zm", sw: 1.1 }
+      ];
+    },
+    wrench: function () {
+      return [
+        { t: "line", a: [20, 20, 39, 39], sw: 6 },
+        { t: "circle", a: [16, 16, 18], fill: "zm" }, { t: "poly", a: [[8, 7], [17, 15], [7, 17]], fill: "page", sw: 1.1 }
+      ];
+    },
+    loop: function () {
+      return [
+        { t: "path", a: "M13 29C9 21 13 11 23 9C28 8 33 10 36 14", sw: 2.2 }, { t: "lin", a: head(30, 9, 37, 14, 7), sw: 2.2 },
+        { t: "path", a: "M35 19C39 27 35 37 25 39C20 40 15 38 12 34", sw: 2.2 }, { t: "lin", a: head(18, 39, 11, 34, 7), sw: 2.2 },
+        { t: "circle", a: [24, 24, 8], fill: "zm", sw: 1.3 }
+      ];
+    },
+    doc: function () {
+      return [
+        { t: "path", a: "M12 5H29L38 14V43H12Z", fill: "paper" }, { t: "path", a: "M29 5V14H38", sw: 1.3 },
+        { t: "rect", a: [16, 19, 10, 5], fill: "zm", sw: 1.1 }, { t: "line", a: [16, 29, 34, 29], sw: 1.2 }, { t: "line", a: [16, 34, 31, 34], sw: 1.2 }
+      ];
+    },
+    shield: function () {
+      return [
+        { t: "path", a: "M24 5L38 10V23C38 32 32 39 24 43C16 39 10 32 10 23V10Z", fill: "zm" },
+        { t: "path", a: "M17 24l5 5 9-11", sw: 2.4 }
+      ];
+    },
+    tree: function () {
+      return [
+        { t: "path", a: "M24 13V24", sw: 1.4 }, { t: "path", a: "M10 34V24H38V34", sw: 1.4 },
+        { t: "rect", a: [17, 5, 14, 9], fill: "zm" },
+        { t: "rect", a: [3, 34, 14, 9], fill: "paper" }, { t: "rect", a: [17, 34, 14, 9], fill: "paper" }, { t: "rect", a: [31, 34, 14, 9], fill: "paper" },
+        { t: "line", a: [24, 24, 24, 34], sw: 1.4 }
+      ];
+    },
+    bars: function () {
+      return [
+        { t: "path", a: "M8 5V41H43", sw: 1.6 },
+        { t: "rect", a: [13, 26, 7, 15], fill: "zm" }, { t: "rect", a: [24, 18, 7, 23], fill: "zm" }, { t: "rect", a: [35, 9, 7, 32], fill: "zm" }
+      ];
+    },
+    db: function () {
+      return [
+        { t: "path", a: "M9 12V35C9 39 16 42 24 42S39 39 39 35V12", fill: "zm" },
+        { t: "path", a: "M9 23C9 27 16 30 24 30S39 27 39 23", sw: 1.3 },
+        { t: "ellipse", a: [24, 12, 30, 11], fill: "paper" }
+      ];
+    }
+  };
+  var TZONE = { start: "terminal", model: "net", harness: "loop", control: "shield", know: "db", tools: "wrench", orch: "tree", ops: "bars" };
+  var TCHAPTER = { chef: "net", counter: "window", tools: "wrench", loop: "loop", recipes: "doc", locks: "shield", helpers: "tree", "kitchen-ops": "bars" };
+  // `chapter` (optional) picks the technical symbol of a chapter; otherwise the zone's one.
+  function doodleSvg(zid, cls, seed, animDelay, chapter) {
     var svg = s("svg", { class: cls || "zone-doodle", viewBox: "0 0 48 48", "aria-hidden": "true", focusable: "false" });
-    if (DOODLE[zid]) sketchInto(svg, DOODLE[zid](), seed || 3, { base: { r: 0.7, bow: 0.8 }, anim: animDelay != null, delay: animDelay || 0, stagger: 0.05 });
+    var shapes = modeGet() === "technical" ? TICON[TCHAPTER[chapter] || TZONE[zid]] : DOODLE[zid];
+    if (shapes) sketchInto(svg, shapes(), seed || 3, { base: { r: 0.7, bow: 0.8 }, anim: animDelay != null, delay: animDelay || 0, stagger: 0.05 });
     return svg;
   }
 
