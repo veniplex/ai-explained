@@ -34,6 +34,11 @@ A static, hand-drawn interactive map of agentic AI, published with GitHub Pages.
 - So leave out the `Claude-Session:` trailer and any session link in commits and PR bodies; a plain `Co-Authored-By` line is fine. Don't add a "Requested by <name>" line or a project-thread link to PR bodies.
 - Before opening a PR, run `git diff origin/main -- . ':!CLAUDE.md' | grep -nEi 'claude\.ai|C:\\|/Users/|/home/|@[a-z]+\.'` and clean up what it finds.
 
+## Pull requests
+
+- Body structure: a short summary of what changed, then a "Details" list. Nothing else.
+- No "Generated with Claude Code" line, no other tool or session attribution, in the body.
+
 ## Commands
 
 - Validate content: `node scripts/validate-data.js [version]`. A PostToolUse hook runs it after every edit to `data.js`, and `node --check` after any JS edit.
