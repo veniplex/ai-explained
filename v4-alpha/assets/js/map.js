@@ -49,10 +49,10 @@
       head(loop), h("ul", { class: "blk-list blk-row" }, loop.entries.map(blk)),
       opts.mini ? null : sk.doodleSvg("harness", "zone-doodle", 9, undefined, "loop"));
     var cnt = h("section", { class: "counter", "data-zone": "harness", "data-from": counter.n, "data-ch": counter.n },
-      head(counter), h("ul", { class: "blk-list blk-row" }, counter.entries.map(blk)));
+      head(counter), h("ul", { class: "blk-list blk-row" }, counter.entries.map(blk)), opts.mini ? null : sk.doodleSvg("harness", "zone-doodle", 5, undefined, "counter"));
     sk.sketchBox(cnt, { seed: 131, radius: 12, fill: "paper" });
     var lk = h("section", { class: "zone zone-locks", "data-zone": "control", "data-from": locks.n, "data-ch": locks.n },
-      head(locks), h("ul", { class: "blk-list blk-row" }, locks.entries.map(blk)));
+      head(locks), h("ul", { class: "blk-list blk-row" }, locks.entries.map(blk)), opts.mini ? null : sk.doodleSvg("control", "zone-doodle", 7, undefined, "locks"));
     sk.sketchBox(lk, { seed: 211 });
     sk.append(el, [top, cnt, opts.ring ? loopButton({ "data-from": loop.n }) : null, lk]);
     return el;
