@@ -205,7 +205,7 @@ window.AE3.entries = {
         "The model only predicts tokens; the harness does everything else. It builds each request (system prompt, instruction files, tool definitions, history), calls the model, reads its tool calls, runs them in a [[sandbox]] or through [[mcp|MCP]], feeds the results back, compacts the context when it fills up, enforces [[permissions]] and [[hooks]], starts sub-agents and saves checkpoints.",
         "Harness quality is a large part of agent quality: the same model scores very differently in different harnesses, so keep one constant when you compare the other. Harness engineering shapes the environment (tools, documentation, fast tests, guardrails) so agents can do reliable work. Customise an existing harness through instruction files, [[skills]], MCP servers, hooks and permissions rather than forking it (copying and changing its code).",
         "A surface is where people meet the harness: a chat app, an IDE (a code editor), a terminal, a desktop app, a browser, team chat or an API in your own product. It shapes what the agent sees (the open file, the current page), how it asks for approval and how results appear. Good surfaces show actions, sources and costs. Every page a browser agent reads can carry a [[security|prompt injection]].",
-        "To put an agent into your own product, use an agent SDK (a code library with the loop, tool calls, state and tracing built in) or a managed runtime that also hosts it. For simple cases, a direct API call and a short loop is often clearer, and open protocols such as MCP avoid lock-in."
+        "To put an agent into your own product, use an agent SDK (a code library with the loop, tool calls, state and tracing built in) or a managed runtime that also hosts it. For simple cases, a direct API call and a short loop is often clearer, and open protocols such as MCP reduce lock-in."
       ],
       includes: [
         { name: "Surfaces & interfaces", text: "Where people meet the agent: chat apps, IDEs, terminals, desktop apps, browsers, team chat or an API." },
@@ -224,7 +224,7 @@ window.AE3.entries = {
     how: [
       "They are written in Markdown, plain text with a little formatting for headings and lists. Agents that write code read files such as AGENTS.md or CLAUDE.md; chat apps offer the same idea as custom instructions. Typical contents are house rules, how a project is organised and your preferences. They sit in the context on every request, so every line takes up room: keep them short."
     ],
-    example: "A house rule says “aisle seat, and no airlines that charge for cabin bags”, so every search follows it without you repeating it.",
+    example: "A house rule says “aisle seat, and no airlines that charge for cabin bags”, so searches take it into account without you repeating it.",
     forYou: [
       "Write down the rules you keep repeating, in a few short lines.",
       "When the agent makes the same mistake twice, add one precise line."
@@ -249,7 +249,7 @@ window.AE3.entries = {
     how: [
       "A skill is a folder with a SKILL.md file: step-by-step instructions in plain text, sometimes with small programs the agent can run. Until a task needs it, only its name and a one-line description sit in the context, so even many skills take little room. Since December 2025 the format has been an open standard that many apps support. You can often start one by name, like a saved prompt."
     ],
-    example: "A recipe card explains how to compare total prices including bags. It loads only when the agent compares flights.",
+    example: "A skill explains how to compare total prices including bags. It loads only when the agent compares flights.",
     forYou: [
       "Turn a procedure you repeat into a skill, and say when to use it.",
       "Install skills only from sources you trust: they can contain code."
@@ -264,7 +264,7 @@ window.AE3.entries = {
       includes: [
         { name: "Playbooks & runbooks", text: "A written, step-by-step procedure for a recurring task, with checks and a definition of done. Best stored as a skill." },
         { name: "Slash commands & prompt templates", text: "Saved prompts you start by name, such as /review. In 2026 most harnesses folded them into skills." },
-        { name: "Plugins & extensions", text: "Installable bundles of skills, commands, sub-agents, hooks and MCP servers, so a whole setup can be shared with one install." }
+        { name: "Plugins & extensions", text: "Installable bundles of skills, commands, sub-agents, hooks and MCP servers, so a whole setup can be shared with one install. They can run code with your permissions, so install only ones you trust." }
       ]
     },
     related: ["instructions", "tools", "team"],
@@ -286,7 +286,7 @@ window.AE3.entries = {
     deeper: {
       details: [
         "RAG grounds the model in your own data without retraining it. The classic pipeline splits documents into chunks, turns each chunk into an embedding and stores them in an index. At question time it retrieves the best-matching chunks, ideally combining meaning and keyword search and then reranking (sorting the hits again), and adds them to the prompt with their sources. In agents, retrieval becomes a tool the model calls as often as it needs (agentic RAG).",
-        "An embedding is a vector of hundreds to thousands of numbers; similar meanings land close together, and vector databases search millions of them quickly. Embeddings miss exact identifiers such as product codes or error numbers, so pair them with keyword search such as BM25 (hybrid search), and never mix embeddings from different models in one index.",
+        "An embedding is a vector of hundreds to thousands of numbers; similar meanings land close together, and vector databases search millions of them quickly. Embeddings often miss exact identifiers such as product codes or error numbers, so pair them with keyword search such as BM25 (hybrid search), and never mix embeddings from different models in one index.",
         "In agentic search the model uses ordinary tools (listing files, grep for text search, reading files, web search, fetching pages) and refines its queries as it learns. Coding agents often prefer it to an index: it is always up to date, exact for names and needs no indexing pipeline. Deep research runs long searches, often with several agents in parallel, and writes a report.",
         "Use RAG for large, private or changing collections and for answers that need citations, not for collections that fit in the context. Measure whether the right passages come back, check the citations, and keep untrusted pages away from a chat or job that also holds sensitive access ([[security]])."
       ],
