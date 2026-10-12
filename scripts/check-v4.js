@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/* Content checks for v4-alpha. Run from the repository root: node scripts/check-v4.js
+/* Content checks for v4-alpha (and, with the same rules, v5-alpha: scripts/check-v5.js). Run from the repository root: node scripts/check-v4.js
    Exits with code 1 and lists every problem when a check fails. Rules come from
    docs/superpowers/specs/2026-10-11-v4-alpha-design.md (sections 6, 7 and 10), plus the two voices (check-voice.js):
    the kitchen voice may use only the kitchen, the technical voice no picture at all. */
@@ -22,7 +22,7 @@ function loadScripts(files) {
   return ctx.window;
 }
 function loadV1(root) { return loadScripts([path.join(root, "v1-alpha/assets/js/data.js")]).AE; }
-function loadV4(root) { return loadScripts(V3_FILES.map((f) => path.join(root, "v4-alpha/assets/js", f))).AE3; }
+function loadV4(root, dir = "v4-alpha") { return loadScripts(V3_FILES.map((f) => path.join(root, dir, "assets/js", f))).AE3; }
 
 // Inline markup to plain text: [[id|label]] -> label, [[id]] -> id, [t](url) -> t, **b** -> b, `c` -> c.
 function plain(text) {
@@ -227,21 +227,28 @@ function voiceChecks(v3, chapterIds, ids, err) {
   });
 }
 
-module.exports = { V3_FILES, CHAPTER_IDS, LIMITS, plain, wordCount, prose, mentions, check, loadV1, loadV4 };
-
-if (require.main === module) {
-  const root = path.resolve(__dirname, "..");
+// The whole check for one version folder: the content, then the generated term and guide pages. Returns the problems.
+function run(root, dir = "v4-alpha", pagesModule = "./build-v4-pages.js", pagesCommand = "node scripts/build-v4-pages.js") {
   let errors = [];
   let v1, v3;
-  try { v1 = loadV1(root); v3 = loadV4(root); } catch (e) { errors = ["could not load data: " + e.message]; }
+  try { v1 = loadV1(root); v3 = loadV4(root, dir); } catch (e) { errors = ["could not load data: " + e.message]; }
   if (!errors.length) {
     try { errors = check(v1, v3); } catch (e) { errors = ["checker crashed: " + e.message]; }
   }
-  // The term and guide pages are generated from index.html and the data (scripts/build-v4-pages.js).
+  // The term and guide pages are generated from index.html and the data (the build script of the version).
   if (!errors.length) {
-    try { errors = require("./build-v4-pages.js").stale(root); } catch (e) { errors = ["page check crashed: " + e.message]; }
-    if (errors.length) errors.push("run: node scripts/build-v4-pages.js");
+    try { errors = require(pagesModule).stale(root); } catch (e) { errors = ["page check crashed: " + e.message]; }
+    if (errors.length) errors.push("run: " + pagesCommand);
   }
-  if (errors.length) { console.error(errors.length + " problem(s):\n- " + errors.join("\n- ")); process.exit(1); }
-  console.log("v4-alpha content checks passed.");
+  return errors;
 }
+
+function main(dir, pagesModule, pagesCommand) {
+  const errors = run(path.resolve(__dirname, ".."), dir, pagesModule, pagesCommand);
+  if (errors.length) { console.error(errors.length + " problem(s):\n- " + errors.join("\n- ")); process.exit(1); }
+  console.log(dir + " content checks passed.");
+}
+
+module.exports = { V3_FILES, CHAPTER_IDS, LIMITS, plain, wordCount, prose, mentions, check, loadV1, loadV4, run, main };
+
+if (require.main === module) main("v4-alpha", "./build-v4-pages.js", "node scripts/build-v4-pages.js");

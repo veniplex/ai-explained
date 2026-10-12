@@ -133,9 +133,10 @@ module.exports = { KITCHEN_BAN, TECH_BAN, BUDGET, words, wordsOf, withoutBridges
 
 if (require.main === module) {
   const root = path.resolve(__dirname, "..");
-  const dataDir = path.join(root, "v4-alpha/assets/js/data");
   const given = process.argv.slice(2).map((f) => path.resolve(f));
   if (!given.length) { console.error("usage: node scripts/check-voice.js <voice file…>"); process.exit(2); }
+  // The shared data (core, entries, sources, guides) sits next to the voice files, in v4-alpha or v5-alpha.
+  const dataDir = path.dirname(given[0]);
   const base = ["core.js", "entries.js", "sources.js", "guides.js"].map((f) => path.join(dataDir, f));
   let data, own;
   try {
