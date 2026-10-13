@@ -1,0 +1,195 @@
+/* ==========================================================================
+   AI explained (v15): the pages that are not the chapters: the glossary (a term page and the index), the guides, the about page. Loaded after style.css
+   and nav.css by technical/ and by every page below the version folder. Tokens only, as in DESIGN.md.
+     - a term page: the list of all terms at the left edge, the heading with its icon, the place in the kitchen, definition, related terms, detail, references
+     - the glossary: filter, A to Z (default) or by topic, cards with icons
+     - the guides: a pinboard of notes, and a long guide with a list of its parts at the left edge
+     - the about page
+   ========================================================================== */
+
+/* ---------- A page with a list at its left edge: a term (all terms) and a guide (its parts) ---------- */
+/* The list sits against the left edge of the window, outside the text. The text is centred in the window, and where the window is too narrow for both, it
+   takes what is left beside the list. Below 960px the list is a closed box above the text. */
+.stage:has(.side-layout) { padding-inline: 0; }
+.side-layout {
+  --side-w: 296px; --text-w: 780px;
+  display: grid; grid-template-columns: minmax(var(--side-w), 1fr) minmax(0, var(--text-w)) minmax(0, 1fr); align-items: start; padding-top: clamp(20px, 4vh, 40px);
+}
+.side-layout-guide { --text-w: 860px; }
+.side-layout > .side { grid-column: 1; position: sticky; top: calc(var(--bar-h) + 16px); width: var(--side-w); padding-left: var(--gutter); box-sizing: content-box; max-width: calc(100% - var(--gutter)); }
+.side-layout > .page { grid-column: 2; max-width: none; margin: 0; padding-top: 0; padding-inline: clamp(20px, 3vw, 40px); }
+.gl-side-box { display: flex; flex-direction: column; max-height: calc(100vh - var(--bar-h) - 40px); max-height: calc(100dvh - var(--bar-h) - 40px); border: 1px solid var(--rule-strong); border-radius: var(--r-lg); background: var(--surface); overflow: hidden; }
+.gl-side-box > summary {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 12px 14px; cursor: pointer; list-style: none;
+  font: 600 var(--fs-md)/1.3 var(--sans); border-bottom: 1px solid transparent;
+}
+.gl-side-box > summary::-webkit-details-marker { display: none; }
+.gl-side-box[open] > summary { border-bottom-color: var(--rule); }
+.gl-side-count { font: 500 var(--fs-2xs)/1 var(--mono); padding: 4px 7px; border-radius: var(--r-sm); background: var(--paper-2); color: var(--ink-2); }
+.gl-side-tools { display: grid; gap: 8px; padding: 10px 10px 6px; }
+.gl-side-tools .gl-view { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.gl-side-tools .gl-chip { justify-content: center; min-height: 34px; padding-inline: 8px; }
+.gl-side-tools input {
+  width: 100%; min-height: 36px; padding: 0 12px; border: 1px solid var(--rule-strong); border-radius: var(--r-pill); background: var(--paper);
+  color: var(--ink); font: 400 var(--fs-md)/1 var(--sans);
+}
+.gl-side-tools input:focus { outline: 2px solid var(--focus); outline-offset: 1px; }
+.gl-side-list { position: relative; max-height: calc(100vh - var(--bar-h) - 230px); max-height: calc(100dvh - var(--bar-h) - 230px); overflow-y: auto; overscroll-behavior: contain; padding: 4px 6px 12px; scrollbar-width: thin; }
+.gl-side-group { margin-top: 8px; }
+.gl-side-head { display: flex; align-items: center; gap: 8px; padding: 6px 8px 4px; font: 500 var(--fs-2xs)/1.2 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); }
+.gl-side-letter { font-size: var(--fs-sm); color: var(--clay-ink); border-bottom: 1px solid var(--rule); margin-bottom: 2px; }
+.gl-side-list ul, .gl-side-list ol { margin: 0; padding: 0; list-style: none; }
+.gl-side-list li { margin: 0; }
+.gl-side-list a {
+  display: block; padding: 5px 10px 5px 12px; border-left: 3px solid transparent; border-radius: 0 var(--r-sm) var(--r-sm) 0;
+  font: 400 var(--fs-md)/1.35 var(--sans); color: var(--ink-2); text-decoration: none;
+}
+.gl-side-list a:hover { background: var(--paper-2); color: var(--ink); }
+.gl-side-list a:focus-visible { outline: 2px solid var(--focus); outline-offset: -2px; }
+.gl-side-list a[aria-current] { background: var(--zt, var(--clay-soft)); border-left-color: var(--zc, var(--clay)); color: var(--ink); font-weight: 650; }
+.gl-side-empty { padding: 4px 16px 14px; font: italic 400 var(--fs-sm)/1.4 var(--serif); color: var(--ink-3); }
+/* The parts of a guide. */
+.gd-side { max-height: calc(100vh - var(--bar-h) - 120px); max-height: calc(100dvh - var(--bar-h) - 120px); padding-top: 8px; }
+.gd-side-back { font-weight: 500; color: var(--clay-ink) !important; }
+.gd-side-list a { display: grid; grid-template-columns: 22px 1fr; gap: 6px; }
+.gd-side-list a > span:only-child { grid-column: 1 / -1; }
+.gd-side-n { font: 500 var(--fs-xs)/1.9 var(--mono); color: var(--ink-3); }
+.gd-side-guides { margin-top: 2px; }
+@media (min-width: 960px) {
+  .gl-side-box > summary { pointer-events: none; cursor: default; }
+}
+@media (max-width: 1371px) and (min-width: 960px) {
+  .side-layout { grid-template-columns: var(--side-w) minmax(0, 1fr); }
+  .side-layout > .side { padding-left: var(--gutter); }
+  .side-layout > .page { grid-column: 2; max-width: var(--text-w); margin-inline: auto; width: 100%; }
+}
+@media (max-width: 959px) {
+  .side-layout { display: block; padding-inline: var(--gutter); }
+  .side-layout > .side { position: static; width: auto; max-width: none; padding-left: 0; margin-bottom: 20px; }
+  .side-layout > .page { padding-inline: 0; margin: 0 auto; max-width: var(--text-w); }
+  .gl-side-box { max-height: none; }
+  .gl-side-list { max-height: 60vh; max-height: 60dvh; }
+  .gd-side { max-height: 60vh; max-height: 60dvh; }
+}
+
+.term-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }
+.term-head-text { min-width: 0; }
+.term-icon { flex: none; width: 84px; height: 84px; overflow: visible; }
+.term-aka { margin-top: 10px; font: 400 var(--fs-md)/1.4 var(--serif); color: var(--ink-3); }
+.term-aka em { font-style: italic; color: var(--ink-2); }
+.page-eyebrow a { color: inherit; }
+@media (max-width: 560px) { .term-icon { width: 56px; height: 56px; } }
+
+/* ---------- The glossary ------------------------------------------------------------------------- */
+.page-glossary { max-width: 1120px; }
+.gl-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 18px; }
+.gl-search { width: min(380px, 100%); }
+.gl-view, .gl-filter { display: flex; flex-wrap: wrap; gap: 6px; }
+.gl-filter { margin-top: 14px; }
+.gl-chip {
+  display: inline-flex; align-items: center; gap: 7px; min-height: 34px; padding: 0 13px; border: 1px solid var(--rule-strong); border-radius: var(--r-pill);
+  background: var(--surface); color: var(--ink-2); cursor: pointer; font: 500 var(--fs-sm)/1 var(--sans);
+  transition: background-color var(--dur-fast), border-color var(--dur-fast);
+}
+.gl-chip:hover { border-color: var(--ink-3); color: var(--ink); }
+.gl-chip.is-on { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.gl-chip:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.gl-chip .zdot { width: 9px; height: 9px; }
+.gl-list { margin-top: 8px; }
+.gl-group-n { margin-left: 4px; font: 500 var(--fs-xs)/1 var(--mono); color: var(--ink-3); }
+.gl-letter { margin: 32px 0 6px; font: 600 var(--fs-4xl)/1 var(--serif); color: var(--clay-ink); }
+.gl-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; margin: 14px 0 0; padding: 0; list-style: none; }
+.gl-grid li { margin: 0; }
+.gl-card {
+  display: grid; grid-template-columns: 60px minmax(0, 1fr); gap: 14px; align-items: start; height: 100%; padding: 14px 16px 14px 14px; color: inherit; text-decoration: none;
+  background: var(--surface); border: 1px solid var(--rule-strong); border-radius: var(--r-lg); border-left: 4px solid var(--zm);
+  transition: border-color var(--dur-fast), box-shadow var(--dur-fast), transform var(--dur-fast);
+}
+.gl-card:hover { border-color: var(--zc); box-shadow: var(--shadow); transform: translateY(-1px); }
+.gl-card:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.gl-icon-host { display: block; width: 56px; height: 56px; padding: 4px; border-radius: var(--r-md); background: var(--zt); }
+.gl-icon { display: block; width: 48px; height: 48px; overflow: visible; }
+.gl-card-text { display: grid; gap: 4px; min-width: 0; }
+.gl-card b { font: 600 var(--fs-lg)/1.25 var(--serif); overflow-wrap: anywhere; }
+.gl-card-line {
+  display: -webkit-box; -webkit-line-clamp: 3; line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+  font: 400 var(--fs-md)/1.45 var(--sans); color: var(--ink-3);
+}
+.gl-card-tag { margin-top: 2px; font: 500 var(--fs-2xs)/1.3 var(--mono); letter-spacing: 0.05em; text-transform: uppercase; color: var(--zc); }
+.gloss-empty { margin-top: 24px; color: var(--ink-3); }
+@media (max-width: 560px) { .gl-grid { grid-template-columns: minmax(0, 1fr); } .gl-chip { min-height: 38px; } }
+
+/* ---------- The guides: a pinboard of notes ------------------------------------------------------- */
+.page-guides { max-width: 1080px; }
+.page-guide { max-width: none; }
+.note-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 34px 28px; margin: 40px 0 0; padding: 0; list-style: none; }
+.note-grid li { margin: 0; }
+.note-card {
+  position: relative; display: grid; align-content: start; gap: 8px; height: 100%; min-height: 220px; padding: 30px 24px 20px; isolation: isolate;
+  color: inherit; text-decoration: none; transform: rotate(var(--tilt, 0deg)); transform-origin: 50% 20%;
+  transition: transform var(--dur-base) var(--ease);
+}
+.note-card > .sk-bg { position: absolute; inset: -3px; z-index: -1; width: calc(100% + 6px); height: calc(100% + 6px); overflow: visible; pointer-events: none; }
+.note-card:hover, .note-card:focus-visible { transform: rotate(0deg) translateY(-4px); }
+.note-card:focus-visible { outline: 2px solid var(--focus); outline-offset: 4px; }
+.note-tape {
+  position: absolute; top: -11px; left: 50%; width: 88px; height: 22px; transform: translateX(-50%) rotate(-3deg);
+  background: color-mix(in srgb, var(--zm) 75%, transparent); border: 1px solid color-mix(in srgb, var(--zc) 35%, transparent); border-radius: 2px;
+}
+.note-icon { width: 52px; height: 52px; overflow: visible; margin-bottom: 2px; }
+.note-title { font: 600 var(--fs-2xl)/1.2 var(--serif); letter-spacing: -0.01em; }
+.note-hint { font: 400 var(--fs-md)/1.5 var(--serif); color: var(--ink-2); }
+.note-meta { display: flex; flex-wrap: wrap; gap: 4px 14px; margin-top: auto; padding-top: 10px; font: 500 var(--fs-2xs)/1.3 var(--mono); letter-spacing: 0.05em; text-transform: uppercase; color: var(--zc); }
+@media (prefers-reduced-motion: reduce) { .note-card, .note-card:hover, .note-card:focus-visible { transition: none; } .note-card:hover, .note-card:focus-visible { transform: rotate(var(--tilt, 0deg)); } }
+
+/* ---------- A long guide ------------------------------------------------------------------------------- */
+.gd-top { margin-bottom: 36px; }
+.gd-expect { position: relative; isolation: isolate; padding: 20px 24px; }
+.gd-expect > .sk-bg { position: absolute; inset: -2px; z-index: -1; width: calc(100% + 4px); height: calc(100% + 4px); overflow: visible; pointer-events: none; }
+.gd-expect .eyebrow { color: var(--zc); }
+.gd-expect ul { margin: 10px 0 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+.gd-expect li { position: relative; padding-left: 24px; font: 400 var(--fs-base)/1.5 var(--serif); color: var(--ink); }
+.gd-expect li::before { content: ""; position: absolute; left: 3px; top: 0.35em; width: 7px; height: 12px; border: solid var(--zc); border-width: 0 2px 2px 0; transform: rotate(40deg); }
+.gd-body { max-width: 760px; margin-inline: auto; }
+.bd-sub { margin-top: 18px; }
+.bd-sub h3 { margin-bottom: 8px; font: 600 var(--fs-md)/1.3 var(--sans); color: var(--ink); }
+.gd-section, .bd-section, .gd-terms { scroll-margin-top: calc(var(--bar-h) + 16px); }
+.gd-section { padding-top: 8px; margin-top: 36px; }
+.gd-section:first-child { margin-top: 0; }
+.gd-section h2 { display: flex; align-items: baseline; gap: 12px; margin-bottom: 14px; font: 600 var(--fs-3xl)/1.2 var(--serif); letter-spacing: -0.01em; }
+.gd-n { flex: none; display: inline-grid; place-items: center; width: 1.45em; height: 1.45em; border-radius: 50%; background: var(--clay-soft); color: var(--clay-ink); font: 600 0.6em/1 var(--sans); }
+.gd-section > p { margin-top: 12px; font: 400 var(--fs-lg)/1.68 var(--serif); color: var(--ink-2); }
+.gd-section > p:first-of-type { margin-top: 0; }
+.gd-section .bd-list { margin-top: 14px; }
+.gd-section .bd-list li { font-size: var(--fs-lg); line-height: 1.6; }
+.gd-section a.link-btn { white-space: nowrap; }
+.gd-steps { margin: 16px 0 0; padding: 0; list-style: none; counter-reset: step; display: grid; gap: 10px; }
+.gd-steps li { counter-increment: step; position: relative; display: grid; gap: 2px; padding: 12px 14px 12px 52px; border: 1px solid var(--rule-strong); border-radius: var(--r-md); background: var(--surface); }
+.gd-steps li::before {
+  content: counter(step); position: absolute; left: 14px; top: 12px; display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%;
+  background: var(--ink); color: var(--paper); font: 600 var(--fs-sm)/1 var(--sans);
+}
+.gd-steps b { font: 650 var(--fs-md)/1.4 var(--sans); }
+.gd-steps span { font: 400 var(--fs-base)/1.55 var(--serif); color: var(--ink-2); }
+.gd-table { margin-top: 18px; }
+.tbl { min-width: 560px; }
+.tbl td { color: var(--ink-2); }
+.code { margin: 18px 0 0; border: 1px solid var(--rule-strong); border-radius: var(--r-md); background: var(--paper-2); overflow: hidden; }
+.code figcaption { padding: 7px 14px; border-bottom: 1px solid var(--rule); font: 500 var(--fs-xs)/1.3 var(--mono); letter-spacing: 0.04em; color: var(--ink-3); background: var(--paper-3); }
+.code pre { margin: 0; padding: 14px 16px; overflow-x: auto; font: 400 var(--fs-sm)/1.6 var(--mono); color: var(--ink); tab-size: 2; }
+.code pre code { padding: 0; border: 0; background: none; font: inherit; overflow-wrap: normal; }
+.gd-callout { display: grid; gap: 4px; margin-top: 18px; padding: 14px 16px; border-left: 4px solid var(--clay); border-radius: 0 var(--r-md) var(--r-md) 0; background: var(--clay-soft); }
+.gd-callout b { font: 650 var(--fs-md)/1.4 var(--sans); color: var(--clay-ink); }
+.gd-callout span { font: 400 var(--fs-base)/1.55 var(--serif); color: var(--ink); }
+.gd-section .bd-section { margin-top: 20px; }
+.gd-terms { margin-top: 56px; padding-top: 22px; border-top: 1px solid var(--rule-strong); }
+.gd-terms h2 { margin-bottom: 12px; font: 600 var(--fs-xl)/1.3 var(--serif); }
+@media (max-width: 860px) { .gd-section h2 { font-size: var(--fs-2xl); } .gd-section > p { font-size: var(--fs-base); } }
+
+/* ---------- About ------------------------------------------------------------------------------------------ */
+.page-about { max-width: 1000px; }
+
+@media print { .side, .gl-tools, .gl-filter, .gd-side { display: none; } .side-layout { display: block; } }
+
+/* The definition of a main term: the line, then the longer text, with room between them. */
+.page-entry .bd .def + p { margin-top: 12px; }
