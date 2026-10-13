@@ -271,6 +271,9 @@
       var id = decodeURIComponent(a.getAttribute("href").slice(1)), el = id ? document.getElementById(id) : null;
       if (!el || !body.contains(el)) return;
       e.preventDefault();
+      // On a narrow screen the list is a box above the text: it closes when you pick a part, so the part is not pushed down by it.
+      var box = a.closest(".gl-side-box");
+      if (box && window.matchMedia && !window.matchMedia("(min-width: 960px)").matches) box.open = false;
       smoothTo(el, "#" + id);
     });
   }

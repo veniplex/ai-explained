@@ -128,25 +128,72 @@
 
   /* ---------- Camera ------------------------------------------------------------ */
   var VH = K.h - K.y0, MID = [K.w / 2, K.y0 + VH / 2];
-  var view = { W: 0, H: 0, u: 1, narrow: false }, camTarget = MID;
+  var view = { W: 0, H: 0, u: 1, narrow: false }, camTarget = MID, mapFocus = null, chefAt = null;
+  // The part of the kitchen that the real names of one chapter cover (their outlines and labels), or null when they are spread over the whole kitchen
+  // (or are the whole kitchen, like the harness): a small screen zooms in on it.
+  var focusBoxes = Object.create(null);
+  function focusOf(ch) {
+    if (focusBoxes[ch] !== undefined) return focusBoxes[ch];
+    var x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9, n = 0;
+    NAMES.forEach(function (nm) {
+      if (nm.ch !== ch) return;
+      (nm.boxes || [nm.box]).forEach(function (b) {
+        if (b[2] > K.w * 0.6) return;
+        x0 = Math.min(x0, b[0]); y0 = Math.min(y0, b[1]); x1 = Math.max(x1, b[0] + b[2]); y1 = Math.max(y1, b[1] + b[3]); n++;
+      });
+      x0 = Math.min(x0, nm.lab[0] - 70); x1 = Math.max(x1, nm.lab[0] + 70); y0 = Math.min(y0, nm.lab[1] - 30); y1 = Math.max(y1, nm.lab[1] + 30);
+    });
+    focusBoxes[ch] = n && x1 - x0 < K.w * 0.6 ? [x0, y0, x1, y1] : null;
+    return focusBoxes[ch];
+  }
+  // Where the middle of a view of this size must lie so that the span [lo, hi] is inside it (as little moved from c as possible).
+  function keepIn(c, lo, hi, span) { return hi - lo >= span ? (lo + hi) / 2 : clamp(c, hi - span / 2, lo + span / 2); }
   function layout() {
     // A little air at both sides, so the room does not touch the edges of the window.
     var r = stage.getBoundingClientRect(), W = r.width, H = r.height, fit = Math.min(W / (K.w + 72), H / VH);
     view.W = W; view.H = H;
     view.narrow = W < 960;
     stage.classList.toggle("is-narrow", view.narrow);
-    // Big screens see the whole kitchen. On a small one the camera comes closer and follows the chef (but not for the real names).
-    var u = fit;
-    if (fit < 0.62 && !stage.classList.contains("is-map")) u = clamp(Math.min(H / VH, 0.8), fit, 0.8);
+    stage.classList.toggle("is-short", H < 300);
+    var isMap = stage.classList.contains("is-map"), zoom = false, fx = null, cx, cy;
+    // Big screens see the whole kitchen. On a small one the camera comes closer and follows the chef (but for the real names it shows the whole kitchen, or the part of one chapter).
+    var u = fit, tgt = camTarget;
+    if (fit < 0.62) {
+      if (!isMap) u = clamp(Math.min(H / VH, 0.8), fit, 0.8);
+      else if (typeof mapFocus === "number" && (fx = focusOf(mapFocus))) {
+        var uz = Math.min(W / (fx[2] - fx[0] + 120), H / (fx[3] - fx[1] + 120), 0.62);
+        if (uz > fit * 1.25) { u = uz; zoom = true; tgt = [(fx[0] + fx[2]) / 2, (fx[1] + fx[3]) / 2]; }
+      }
+    }
     view.u = u;
-    var vw = W / u, vh = H / u, cx = camTarget[0], cy = camTarget[1];
-    cx = vw >= K.w ? K.w / 2 : clamp(cx, vw / 2, K.w - vw / 2);
-    cy = vh >= VH ? MID[1] : clamp(cy, K.y0 + vh / 2, K.h - vh / 2);
+    stage.classList.toggle("is-zoom", zoom);
+    hworld.style.setProperty("--bfs", Math.max(16, (view.narrow ? 14 : 12) / u).toFixed(1) + "px");
+    hworld.style.setProperty("--lfs", Math.max(15, (zoom ? 14 : view.narrow ? 12 : 12.5) / u).toFixed(1) + "px");
+    // Speech is never narrower than about 130 screen pixels, however far the camera is: the text stays readable.
+    hworld.style.setProperty("--bmin", view.narrow ? (130 / u).toFixed(0) + "px" : "0px");
+    var vw = W / u, vh = H / u;
+    cx = vw >= K.w ? K.w / 2 : clamp(tgt[0], vw / 2, K.w - vw / 2);
+    cy = vh >= VH ? MID[1] : clamp(tgt[1], K.y0 + vh / 2, K.h - vh / 2);
+    // On a small screen the speech and the chef must be in view, whatever the step says about the camera.
+    if (!isMap && (vw < K.w || vh < VH)) {
+      var bl = 1e9, bt = 1e9, br = -1e9, bb = -1e9, m = 14 / u, any = false;
+      Array.prototype.forEach.call(bubs.children, function (b) {
+        var l = parseFloat(b.style.left) || 0, t = parseFloat(b.style.top) || 0;
+        bl = Math.min(bl, l - m); br = Math.max(br, l + b.offsetWidth + m); bt = Math.min(bt, t - 20 - m); bb = Math.max(bb, t + b.offsetHeight + 20 + m); any = true;
+      });
+      var cl = 1e9, ct = 1e9, cr = -1e9, cb = -1e9, chef = !!chefAt;
+      if (chef) { cl = chefAt[0] - 60; cr = chefAt[0] + 60; ct = chefAt[1] - 180; cb = chefAt[1] + 30; }
+      if (any || chef) {
+        var ul = Math.min(bl, cl), ur = Math.max(br, cr), ut = Math.min(bt, ct), ub = Math.max(bb, cb);
+        if (any && ur - ul > vw) { ul = bl; ur = br; }
+        if (any && ub - ut > vh) { ut = bt; ub = bb; }
+        if (vw < K.w) cx = clamp(keepIn(cx, ul, ur, vw), vw / 2, K.w - vw / 2);
+        if (vh < VH) cy = clamp(keepIn(cy, ut, ub, vh), K.y0 + vh / 2, K.h - vh / 2);
+      }
+    }
     var tf = "translate(" + (W / 2 - cx * u).toFixed(1) + "px," + (H / 2 - cy * u).toFixed(1) + "px) scale(" + u.toFixed(4) + ")";
     world.style.transform = tf;
     hworld.style.transform = tf;
-    hworld.style.setProperty("--bfs", Math.max(16, 12 / u).toFixed(1) + "px");
-    hworld.style.setProperty("--lfs", Math.max(15, (view.narrow ? 10 : 12.5) / u).toFixed(1) + "px");
     if (openId) placeCard();
   }
 
@@ -214,7 +261,8 @@
     stage.classList.toggle("is-night", !!st.night);
     stage.classList.toggle("is-map", st.map !== null);
     camTarget = st.cam || MID;
-    layout();
+    mapFocus = typeof step.map === "number" ? step.map : null;
+    chefAt = st.on.chef ? st.pos.chef : null;
 
     // Which real names are in front.
     Object.keys(labEls).forEach(function (id) {
@@ -225,6 +273,7 @@
     if (!opts.keepCard) closeTerm({ quiet: true });
 
     speech(step, jump);
+    layout();
     words(s, step, prev);
     chrome(s);
     if (opts.step || opts.push) schedulePath(s);
@@ -338,7 +387,8 @@
     if (!openId) return;
     var lab = labEls[openId], sr = stage.getBoundingClientRect(), lr = lab.getBoundingClientRect(), c = el.card, cw = c.offsetWidth, chh = c.offsetHeight;
     var x = lr.left + lr.width / 2 - sr.left - cw / 2, y = lr.bottom - sr.top + 12;
-    if (view.narrow) { x = (sr.width - cw) / 2; y = sr.height - chh - 8; }
+    // On a phone the card sits at the bottom, or at the top when its label is in the lower half, so that the label stays in sight.
+    if (view.narrow) { x = (sr.width - cw) / 2; y = lr.top + lr.height / 2 - sr.top > sr.height / 2 ? 8 : sr.height - chh - 8; }
     else if (y + chh > sr.height - 8) y = lr.top - sr.top - chh - 12;
     c.style.left = clamp(x, 8, Math.max(8, sr.width - cw - 8)) + "px";
     c.style.top = clamp(y, 8, Math.max(8, sr.height - chh - 8)) + "px";
@@ -489,8 +539,30 @@
   chips();
   applySpeed();
   setPlayLabel();
+  // On a small screen the words under the kitchen keep the height of the longest caption (on a phone on its side, of most of them), so the picture does not change size from step to step.
+  var tight = window.matchMedia ? window.matchMedia("(max-width: 900px)") : null;
+  function reserveCaption() {
+    if (!tight || !tight.matches) { root.style.removeProperty("--cap-h"); return; }
+    var probe = h("p", { class: "cap", "aria-hidden": "true" }), tops = [], w = el.cap.offsetWidth, top;
+    if (!w) return;
+    probe.style.cssText = "position:absolute;visibility:hidden;pointer-events:none;left:0;top:0;min-height:0;width:" + w + "px";
+    el.cap.parentNode.appendChild(probe);
+    STEPS.forEach(function (st) {
+      probe.textContent = "";
+      probe.appendChild(rich(st.cap));
+      if (st.map !== undefined) probe.appendChild(document.createTextNode(" Chapter 8 in the deep dive →"));
+      tops.push(probe.offsetHeight);
+    });
+    // On a phone on its side the picture is short already: the longest captions may push it a little rather than every step.
+    tops.sort(function (p, q) { return p - q; });
+    top = tops[window.innerHeight <= 520 ? Math.floor(tops.length * 0.75) : tops.length - 1];
+    el.cap.parentNode.removeChild(probe);
+    root.style.setProperty("--cap-h", top + "px");
+  }
   var rzTimer = 0;
-  function onResize() { clearTimeout(rzTimer); rzTimer = setTimeout(function () { stage.classList.add("is-jump"); layout(); setTimeout(function () { stage.classList.remove("is-jump"); }, 60); }, 80); }
+  function onResize() { clearTimeout(rzTimer); rzTimer = setTimeout(function () { reserveCaption(); stage.classList.add("is-jump"); layout(); setTimeout(function () { stage.classList.remove("is-jump"); }, 60); }, 80); }
+  reserveCaption();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { reserveCaption(); layout(); });
   if (window.ResizeObserver) new ResizeObserver(onResize).observe(stage); else window.addEventListener("resize", onResize);
   C.reader = { go: go, next: next, back: back, state: function () { return cur; }, steps: STEPS, openTerm: openTerm };
   var t0 = stepOfHash(location.hash);

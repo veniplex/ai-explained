@@ -13,6 +13,8 @@
   --bar-main-h: 60px;
   --actions-w: 232px; /* the room of the GitHub button, the theme button and the menu */
   --sec-h: 0px;
+  --inset-l: env(safe-area-inset-left, 0px);  /* the notch of a phone held sideways (the page is set to cover the screen) */
+  --inset-r: env(safe-area-inset-right, 0px);
   --bar-h: calc(var(--bar-main-h) + var(--sec-h));
   --z-search: 60;   /* the list of hits, above the menus */
   --z-pop: 70;      /* the hover card, above everything but the skip link */
@@ -26,12 +28,16 @@
    changing the width of its word, and the actions at the right have a width of their own, so the star count arriving late moves nothing else. */
 .bar { display: block; height: auto; padding: 0; gap: 0; background: var(--paper); -webkit-backdrop-filter: none; backdrop-filter: none; }
 .bar-main {
-  position: relative; height: var(--bar-main-h); padding-inline: var(--gutter);
+  position: relative; height: var(--bar-main-h); padding-inline: max(var(--gutter), var(--inset-l)) max(var(--gutter), var(--inset-r));
   display: grid; grid-template-columns: auto auto minmax(0, 1fr) var(--actions-w); align-items: center; column-gap: 16px;
 }
 .bar-main .brand { justify-self: start; }
 /* The deep dive and the story each shrink the brand and the menu button in their own way on a narrow window; here they are one, so the bar is the same on every page. */
 .bar .brand-mark { width: 30px; height: 30px; }
+/* A hit area of 44px for the brand and the GitHub pill (the mark alone is 30px, the pill 36px), without moving anything. */
+.bar .brand, .gh-pill { position: relative; }
+.bar .brand::after { content: ""; position: absolute; inset: -7px -8px; }
+.gh-pill::after { content: ""; position: absolute; inset: -4px -2px; }
 .bar .brand-title { font-size: var(--fs-xl); letter-spacing: -0.01em; line-height: 1.1; }
 .bar .site-menu > summary { padding-inline: 12px; }
 .bar-main .search { justify-self: center; width: 100%; max-width: 380px; min-width: 0; }
@@ -110,7 +116,7 @@
 .menu-foot { margin-top: 6px; padding-top: 6px; border-top: 1px solid var(--rule); }
 .menu-foot:empty { display: none; }
 .menu-foot .vs { display: block; position: static; }
-.menu-foot .vs-btn { width: 100%; justify-content: space-between; min-height: 40px; padding: 0 10px; font: 400 var(--fs-sm)/1 var(--sans); color: var(--ink-3); }
+.menu-foot .vs-btn { width: 100%; justify-content: space-between; min-height: 44px; padding: 0 10px; font: 400 var(--fs-sm)/1 var(--sans); color: var(--ink-3); }
 .menu-foot .vs-btn .vs-label::before { content: "Version\00a0"; }
 .menu-foot .vs-btn.is-old { color: var(--clay-ink); }
 .menu-foot .vs .vs-menu, .menu-foot .vs.is-right .vs-menu { position: static; width: auto; max-height: min(320px, 42dvh); margin-top: 6px; padding: 4px; box-shadow: none; transform: none; border-color: var(--rule); }
@@ -118,7 +124,7 @@
 .menu-foot .vs .vs-short { display: none; }
 
 /* ---------- The version tab: a small tab that hangs from the right edge of the bar and goes with it --------- */
-.version-tab { position: absolute; top: 100%; right: max(var(--gutter), env(safe-area-inset-right, 0px)); z-index: 1; margin-top: -1px; }
+.version-tab { position: absolute; top: 100%; right: max(var(--gutter), var(--inset-r)); z-index: 1; margin-top: -1px; }
 .version-tab .vs { display: block; }
 .version-tab .vs-btn {
   min-height: 0; height: 26px; padding: 0 10px 0 11px; gap: 5px; border: 1px solid var(--rule); border-top: 0; border-radius: 0 0 var(--r-md) var(--r-md);
@@ -186,16 +192,19 @@
   .search-field { display: none; }
   .search-open { display: inline-grid; }
   .search.is-open .search-field {
-    display: flex; position: fixed; left: 12px; right: 12px; width: auto; z-index: calc(var(--z-search) + 1); box-shadow: var(--shadow);
+    display: flex; position: fixed; left: max(12px, env(safe-area-inset-left, 0px)); right: max(12px, env(safe-area-inset-right, 0px)); width: auto; z-index: calc(var(--z-search) + 1); box-shadow: var(--shadow);
     top: calc(var(--bar-main-h) + env(safe-area-inset-top, 0px) + 8px);
   }
+  /* The list never runs below the window (a phone held sideways has little height, and the keyboard takes more). */
   .search.is-open .search-results {
-    position: fixed; left: 12px; right: 12px; width: auto; transform: none;
+    position: fixed; left: max(12px, env(safe-area-inset-left, 0px)); right: max(12px, env(safe-area-inset-right, 0px)); width: auto; transform: none;
     top: calc(var(--bar-main-h) + env(safe-area-inset-top, 0px) + 58px);
+    max-height: min(460px, calc(100vh - var(--bar-main-h) - env(safe-area-inset-top, 0px) - 70px)); max-height: min(460px, calc(100dvh - var(--bar-main-h) - env(safe-area-inset-top, 0px) - 70px));
   }
 }
 @media (max-width: 900px) and (min-width: 561px) { .bar .brand-title { display: block; } }
-@media (max-width: 560px) { .search-field input { font-size: 16px; } }
+/* 16px keeps a phone from zooming into the field. */
+@media (max-width: 900px), (pointer: coarse) { .search-field input { font-size: 16px; } }
 
 /* ---------- The hover card ------------------------------------------------------------ */
 .pop {
@@ -244,6 +253,9 @@
 /* A page that scrolls and a page that does not would otherwise be a scrollbar's width apart, and the bar, the search and the buttons would move by half of it
    when you go from one to the other. */
 html { scrollbar-gutter: stable; }
+
+/* ---------- The notch: the text of a page keeps clear of it (the story is a picture and goes under it) ---------- */
+body:not([data-page="kitchen"]) > .stage:not(:has(.side-layout)) { padding-inline: max(var(--gutter), var(--inset-l)) max(var(--gutter), var(--inset-r)); }
 
 /* ---------- The button back to the top (totop.js) ------------------------------------------------------- */
 .to-top {

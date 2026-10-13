@@ -77,14 +77,34 @@
   .side-layout > .page { grid-column: 2; max-width: var(--text-w); margin-inline: auto; width: 100%; }
 }
 @media (max-width: 959px) {
-  .side-layout { display: block; padding-inline: var(--gutter); }
+  .side-layout { display: block; padding-inline: max(var(--gutter), var(--inset-l)) max(var(--gutter), var(--inset-r)); padding-top: 28px; } /* clear of the version tab that hangs from the top bar */
   .side-layout > .side { position: static; width: auto; max-width: none; padding-left: 0; margin-bottom: 20px; }
   .side-layout > .page { padding-inline: 0; margin: 0 auto; max-width: var(--text-w); }
-  .gl-side-body { max-height: none; overflow: visible; }
-  .gl-side-terms { min-height: 0; }
-  .gl-side-list, .gd-side-nav { max-height: 60vh; max-height: 60dvh; }
+  /* Room under the last line for the button back to the top, so it does not cover the link to the next term. */
+  .side-layout > .page, .page-glossary { padding-bottom: 80px; }
+  /* The open box never grows taller than the window: it scrolls inside, and the list of terms has a height of its own (a short window shows part of it). */
+  .gl-side-body { max-height: calc(100vh - var(--bar-h) - 32px); max-height: calc(100dvh - var(--bar-h) - 32px); }
+  .gl-side-terms { min-height: 0; flex: none; }
+  .gl-side-list { flex: none; min-height: 180px; max-height: 50vh; max-height: 50dvh; }
+  .gd-side-nav { max-height: 60vh; max-height: 60dvh; }
   .gl-side-page .gd-side-nav { max-height: none; }
+  /* A closed box says it opens: a chevron at the right end of its heading. */
+  .gl-side-box > summary::after {
+    content: ""; flex: none; width: 9px; height: 9px; margin: -4px 4px 0 0; border: solid var(--ink-3); border-width: 0 2px 2px 0; transform: rotate(45deg);
+    transition: transform var(--dur-fast) var(--ease);
+  }
+  .gl-side-box[open] > summary::after { margin-top: 4px; transform: rotate(-135deg); }
+  .gl-side-box > summary { height: 52px; }
+  .gl-side-box > summary:focus-visible { outline: 2px solid var(--focus); outline-offset: -2px; border-radius: var(--r-lg); }
 }
+/* Touch: every row of the lists and every button is a target of 40px or more, and a field is 16px so that a phone does not zoom into it. */
+@media (max-width: 959px), (pointer: coarse) {
+  .gl-side-list a, .gd-side-list a, .gl-side-page .gd-side-list a { padding-block: 10px; }
+  .gl-side-tools .gl-chip { min-height: 40px; }
+  .gl-side-tools input, .gl-tools .gl-search input { font-size: 16px; }
+  .gl-side-tools input { min-height: 42px; }
+}
+@media (prefers-reduced-motion: reduce) { .gl-side-box > summary::after { transition: none; } }
 
 .term-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }
 .term-head-text { min-width: 0; }
@@ -98,6 +118,8 @@
 .page-glossary { max-width: 1120px; }
 .gl-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 18px; }
 .gl-search { width: min(380px, 100%); }
+/* nav.css hides every .search-field below 900px (the top bar's search turns into a button); the filter of the glossary is not that field and stays. */
+.gl-tools .gl-search { display: flex; }
 .gl-view, .gl-filter { display: flex; flex-wrap: wrap; gap: 6px; }
 .gl-filter { margin-top: 14px; }
 .gl-chip {
@@ -130,12 +152,13 @@
   font: 400 var(--fs-md)/1.45 var(--sans); color: var(--ink-3);
 }
 .gloss-empty { margin-top: 24px; color: var(--ink-3); }
-@media (max-width: 560px) { .gl-grid { grid-template-columns: minmax(0, 1fr); } .gl-chip { min-height: 38px; } }
+@media (max-width: 560px) { .gl-grid { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 959px), (pointer: coarse) { .gl-chip { min-height: 40px; } }
 
 /* ---------- The guides: a pinboard of notes ------------------------------------------------------- */
 .page-guides { max-width: 1080px; }
 .page-guide { max-width: none; }
-.note-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 34px 28px; margin: 40px 0 0; padding: 0; list-style: none; }
+.note-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(290px, 100%), 1fr)); gap: 34px 28px; margin: 40px 0 0; padding: 0; list-style: none; }
 .note-grid li { margin: 0; }
 .note-card {
   position: relative; display: grid; align-content: start; gap: 8px; height: 100%; min-height: 220px; padding: 30px 24px 20px; isolation: isolate;
@@ -176,6 +199,7 @@
 .gd-section .bd-list { margin-top: 14px; }
 .gd-section .bd-list li { font-size: var(--fs-lg); line-height: 1.6; }
 .gd-section a.link-btn { white-space: nowrap; }
+@media (max-width: 560px) { .gd-section a.link-btn { white-space: normal; } } /* a long term wraps instead of widening the page */
 .gd-steps { margin: 16px 0 0; padding: 0; list-style: none; counter-reset: step; display: grid; gap: 10px; }
 .gd-steps li { counter-increment: step; position: relative; display: grid; gap: 2px; padding: 12px 14px 12px 52px; border: 1px solid var(--rule-strong); border-radius: var(--r-md); background: var(--surface); }
 .gd-steps li::before {
@@ -238,6 +262,7 @@
 .gd-view .flows { grid-template-columns: minmax(0, 1fr); }
 .gd-view .checklist { grid-template-columns: minmax(0, 1fr); }
 .gd-view-compare-table, .gd-view-protocols { margin-inline: calc(-1 * clamp(0px, 4vw, 60px)); }
+@media (max-width: 959px) { .gd-view-compare-table, .gd-view-protocols { margin-inline: calc(-1 * var(--gutter)); } } /* no further out than the gutter, or the page scrolls sideways */
 .reading-intro { margin: 0 0 8px; font: italic 400 var(--fs-md)/1.45 var(--serif); color: var(--ink-3); }
 /* The sources a part rests on, and the list of all of them at the end. */
 .gd-section > p.gd-src { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 18px; font: 500 var(--fs-2xs)/1 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); }
@@ -279,3 +304,19 @@
 .read-progress.is-on { opacity: 1; }
 .read-progress > span { display: block; width: 100%; height: 100%; background: var(--clay); border-radius: 0 3px 3px 0; transform: scaleX(0); transform-origin: 0 50%; will-change: transform; }
 @media (forced-colors: active) { .read-progress > span { background: Highlight; } }
+
+/* ---------- Touch: the small things in a guide get a hit area of 40px or more, without changing how the page looks ---------- */
+@media (pointer: coarse) {
+  .gd-src-n { position: relative; min-width: 32px; height: 32px; }
+  .gd-src-n::after { content: ""; position: absolute; inset: -5px; }
+  .gd-section > p.gd-src { gap: 8px; }
+  .page-guide .chips { gap: 4px 6px; }
+  .page-guide .chip { min-height: 40px; }
+  /* a whole row of the list of sources is the link */
+  .page-guide .links li { position: relative; }
+  .gd-sources a::after, .page-guide .links a::after { content: ""; position: absolute; inset: 0; }
+  .gd-sources .link-meta a, .page-guide .links .link-meta a { position: relative; z-index: 1; }
+  .checklist-meta .link-btn { padding: 11px 6px; margin: -11px 0; }
+  .gd-side-all { min-height: 44px; }
+  .proto-link { display: inline-block; padding: 8px 4px; margin: -8px -4px; }
+}

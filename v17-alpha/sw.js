@@ -3,7 +3,7 @@
      - on install it keeps the files every page needs (styles, scripts, fonts, the data, icons) and the main pages in one cache that has the build's name;
      - on activation it deletes the caches of earlier builds;
      - a page is fetched from the network first, so a visit always shows the current text, and the copy in the cache is used when there is no network (a page seen
-       once is kept; with nothing for the page, the start page answers);
+       once is kept; with nothing for the page, the start page opens instead);
      - a file of this folder comes from the cache first (it cannot differ from the build that wrote it); the few files at the root of the site (the list of versions)
        come from the cache while a fresh copy is fetched behind them.
    It makes no request to anywhere but this site (the star count of the GitHub button is not touched). The block between the two markers is written by
@@ -11,7 +11,7 @@
 "use strict";
 
 /* build:start */
-const BUILD = "ae17-52a0b45edd";
+const BUILD = "ae17-fb759986c3";
 const PRECACHE = [
   "./",
   "story/",
@@ -123,10 +123,11 @@ function keep(request, response) {
   return response;
 }
 
-// A page: the network first, the cache when there is none, the start page when the cache has nothing either.
+// A page: the network first, the cache when there is none, and a way to the start page when the cache has nothing either (the start page itself is not
+// served under another address: its styles and scripts are found by relative paths, so it would show unstyled).
 function page(request) {
   return fetch(request).then((response) => keep(request, response)).catch(() =>
-    caches.match(request, { ignoreSearch: true }).then((hit) => hit || caches.match(SCOPE, { ignoreSearch: true })).then((hit) => hit || Response.error())
+    caches.match(request, { ignoreSearch: true }).then((hit) => hit || caches.match(SCOPE, { ignoreSearch: true }).then((home) => (home ? Response.redirect(SCOPE, 302) : Response.error())))
   );
 }
 // A file of this folder: the cache first.

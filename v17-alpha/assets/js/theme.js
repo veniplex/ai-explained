@@ -16,9 +16,21 @@
   function write(pref) {
     try { if (pref === "system") localStorage.removeItem(KEY); else localStorage.setItem(KEY, pref); } catch (e) {}
   }
+  // The colour of the browser's own bar (the <meta name="theme-color"> pair is set for the device's setting): a chosen Light or Dark takes the matching one.
+  function chrome(pref) {
+    if (!document.querySelectorAll) return;
+    var metas = document.querySelectorAll('meta[name="theme-color"]');
+    for (var i = 0; i < metas.length; i++) {
+      var m = metas[i], was = m.getAttribute("data-media");
+      if (was === null) { was = m.getAttribute("media") || ""; m.setAttribute("data-media", was); }
+      if (pref === "system") { if (was) m.setAttribute("media", was); else m.removeAttribute("media"); }
+      else m.setAttribute("media", (/dark/.test(was) === (pref === "dark")) ? "all" : "not all");
+    }
+  }
   function apply(pref) {
     root.setAttribute("data-theme", pref === "system" ? (mq && mq.matches ? "dark" : "light") : pref);
     root.setAttribute("data-theme-pref", pref);
+    chrome(pref);
   }
 
   root.className += (root.className ? " " : "") + "js";

@@ -55,12 +55,20 @@
   .path { display: grid; grid-template-columns: 150px minmax(0, 1fr); column-gap: 18px; align-items: start; }
   .path .pic { grid-row: 1 / span 4; margin: 0; max-width: none; align-self: center; }
   .path-go { padding-top: 12px; }
+  /* The row of icons has to fit the 150px column of the picture. */
+  .pic-tech { gap: 2px; aspect-ratio: auto; }
+  .pic-tech .pic-icon { width: 26px; height: 26px; }
+  .pic-op { font-size: var(--fs-sm); }
 }
 @media (max-width: 760px) {
   .start-more-list { grid-template-columns: minmax(0, 1fr); }
   .paths { grid-template-columns: minmax(0, 1fr); }
   .path { display: flex; }
   .path .pic { max-width: 150px; margin: 0 0 4px; }
+  .path .pic-tech { max-width: none; justify-content: flex-start; }
+  .pic-tech { gap: 6px; }
+  .pic-tech .pic-icon { width: 44px; height: 44px; }
+  .pic-op { font-size: var(--fs-xl); }
   .path-title { font-size: var(--fs-3xl); }
 }
 @media (prefers-reduced-motion: reduce) {

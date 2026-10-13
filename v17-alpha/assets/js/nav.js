@@ -17,6 +17,12 @@
       var list = document.getElementById("search-results");
       if (menu.open && list) list.hidden = true;
     });
+    // The version list opens in place at the foot of the panel: bring it into view, or a short window would show only its first line.
+    menu.addEventListener("click", function (e) {
+      var b = e.target.closest ? e.target.closest(".menu-foot .vs-btn") : null;
+      if (!b) return;
+      setTimeout(function () { var list = menu.querySelector(".menu-foot .vs-menu"); if (list && !list.hidden && list.scrollIntoView) list.scrollIntoView({ block: "nearest" }); }, 30);
+    }, true); // in the capture phase: the version button stops the click from going further
     // The arrow keys move between the links, as in the version dropdown.
     menu.addEventListener("keydown", function (e) {
       if (e.key !== "ArrowDown" && e.key !== "ArrowUp") return;
@@ -31,7 +37,7 @@
 
   // The version button (made by version-switcher.js, which runs before the page has finished loading) hangs in the tab under the bar, and sits in the foot of the
   // menu on a phone.
-  var tab = document.querySelector(".version-tab"), foot = document.querySelector("[data-version-menu]"), narrow = window.matchMedia ? window.matchMedia("(max-width: 760px)") : null;
+  var tab = document.querySelector(".version-tab"), foot = document.querySelector("[data-version-menu]"), narrow = window.matchMedia ? window.matchMedia("(max-width: 760px), (max-height: 520px)") : null;
   function place() {
     var vs = document.querySelector(".vs");
     if (!vs || !tab || !foot || !narrow) return;

@@ -1094,3 +1094,20 @@ a.formula-part:hover { color: var(--ink); }
 .links li { padding-block: 10px; }
 /* A wide table (the comparison) says it scrolls: a soft edge on the right while there is more. */
 .table-scroll { background: linear-gradient(to right, var(--surface) 30%, transparent) 0 0 / 28px 100% no-repeat local, linear-gradient(to left, var(--surface) 30%, transparent) 100% 0 / 28px 100% no-repeat local, radial-gradient(farthest-side at 0 50%, var(--rule-strong), transparent) 0 0 / 10px 100% no-repeat scroll, radial-gradient(farthest-side at 100% 50%, var(--rule-strong), transparent) 100% 0 / 10px 100% no-repeat scroll; }
+
+/* ---------- Touch on the deep dive: the pieces of the map, the chips and the footer links get a hit area of 40px ---------- */
+@media (pointer: coarse) {
+  .hub .kmap .blk { min-height: 40px; }
+  .hub .kmap .zone-title { min-height: 40px; display: inline-flex; align-items: center; }
+  .chip { min-height: 40px; }
+  .stamp a { display: inline-block; padding-block: 12px; margin-block: -12px; }
+}
+/* The small map of a chapter is a picture (it cannot be tapped), but its words still have to be readable. */
+@media (max-width: 760px) {
+  .kmap-mini .blk { font-size: var(--fs-sm); }
+  /* The shield of the guardrails sits in the corner: the row of words leaves it room. */
+  .zone-locks .blk-row { padding-right: 52px; }
+  /* "You" stays one row (icon left, words right) on the narrowest screens. */
+  .zone-you { flex-wrap: nowrap; padding-inline: 12px; }
+  .zone-you .zone-doodle { flex: none; width: 34px; height: 34px; }
+}
