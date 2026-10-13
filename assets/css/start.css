@@ -24,14 +24,6 @@
 .start-word { position: relative; display: inline-block; }
 .start-scribble { position: absolute; left: 0; right: 0; bottom: -0.16em; width: 100%; height: 0.2em; overflow: visible; pointer-events: none; }
 .start-line { margin-top: 22px; font: 400 clamp(var(--fs-lg), 1.6vw, var(--fs-2xl))/1.5 var(--serif); color: var(--ink-2); }
-.start-cta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
-.start-cta .btn { min-height: 46px; padding-inline: 20px; font-size: var(--fs-base); }
-.start-cta .btn svg { width: 18px; height: 18px; transition: transform var(--dur-fast) var(--ease); }
-.start-cta .btn:hover svg { transform: translateX(3px); }
-.start-stats { display: flex; flex-wrap: wrap; gap: 8px 28px; margin: 30px 0 0; padding: 18px 0 0; list-style: none; border-top: 1px solid var(--rule); }
-.start-stats li { display: flex; align-items: baseline; gap: 8px; }
-.start-stats b { min-width: 2ch; font: 600 var(--fs-4xl)/1 var(--serif); letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
-.start-stats span { font: 400 var(--fs-md)/1.2 var(--sans); color: var(--ink-3); }
 
 /* ---------- The demo ---------------------------------------------------------------------------------- */
 .demo {
@@ -46,30 +38,9 @@
 .demo-goal[aria-pressed="true"] { border-color: var(--zc); background: color-mix(in srgb, var(--zm) 45%, var(--zt)); color: var(--ink); }
 .demo-goal:focus-visible, .pull-chips .chip:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 
-/* The loop as five stations: think, act and observe repeat, ask and answer end it. */
-.demo-stations { position: relative; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); margin: 18px 0 0; padding: 0; list-style: none; row-gap: 2px; }
-.st {
-  position: relative; display: grid; justify-items: center; gap: 4px; margin-inline: 4px; padding: 8px 2px 6px;
-  border: 1.5px solid transparent; border-radius: var(--r-lg); opacity: 0.55;
-  transition: opacity var(--dur-base) var(--ease), background var(--dur-base) var(--ease), border-color var(--dur-base) var(--ease), transform var(--dur-base) var(--ease);
-}
-.st.on { opacity: 1; background: var(--zt); border-color: var(--zc); transform: translateY(-3px) scale(1.04); }
-.st-ico { display: block; width: 44px; height: 44px; }
-.st-glyph { width: 100%; height: 100%; overflow: visible; }
-.st-name { font: 600 var(--fs-xs)/1.2 var(--sans); letter-spacing: 0.02em; color: var(--ink-2); }
-.st.on .st-name { color: var(--zc); }
-.st-arrow { position: absolute; right: -3px; top: 25px; width: 22px; height: 12px; overflow: visible; }
-.st-split { position: absolute; right: -5px; top: 10px; bottom: 8px; border-right: 1.5px dashed var(--rule-strong); }
-.st-loop { position: relative; grid-column: 1 / 4; grid-row: 2; height: 30px; margin-top: -2px; }
-.st-back { width: 100%; height: 100%; overflow: visible; }
-.st-back .sk-line { stroke: var(--ink-3); vector-effect: non-scaling-stroke; transition: stroke var(--dur-base); }
-.st-loop.on .sk-line { stroke: var(--zc, var(--clay-ink)); }
-.st-loop-label { position: absolute; left: 50%; bottom: -3px; transform: translateX(-50%); padding: 0 8px; background: var(--surface); font: italic 500 var(--fs-xs)/1 var(--serif); color: var(--ink-3); }
-.demo-explain { min-height: 3em; margin-top: 8px; font: 400 var(--fs-md)/1.5 var(--sans); color: var(--ink-3); }
-
 /* The log: one line for every step, the newest at the bottom. */
 .demo-log {
-  height: 19em; margin: 10px 0 0; padding: 10px; overflow-y: auto; list-style: none; display: grid; align-content: start; gap: 6px;
+  min-height: 15.5em; margin: 14px 0 0; padding: 10px; list-style: none; display: grid; align-content: start; gap: 6px;
   background: var(--paper); border: 1px solid var(--rule); border-radius: var(--r-lg); scrollbar-width: thin;
 }
 .ls { display: grid; grid-template-columns: 4.9rem minmax(0, 1fr); gap: 10px; align-items: baseline; padding: 6px 8px; border-radius: var(--r-md); }
@@ -202,10 +173,6 @@ code.ls-text { font: 500 var(--fs-sm)/1.45 var(--mono); color: var(--ink-2); }
   .pull-text { font-size: var(--fs-lg); min-height: 0; }
 }
 @media (max-width: 520px) {
-  .st-ico { width: 34px; height: 34px; }
-  .st { margin-inline: 1px; }
-  .st-name { font-size: var(--fs-2xs); }
-  .st-arrow { display: none; }
   .ls { grid-template-columns: minmax(0, 1fr); gap: 0; }
   .demo-more { margin-left: 0; flex-basis: 100%; }
   .shelf-notes { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 14px; }
@@ -215,14 +182,12 @@ code.ls-text { font: 500 var(--fs-sm)/1.45 var(--mono); color: var(--ink-2); }
 @media (prefers-reduced-motion: reduce) {
   .start-copy > *, .demo, .ls-new, .pull-swap { animation: none; }
   .rv { opacity: 1; transform: none; }
-  .path, .snote, .st { transition: none; }
-  .path:hover, .path:hover .pic > svg, .path:hover .pic-icon, .path:hover .path-go .btn svg, .start-cta .btn:hover svg { transform: none; }
+  .path, .snote { transition: none; }
+  .path:hover, .path:hover .pic > svg, .path:hover .pic-icon, .path:hover .path-go .btn svg { transform: none; }
   .snote:hover, .snote:focus-visible { transform: rotate(var(--tilt, 0deg)); }
-  .st.on { transform: none; }
 }
 @media (forced-colors: active) {
   .path, .demo, .pull-card, .snote { border: 1px solid CanvasText; }
   .path-link:focus-visible::after { outline-color: Highlight; }
-  .st.on { border-color: Highlight; }
 }
 @media print { .bar, .skip-link { display: none; } }
