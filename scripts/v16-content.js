@@ -185,7 +185,7 @@ function checkLongGuides(A) {
 
 function load(root) {
   const fs = require("node:fs"), p = path.join(root, DIR, "assets/js/data");
-  const files = ["core.js", "entries.js", "sources.js", "guides.js", "glossary.js", "glossary-refs.js", "voice-ui-tech.js", "voice-tech.js", "voice-guides-tech.js",
+  const files = ["core.js", "entries.js", "sources.js", "guides.js", "glossary.js", "glossary-refs.js", "voice-ui-tech.js", "voice-tech.js", 
     "voice-glossary-kitchen.js", "voice-guides-long-tech-a.js", "voice-guides-long-tech-b.js", "voice-guides-long-tech-c.js", "voice-guides-long-tech-d.js"].map((f) => path.join(p, f)).filter((f) => fs.existsSync(f));
   return voice.loadScripts(files);
 }

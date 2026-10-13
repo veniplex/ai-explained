@@ -156,7 +156,7 @@
 .gd-body { max-width: 760px; margin-inline: auto; }
 .bd-sub { margin-top: 18px; }
 .bd-sub h3 { margin-bottom: 8px; font: 600 var(--fs-md)/1.3 var(--sans); color: var(--ink); }
-.gd-section, .bd-section, .gd-terms { scroll-margin-top: calc(var(--bar-h) + 16px); }
+.gd-section, .bd-section, .gd-terms { scroll-margin-top: 0; } /* the offset under the bar is the page's scroll-padding-top */
 .gd-section { padding-top: 8px; margin-top: 36px; }
 .gd-section:first-child { margin-top: 0; }
 .gd-section h2 { display: flex; align-items: baseline; gap: 12px; margin-bottom: 14px; font: 600 var(--fs-3xl)/1.2 var(--serif); letter-spacing: -0.01em; }
@@ -236,7 +236,7 @@
 .gd-sources { margin: 0; padding: 0; list-style: none; counter-reset: src; display: grid; gap: 0; }
 .gd-sources li {
   counter-increment: src; position: relative; display: grid; grid-template-columns: 30px 82px minmax(0, 1fr); column-gap: 10px; row-gap: 2px; align-items: start;
-  padding: 10px 8px 10px 0; border-top: 1px solid var(--rule); scroll-margin-top: calc(var(--bar-h) + 24px);
+  padding: 10px 8px 10px 0; border-top: 1px solid var(--rule); scroll-margin-top: 8px;
 }
 .gd-sources li:first-child { border-top: 0; }
 .gd-sources li::before { content: counter(src); grid-row: span 2; justify-self: end; padding-top: 2px; font: 500 var(--fs-sm)/1.4 var(--mono); color: var(--clay-ink); }
@@ -257,7 +257,7 @@
 .gd-section > h2:focus, .gd-section-plain > h2:focus { outline: none; }
 .gd-section > h2:focus-visible, .gd-section-plain > h2:focus-visible { outline: 2px solid var(--focus); outline-offset: 4px; border-radius: var(--r-sm); }
 @media (prefers-reduced-motion: reduce) { .gd-section.is-hit > h2, .gd-section-plain.is-hit > h2 { animation: none; background-color: var(--clay-soft); } }
-.gd-section-plain { scroll-margin-top: calc(var(--bar-h) + 16px); }
+.gd-section-plain { scroll-margin-top: 0; }
 /* How far you have read: a thin line along the lower edge of the top bar. */
 .read-progress { position: absolute; left: 0; right: 0; bottom: -1px; height: 3px; pointer-events: none; opacity: 0; transition: opacity var(--dur-base); z-index: 2; }
 .read-progress.is-on { opacity: 1; }
