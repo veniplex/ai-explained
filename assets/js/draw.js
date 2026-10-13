@@ -222,18 +222,29 @@
     return g;
   };
 
-  /* The empty room: a tiled wall, a baseboard and a wooden floor, which go on far past the picture so that a wide or tall window
-     simply shows more room. wall is the y where the wall ends and the floor begins. */
+  /* The empty room: a back wall of kitchen tiles (the classic "subway" tile, laid in brick bond), a baseboard and a wooden floor, which go on far past the
+     picture so that a wide or tall window simply shows more room. wall is the y where the wall ends and the floor begins. Each tile is a little uneven:
+     its joints sit a pixel or two off, and some tiles catch a faint gloss. */
   C.room = function (wall) {
     var g = el("g", { class: "room" }), x, y, k;
     g.appendChild(el("rect", { class: "wall", x: -4200, y: -2600, width: 9800, height: 2600 + wall }));
     g.appendChild(el("rect", { class: "floor", x: -4200, y: wall, width: 9800, height: 3200 }));
     seedAt = 4001;
-    var tile = { w: 1.2, k: "rule", r: 0.5, bow: 0.3 }, lines = [];
-    // Tiles: vertical joints, then rows, drawn in short strokes so that a long line wobbles like a hand-drawn one.
-    for (x = -840; x <= 2240; x += 70) lines.push(S.line(x, -420, x + ((x / 70) % 2 ? 1.5 : -1), wall - 12, tile));
-    for (y = wall - 12; y > -420; y -= 100) for (x = -840; x < 2240; x += 280) lines.push(S.line(x, y, x + 282, y, tile));
+    var TW = 96, TH = 48, X0 = -840, X1 = 2240, Y0 = -420, rnd = 7, row = 0;
+    function next() { rnd = (rnd * 1103515245 + 12345) & 0x7fffffff; return rnd / 0x7fffffff; }
+    var grout = { w: 1.5, k: "rule", r: 0.4, bow: 0.25 }, gloss = { w: 2, k: "surface", r: 0.2, bow: 0.1 }, lines = [], shine = [];
+    // Rows of tiles from the baseboard up. Every other row is shifted by half a tile.
+    for (y = wall - 8; y > Y0; y -= TH, row++) {
+      lines.push(S.line(X0, y, X1, y + (next() - 0.5) * 1.6, grout));
+      var shift = row % 2 ? TW / 2 : 0;
+      for (x = X0 + shift; x < X1; x += TW) {
+        var jx = x + (next() - 0.5) * 3;
+        lines.push(S.line(jx, y, jx + (next() - 0.5) * 2, y - TH, grout));
+        if (next() < 0.35) shine.push(S.line(jx + 9, y - TH + 8, jx + 9 + 12 + next() * 20, y - TH + 8, gloss));
+      }
+    }
     paintAny(g, lines);
+    paintAny(g, shine);
     // Baseboard, and the planks of the floor.
     var base = [];
     for (x = -840; x < 2240; x += 280) base.push(S.line(x, wall, x + 282, wall, { w: 3.2, k: "ink3", r: 0.5, bow: 0.3 }));
