@@ -48,14 +48,14 @@
    place is the ink pill (as in the menu); its weight does not change, so no word changes width. */
 .bar-links { display: flex; align-items: center; gap: 6px; }
 .bar-links a {
-  position: relative; display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 12px; border: 1px solid var(--rule); border-radius: var(--r-pill); background: var(--paper-2); color: var(--ink-2); text-decoration: none; white-space: nowrap;
+  position: relative; display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 12px; border: 1px solid transparent; border-radius: var(--r-pill); background: transparent; color: var(--ink-2); text-decoration: none; white-space: nowrap;
   font: 500 var(--fs-sm)/1.2 var(--sans); transition: background-color var(--dur-fast), color var(--dur-fast), border-color var(--dur-fast);
 }
 .bar-links a:hover { background: var(--pz-tint, var(--paper-3)); border-color: var(--pz, var(--rule-strong)); color: var(--ink); }
 .bar-links a:focus-visible { outline: 2px solid var(--focus); outline-offset: 1px; }
-.bar-links a[aria-current] { background: var(--paper-2); border-color: var(--rule); color: var(--ink); }
+.bar-links a[aria-current] { color: var(--ink); }
 
-/* ---------- The bar with some life: a small drawing for each place, a squiggle under the current one, a little bounce on hover ----------------------------- */
+/* ---------- The bar with some life: a small drawing for each place (no boxes round them), a squiggle under the current one, a little bounce on hover ----------------------------- */
 /* The drawings are one sprite in the shell (docs/logo/nav-icons.js); each place has the colours of one of the map's zones (the same as on the start page), the lines are the
    text colour. The bar stays one row of one height: the drawings only appear where the centred middle has room for them (from 1440px) and in the menu. */
 [data-sec="start"]     { --pz: var(--z-harness); --pz-tint: var(--t-harness); --pz-mid: var(--m-harness); }
@@ -66,7 +66,7 @@
 [data-sec="about"]     { --pz: var(--z-control); --pz-tint: var(--t-control); --pz-mid: var(--m-control); }
 .pico { width: 18px; height: 18px; flex: none; --pi-fill: var(--pz-tint, transparent); --pi-accent: var(--pz, currentColor); transform-origin: 50% 70%; }
 .bar-links .pico { display: none; margin-left: -2px; }
-.pico-squig { display: none; position: absolute; left: 50%; bottom: -8px; width: 52px; height: 7px; margin-left: -26px; color: var(--clay); pointer-events: none; }
+.pico-squig { display: none; position: absolute; left: 6px; right: 6px; bottom: 1px; width: calc(100% - 12px); height: 8px; color: var(--clay); pointer-events: none; }
 .bar-links a[aria-current] .pico-squig { display: block; }
 @media (min-width: 1440px) {
   .bar-links a { padding: 0 11px 0 10px; }
@@ -87,7 +87,7 @@
 @keyframes pico-wiggle { 0% { transform: none; } 25% { transform: rotate(-12deg) scale(1.12); } 55% { transform: rotate(9deg) scale(1.12); } 80% { transform: rotate(-4deg); } 100% { transform: none; } }
 @keyframes star-spin { from { transform: rotate(0) scale(1); } 50% { transform: rotate(180deg) scale(1.35); } to { transform: rotate(360deg) scale(1); } }
 @keyframes squig-draw { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
-@media (forced-colors: active) { .bar-links a { border-color: CanvasText; } .bar-links a[aria-current] { forced-color-adjust: none; background: Highlight; border-color: Highlight; color: HighlightText; } }
+@media (forced-colors: active) { .bar-links a:hover { border-color: CanvasText; } .bar-links a[aria-current] .pico-squig { color: Highlight; forced-color-adjust: none; } }
 @media (max-width: 1339px) {
   .bar-links { display: none; }
   .bar-main { grid-template-columns: minmax(auto, 1fr) minmax(0, 380px) minmax(auto, 1fr); }

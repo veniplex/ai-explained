@@ -82,8 +82,10 @@ function symbol(id, parts) {
 }
 
 const symbols = Object.keys(ICONS).map((id) => symbol(id, ICONS[id]()));
-// The squiggle under the current place (a box of 64 x 8, a pen stroke that wiggles; the colour is the link's currentColor).
-symbols.push('<symbol id="ni-squig" viewBox="0 0 64 8">' + shape("line", "M2 5C8 1 12 7.5 20 4S32 1 40 4.6S54 7.6 62 3").map((p) => '<path d="' + p.d + '" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>').join("") + "</symbol>");
+// The squiggle under the current place: one long wavy pen line (a box of 320 x 8) that the link crops to its own width (preserveAspectRatio slice, centred), so it is as wide as the
+// item whatever the item is; the colour is the link's currentColor.
+let wave = "M0 4Q4 0.6 8 4"; for (let x = 16; x <= 320; x += 8) wave += "T" + x + " 4";
+symbols.push('<symbol id="ni-squig" viewBox="0 0 320 8" preserveAspectRatio="xMidYMid slice">' + shape("line", wave).map((p) => '<path d="' + p.d + '" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>').join("") + "</symbol>");
 const sprite = '<svg class="sprite" width="0" height="0" aria-hidden="true" focusable="false">' + symbols.join("") + "</svg>";
 const block = "<!-- nav-icons:start -->\n  " + sprite + "\n  <!-- nav-icons:end -->";
 
