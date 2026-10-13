@@ -4,6 +4,7 @@
    guided: has the guided path (#ch-1 …), so a chapter link carries over. pages: has a page per term and per guide (terms/<id>/, guides/<id>/). */
 window.AE_VERSIONS = {
   list: [
+    { id: "v16-alpha", note: "A simpler top bar with GitHub and a System theme, guides in one layout with sources and a reading bar, and a steadier glossary", guided: true, pages: false },
     { id: "v15-alpha", note: "A glossary with a kitchen place for every term, a left sidebar, and guides with their own section list", guided: true, pages: false },
     { id: "v14-alpha", note: "AI explained: a menu, guides as notes, and a glossary of AI terms", guided: true, pages: false },
     { id: "v13-alpha", note: "Three ways in: the kitchen story, the kitchen deep dive, and a technical deep dive with no analogy", guided: true, pages: false },

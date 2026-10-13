@@ -27,7 +27,8 @@
   var script = document.currentScript, base = script && script.src ? script.src.replace(/[^/]*$/, "") : "/";
   var list = DATA.list, latest = list[0].id;
   var m = location.pathname.match(/\/(v\d+-[a-z0-9]+)\/(.*)$/), here = m ? m[1] : "", rest = m ? m[2].replace(/index\.html$/, "") : "";
-  var host = document.querySelector(".bar-actions");
+  // A page can offer a place of its own for the button (v16 puts it at the foot of its menu); every other page gets it in the actions of the header.
+  var host = document.querySelector("[data-version-slot]") || document.querySelector(".bar-actions");
   if (!host) return;
 
   var link = document.createElement("link");
