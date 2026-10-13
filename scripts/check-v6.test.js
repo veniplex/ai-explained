@@ -6,7 +6,7 @@ const { checkPoints } = require("./check-v6.js");
 const { loadV4 } = require("./check-v4.js");
 
 const root = path.resolve(__dirname, "..");
-const load = () => loadV4(root, "v6-alpha");
+const load = () => loadV4(root, "versions/v6-alpha");
 
 test("the arrow targets of v6-alpha are all valid", () => {
   assert.deepEqual(checkPoints(load()), []);

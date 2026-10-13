@@ -21,10 +21,10 @@ function loadScripts(files) {
   files.forEach((f) => vm.runInContext(fs.readFileSync(f, "utf8"), ctx, { filename: f }));
   return ctx.window;
 }
-function loadV1(root) { return loadScripts([path.join(root, "v1-alpha/assets/js/data.js")]).AE; }
+function loadV1(root) { return loadScripts([path.join(root, "versions/v1-alpha/assets/js/data.js")]).AE; }
 // A version may split a voice file in two (voice-ui-kitchen.js and voice-ui-tech.js); the halves are loaded when they exist.
 const SPLIT_FILES = ["data/voice-ui-kitchen.js", "data/voice-ui-tech.js", "data/voice-guides-kitchen.js", "data/voice-guides-tech.js"];
-function loadV4(root, dir = "v4-alpha") {
+function loadV4(root, dir = "versions/v4-alpha") {
   const files = V3_FILES.concat(SPLIT_FILES).map((f) => path.join(root, dir, "assets/js", f)).filter((f) => fs.existsSync(f));
   return loadScripts(files).AE3;
 }
@@ -241,7 +241,7 @@ function voiceChecks(v3, chapterIds, ids, err, opts) {
 }
 
 // The whole check for one version folder: the content, then the generated term and guide pages. Returns the problems.
-function run(root, dir = "v4-alpha", pagesModule = "./build-v4-pages.js", pagesCommand = "node scripts/build-v4-pages.js") {
+function run(root, dir = "versions/v4-alpha", pagesModule = "./build-v4-pages.js", pagesCommand = "node scripts/build-v4-pages.js") {
   let errors = [];
   let v1, v3;
   try { v1 = loadV1(root); v3 = loadV4(root, dir); } catch (e) { errors = ["could not load data: " + e.message]; }
@@ -264,4 +264,4 @@ function main(dir, pagesModule, pagesCommand) {
 
 module.exports = { V3_FILES, CHAPTER_IDS, LIMITS, plain, wordCount, prose, mentions, check, loadV1, loadV4, run, main };
 
-if (require.main === module) main("v4-alpha", "./build-v4-pages.js", "node scripts/build-v4-pages.js");
+if (require.main === module) main("versions/v4-alpha", "./build-v4-pages.js", "node scripts/build-v4-pages.js");

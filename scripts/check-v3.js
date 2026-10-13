@@ -17,8 +17,8 @@ function loadScripts(files) {
   files.forEach((f) => vm.runInContext(fs.readFileSync(f, "utf8"), ctx, { filename: f }));
   return ctx.window;
 }
-function loadV1(root) { return loadScripts([path.join(root, "v1-alpha/assets/js/data.js")]).AE; }
-function loadV3(root) { return loadScripts(V3_FILES.map((f) => path.join(root, "v3-alpha/assets/js", f))).AE3; }
+function loadV1(root) { return loadScripts([path.join(root, "versions/v1-alpha/assets/js/data.js")]).AE; }
+function loadV3(root) { return loadScripts(V3_FILES.map((f) => path.join(root, "versions/v3-alpha/assets/js", f))).AE3; }
 
 // Inline markup to plain text: [[id|label]] -> label, [[id]] -> id, [t](url) -> t, **b** -> b, `c` -> c.
 function plain(text) {

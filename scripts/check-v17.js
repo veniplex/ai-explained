@@ -25,7 +25,7 @@ const v4 = require("./check-v4.js");
 const build = require("./build-v17-pages.js");
 const content = require("./v17-content.js");
 
-const DIR = "v17-alpha";
+const DIR = "versions/v17-alpha";
 const SECTIONS = ["story", "technical", "guides", "glossary", "about"];
 const PLACES = SECTIONS;
 // The guides of v17: the four long ones, the table, the build guide and the reading list (v4 allowed five).
@@ -111,7 +111,7 @@ function selfContained(root) {
   const errors = [];
   walk(path.join(root, DIR)).filter((f) => /\.(html|js|css|md)$/.test(f)).forEach((f) => {
     const rel = path.relative(root, f), text = fs.readFileSync(f, "utf8");
-    const named = (text.match(/\bv\d+-(alpha|beta)\b/g) || []).filter((v) => v !== DIR);
+    const named = (text.match(/\bv\d+-(alpha|beta)\b/g) || []).filter((v) => v !== path.basename(DIR));
     if (named.length) errors.push(rel + ": names another version (" + Array.from(new Set(named)).join(", ") + ")");
     if (/\.html$/.test(f)) {
       for (const m of text.matchAll(/(?:href|src)="((?:\.\.\/)+)([^"]*)"/g)) {

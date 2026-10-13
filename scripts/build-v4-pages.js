@@ -74,7 +74,7 @@ function pageFor(home, dir, kind, id, title, description, layout) {
   return html;
 }
 
-function pages(root, dir = "v4-alpha", layoutName = "flat") {
+function pages(root, dir = "versions/v4-alpha", layoutName = "flat") {
   const layout = LAYOUTS[layoutName];
   const home = fs.readFileSync(path.join(root, dir, layout.shell), "utf8");
   const D = loadV4(root, dir);
@@ -89,7 +89,7 @@ function pages(root, dir = "v4-alpha", layoutName = "flat") {
   return out;
 }
 
-function existing(root, dir = "v4-alpha") {
+function existing(root, dir = "versions/v4-alpha") {
   const found = [];
   ["terms", "guides"].forEach((kind) => {
     const base = path.join(root, dir, kind);
@@ -100,7 +100,7 @@ function existing(root, dir = "v4-alpha") {
 }
 
 // Problems with the generated pages: missing, out of date, or left over from a term or guide that no longer exists.
-function stale(root, dir = "v4-alpha", layoutName = "flat") {
+function stale(root, dir = "versions/v4-alpha", layoutName = "flat") {
   const want = pages(root, dir, layoutName), problems = [];
   Object.keys(want).forEach((f) => {
     const p = path.join(root, f);
@@ -111,7 +111,7 @@ function stale(root, dir = "v4-alpha", layoutName = "flat") {
   return problems;
 }
 
-function write(root, dir = "v4-alpha", layoutName = "flat") {
+function write(root, dir = "versions/v4-alpha", layoutName = "flat") {
   const want = pages(root, dir, layoutName);
   existing(root, dir).forEach((f) => { if (!want[f]) fs.rmSync(path.dirname(path.join(root, f)), { recursive: true }); });
   Object.keys(want).forEach((f) => {
@@ -136,4 +136,4 @@ function cli(dir, script, layoutName = "flat") {
 
 module.exports = { pages, stale, write, cli };
 
-if (require.main === module) cli("v4-alpha", "build-v4-pages.js");
+if (require.main === module) cli("versions/v4-alpha", "build-v4-pages.js");

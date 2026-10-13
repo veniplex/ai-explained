@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" data-mode="kitchen">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Context engineering: deciding what the model sees · Kitchen guide · AI explained</title>
+  <meta name="description" content="The chef sees only what lies on the counter, and the counter is small, costly to keep full and easy to clutter. This guide is about what lies there, why more is not better, and how to keep it useful.">
+  <meta name="theme-color" content="#faf9f5" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#1f1e1d" media="(prefers-color-scheme: dark)">
+  <link rel="canonical" href="https://veniplex.github.io/ai-explained/versions/v14-alpha/kitchen/guides/context/">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Context engineering: deciding what the model sees · Kitchen guide">
+  <meta property="og:description" content="The chef sees only what lies on the counter, and the counter is small, costly to keep full and easy to clutter. This guide is about what lies there, why more is not better, and how to keep it useful.">
+  <meta property="og:url" content="https://veniplex.github.io/ai-explained/versions/v14-alpha/kitchen/guides/context/">
+  <meta property="og:image" content="https://veniplex.github.io/ai-explained/versions/v14-alpha/assets/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="../../../assets/fonts/source-serif-4-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../assets/fonts/dm-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../../assets/css/style.css">
+  <link rel="stylesheet" href="../../../assets/css/places.css">
+  <link rel="stylesheet" href="../../../assets/css/nav.css">
+  <link rel="stylesheet" href="../../../assets/css/pages.css">
+  <script>
+    /* Set the theme before first paint: the saved choice, else the system setting.
+       The stylesheet reads only data-theme, so this always sets it. */
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem("ae-theme"); } catch (e) {}
+      if (t !== "light" && t !== "dark") t = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      document.documentElement.setAttribute("data-theme", t);
+    })();
+  </script>
+
+</head>
+<body data-page="guide" data-id="context" data-path="kitchen" data-base="../../../">
+  <a class="skip-link" href="#main">Skip to the content</a>
+
+  <header class="bar">
+    <div class="bar-main">
+      <a class="brand" href="../../../" aria-label="AI explained: the start">
+        <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
+          <path class="brand-ring" d="M25.6 12.4C23.9 7.6 18.6 5 13.8 6.6 8.9 8.2 6.3 13.6 7.9 18.5c1.6 4.9 6.9 7.6 11.8 6 2.6-.9 4.6-2.8 5.6-5.2"/>
+          <path class="brand-ring" d="M26.6 6.8l-.9 5.8-5.6-1.6"/>
+          <circle class="brand-dot" cx="16.6" cy="16" r="3.4"/>
+        </svg>
+        <span class="brand-title">AI<span class="brand-tail"> <em>explained</em></span></span>
+      </a>
+      <div class="search" id="search" role="search">
+        <button class="icon-btn search-open" type="button" id="search-open" aria-label="Search the whole site" aria-controls="site-search" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg>
+        </button>
+        <div class="search-field">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg>
+          <label class="visually-hidden" for="site-search">Search the whole site</label>
+          <input id="site-search" type="search" placeholder="Search the whole site…" autocomplete="off" spellcheck="false" aria-controls="search-results" aria-describedby="search-status">
+          <kbd aria-hidden="true">/</kbd>
+        </div>
+        <ul class="search-results" id="search-results" hidden></ul>
+        <p class="visually-hidden" id="search-status" aria-live="polite"></p>
+      </div>
+      <div class="bar-actions">
+        <details class="site-menu" id="site-menu">
+          <summary class="btn btn-ghost site-menu-btn" aria-label="Menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg><span class="site-menu-label">Menu</span><svg class="site-menu-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9.5l6 6 6-6"/></svg></summary>
+          <nav class="site-menu-panel" aria-label="Sections">
+            <p class="menu-head">Explained simply</p>
+            <ul>
+              <li><a href="../../../story/" data-sec="story"><b>Kitchen story</b><span>One drawn kitchen on one screen. No jargon.</span></a></li>
+              <li><a href="../../../kitchen/" data-sec="kitchen"><b>Kitchen deep dive</b><span>The same chapters in more detail, still no jargon.</span></a></li>
+            </ul>
+            <p class="menu-head">For people who build</p>
+            <ul>
+              <li><a href="../../../technical/" data-sec="technical"><b>Technical deep dive</b><span>Precise terms and mechanisms, no analogy.</span></a></li>
+            </ul>
+            <p class="menu-head">Look things up</p>
+            <ul>
+              <li><a href="../../../kitchen/guides/" data-sec="guides" aria-current="page"><b>Guides</b><span>Long explainers: how agents work, and how to build, secure and test them.</span></a></li>
+              <li><a href="../../../kitchen/glossary/" data-sec="glossary"><b>Glossary</b><span>Every AI term with a short definition and where it fits.</span></a></li>
+              <li><a href="../../../kitchen/about/" data-sec="about"><b>About</b><span>What this site is, its sources and privacy.</span></a></li>
+            </ul>
+          </nav>
+        </details>
+        <button class="icon-btn" id="theme-toggle" type="button" aria-label="Switch colour theme" title="Switch colour theme">
+          <svg class="theme-icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>
+          <svg class="theme-icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="stage" id="main" tabindex="-1">
+    <noscript>
+      <article class="page">
+        <h1>Context engineering: deciding what the model sees</h1>
+        <p>The chef sees only what lies on the counter, and the counter is small, costly to keep full and easy to clutter. This guide is about what lies there, why more is not better, and how to keep it useful.</p>
+        <ul>
+          <li>What fills the counter, and which parts only grow</li>
+          <li>Why a cluttered counter makes the chef worse and dearer</li>
+          <li>Why the order of things matters</li>
+          <li>How lookups, tidying and helpers trade detail for room</li>
+        </ul>
+        <h2>What fills the counter</h2>
+        <p>Deciding what lies on the counter at each move is context engineering, the owner's most useful skill. The counter holds the house rules, the tool list, looked-up facts, every earlier note and the answers from tools. Its size is the context window.</p>
+        <p>House rules and the tool list are written once and read again every move. Notes and answers only pile up, and the answers are often the biggest pile, because one phone call can bring a page of numbers.</p>
+        <h2>Why more is not better</h2>
+        <p>Each extra item takes a little of the chef's attention from the rest. Things at the start and end of a long pile are noticed more than things in the middle, and the longer and messier the pile, the more the chef slips, even on simple jobs (clutter rot). Look-alike scraps, such as an old version of a decision, do harm too. A long pile is also slower and dearer. Aim for the smallest pile that lets the chef take the next step well.</p>
+        <h2>Order matters</h2>
+        <p>Reading a long pile is the costly part of every move. If the top is exactly as it was a moment ago, the chef can skim it cheaply (a quick-read). So the things that never change go first, and the newest notes go last.</p>
+        <p>Change anything near the top, such as a clock stuck to it or a tool added mid-service, and everything below is read afresh. A quick-read also fades after a few idle minutes.</p>
+        <h2>Keeping the counter lean</h2>
+        <p>Most clutter arrives through tools. A small, clearly labelled rack beats a wall of gadgets, because every label is read every move. Ask for short answers: ten prices with a way to ask for more, not the whole market book. Recipe cards work the same way: only the title lies on the counter until a dish needs the whole card.</p>
+        <h2>Looking things up</h2>
+        <p>The kitchen must bring what the cookbooks never said, and only the part that matters. One way is a librarian who sorts the shelf by meaning and brings the closest pages (looking things up), and who also checks by exact name. The other is for the chef to search the shelves step by step and read only one page (searching as it goes): more rounds, but nothing to keep sorted. A small shelf can go on the counter whole.</p>
+        <h2>When the pile gets long</h2>
+        <p>At some point the old notes are the problem. The kitchen can replace them with a short summary of what was decided and what is open, keeping the latest notes word for word (tidying), or clear away answers no later move needs.</p>
+        <p>Tidying loses detail: a forgotten decision, repeated work, a dropped warning. So write key facts in a notebook on the shelf before the counter fills, and keep exact warnings. The notebook also carries facts to the next shift.</p>
+        <h2>Helpers with their own counter</h2>
+        <p>A helper works in a corner on a small counter of its own. It gets a short brief, reads as much as it needs, and only a short answer comes back. The helper knows only its brief, helpers cannot see each other's work, and each reads its own rules, so the total cost rises. Send helpers on reading-heavy jobs that sum up in a line.</p>
+        <h2>Habits to take away</h2>
+        <p>Four moves: write things out to the notebook, choose what to bring to the counter, squeeze what stays, and send work to separate corners. When a dish goes wrong, first look at the counter exactly as the chef saw it.</p>
+      </article>
+      <p class="noscript">This page is interactive and needs JavaScript. All of its text is also in <code>assets/js/data/</code> in the <a href="https://github.com/veniplex/ai-explained">GitHub repository</a>.</p>
+    </noscript>
+  </main>
+
+  <script src="../../../assets/vendor/rough.js"></script>
+  <script src="../../../assets/js/data/core.js"></script>
+  <script src="../../../assets/js/data/entries.js"></script>
+  <script src="../../../assets/js/data/sources.js"></script>
+  <script src="../../../assets/js/data/guides.js"></script>
+  <script src="../../../assets/js/data/voice-ui-kitchen.js"></script>
+  <script src="../../../assets/js/data/voice-ui-tech.js"></script>
+  <script src="../../../assets/js/data/voice-kitchen-a.js"></script>
+  <script src="../../../assets/js/data/voice-kitchen-b.js"></script>
+  <script src="../../../assets/js/data/voice-tech.js"></script>
+  <script src="../../../assets/js/data/voice-guides-kitchen.js"></script>
+  <script src="../../../assets/js/data/glossary.js"></script>
+  <script src="../../../assets/js/data/voice-glossary-kitchen.js"></script>
+  <script src="../../../assets/js/data/voice-guides-long-kitchen-a.js"></script>
+  <script src="../../../assets/js/data/voice-guides-long-kitchen-b.js"></script>
+  <script src="../../../assets/js/data/voice-guides-tech.js"></script>
+  <script src="../../../assets/js/data/glance-kitchen.js"></script>
+  <script src="../../../assets/js/sketch.js"></script>
+  <script src="../../../assets/js/icons.js"></script>
+  <script src="../../../assets/js/draw.js"></script>
+  <script src="../../../assets/js/props.js"></script>
+  <script src="../../../assets/js/data/props-extra-a.js"></script>
+  <script src="../../../assets/js/data/props-extra-b.js"></script>
+  <script src="../../../assets/js/data/props-extra-c.js"></script>
+  <script src="../../../assets/js/data/props-kitchen.js"></script>
+  <script src="../../../assets/js/data/kitchen.js"></script>
+  <script src="../../../assets/js/data/story.js"></script>
+  <script src="../../../assets/js/data/names.js"></script>
+  <script src="../../../assets/js/locator.js"></script>
+  <script src="../../../assets/js/voice.js"></script>
+  <script src="../../../assets/js/terms.js"></script>
+  <script src="../../../assets/js/map.js"></script>
+  <script src="../../../assets/js/story.js"></script>
+  <script src="../../../assets/js/guide-views.js"></script>
+  <script src="../../../assets/js/pages.js"></script>
+  <script src="../../../assets/js/app.js"></script>
+  <script src="../../../assets/js/nav.js"></script>
+  <script src="../../../assets/js/search.js"></script>
+  <script src="../../../assets/js/popover.js"></script>
+  <script src="../../../../versions.js"></script>
+  <script src="../../../../version-switcher.js"></script>
+</body>
+</html>

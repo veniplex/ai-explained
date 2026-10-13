@@ -5,7 +5,7 @@
 "use strict";
 const v4 = require("./build-v4-pages.js");
 
-const DIR = "v5-alpha";
+const DIR = "versions/v5-alpha";
 module.exports = {
   pages: (root) => v4.pages(root, DIR),
   stale: (root) => v4.stale(root, DIR),

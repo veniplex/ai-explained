@@ -20,7 +20,7 @@ const { plain } = require("./check-v4.js");
 const content = require("./v15-content.js");
 const v9 = require("./check-v9.js");
 
-const DIR = "v15-alpha";
+const DIR = "versions/v15-alpha";
 const SITE = "https://veniplex.github.io/ai-explained/";
 const TAIL = " · AI explained";
 const GLANCE = DIR + "/assets/js/data/glance.js", INDEX = DIR + "/assets/js/data/search-index.js";

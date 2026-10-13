@@ -6,7 +6,7 @@
 const path = require("node:path");
 const { loadV4, run } = require("./check-v4.js");
 
-const DIR = "v6-alpha";
+const DIR = "versions/v6-alpha";
 const PAGES = ["./build-v6-pages.js", "node scripts/build-v6-pages.js"];
 
 // Problems with AE3.points: one list per paragraph and one for the example, in each voice, only naming pieces that are

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>README pictures</title>
+  <meta name="robots" content="noindex">
+  <!-- The drawings of the README (docs/readme/*.png), drawn with the pen of the site (assets/js/draw.js, props.js, rough.js).
+       Open art.html?scene=banner&theme=light (scenes: banner, ways, chapters, loop; themes: light, dark) or run node docs/readme/render.js to write all of them.
+       Nothing here loads from another site. -->
+  <link rel="stylesheet" href="../../assets/css/kitchen.css">
+  <style>
+    html, body { margin: 0; height: auto; overflow: visible; background: var(--paper); }
+    body { display: block; }
+    #art { display: block; }
+  </style>
+  <script>
+    (function () {
+      var q = new URLSearchParams(location.search);
+      document.documentElement.setAttribute("data-theme", q.get("theme") === "dark" ? "dark" : "light");
+    })();
+  </script>
+</head>
+<body>
+  <svg id="art" xmlns="http://www.w3.org/2000/svg"></svg>
+  <script src="../../assets/vendor/rough.js"></script>
+  <script src="../../assets/js/draw.js"></script>
+  <script src="../../assets/js/props.js"></script>
+  <script src="../../assets/js/data/props-extra-a.js"></script>
+  <script src="../../assets/js/data/props-extra-b.js"></script>
+  <script src="../../assets/js/data/props-extra-c.js"></script>
+  <script src="../../assets/js/data/props-kitchen.js"></script>
+  <script src="../../assets/js/data/kitchen.js"></script>
+  <script src="../../assets/js/data/story.js"></script>
+  <script src="../../assets/js/data/names.js"></script>
+  <script src="scenes.js"></script>
+</body>
+</html>

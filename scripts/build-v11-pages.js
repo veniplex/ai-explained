@@ -12,7 +12,7 @@ const path = require("node:path");
 const v4 = require("./build-v4-pages.js");
 const { loadV4, plain } = require("./check-v4.js");
 
-const DIR = "v11-alpha";
+const DIR = "versions/v11-alpha";
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 const para = (s) => "<p>" + esc(plain(s)) + "</p>";
 

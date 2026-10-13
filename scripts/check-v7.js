@@ -9,7 +9,7 @@ const path = require("node:path");
 const vm = require("node:vm");
 const { KITCHEN_BAN, banned, withoutBridges, words } = require("./check-voice.js");
 
-const DIR = "v7-alpha";
+const DIR = "versions/v7-alpha";
 const ZONES = ["start", "model", "harness", "control", "know", "tools", "orch", "ops"];
 const BGS = ["kitchen", "market", "night", "plain"];
 const KINDS = ["say", "think", "sign", "shout", "sfx"];
@@ -32,7 +32,7 @@ function load(root) {
 }
 // The terms of v6 (their ids), read from its entries file.
 function v6Terms(root) {
-  const src = fs.readFileSync(path.join(root, "v6-alpha/assets/js/data/entries.js"), "utf8");
+  const src = fs.readFileSync(path.join(root, "versions/v6-alpha/assets/js/data/entries.js"), "utf8");
   return Array.from(src.matchAll(/^  "?([a-z-]+)"?: \{\n    chapter:/gm)).map((m) => m[1]);
 }
 

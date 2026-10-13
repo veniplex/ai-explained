@@ -12,7 +12,7 @@ const path = require("node:path");
 const v9 = require("./check-v9.js");
 const v4 = require("./check-v4.js");
 
-const DIR = "v10-alpha";
+const DIR = "versions/v10-alpha";
 
 // The bridges of the kitchen story, loaded as the browser does.
 function loadBridges(root) {

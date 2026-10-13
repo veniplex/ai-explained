@@ -24,9 +24,9 @@ test("any step can be reached: the chapters of the story run from the start to t
 });
 
 test("index.html loads files that exist and has the elements the reader needs", () => {
-  const html = fs.readFileSync(path.join(root, "v9-alpha/index.html"), "utf8");
-  for (const m of html.matchAll(/<script src="([^"]+)"/g)) assert.ok(fs.existsSync(path.join(root, "v9-alpha", m[1])), m[1]);
-  const js = fs.readFileSync(path.join(root, "v9-alpha/assets/js/kitchen.js"), "utf8");
+  const html = fs.readFileSync(path.join(root, "versions/v9-alpha/index.html"), "utf8");
+  for (const m of html.matchAll(/<script src="([^"]+)"/g)) assert.ok(fs.existsSync(path.join(root, "versions/v9-alpha", m[1])), m[1]);
+  const js = fs.readFileSync(path.join(root, "versions/v9-alpha/assets/js/kitchen.js"), "utf8");
   for (const m of js.matchAll(/\$\("#([a-z-]+)"\)/g)) assert.ok(html.includes('id="' + m[1] + '"'), "#" + m[1] + " is missing from index.html");
   assert.match(html, /<script src="\.\.\/versions\.js"><\/script>\s*<script src="\.\.\/version-switcher\.js"><\/script>\s*<\/body>/);
 });

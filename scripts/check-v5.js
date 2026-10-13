@@ -4,4 +4,4 @@
 "use strict";
 const { main } = require("./check-v4.js");
 
-main("v5-alpha", "./build-v5-pages.js", "node scripts/build-v5-pages.js");
+main("versions/v5-alpha", "./build-v5-pages.js", "node scripts/build-v5-pages.js");

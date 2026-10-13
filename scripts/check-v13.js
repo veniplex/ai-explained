@@ -18,7 +18,7 @@ const v9 = require("./check-v9.js");
 const v4 = require("./check-v4.js");
 const build = require("./build-v13-pages.js");
 
-const DIR = "v13-alpha";
+const DIR = "versions/v13-alpha";
 const SECTIONS = ["story", "kitchen", "technical", "guides", "references"];
 
 const walk = (d) => fs.readdirSync(d, { withFileTypes: true }).flatMap((e) => e.isDirectory() ? (e.name === "vendor" ? [] : walk(path.join(d, e.name))) : [path.join(d, e.name)]);
@@ -83,7 +83,7 @@ function selfContained(root) {
   const errors = [];
   walk(path.join(root, DIR)).filter((f) => /\.(html|js|css|md)$/.test(f)).forEach((f) => {
     const rel = path.relative(root, f), text = fs.readFileSync(f, "utf8");
-    const named = (text.match(/\bv\d+-(alpha|beta)\b/g) || []).filter((v) => v !== DIR);
+    const named = (text.match(/\bv\d+-(alpha|beta)\b/g) || []).filter((v) => v !== path.basename(DIR));
     if (named.length) errors.push(rel + ": names another version (" + Array.from(new Set(named)).join(", ") + ")");
     if (/\.html$/.test(f)) {
       for (const m of text.matchAll(/(?:href|src)="((?:\.\.\/)+)([^"]*)"/g)) {

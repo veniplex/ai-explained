@@ -8,7 +8,7 @@
 const path = require("node:path");
 const voice = require("./check-voice.js");
 
-const DIR = "v16-alpha";
+const DIR = "versions/v16-alpha";
 // The drawings of assets/js/icons.js, by name. icons.js must draw every one of them (check-v16.js verifies).
 const ICONS = ["net", "book", "books", "lock", "key", "shield", "search", "link", "plug", "wrench", "gear", "loop", "clock", "calendar", "scales", "flask", "bars",
   "gauge", "coin", "team", "tree", "fork", "merge", "pencil", "note", "doc", "folder", "db", "cloud", "chip", "stack", "funnel", "target", "flag", "bell", "eye",

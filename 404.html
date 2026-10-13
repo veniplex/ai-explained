@@ -7,6 +7,14 @@
   <meta name="robots" content="noindex">
   <!-- GitHub Pages serves this page for any unknown address, at any depth, so the paths start at the site root (/ai-explained/). -->
   <link rel="icon" href="/ai-explained/favicon.svg" type="image/svg+xml">
+  <script>
+    /* The older versions moved into versions/ (…/v12-alpha/terms/mcp/ is now …/versions/v12-alpha/terms/mcp/). An address that names one of them is sent there,
+       with its query and hash, so every link made before the move still works. An address already inside versions/ is not sent again. */
+    (function () {
+      var m = location.pathname.match(/^(.*?\/)(v\d+-[a-z0-9]+)(\/.*)?$/);
+      if (m && !/\/versions\/$/.test(m[1])) location.replace(m[1] + "versions/" + m[2] + (m[3] || "/") + location.search + location.hash);
+    })();
+  </script>
   <style>
     :root { color-scheme: light dark; --paper: #faf9f5; --ink: #1f1e1d; --ink-2: #4a4842; --clay: #8f3f23; --rule: #c9c3b3; }
     @media (prefers-color-scheme: dark) { :root { --paper: #1f1e1d; --ink: #f2efe6; --ink-2: #c9c5b8; --clay: #f0a07f; --rule: #4a4842; } }
@@ -26,9 +34,9 @@
     <h1>This page does not exist</h1>
     <p>There is nothing at this address. Here is where to go instead.</p>
     <ul>
-      <li><a href="/ai-explained/">AI explained</a>: the start page, with three ways to learn how AI agents work.</li>
-      <li><a href="/ai-explained/v15-alpha/glossary/">The glossary</a>: over 180 AI terms in plain words.</li>
-      <li><a href="/ai-explained/v15-alpha/guides/">The guides</a>: long explainers on how agents work and how to build, secure and test them.</li>
+      <li><a href="/ai-explained/">AI explained</a>: the start page, with two ways to learn how AI agents work.</li>
+      <li><a href="/ai-explained/glossary/">The glossary</a>: over 180 AI terms in plain words.</li>
+      <li><a href="/ai-explained/guides/">The guides</a>: long explainers on how agents work and how to build, secure and test them.</li>
     </ul>
   </main>
 </body>

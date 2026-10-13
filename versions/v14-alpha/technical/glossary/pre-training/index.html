@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" data-mode="technical">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Pre-training · Technical glossary · AI explained</title>
+  <meta name="description" content="The first and largest training stage, in which a model learns to predict the next token across huge amounts of text, code and other data. It gives the model its general knowledge and language…">
+  <meta name="theme-color" content="#faf9f5" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#1f1e1d" media="(prefers-color-scheme: dark)">
+  <link rel="canonical" href="https://veniplex.github.io/ai-explained/versions/v14-alpha/technical/glossary/pre-training/">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Pre-training · Technical glossary">
+  <meta property="og:description" content="The first and largest training stage, in which a model learns to predict the next token across huge amounts of text, code and other data. It gives the model its general knowledge and language…">
+  <meta property="og:url" content="https://veniplex.github.io/ai-explained/versions/v14-alpha/technical/glossary/pre-training/">
+  <meta property="og:image" content="https://veniplex.github.io/ai-explained/versions/v14-alpha/assets/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="../../../assets/fonts/source-serif-4-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../assets/fonts/dm-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../../assets/css/style.css">
+  <link rel="stylesheet" href="../../../assets/css/places.css">
+  <link rel="stylesheet" href="../../../assets/css/nav.css">
+  <link rel="stylesheet" href="../../../assets/css/pages.css">
+  <script>
+    /* Set the theme before first paint: the saved choice, else the system setting.
+       The stylesheet reads only data-theme, so this always sets it. */
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem("ae-theme"); } catch (e) {}
+      if (t !== "light" && t !== "dark") t = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      document.documentElement.setAttribute("data-theme", t);
+    })();
+  </script>
+
+</head>
+<body data-page="term" data-id="pre-training" data-path="technical" data-base="../../../">
+  <a class="skip-link" href="#main">Skip to the content</a>
+
+  <header class="bar">
+    <div class="bar-main">
+      <a class="brand" href="../../../" aria-label="AI explained: the start">
+        <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
+          <path class="brand-ring" d="M25.6 12.4C23.9 7.6 18.6 5 13.8 6.6 8.9 8.2 6.3 13.6 7.9 18.5c1.6 4.9 6.9 7.6 11.8 6 2.6-.9 4.6-2.8 5.6-5.2"/>
+          <path class="brand-ring" d="M26.6 6.8l-.9 5.8-5.6-1.6"/>
+          <circle class="brand-dot" cx="16.6" cy="16" r="3.4"/>
+        </svg>
+        <span class="brand-title">AI<span class="brand-tail"> <em>explained</em></span></span>
+      </a>
+      <div class="search" id="search" role="search">
+        <button class="icon-btn search-open" type="button" id="search-open" aria-label="Search the whole site" aria-controls="site-search" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg>
+        </button>
+        <div class="search-field">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg>
+          <label class="visually-hidden" for="site-search">Search the whole site</label>
+          <input id="site-search" type="search" placeholder="Search the whole site…" autocomplete="off" spellcheck="false" aria-controls="search-results" aria-describedby="search-status">
+          <kbd aria-hidden="true">/</kbd>
+        </div>
+        <ul class="search-results" id="search-results" hidden></ul>
+        <p class="visually-hidden" id="search-status" aria-live="polite"></p>
+      </div>
+      <div class="bar-actions">
+        <details class="site-menu" id="site-menu">
+          <summary class="btn btn-ghost site-menu-btn" aria-label="Menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg><span class="site-menu-label">Menu</span><svg class="site-menu-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9.5l6 6 6-6"/></svg></summary>
+          <nav class="site-menu-panel" aria-label="Sections">
+            <p class="menu-head">Explained simply</p>
+            <ul>
+              <li><a href="../../../story/" data-sec="story"><b>Kitchen story</b><span>One drawn kitchen on one screen. No jargon.</span></a></li>
+              <li><a href="../../../kitchen/" data-sec="kitchen"><b>Kitchen deep dive</b><span>The same chapters in more detail, still no jargon.</span></a></li>
+            </ul>
+            <p class="menu-head">For people who build</p>
+            <ul>
+              <li><a href="../../../technical/" data-sec="technical"><b>Technical deep dive</b><span>Precise terms and mechanisms, no analogy.</span></a></li>
+            </ul>
+            <p class="menu-head">Look things up</p>
+            <ul>
+              <li><a href="../../../technical/guides/" data-sec="guides"><b>Guides</b><span>Long explainers: how agents work, and how to build, secure and test them.</span></a></li>
+              <li><a href="../../../technical/glossary/" data-sec="glossary" aria-current="page"><b>Glossary</b><span>Every AI term with a short definition and where it fits.</span></a></li>
+              <li><a href="../../../technical/about/" data-sec="about"><b>About</b><span>What this site is, its sources and privacy.</span></a></li>
+            </ul>
+          </nav>
+        </details>
+        <button class="icon-btn" id="theme-toggle" type="button" aria-label="Switch colour theme" title="Switch colour theme">
+          <svg class="theme-icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>
+          <svg class="theme-icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="stage" id="main" tabindex="-1">
+    <noscript>
+      <article class="page">
+        <h1>Pre-training</h1>
+        <p>The first and largest training stage, in which a model learns to predict the next token across huge amounts of text, code and other data. It gives the model its general knowledge and language ability, and it sets the knowledge cutoff.</p>
+      </article>
+      <p class="noscript">This page is interactive and needs JavaScript. All of its text is also in <code>assets/js/data/</code> in the <a href="https://github.com/veniplex/ai-explained">GitHub repository</a>.</p>
+    </noscript>
+  </main>
+
+  <script src="../../../assets/vendor/rough.js"></script>
+  <script src="../../../assets/js/data/core.js"></script>
+  <script src="../../../assets/js/data/entries.js"></script>
+  <script src="../../../assets/js/data/sources.js"></script>
+  <script src="../../../assets/js/data/guides.js"></script>
+  <script src="../../../assets/js/data/voice-ui-tech.js"></script>
+  <script src="../../../assets/js/data/voice-tech.js"></script>
+  <script src="../../../assets/js/data/voice-guides-tech.js"></script>
+  <script src="../../../assets/js/data/glossary.js"></script>
+  <script src="../../../assets/js/data/voice-guides-long-tech-a.js"></script>
+  <script src="../../../assets/js/data/voice-guides-long-tech-b.js"></script>
+  <script src="../../../assets/js/data/glance-technical.js"></script>
+  <script src="../../../assets/js/sketch.js"></script>
+  <script src="../../../assets/js/icons.js"></script>
+  <script src="../../../assets/js/voice.js"></script>
+  <script src="../../../assets/js/terms.js"></script>
+  <script src="../../../assets/js/map.js"></script>
+  <script src="../../../assets/js/story.js"></script>
+  <script src="../../../assets/js/guide-views.js"></script>
+  <script src="../../../assets/js/pages.js"></script>
+  <script src="../../../assets/js/app.js"></script>
+  <script src="../../../assets/js/nav.js"></script>
+  <script src="../../../assets/js/search.js"></script>
+  <script src="../../../assets/js/popover.js"></script>
+  <script src="../../../../versions.js"></script>
+  <script src="../../../../version-switcher.js"></script>
+</body>
+</html>

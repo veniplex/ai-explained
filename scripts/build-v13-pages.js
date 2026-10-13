@@ -18,7 +18,7 @@ const path = require("node:path");
 const { loadV4, plain } = require("./check-v4.js");
 const v9 = require("./check-v9.js");
 
-const DIR = "v13-alpha";
+const DIR = "versions/v13-alpha";
 const WAYS = ["kitchen", "technical"];
 const SITE = "https://veniplex.github.io/ai-explained/";
 const TAIL = " · Agentic AI, Explained";

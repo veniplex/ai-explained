@@ -8,21 +8,21 @@ const { loadV4 } = require("./check-v4.js");
 const root = path.resolve(__dirname, "..");
 
 test("there is one page per term and per guide, inside v5-alpha", () => {
-  const D = loadV4(root, "v5-alpha"), list = Object.keys(pages(root));
+  const D = loadV4(root, "versions/v5-alpha"), list = Object.keys(pages(root));
   assert.equal(list.length, Object.keys(D.entries).length + D.guideList.length);
-  assert.ok(list.every((f) => f.startsWith("v5-alpha/")));
-  assert.ok(list.includes("v5-alpha/terms/agent-loop/index.html"));
+  assert.ok(list.every((f) => f.startsWith("versions/v5-alpha/")));
+  assert.ok(list.includes("versions/v5-alpha/terms/agent-loop/index.html"));
 });
 
 test("a page points at its own v5 address and reaches the assets two folders up", () => {
-  const html = pages(root)["v5-alpha/terms/mcp/index.html"];
-  assert.match(html, /<link rel="canonical" href="https:\/\/veniplex\.github\.io\/ai-explained\/v5-alpha\/terms\/mcp\/">/);
+  const html = pages(root)["versions/v5-alpha/terms/mcp/index.html"];
+  assert.match(html, /<link rel="canonical" href="https:\/\/veniplex\.github\.io\/ai-explained\/versions\/v5-alpha\/terms\/mcp\/">/);
   assert.match(html, /<link rel="stylesheet" href="..\/..\/assets\/css\/style\.css">/);
   assert.doesNotMatch(html, /(href|src)="assets\//);
 });
 
 test("v5 has no voice switch left", () => {
-  const html = pages(root)["v5-alpha/guides/compare/index.html"];
+  const html = pages(root)["versions/v5-alpha/guides/compare/index.html"];
   assert.doesNotMatch(html, /mode-slot|data-mode|ae-mode/);
 });
 
