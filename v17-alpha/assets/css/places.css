@@ -1,0 +1,59 @@
+/* ==========================================================================
+   AI explained (v17): what the story and the glossary share.
+   The kitchen story (story/, kitchen.css) and the deep dive with its glossary and guides (style.css) each have their own stylesheet, with the same
+   tokens. This one holds the pieces that tie the kitchen to the rest: the links from the story into the glossary, and "where it sits in the kitchen" on a glossary page. The top bar is nav.css. Tokens only, as in DESIGN.md.
+   ========================================================================== */
+
+/* ---------- From the story into the glossary and the deep dive ----------------------------- */
+/* A bold word of a caption that has a page of its own. */
+.cap a.bridge { color: inherit; text-decoration: none; cursor: pointer; }
+.cap a.bridge strong { background-image: linear-gradient(transparent 58%, var(--zh, var(--clay-soft)) 58%); border-bottom: 1.5px dashed var(--clay); }
+.cap a.bridge:hover strong { background-image: linear-gradient(transparent 20%, var(--zh, var(--clay-soft)) 20%); border-bottom-style: solid; }
+.cap a.bridge:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 2px; }
+.cap a.bridge strong::after { content: "\2197"; margin-left: 2px; font: 600 0.62em/1 var(--sans); color: var(--clay-ink); vertical-align: 0.45em; }
+
+/* The names chapter: the way into the glossary and the deep dive, after the caption. */
+.cap a.cap-more { color: var(--clay-ink); font: 500 0.82em/1 var(--sans); white-space: nowrap; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+.cap a.cap-more:hover { text-decoration-thickness: 2px; }
+
+/* The card of a real name: the page first (a button), the chapter second (a link). */
+.defcard .def-links { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; margin: 12px 0 0; }
+.defcard .def-links .btn { min-height: 40px; padding: 6px 14px; }
+.defcard .def-chapter { padding: 10px 0; font: 500 var(--fs-sm)/1.3 var(--sans); color: var(--clay-ink); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+.defcard .def-chapter:hover { text-decoration-thickness: 2px; }
+
+/* ---------- Where it sits in the kitchen (a glossary page) ----------------------------- */
+.locator {
+  display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 20px; align-items: center;
+  margin: 0; padding: 12px; background: var(--surface); border: 1px solid var(--rule-strong); border-radius: var(--r-lg);
+}
+.loc-pic {
+  --wall-c: color-mix(in srgb, var(--t-start) 55%, var(--paper)); --floor-c: var(--paper-3);
+  display: block; position: relative; aspect-ratio: 1500 / 610; overflow: hidden; border-radius: var(--r-md); background: var(--wall-c); text-decoration: none;
+}
+.loc-pic:not(.is-drawn)::after { content: ""; position: absolute; inset: 0; background: linear-gradient(100deg, transparent 30%, color-mix(in srgb, var(--paper) 55%, transparent) 50%, transparent 70%); background-size: 220% 100%; animation: loc-wait 1.4s linear infinite; }
+@keyframes loc-wait { from { background-position: 120% 0; } to { background-position: -120% 0; } }
+.loc-sk { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.loc-sk .room .wall { fill: var(--wall-c); }
+.loc-sk .room .floor { fill: var(--floor-c); }
+.loc-sk .pose { display: none; }
+.loc-sk .pose.on { display: inline; }
+.loc-sk .loc-world { opacity: 0.42; filter: saturate(0.55); }
+.loc-sk .halo { opacity: 1; }
+.loc-sk .halo .sk-fill { opacity: 0.55; }
+.loc-sk .halo .sk-dash { stroke-width: 7; stroke-dasharray: 18 12; }
+.loc-title { margin: 0 0 6px; font: 600 var(--fs-2xl)/1.2 var(--serif); }
+.loc-part { margin: 0 0 8px; font: 500 var(--fs-xs)/1.4 var(--mono); letter-spacing: 0.04em; color: var(--ink-3); }
+.loc-part a { color: var(--zc, var(--ink-2)); }
+.loc-line { margin: 0 0 14px; font: 400 var(--fs-md)/1.5 var(--sans); color: var(--ink-2); }
+.loc-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.loc-actions .btn { min-height: 40px; }
+/* The drawing is a picture: it is not text to select, copy or find. */
+.loc-sk { user-select: none; -webkit-user-select: none; }
+@media (max-width: 640px) {
+  .locator { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .loc-pic:not(.is-drawn)::after { animation: none; }
+}
+@media print { .locator { display: none; } }
