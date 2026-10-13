@@ -17,7 +17,7 @@
     var h = location.hash;
     var v1 = /^#(block-|zone-|link-|step-|(story|ideas|steps|context|compare|patterns|protocols|decide|build|blocks|glossary|learn|about)$)/.test(h);
     var newest = window.AE_VERSIONS && window.AE_VERSIONS.list[0].id;
-    if (v1 || newest) location.replace((v1 ? "v1-alpha" : newest) + "/" + h);
+    if (v1 || newest) location.replace((v1 ? "v1-alpha" : newest) + "/" + (v1 ? "" : location.search) + h);
   </script>
 </head>
 <body>

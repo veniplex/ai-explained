@@ -75,6 +75,7 @@
   menu.appendChild(el("li", "vs-head", "Versions"));
   list.forEach(function (v) {
     var li = el("li"), a = el("a", "vs-item" + (v.id === here ? " is-here" : ""));
+    a.setAttribute("data-v", v.id);
     a.href = base + target(list, here, rest, location.hash, v.id).replace(/^\.\//, "");
     if (v.id === here) a.setAttribute("aria-current", "page");
     var top = el("span", "vs-top");
@@ -90,8 +91,12 @@
   host.insertBefore(wrap, host.firstChild);
 
   function items() { return Array.prototype.slice.call(menu.querySelectorAll("a")); }
+  // The links follow the page: a chapter or a card opened since the page loaded is carried over too. A list that would run off the
+  // right edge of the window hangs from the right edge of its button instead.
   function open() {
+    items().forEach(function (a) { a.href = base + target(list, here, rest, location.hash, a.getAttribute("data-v")).replace(/^\.\//, ""); });
     menu.hidden = false;
+    wrap.classList.toggle("is-right", btn.getBoundingClientRect().left + Math.min(320, window.innerWidth - 32) > window.innerWidth - 8);
     btn.setAttribute("aria-expanded", "true");
     // Let the browser lay the list out first, so it can fade in.
     requestAnimationFrame(function () { wrap.classList.add("is-open"); });
