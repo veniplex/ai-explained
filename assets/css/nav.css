@@ -55,21 +55,20 @@
 .bar-links a:focus-visible { outline: 2px solid var(--focus); outline-offset: 1px; }
 .bar-links a[aria-current] { background: var(--ink); border-color: var(--ink); color: var(--paper); }
 @media (forced-colors: active) { .bar-links a { border-color: CanvasText; } .bar-links a[aria-current] { forced-color-adjust: none; background: Highlight; border-color: Highlight; color: HighlightText; } }
-@media (max-width: 1099px) { .bar .brand-tail { display: none; } }
 @media (max-width: 1319px) {
   .bar-links { display: none; }
   .bar-main { grid-template-columns: minmax(auto, 1fr) minmax(0, 380px) minmax(auto, 1fr); }
 }
 /* The menu is the way to the places where the bar has no room for them. */
 @media (min-width: 1320px) { .site-menu { display: none; } }
-/* From 1320px up everything is on one row: the brand, the search right next to it, the five places in the space that is left (centred in it) and the buttons at the
-   right. Below that the places are in the menu and the search is in the middle. */
+/* From 1320px up everything is on one row: the brand, the five places in the room between (centred in it), then the search and the buttons at the right. Below that
+   the places are in the menu and the search is in the middle. */
 @media (min-width: 1320px) {
   :root { --actions-w: 190px; } /* no menu button here, so the buttons need less room */
-  .bar-main { grid-template-columns: max-content minmax(190px, 270px) minmax(max-content, 1fr) var(--actions-w); }
+  .bar-main { grid-template-columns: max-content minmax(max-content, 1fr) minmax(190px, 270px) var(--actions-w); }
   .bar-main .brand { grid-column: 1; grid-row: 1; }
-  .bar-main .search { grid-column: 2; grid-row: 1; justify-self: stretch; max-width: none; }
-  .bar-links { grid-column: 3; grid-row: 1; justify-self: center; }
+  .bar-links { grid-column: 2; grid-row: 1; justify-self: center; }
+  .bar-main .search { grid-column: 3; grid-row: 1; justify-self: stretch; max-width: none; }
   .bar-main .bar-actions { grid-column: 4; grid-row: 1; }
 }
 
