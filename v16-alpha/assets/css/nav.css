@@ -1,0 +1,227 @@
+/* ==========================================================================
+   AI explained (v16): the top bar, the same on every page, and the pieces that belong to it. Loaded after the stylesheet of the page
+   (style.css or kitchen.css), so it settles what they leave open. Tokens only, as in DESIGN.md.
+     - the bar is one row: the brand, the four places to go (kitchen story, deep dive, guides, glossary), the search, the GitHub button with its star
+       count, the theme button (System, Light, Dark) and a menu. On a wide window the menu ("More") holds only About and the version; below 1180px the
+       four places move into it too, as a list with a line each. The version button is at the foot of the menu: it is for people who need it.
+     - the search field and its list (the story has no search styles of its own)
+     - the hover card of a term (popover.js)
+     - the lists of the glossary and of guides (glossary, notes and guide pages: pages.css)
+   ========================================================================== */
+
+:root {
+  --bar-main-h: 60px;
+  --sec-h: 0px;
+  --bar-h: calc(var(--bar-main-h) + var(--sec-h));
+  --z-search: 60;   /* the list of hits, above the menus */
+  --z-pop: 70;      /* the hover card, above everything but the skip link */
+}
+@media (max-width: 760px) {
+  :root { --bar-main-h: 54px; }
+}
+
+/* ---------- The bar: brand, places, search, actions ------------------------------ */
+.bar { display: block; height: auto; padding: 0; gap: 0; background: var(--paper); -webkit-backdrop-filter: none; backdrop-filter: none; }
+.bar-main {
+  position: relative; height: var(--bar-main-h); padding-inline: var(--gutter);
+  display: grid; grid-template-columns: auto auto minmax(0, 1fr) auto; align-items: center; column-gap: 18px;
+}
+.bar-main .brand { justify-self: start; }
+.bar-main .search { justify-self: center; width: 100%; max-width: 440px; min-width: 0; }
+.bar-main .bar-actions { justify-self: end; margin-left: 0; gap: 4px; }
+.bar-links { display: flex; align-items: center; gap: 2px; }
+.bar-links a {
+  padding: 7px 12px; border-radius: var(--r-pill); color: var(--ink-2); text-decoration: none; white-space: nowrap;
+  font: 500 var(--fs-md)/1.2 var(--sans); transition: background-color var(--dur-fast), color var(--dur-fast);
+}
+.bar-links a:hover { background: var(--paper-2); color: var(--ink); }
+.bar-links a:focus-visible { outline: 2px solid var(--focus); outline-offset: 1px; }
+.bar-links a[aria-current] { color: var(--ink); font-weight: 650; text-decoration: underline 2px var(--clay); text-underline-offset: 9px; }
+@media (max-width: 1239px) { .bar .brand-tail { display: none; } }
+@media (max-width: 1179px) {
+  .bar-links { display: none; }
+  .bar-main { grid-template-columns: auto minmax(0, 1fr) auto; }
+}
+
+/* ---------- The GitHub button: a pill with the name and the number of stars -------------------- */
+.gh-pill {
+  display: inline-flex; align-items: center; gap: 7px; height: 36px; padding: 0 12px; margin-right: 4px; border: 1px solid var(--rule-strong); border-radius: var(--r-pill);
+  background: var(--surface); color: var(--ink); text-decoration: none; font: 500 var(--fs-sm)/1 var(--sans);
+  transition: background-color var(--dur-fast), border-color var(--dur-fast);
+}
+.gh-pill:hover { background: var(--paper-2); border-color: var(--ink-3); }
+.gh-pill:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.gh-mark { width: 17px; height: 17px; flex: none; }
+.gh-stars { display: inline-flex; align-items: center; gap: 4px; margin-left: 1px; padding-left: 8px; border-left: 1px solid var(--rule-strong); color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.gh-stars[hidden] { display: none; }
+.gh-stars svg { width: 13px; height: 13px; flex: none; color: var(--clay); }
+@media (max-width: 1179px) { .gh-name { display: none; } .gh-pill { padding: 0 10px; } }
+@media (max-width: 400px) { .gh-stars { display: none; } }
+
+/* ---------- The menu: About, the version, and below 1180px the four places too ---------------- */
+.site-menu { position: relative; }
+.site-menu > summary { list-style: none; cursor: pointer; gap: 6px; user-select: none; }
+.site-menu > summary::-webkit-details-marker { display: none; }
+.site-menu > summary::marker { content: ""; }
+.site-menu > summary svg { width: 18px; height: 18px; flex: none; }
+.site-menu .site-menu-chevron { width: 14px; height: 14px; transition: transform var(--dur-base) var(--ease); }
+.site-menu[open] .site-menu-chevron { transform: rotate(180deg); }
+.site-menu[open] > summary { background: var(--paper-2); color: var(--ink); }
+.site-menu > summary:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.l-wide { display: none; }
+.site-menu-panel {
+  position: absolute; top: calc(100% + 8px); right: 0; z-index: var(--z-menu, 45);
+  width: min(380px, calc(100vw - 32px)); max-height: calc(100vh - var(--bar-main-h) - 24px); max-height: calc(100dvh - var(--bar-main-h) - 24px);
+  overflow-y: auto; overscroll-behavior: contain; padding: 8px;
+  background: var(--surface); border: 1px solid var(--rule-strong); border-radius: var(--r-lg); box-shadow: var(--shadow);
+  transform-origin: top right; animation: menu-in 0.16s ease-out;
+}
+.site-menu-panel ul { margin: 0; padding: 0; list-style: none; }
+.site-menu-panel li { margin: 0; }
+.menu-head { padding: 10px 10px 4px; font: 500 var(--fs-2xs)/1.2 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--clay-ink); }
+.menu-head:first-child { padding-top: 4px; }
+.menu-more { margin-top: 4px !important; padding-top: 4px !important; border-top: 1px solid var(--rule); }
+.menu-main a, .menu-more a {
+  display: grid; gap: 2px; padding: 9px 10px; border-radius: var(--r-md); color: var(--ink); text-decoration: none;
+  transition: background-color var(--dur-fast);
+}
+.menu-main a b, .menu-more a b { font: 600 var(--fs-base)/1.3 var(--sans); }
+.menu-main a span, .menu-more a span { font: 400 var(--fs-sm)/1.4 var(--sans); color: var(--ink-3); }
+.menu-main a:hover, .menu-main a:focus-visible, .menu-more a:hover, .menu-more a:focus-visible { background: var(--paper-2); }
+.menu-main a:focus-visible, .menu-more a:focus-visible { outline: 2px solid var(--focus); outline-offset: -2px; }
+.menu-main a[aria-current], .menu-more a[aria-current] { background: var(--ink); }
+.menu-main a[aria-current] b, .menu-more a[aria-current] b { color: var(--paper); }
+.menu-main a[aria-current] span, .menu-more a[aria-current] span { color: color-mix(in srgb, var(--paper) 78%, transparent); }
+@keyframes menu-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .site-menu-panel { animation: none; } .site-menu .site-menu-chevron { transition: none; } }
+@media (max-width: 760px) {
+  .site-menu { position: static; }
+  .site-menu-panel { left: 12px; right: 12px; width: auto; top: calc(var(--bar-main-h) + env(safe-area-inset-top, 0px) - 4px); position: fixed; }
+}
+@media (max-width: 640px) { .site-menu-label, .site-menu .site-menu-chevron { display: none; } .site-menu > summary { padding-inline: 10px; } }
+/* A wide window: the four places are in the bar, so the menu is "More": no hamburger, a word and an arrow, and only About and the version inside. */
+@media (min-width: 1180px) {
+  .menu-main { display: none; }
+  .menu-more { margin-top: 0 !important; padding-top: 0 !important; border-top: 0; }
+  .site-menu > summary > svg:first-child { display: none; }
+  .l-narrow { display: none; }
+  .l-wide { display: inline; }
+}
+
+/* The version button, at the foot of the menu, quiet: the list opens in place, inside the panel. */
+.menu-foot { margin-top: 6px; padding-top: 6px; border-top: 1px solid var(--rule); }
+.menu-foot .vs { display: block; position: static; }
+.menu-foot .vs-btn { width: 100%; justify-content: space-between; min-height: 36px; padding: 0 10px; font: 400 var(--fs-sm)/1 var(--sans); color: var(--ink-3); }
+.menu-foot .vs-btn .vs-label::before { content: "Version\00a0"; }
+.menu-foot .vs-btn.is-old { color: var(--clay-ink); }
+.menu-foot .vs .vs-menu, .menu-foot .vs.is-right .vs-menu { position: static; width: auto; max-height: min(320px, 42dvh); margin-top: 6px; padding: 4px; box-shadow: none; transform: none; border-color: var(--rule); }
+.menu-foot .vs .vs-full { display: inline; }
+.menu-foot .vs .vs-short { display: none; }
+@media (forced-colors: active) { .menu-main a[aria-current], .menu-more a[aria-current] { forced-color-adjust: none; background: Highlight; } .menu-main a[aria-current] b, .menu-main a[aria-current] span, .menu-more a[aria-current] b, .menu-more a[aria-current] span { color: HighlightText; } }
+
+/* ---------- Search ------------------------------------------------------------------ */
+.search { position: relative; }
+.search-field {
+  display: flex; align-items: center; gap: 8px; height: 40px; width: 100%; padding: 0 14px;
+  border: 1px solid var(--rule-strong); border-radius: var(--r-pill); background: var(--surface);
+  transition: border-color var(--dur-fast), box-shadow var(--dur-fast);
+}
+.search-field:focus-within { border-color: var(--ink-3); box-shadow: 0 0 0 3px color-mix(in srgb, var(--focus) 22%, transparent); }
+.search-field svg { width: 17px; height: 17px; color: var(--ink-3); flex: none; }
+.search-field input {
+  flex: 1; min-width: 0; border: 0; background: transparent; color: var(--ink); outline: none;
+  font: 400 var(--fs-md)/1 var(--sans);
+}
+.search-field input::placeholder { color: var(--ink-3); }
+.search-field input::-webkit-search-cancel-button { display: none; }
+.search-field kbd {
+  font: 500 var(--fs-2xs)/1 var(--mono); color: var(--ink-3); border: 1px solid var(--rule-strong);
+  border-radius: var(--r-sm, 6px); padding: 3px 6px; background: var(--paper);
+}
+.search-field:focus-within kbd { display: none; }
+.search-open { display: none; }
+.search-results {
+  position: absolute; left: 50%; transform: translateX(-50%); top: calc(100% + 8px); width: min(600px, calc(100vw - 32px)); z-index: var(--z-search);
+  margin: 0; padding: 6px; list-style: none;
+  background: var(--surface); border: 1px solid var(--rule); border-radius: var(--r-lg); box-shadow: var(--shadow);
+  max-height: min(460px, 70vh); overflow: auto;
+}
+.search-results[hidden] { display: none; }
+.search-results li { margin: 0; }
+.search-results a {
+  display: grid; grid-template-columns: 10px 1fr; column-gap: 10px; align-items: baseline;
+  width: 100%; padding: 10px; border-radius: var(--r-md); background: transparent; text-align: left; color: inherit; text-decoration: none;
+}
+.search-results a:hover, .search-results a:focus-visible, .search-field:focus-within ~ .search-results a.is-first { background: var(--paper-2); }
+.search-results a:focus-visible { outline: 2px solid var(--focus); outline-offset: -2px; }
+.search-results .zdot {
+  align-self: center; flex: none; width: var(--dot); height: var(--dot); border-radius: 50%;
+  background: var(--zm, var(--m-start)); box-shadow: inset 0 0 0 var(--dot-ring) var(--zc, var(--z-start));
+}
+.search-results b { font: 600 var(--fs-md)/1.25 var(--sans); color: var(--ink); }
+.search-results .sr-kind { font: 400 var(--fs-sm)/1 var(--sans); font-style: normal; color: var(--ink-3); }
+.search-results span { grid-column: 2; font-size: var(--fs-sm); line-height: 1.35; color: var(--ink-3); }
+.search-results .sr-empty { padding: 12px; color: var(--ink-3); font-size: var(--fs-sm); }
+
+/* Narrow: the field becomes a button, and opens under the first row of the bar. */
+@media (max-width: 900px) {
+  .bar-main { grid-template-columns: minmax(0, 1fr) auto auto; column-gap: 6px; }
+  .bar-main .search { width: auto; max-width: none; justify-self: end; }
+  .bar .brand-title { display: none; }
+  .search { justify-self: end; }
+  .search-field { display: none; }
+  .search-open { display: inline-grid; }
+  .search.is-open .search-field {
+    display: flex; position: fixed; left: 12px; right: 12px; width: auto; z-index: calc(var(--z-search) + 1); box-shadow: var(--shadow);
+    top: calc(var(--bar-main-h) + env(safe-area-inset-top, 0px) + 8px);
+  }
+  .search.is-open .search-results {
+    position: fixed; left: 12px; right: 12px; width: auto; transform: none;
+    top: calc(var(--bar-main-h) + env(safe-area-inset-top, 0px) + 58px);
+  }
+}
+@media (max-width: 900px) and (min-width: 561px) { .bar .brand-title { display: block; } }
+@media (max-width: 560px) { .search-field input { font-size: 16px; } }
+
+/* ---------- The hover card ------------------------------------------------------------ */
+.pop {
+  position: fixed; z-index: var(--z-pop); width: min(320px, calc(100vw - 16px)); padding: 12px 14px 12px 16px;
+  background: var(--surface); color: var(--ink); border: 1px solid var(--rule-strong); border-left: 4px solid var(--zm, var(--clay)); border-radius: var(--r-md);
+  box-shadow: var(--shadow); animation: pop-in 0.14s ease-out;
+}
+.pop[hidden] { display: none; }
+.pop p { margin: 0; }
+.pop-eyebrow { font: 500 var(--fs-2xs)/1.3 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); }
+.pop-title { margin-top: 3px !important; font: 600 var(--fs-lg)/1.25 var(--serif); }
+.pop-text { margin-top: 6px !important; font: 400 var(--fs-md)/1.45 var(--sans); color: var(--ink-2); }
+.pop-link { display: inline-block; margin-top: 8px; font: 500 var(--fs-sm)/1.3 var(--sans); color: var(--clay-ink); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+.pop-link:hover { text-decoration-thickness: 2px; }
+@keyframes pop-in { from { opacity: 0; transform: translateY(-3px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .pop { animation: none; } }
+@media (forced-colors: active) {
+  .pop { border-color: CanvasText; }
+}
+
+/* ---------- The lists of the glossary and guides ----------------------------------------- */
+.page-list { max-width: 1040px; }
+.ref-group { margin-top: 36px; }
+.ref-group-title { display: flex; align-items: center; gap: 10px; font: 600 var(--fs-2xl)/1.2 var(--serif); }
+.ref-group-title a { color: inherit; text-decoration: none; }
+.ref-group-title a:hover { text-decoration: underline; text-underline-offset: 4px; }
+.ref-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; margin: 14px 0 0; padding: 0; list-style: none; }
+.page-list > .ref-grid { margin-top: 28px; }
+.ref-grid li { margin: 0; }
+.ref-card {
+  display: grid; align-content: start; gap: 4px; height: 100%; padding: 14px 16px; color: inherit; text-decoration: none;
+  background: var(--surface); border: 1px solid var(--rule-strong); border-left: 4px solid var(--zm, var(--rule-strong)); border-radius: var(--r-lg);
+  transition: border-color var(--dur-fast), box-shadow var(--dur-fast);
+}
+.ref-card:hover { border-color: var(--zc, var(--ink-3)); box-shadow: var(--shadow); }
+.ref-card:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.ref-card b { font: 600 var(--fs-lg)/1.25 var(--serif); }
+.ref-card span { font: 400 var(--fs-md)/1.45 var(--sans); color: var(--ink-3); }
+.ref-card .eyebrow { font: 500 var(--fs-xs)/1.3 var(--mono); }
+.guide-card { border-left-color: var(--rule-strong); }
+
+/* ---------- Print -------------------------------------------------------------------------- */
+@media print { .pop, .site-menu { display: none !important; } }
