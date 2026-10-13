@@ -78,7 +78,7 @@ window.AE3.guides = {
         "name": "Slash commands",
         "entry": "skills",
         "cells": [
-          "A saved prompt template triggered by name, such as `/review`. In most harnesses now a skill invoked by name",
+          "A saved prompt template triggered by name, such as `/review`. In Claude Code these are now merged into skills, invoked by name",
           "The user, explicitly",
           "When invoked",
           "Only when used",
@@ -130,7 +130,7 @@ window.AE3.guides = {
           "The harness, automatically",
           "Usually never; its output can be injected",
           "Near zero",
-          "Yes",
+          "Yes for a command hook, which runs your code. The prompt and agent hook types ask a model, so they are not",
           "Rules that must always hold"
         ]
       },
@@ -196,7 +196,7 @@ window.AE3.guides = {
     "recipe": [
       {
         "title": "Define the job and what “done” means",
-        "text": "Write down 10 to 20 real example tasks with the outcome you expect. This is your first eval set and your specification.",
+        "text": "Write down 20 to 50 real example tasks with the outcome you expect, drawn from real use and real failures where you can. This is your first eval set and your specification.",
         "entries": [
           "evals"
         ]
@@ -1064,9 +1064,12 @@ window.AE3.guides = {
         "connects": "Agents ↔ tools, data and prompts",
         "origin": "Anthropic, November 2024",
         "governance": "Agentic AI Foundation (Linux Foundation) since December 2025; maintainers decide through enhancement proposals",
-        "status": "Current revision 2026-07-28: a stateless core plus formal extensions (long-running Tasks, MCP Apps, enterprise authorisation). Supported by virtually every major model vendor and harness.",
+        "status": "Current revision 2026-07-28: a stateless core (no protocol-level sessions or initialize handshake), with Tasks, MCP Apps, enterprise-managed authorisation and Skills over MCP as official extensions. Supported by a wide range of clients, including Claude, ChatGPT, Visual Studio Code and Cursor.",
         "sources": [
+          "https://modelcontextprotocol.io/specification/versioning",
           "https://modelcontextprotocol.io/specification/2026-07-28/changelog",
+          "https://modelcontextprotocol.io/extensions/overview",
+          "https://modelcontextprotocol.io",
           "https://blog.modelcontextprotocol.io/posts/2025-12-09-mcp-joins-agentic-ai-foundation/"
         ],
         "entry": "mcp"
@@ -1078,9 +1081,11 @@ window.AE3.guides = {
         "connects": "Agent ↔ agent, across vendors and frameworks",
         "origin": "Google, April 2025",
         "governance": "Linux Foundation project since June 2025; part of the Agentic AI Foundation since August 2026",
-        "status": "Version 1.0 (March 2026): signed Agent Cards, JSON-RPC, gRPC and HTTP bindings. IBM's Agent Communication Protocol merged into A2A in 2025.",
+        "status": "Version 1.0 (March 2026): signed Agent Cards and JSON-RPC, gRPC and HTTP+JSON bindings. IBM's Agent Communication Protocol merged into A2A in August 2025.",
         "sources": [
           "https://a2a-protocol.org/latest/blog/2026/03/12/a2a-protocol-ships-v10-production-ready-standard-for-agent-to-agent-communication/",
+          "https://a2a-protocol.org/latest/specification/",
+          "https://www.linuxfoundation.org/press/linux-foundation-launches-the-agent2agent-protocol-project-to-enable-secure-intelligent-communication-between-ai-agents",
           "https://aaif.io/blog/a2a-joins-aaif"
         ],
         "entry": "team"
@@ -1092,7 +1097,7 @@ window.AE3.guides = {
         "connects": "Repository ↔ coding agents (standing instructions)",
         "origin": "OpenAI Codex, Amp, Google Jules, Cursor and Factory, 2025",
         "governance": "Agentic AI Foundation since December 2025",
-        "status": "Plain Markdown with no required fields; the nearest file in the folder tree wins. Used by more than 60,000 open-source projects and read by most coding agents.",
+        "status": "Plain Markdown with no required fields; the nearest file in the folder tree wins. The project site reports more than 60,000 open-source projects using it and lists agents that read it, among them Codex, Jules, Cursor, Gemini CLI, GitHub Copilot and VS Code.",
         "sources": [
           "https://agents.md/"
         ],
@@ -1103,11 +1108,12 @@ window.AE3.guides = {
         "name": "Agent Skills",
         "url": "https://agentskills.io",
         "connects": "Packaged know-how (folders with a SKILL.md) ↔ any compatible agent",
-        "origin": "Anthropic, October 2025; open standard since December 2025",
+        "origin": "Anthropic, October 2025; published as an open standard in December 2025",
         "governance": "Open specification developed on GitHub",
-        "status": "Small, stable spec (only name and description are required). Supported by more than 40 agents, including Claude Code, Codex, Antigravity, GitHub Copilot, VS Code and Cursor.",
+        "status": "Small spec (only name and description are required in SKILL.md). Its client showcase lists dozens of agent products, including Claude Code, Codex, Gemini CLI, GitHub Copilot, VS Code and Cursor.",
         "sources": [
-          "https://agentskills.io/specification"
+          "https://agentskills.io/specification",
+          "https://agentskills.io"
         ],
         "entry": "skills"
       },
@@ -1118,9 +1124,10 @@ window.AE3.guides = {
         "connects": "Web page ↔ in-browser agent: the page exposes its own tools",
         "origin": "W3C Web Machine Learning Community Group, with editors from Microsoft and Google",
         "governance": "W3C Community Group draft, not on the W3C standards track",
-        "status": "Draft report updated in October 2026; ChatGPT supports it as “site tools”.",
+        "status": "Draft Community Group report dated 9 October 2026. The ChatGPT desktop app supports it as “site tools” in its built-in browser.",
         "sources": [
-          "https://webmachinelearning.github.io/webmcp/"
+          "https://webmachinelearning.github.io/webmcp/",
+          "https://help.openai.com/en/articles/20001423-using-site-tools-in-the-chatgpt-desktop-app"
         ],
         "entry": "tools"
       },
@@ -1145,7 +1152,7 @@ window.AE3.guides = {
         "connects": "Agent back end ↔ application front end, as a stream of typed events",
         "origin": "CopilotKit, May 2025",
         "governance": "Open-source community project",
-        "status": "Integrations with Microsoft Agent Framework, Google ADK, AWS Strands and Bedrock AgentCore, Mastra, Pydantic AI, LlamaIndex and others.",
+        "status": "Its documentation lists supported first-party integrations with Microsoft Agent Framework, Google ADK, AWS Strands Agents and Bedrock AgentCore, Mastra, Pydantic AI, LlamaIndex and others.",
         "sources": [
           "https://docs.ag-ui.com/introduction"
         ],
@@ -1155,12 +1162,13 @@ window.AE3.guides = {
         "group": "User interfaces",
         "name": "Agent Client Protocol",
         "url": "https://agentclientprotocol.com",
-        "connects": "Code editor ↔ coding agent (often described as “LSP for agents”)",
+        "connects": "Code editor ↔ coding agent",
         "origin": "Zed, August 2025",
-        "governance": "Zed and JetBrains, with a stated plan to move to an independent foundation",
-        "status": "Version 1 stable, SDKs at 1.0 (June 2026), version 2 in draft. Used by Zed, JetBrains IDEs and Devin Desktop. Not the same as the Agentic Commerce Protocol, which shares the abbreviation ACP.",
+        "governance": "Jointly governed by Zed and JetBrains, working toward an independent foundation",
+        "status": "Version 1 is the documented version; the Rust and TypeScript SDKs reached 1.0 (June 2026) and version 2 is published in draft (July 2026). Editors include Zed, JetBrains IDEs, Visual Studio Code and Neovim; agents include Claude Agent, Codex CLI, Gemini CLI and GitHub Copilot. Not the same as the Agentic Commerce Protocol, which shares the abbreviation ACP.",
         "sources": [
           "https://agentclientprotocol.com/updates",
+          "https://agentclientprotocol.com/community/governance",
           "https://zed.dev/acp"
         ],
         "entry": "harness"
@@ -1172,7 +1180,7 @@ window.AE3.guides = {
         "connects": "Agent → user interface built from the client's own native components",
         "origin": "Google, December 2025",
         "governance": "Google-led open source (Apache 2.0)",
-        "status": "Version 0.9 in production use, 1.0 as a release candidate. Can travel over A2A, AG-UI or MCP.",
+        "status": "The project site lists version 0.9.1 as the current production release and 1.0 as a release candidate. Messages can travel over A2A, and the site has guides for MCP and AG-UI.",
         "sources": [
           "https://a2ui.org/"
         ],
@@ -1185,7 +1193,7 @@ window.AE3.guides = {
         "connects": "Agents ↔ observability tools",
         "origin": "OpenTelemetry project",
         "governance": "Cloud Native Computing Foundation (CNCF)",
-        "status": "Standard spans and metrics for model calls, agents, tools and MCP. Still marked as in development, not yet stable.",
+        "status": "Conventions for spans, metrics and events of generative AI clients, agents, tool calls and MCP, now kept in a separate repository. Still marked as in development (October 2026), so attribute names can change.",
         "sources": [
           "https://github.com/open-telemetry/semantic-conventions-genai"
         ],
@@ -1210,16 +1218,17 @@ window.AE3.guides = {
         "connects": "Buyer's agent ↔ merchant ↔ payment provider, for checkout",
         "origin": "OpenAI and Stripe, September 2025",
         "governance": "OpenAI and Stripe as founding maintainers",
-        "status": "Date-versioned specification, latest stable 2026-04-17. Powers checkout inside ChatGPT.",
+        "status": "Date-versioned specification, latest stable 2026-04-17. OpenAI launched Instant Checkout in ChatGPT on it in September 2025.",
         "sources": [
-          "https://www.agenticcommerce.dev/"
+          "https://github.com/agentic-commerce-protocol/agentic-commerce-protocol",
+          "https://openai.com/index/buy-it-in-chatgpt/"
         ]
       },
       {
         "group": "Payments and commerce",
         "name": "UCP (Universal Commerce Protocol)",
         "url": "https://ucp.dev",
-        "connects": "Agents ↔ businesses across search, cart, checkout and orders",
+        "connects": "Agents ↔ businesses across product discovery, checkout and order management",
         "origin": "Google with Shopify, Etsy, Wayfair, Target and Walmart, January 2026",
         "governance": "Open source (Apache 2.0)",
         "status": "Shopping specification published; designed to work with AP2, A2A and MCP.",
@@ -1234,9 +1243,10 @@ window.AE3.guides = {
         "connects": "Agent ↔ paid API or website, via the HTTP 402 status code",
         "origin": "Coinbase",
         "governance": "x402 Foundation under the Linux Foundation, since July 2026",
-        "status": "Pay-per-request payments, mostly in stablecoins.",
+        "status": "Pay-per-request payments: a server answers with HTTP 402 and the client pays and retries. Stablecoin payments are the primary use case.",
         "sources": [
-          "https://www.x402.org/"
+          "https://www.x402.org/",
+          "https://www.linuxfoundation.org/press/linux-foundation-announces-operational-launch-of-x402-foundation-to-standardize-internet-native-payments-for-ai-agents-and-applications"
         ]
       }
     ],
@@ -1584,7 +1594,7 @@ window.AE3.guides = {
           "by": "Claude Academy (Anthropic)",
           "year": 2026,
           "url": "https://academy.claude.com/courses/introduction-to-agent-skills",
-          "note": "beginner · Create, structure and share Skills; compare them with subagents, hooks and MCP."
+          "note": "6 lessons, about 1 hour; no sign-in needed to start. Create, structure and share Skills; compare them with subagents, hooks and MCP."
         },
         {
           "type": "course",
@@ -1652,7 +1662,7 @@ window.AE3.guides = {
           "by": "Chip Huyen (O'Reilly)",
           "year": 2025,
           "url": "https://huyenchip.com/books/",
-          "note": "Building applications on foundation models: evaluation, RAG, agents, fine-tuning, deployment."
+          "note": "Building applications on foundation models: evaluation, RAG, agents, fine-tuning, deployment (chapters as listed by the publisher)."
         },
         {
           "type": "book",
