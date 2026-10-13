@@ -120,7 +120,17 @@
       lab.style.left = nm.lab[0] + "px";
       lab.style.top = nm.lab[1] + "px";
       lab.style.setProperty("--ld", (0.1 + i * 0.09) + "s");
-      lab.addEventListener("click", function (e) { e.stopPropagation(); stopPlay(); toggleTerm(nm.id, e.detail === 0); });
+      // A click (or Enter) pins the card open; one that comes while the card is only there because the pointer rests on the label pins it instead of closing it.
+      lab.addEventListener("click", function (e) {
+        e.stopPropagation(); stopPlay();
+        if (openId === nm.id && !pinned) { pinned = true; scheduleHash(); return; }
+        pinned = true;
+        toggleTerm(nm.id, e.detail === 0);
+      });
+      // With a mouse, resting on a label is enough: it comes into focus (the others step back) and its card opens, and both go when the pointer leaves
+      // the label and the card. A touch screen has no hover: a tap opens the card as before.
+      lab.addEventListener("pointerenter", function (e) { if (e.pointerType === "mouse") hoverIn(nm.id); });
+      lab.addEventListener("pointerleave", function (e) { if (e.pointerType === "mouse") hoverOut(); });
       labs.appendChild(lab);
       labEls[nm.id] = lab;
     });
@@ -291,7 +301,7 @@
       bubs.appendChild(b);
     });
   }
-  function chapterLabel(ch) { return ch === 0 ? "Start" : ch === 9 ? "The end" : ch === 10 ? "Names" : "Chapter " + ch; }
+  function chapterLabel(ch) { return ch === 0 ? "Start" : ch === 9 ? "The end" : ch === 10 ? "Technical" : "Chapter " + ch; }
   function words(s, step, prev) {
     var ch = CH[step.ch], first = s === 0 || STEPS[s - 1].ch !== step.ch;
     el.chno.textContent = chapterLabel(step.ch);
@@ -321,24 +331,58 @@
   var firstOf = [];
   STEPS.forEach(function (st, i) { if (firstOf[st.ch] === undefined) firstOf[st.ch] = i; });
   var nav = $("#pages");
+  // One chip per chapter, and after each chip a row of small dots, one per step of that chapter. Only the row of the chapter you are in is open (it makes room
+  // with a short animation); a dot goes to its step.
+  var dotRows = [];
+  function plain(s) { return String(s || "").replace(/\*\*/g, "").replace(/\s+/g, " ").trim(); }
   function chips() {
     CH.forEach(function (c, i) {
       var a = h("a", { class: "pg" + (i === 10 ? " is-map" : ""), href: "#" + (c.hash || "start"), "data-ch": i, title: c.title,
-        "aria-label": (i === 0 ? "Start: " : i === 9 ? "End: " : i === 10 ? "" : "Chapter " + i + ": ") + c.title }, c.short);
+        "aria-label": (i === 0 ? "Start: " : i === 9 ? "End: " : i === 10 ? "Technical: " : "Chapter " + i + ": ") + c.title }, c.short);
       a.addEventListener("click", function (e) { e.preventDefault(); stopPlay(); go(firstOf[i], { push: true }); });
       nav.appendChild(a);
+      var n = 0, row = h("span", { class: "pg-steps", role: "group", "aria-label": c.title + ": steps" });
+      STEPS.forEach(function (st, k) {
+        if (st.ch !== i) return;
+        n++;
+        var d = h("button", { class: "pgs", type: "button", "data-step": k, title: plain(st.cap).slice(0, 90) + (plain(st.cap).length > 90 ? "…" : ""),
+          "aria-label": (i === 0 ? "Start" : i === 9 ? "End" : i === 10 ? "Technical" : "Chapter " + i) + ", step " + n + " of " + STEPS.filter(function (x) { return x.ch === i; }).length });
+        d.addEventListener("click", function (e) { e.preventDefault(); e.stopPropagation(); stopPlay(); touched = true; go(k); });
+        row.appendChild(d);
+      });
+      row.style.setProperty("--n", n);
+      nav.appendChild(row);
+      dotRows[i] = row;
     });
   }
-  var seenTo = 0, touched = false;
+  var seenTo = 0, touched = false, centreTimer = 0;
+  // Keep the chapter you are in, and the row of its steps, in the middle of a chip row that scrolls (a phone). The row opens with a short animation, so it is
+  // done again when that has run.
+  function centreChip() {
+    var here = nav.querySelector(".pg[aria-current]");
+    if (!here || !nav.scrollTo) return;
+    var row = dotRows[+here.getAttribute("data-ch")], w = here.offsetWidth + (row ? row.scrollWidth : 0);
+    nav.scrollTo({ left: here.offsetLeft + w / 2 - nav.clientWidth / 2, behavior: "auto" });
+  }
   function chrome(s) {
     seenTo = Math.max(seenTo, s);
-    var cur = null;
-    Array.prototype.forEach.call(nav.children, function (a, i) {
-      var here = i === STEPS[s].ch, seen = firstOf[i] < seenTo;
+    var ch = STEPS[s].ch;
+    Array.prototype.forEach.call(nav.querySelectorAll(".pg"), function (a, i) {
+      var here = i === ch, seen = firstOf[i] < seenTo;
       a.classList.toggle("is-seen", seen && !here);
-      if (here) { a.setAttribute("aria-current", "true"); cur = a; } else a.removeAttribute("aria-current");
+      if (here) a.setAttribute("aria-current", "true"); else a.removeAttribute("aria-current");
     });
-    if (cur && nav.scrollTo) nav.scrollTo({ left: cur.offsetLeft - nav.clientWidth / 2 + cur.offsetWidth / 2, behavior: "auto" });
+    dotRows.forEach(function (row, i) {
+      row.classList.toggle("is-open", i === ch);
+      Array.prototype.forEach.call(row.children, function (d) {
+        var k = +d.getAttribute("data-step");
+        d.classList.toggle("is-seen", k <= seenTo && k !== s);
+        if (k === s) d.setAttribute("aria-current", "step"); else d.removeAttribute("aria-current");
+      });
+    });
+    centreChip();
+    clearTimeout(centreTimer);
+    if (motionOk()) centreTimer = setTimeout(centreChip, 360);
     el.back.setAttribute("aria-disabled", s <= 0 ? "true" : "false");
     el.next.querySelector(".btn-label").textContent = s >= LAST ? "Deep dive" : "Next";
     el.next.setAttribute("aria-label", s >= LAST ? "Open the technical deep dive" : "Next step");
@@ -350,13 +394,33 @@
   }
 
   /* ---------- The real names: the card with the explanation ---------------------------- */
-  var byName = Object.create(null), openId = null;
+  var byName = Object.create(null), openId = null, pinned = false, hovering = false, hoverTimer = 0, leaveTimer = 0;
   NAMES.forEach(function (nm) { byName[nm.id] = nm; });
+  // Hover: a short rest on a label opens its card (so a pointer passing over several labels opens none); after the pointer has left the label and the card,
+  // the card closes unless it was pinned by a click.
+  // The names come in one after another with a delay of their own; a term coming into focus (or going out of it) must not wait for that delay.
+  var quickTimer = 0;
+  function quick() { stage.classList.add("is-quick"); clearTimeout(quickTimer); quickTimer = setTimeout(function () { stage.classList.remove("is-quick"); }, 450); }
+  function hoverIn(id) {
+    hovering = true;
+    clearTimeout(leaveTimer);
+    clearTimeout(hoverTimer);
+    if (!stage.classList.contains("is-map") || openId === id) return;
+    hoverTimer = setTimeout(function () { if (hovering && openId !== id) openTerm(id, { hover: true }); }, 110);
+  }
+  function hoverOut() {
+    hovering = false;
+    clearTimeout(hoverTimer);
+    clearTimeout(leaveTimer);
+    leaveTimer = setTimeout(function () { if (!hovering && !pinned && openId) closeTerm(); }, 280);
+  }
   function toggleTerm(id, byKey) { if (openId === id) closeTerm(); else openTerm(id, { focus: byKey }); }
   function openTerm(id, opts) {
     var nm = byName[id];
     if (!nm) return;
     openId = id;
+    if (!(opts && opts.hover)) clearTimeout(leaveTimer);
+    else pinned = false;
     el.card.setAttribute("data-zone", nm.zone);
     el.cardKw.textContent = nm.kw ? "In the kitchen: " + nm.kw : "";
     el.cardTerm.textContent = nm.term;
@@ -365,10 +429,15 @@
     el.cardChapter.setAttribute("href", diveOf(nm.ch));
     el.cardChapter.textContent = "Chapter " + nm.ch + " in the deep dive";
     el.card.hidden = false;
-    Object.keys(labEls).forEach(function (k) { labEls[k].classList.toggle("is-open", k === id); labEls[k].setAttribute("aria-expanded", k === id ? "true" : "false"); });
+    Object.keys(labEls).forEach(function (k) {
+      labEls[k].classList.toggle("is-open", k === id); labEls[k].setAttribute("aria-expanded", k === id ? "true" : "false");
+      (haloEls[k] || []).forEach(function (g) { g.classList.toggle("is-open", k === id); });
+    });
+    stage.classList.add("has-open");
+    quick();
     document.title = nm.term + " · The real names · " + BASE;
     placeCard();
-    scheduleHash();
+    if (!(opts && opts.hover)) scheduleHash();
     if (opts && opts.focus) el.cardTerm.focus();
   }
   // A card that had the keyboard focus hands it back to its label, so the next Tab goes on from there.
@@ -376,8 +445,11 @@
     if (!openId) return;
     var id = openId, hadFocus = el.card.contains(document.activeElement);
     openId = null;
+    pinned = false;
     el.card.hidden = true;
-    Object.keys(labEls).forEach(function (k) { labEls[k].classList.remove("is-open"); labEls[k].setAttribute("aria-expanded", "false"); });
+    stage.classList.remove("has-open");
+    quick();
+    Object.keys(labEls).forEach(function (k) { labEls[k].classList.remove("is-open"); labEls[k].setAttribute("aria-expanded", "false"); (haloEls[k] || []).forEach(function (g) { g.classList.remove("is-open"); }); });
     if (cur >= 0) document.title = (STEPS[cur].ch === 0 ? "" : CH[STEPS[cur].ch].title + " · ") + BASE;
     if (hadFocus) (stage.classList.contains("is-map") ? labEls[id] : el.next).focus();
     if (!opts || !opts.quiet) scheduleHash();
@@ -395,6 +467,8 @@
   }
   el.cardClose.addEventListener("click", function (e) { e.stopPropagation(); closeTerm(); });
   el.card.addEventListener("click", function (e) { e.stopPropagation(); });
+  el.card.addEventListener("pointerenter", function (e) { if (e.pointerType === "mouse") { hovering = true; clearTimeout(leaveTimer); } });
+  el.card.addEventListener("pointerleave", function (e) { if (e.pointerType === "mouse") hoverOut(); });
 
   /* ---------- Moving along ------------------------------------------------------------- */
   function go(s, opts) {

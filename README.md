@@ -63,7 +63,7 @@ The model **looks** at what is on the counter, **picks** a next step, **does** i
 
 | | |
 | --- | --- |
-| **Kitchen story** | One screen, 62 steps. Click, arrow keys, swipe, a scrubber, or Play at your own speed. |
+| **Kitchen story** | One screen, 62 steps. Click, arrow keys, swipe, a scrubber, the dots of each chapter, or Play at your own speed. |
 | **Technical deep dive** | Eight chapters and a map of 21 main terms, each with a page of its own. |
 | **Glossary** | 187 terms, each with an icon, a definition, related terms, a detailed technical description, references and a drawing of where it sits in the kitchen. A to Z or by topic. |
 | **Guides** | Seven long articles for people who build: how an agent works, context engineering, building an agent, securing agents, testing and running them, what is easily confused, where to learn more. Every claim points to a numbered source. |
