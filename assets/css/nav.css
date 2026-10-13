@@ -48,12 +48,46 @@
    place is the ink pill (as in the menu); its weight does not change, so no word changes width. */
 .bar-links { display: flex; align-items: center; gap: 6px; }
 .bar-links a {
-  display: inline-flex; align-items: center; height: 36px; padding: 0 12px; border: 1px solid var(--rule); border-radius: var(--r-pill); background: var(--paper-2); color: var(--ink-2); text-decoration: none; white-space: nowrap;
+  position: relative; display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 12px; border: 1px solid var(--rule); border-radius: var(--r-pill); background: var(--paper-2); color: var(--ink-2); text-decoration: none; white-space: nowrap;
   font: 500 var(--fs-sm)/1.2 var(--sans); transition: background-color var(--dur-fast), color var(--dur-fast), border-color var(--dur-fast);
 }
-.bar-links a:hover { background: var(--paper-3); border-color: var(--rule-strong); color: var(--ink); }
+.bar-links a:hover { background: var(--pz-tint, var(--paper-3)); border-color: var(--pz, var(--rule-strong)); color: var(--ink); }
 .bar-links a:focus-visible { outline: 2px solid var(--focus); outline-offset: 1px; }
 .bar-links a[aria-current] { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+
+/* ---------- The bar with some life: a small drawing for each place, a squiggle under the current one, a little bounce on hover ----------------------------- */
+/* The drawings are one sprite in the shell (docs/logo/nav-icons.js); each place has the colours of one of the map's zones (the same as on the start page), the lines are the
+   text colour. The bar stays one row of one height: the drawings only appear where the centred middle has room for them (from 1440px) and in the menu. */
+[data-sec="start"]     { --pz: var(--z-harness); --pz-tint: var(--t-harness); --pz-mid: var(--m-harness); }
+[data-sec="story"]     { --pz: var(--z-tools);   --pz-tint: var(--t-tools);   --pz-mid: var(--m-tools); }
+[data-sec="technical"] { --pz: var(--z-orch);    --pz-tint: var(--t-orch);    --pz-mid: var(--m-orch); }
+[data-sec="guides"]    { --pz: var(--z-know);    --pz-tint: var(--t-know);    --pz-mid: var(--m-know); }
+[data-sec="glossary"]  { --pz: var(--z-model);   --pz-tint: var(--t-model);   --pz-mid: var(--m-model); }
+[data-sec="about"]     { --pz: var(--z-control); --pz-tint: var(--t-control); --pz-mid: var(--m-control); }
+.pico { width: 18px; height: 18px; flex: none; --pi-fill: var(--pz-tint, transparent); --pi-accent: var(--pz, currentColor); transform-origin: 50% 70%; }
+.bar-links .pico { display: none; margin-left: -2px; }
+.bar-links a[aria-current] .pico { --pi-fill: color-mix(in srgb, var(--pz-mid) 55%, var(--ink)); --pi-accent: var(--pz-mid); }
+.pico-squig { display: none; position: absolute; left: 50%; bottom: -8px; width: 52px; height: 7px; margin-left: -26px; color: var(--clay); pointer-events: none; }
+.bar-links a[aria-current] .pico-squig { display: block; }
+@media (min-width: 1440px) {
+  .bar-links a { padding: 0 11px 0 10px; }
+  .bar-links .pico { display: block; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .bar-links a { transition: background-color var(--dur-fast), color var(--dur-fast), border-color var(--dur-fast), transform 0.32s cubic-bezier(0.34, 1.7, 0.5, 1); }
+  .bar-links a:hover { transform: translateY(-2px) rotate(-1.2deg); }
+  .bar-links a:nth-child(even):hover { transform: translateY(-2px) rotate(1.2deg); }
+  .bar-links a:active { transform: translateY(0) scale(0.96); transition-duration: 0.08s; }
+  .bar-links a:hover .pico { animation: pico-wiggle 0.5s ease-in-out; }
+  .bar-links a[aria-current] .pico-squig { animation: squig-draw 0.55s ease-out both; }
+  .brand:hover .brand-mark { animation: pico-wiggle 0.6s ease-in-out; }
+  .gh-pill:hover .gh-stars svg { animation: star-spin 0.6s cubic-bezier(0.34, 1.4, 0.5, 1); }
+  .search-trigger:hover svg { animation: pico-wiggle 0.5s ease-in-out; }
+  .icon-btn:hover svg { animation: pico-wiggle 0.5s ease-in-out; }
+}
+@keyframes pico-wiggle { 0% { transform: none; } 25% { transform: rotate(-12deg) scale(1.12); } 55% { transform: rotate(9deg) scale(1.12); } 80% { transform: rotate(-4deg); } 100% { transform: none; } }
+@keyframes star-spin { from { transform: rotate(0) scale(1); } 50% { transform: rotate(180deg) scale(1.35); } to { transform: rotate(360deg) scale(1); } }
+@keyframes squig-draw { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
 @media (forced-colors: active) { .bar-links a { border-color: CanvasText; } .bar-links a[aria-current] { forced-color-adjust: none; background: Highlight; border-color: Highlight; color: HighlightText; } }
 @media (max-width: 1339px) {
   .bar-links { display: none; }
@@ -116,6 +150,10 @@
   display: grid; gap: 2px; padding: 9px 10px; border-radius: var(--r-md); color: var(--ink); text-decoration: none;
   transition: background-color var(--dur-fast);
 }
+.site-menu-panel a:not(.vs-item) { grid-template-columns: 34px minmax(0, 1fr); column-gap: 10px; align-items: center; }
+.site-menu-panel a:not(.vs-item) .pico { grid-row: 1 / span 2; width: 34px; height: 34px; padding: 5px; border-radius: 50%; background: var(--pz-tint); box-sizing: border-box; }
+.site-menu-panel a:not(.vs-item)[aria-current] .pico { --pi-fill: color-mix(in srgb, var(--pz-mid) 55%, var(--ink)); --pi-accent: var(--pz-mid); background: color-mix(in srgb, var(--paper) 14%, transparent); }
+.site-menu-panel a:not(.vs-item)[aria-current] .pico { color: var(--paper); }
 .site-menu-panel a:not(.vs-item) b { font: 600 var(--fs-base)/1.3 var(--sans); }
 .site-menu-panel a:not(.vs-item) span { font: 400 var(--fs-sm)/1.4 var(--sans); color: var(--ink-3); }
 .site-menu-panel a:not(.vs-item):hover, .site-menu-panel a:not(.vs-item):focus-visible { background: var(--paper-2); }
@@ -125,6 +163,7 @@
 .site-menu-panel a:not(.vs-item)[aria-current] span { color: color-mix(in srgb, var(--paper) 78%, transparent); }
 @keyframes menu-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) { .site-menu-panel { animation: none; } }
+@media (prefers-reduced-motion: no-preference) { .site-menu-panel a:not(.vs-item):hover .pico { animation: pico-wiggle 0.5s ease-in-out; } }
 @media (max-width: 760px) {
   .site-menu { position: static; }
   .site-menu-panel { left: 12px; right: 12px; width: auto; top: calc(var(--bar-main-h) + env(safe-area-inset-top, 0px) - 4px); position: fixed; }
