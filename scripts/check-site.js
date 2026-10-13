@@ -228,6 +228,17 @@ function glossaryChecks(root) {
   content.ICONS.forEach((n) => { if (!new RegExp("(^|[\\s,{])\"?" + n + "\"?\\s*:").test(icons)) errors.push("icons.js: no drawing for the icon " + n); });
   const guides = fs.readdirSync(path.join(root, "guides"), { withFileTypes: true }).filter((d) => d.isDirectory()).map((d) => d.name).sort();
   if (guides.join() !== A.guideList.map((g) => g.id).sort().join()) errors.push("guides: the pages " + guides.join(", ") + " do not match guideList");
+  // The start page: a note for every guide with its reading time, and every link inside the page leads to a page that exists.
+  const start = read("index.html"), L = (A.tech || {}).longGuides || {};
+  A.guideList.forEach((g) => {
+    const m = start.match(new RegExp('href="guides/' + g.id + '/"[^>]*>(?:(?!</a>)[\\s\\S])*?<span class="snote-min">(\\d+) min read'));
+    if (!m) errors.push("index.html: no note on the shelf for the guide " + g.id);
+    else if (L[g.id] && +m[1] !== L[g.id].minutes) errors.push("index.html: the note of " + g.id + " says " + m[1] + " min, the guide " + L[g.id].minutes);
+  });
+  (start.match(/<main[\s\S]*<\/main>/) || [""])[0].replace(/href="([a-z][^":#]*)"/g, (all, href) => {
+    if (!/^https?:/.test(href) && !fs.existsSync(path.join(root, href, "index.html"))) errors.push("index.html: the link " + href + " leads nowhere");
+    return all;
+  });
   return errors;
 }
 
