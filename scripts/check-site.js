@@ -159,7 +159,7 @@ function pageChecks(root) {
     if (f !== "story/index.html" && !/<script src="(\.\.\/)*assets\/js\/totop\.js"><\/script>/.test(html)) err(f + ": loads no totop.js (the button to the top)");
     if (f !== "story/index.html" && f !== "index.html" && !/<script src="(\.\.\/)*assets\/js\/stickhead\.js"><\/script>/.test(html)) err(f + ": loads no stickhead.js (the heading you are in stays in view)");
     if (/<nav class="sections"/.test(html)) err(f + ": the row of sections is back");
-    ["id=\"search\"", "id=\"site-search\"", "id=\"search-results\"", "id=\"theme-toggle\"", "id=\"gh-pill\"", "id=\"gh-stars\"", "id=\"gh-count\"", 'class="bar-actions"'].forEach((x) => { if (!html.includes(x)) err(f + ": the top bar needs " + x); });
+    ["id=\"search\"", "id=\"search-open\"", 'id="search-modal" role="dialog" aria-modal="true"', "id=\"site-search\"", "id=\"search-results\"", "id=\"theme-toggle\"", "id=\"gh-pill\"", "id=\"gh-stars\"", "id=\"gh-count\"", 'class="bar-actions"'].forEach((x) => { if (!html.includes(x)) err(f + ": the top bar needs " + x); });
     if (!/id="gh-pill" href="https:\/\/github\.com\/veniplex\/ai-explained" target="_blank" rel="noopener"/.test(html)) err(f + ": the GitHub button must open the repository in a new tab with rel=noopener");
     if (!/<head>[\s\S]*?<script src="(\.\.\/)*assets\/js\/theme\.js"><\/script>[\s\S]*?<\/head>/.test(html)) err(f + ": theme.js must be loaded in the head, before the first paint");
     if (/localStorage/.test(html.replace(/<noscript>[\s\S]*?<\/noscript>/g, ""))) err(f + ": no inline script touches the theme any more (theme.js does)");

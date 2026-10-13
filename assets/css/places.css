@@ -28,7 +28,7 @@
   margin: 0; padding: 12px; background: var(--surface); border: 1px solid var(--rule-strong); border-radius: var(--r-lg);
 }
 .loc-pic {
-  --wall-c: color-mix(in srgb, var(--t-start) 55%, var(--paper)); --floor-c: var(--paper-3);
+  --wall-c: color-mix(in srgb, var(--clay-soft) var(--wall-warm, 34%), var(--paper-2)); --floor-c: var(--paper-3);
   display: block; position: relative; aspect-ratio: 1500 / 610; overflow: hidden; border-radius: var(--r-md); background: var(--wall-c); text-decoration: none;
 }
 .loc-pic:not(.is-drawn)::after { content: ""; position: absolute; inset: 0; background: linear-gradient(100deg, transparent 30%, color-mix(in srgb, var(--paper) 55%, transparent) 50%, transparent 70%); background-size: 220% 100%; animation: loc-wait 1.4s linear infinite; }

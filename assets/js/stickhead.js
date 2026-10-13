@@ -21,7 +21,9 @@
     for (i = 0; i < list.length; i++) {
       el = list[i];
       r = el.getBoundingClientRect();
-      var pinned = Math.abs(r.top - (parseFloat(getComputedStyle(el).top) || y)) < 1 && r.height > 0;
+      // Pinned from the moment it reaches its place under the bar until it has slid out under the bar: while the end of its part pushes it up it keeps its paper,
+      // so it never lies as bare text on the last lines of its own part (the sources, the notes).
+      var pinned = r.height > 0 && r.top <= (parseFloat(getComputedStyle(el).top) || y) + 0.5 && r.bottom > y;
       if (pinned !== el.classList.contains("is-stuck")) el.classList.toggle("is-stuck", pinned);
       if (r.height > tallest) tallest = r.height;
     }

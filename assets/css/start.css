@@ -5,7 +5,6 @@
 
 .start { max-width: 1120px; margin: 0 auto; padding-block: clamp(24px, 6vh, 64px) 48px; }
 .start-head { max-width: 46rem; }
-.start-head .eyebrow { color: var(--clay-ink); }
 .start-title { margin-top: 12px; font: 600 clamp(var(--fs-5xl), 5vw, calc(var(--fs-5xl) * 1.5))/1.06 var(--serif); letter-spacing: -0.025em; }
 .start-line { margin-top: 16px; font: 400 clamp(var(--fs-lg), 1.7vw, var(--fs-2xl))/1.5 var(--serif); color: var(--ink-2); }
 

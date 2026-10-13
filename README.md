@@ -67,7 +67,7 @@ The model **looks** at what is on the counter, **picks** a next step, **does** i
 | **Technical deep dive** | Eight chapters and a map of 21 main terms, each with a page of its own. |
 | **Glossary** | 187 terms, each with an icon, a definition, related terms, a detailed technical description, references and a drawing of where it sits in the kitchen. A to Z or by topic. |
 | **Guides** | Seven long articles for people who build: how an agent works, context engineering, building an agent, securing agents, testing and running them, what is easily confused, where to learn more. Every claim points to a numbered source. |
-| **Search** | Press `/` to search the glossary, chapters and guides. Arrow keys choose, Enter opens, Esc closes. |
+| **Search** | Press `/` or Ctrl/Cmd+K and a search window floats over the page: glossary, chapters and guides. Arrow keys choose, Enter opens, Esc closes. |
 | **Always oriented** | On long pages the heading of the part you are reading stays pinned under the top bar, so you always see where you are. |
 | **Hover cards** | Rest on any term for a short explanation and a link to its page. |
 | **Themes** | Light, dark or follow the device. |
@@ -103,7 +103,7 @@ The root of this repository is the current release, **1.0**. It is what the addr
 
 The site grew through sixteen earlier alpha versions: a first interactive map, a guided path, side-by-side voices, a comic, a growing storyline, and finally the kitchen on one screen. They are kept, unchanged, in [`versions/`](versions/) and stay online at `…/ai-explained/versions/<name>/`. Old addresses such as `…/v0.12-alpha/` still work: they forward to the new place.
 
-Every page has a version dropdown in its top bar. It lists all releases, with the current one marked, and takes you to the same page in another release when that page exists there. The list lives in one file, [`versions/versions.js`](versions/versions.js).
+Every page has a version dropdown in its top bar. It lists all releases by number and codename (v1.0 is Saffron), with the current one marked, and takes you to the same page in another release when that page exists there. The list lives in one file, [`versions/versions.js`](versions/versions.js).
 
 ## How it is made
 
@@ -117,6 +117,10 @@ Every page has a version dropdown in its top bar. It lists all releases, with th
 - [rough.js](https://github.com/rough-stuff/rough) by Preet Shihn, MIT licence (copy in `assets/vendor/`).
 - Fonts DM Sans, DM Mono and Source Serif 4 by their project authors, under the SIL Open Font Licence (copies in `assets/fonts/`). They are self-hosted.
 - The sources behind every claim are linked on the pages themselves.
+
+## Licence
+
+[Creative Commons Attribution-NonCommercial 4.0](LICENSE) (CC BY-NC 4.0): you may share and adapt everything here, with credit to the project ("AI explained" and a link to this repository), but not for commercial purposes. The third-party files in `assets/vendor/` and `assets/fonts/` keep their own licences.
 
 ## Contributing
 

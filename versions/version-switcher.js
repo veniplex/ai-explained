@@ -78,12 +78,13 @@
   btn.type = "button";
   btn.setAttribute("aria-expanded", "false");
   btn.setAttribute("aria-controls", "vs-menu");
-  btn.setAttribute("aria-label", "Version: " + (here || "choose") + (here && here !== latest ? " (an older version)" : ""));
+  btn.setAttribute("aria-label", "Version: " + (here || "choose") + (find(list, here) && find(list, here).codename ? ", " + find(list, here).codename : "") + (here && here !== latest ? " (an older version)" : ""));
   menu.id = "vs-menu";
   menu.hidden = true;
   if (here && here !== latest) { btn.className += " is-old"; btn.setAttribute("title", "A newer version is available"); }
   var label = el("span", "vs-label");
-  label.appendChild(el("span", "vs-full", here || "Versions"));
+  var hereV = find(list, here);
+  label.appendChild(el("span", "vs-full", here ? here + (hereV && hereV.codename ? " · " + hereV.codename : "") : "Versions"));
   label.appendChild(el("span", "vs-short", here ? short(here) : "Versions"));
   btn.appendChild(label);
   btn.appendChild(chevron());
@@ -96,9 +97,9 @@
     if (v.id === here) a.setAttribute("aria-current", "page");
     var top = el("span", "vs-top");
     top.appendChild(el("b", "vs-name", v.id));
+    if (v.codename) top.appendChild(el("span", "vs-code", v.codename));
     if (v.id === latest) top.appendChild(el("span", "vs-tag", "Current"));
     a.appendChild(top);
-    a.appendChild(el("span", "vs-note", v.note));
     li.appendChild(a);
     return li;
   }

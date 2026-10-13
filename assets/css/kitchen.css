@@ -302,8 +302,10 @@ img { max-width: 100%; }
 }
 .brand { display: flex; align-items: center; gap: 12px; min-width: 0; color: var(--ink); text-decoration: none; }
 .brand-mark { width: 30px; height: 30px; flex: none; }
-.brand-ring { fill: none; stroke: var(--ink); stroke-width: 2.4; stroke-linecap: round; }
-.brand-dot { fill: var(--clay); }
+.brand-line { fill: none; stroke: var(--ink); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.brand-node-fill { fill: var(--surface); stroke: none; }
+.brand-core { fill: var(--clay); stroke: none; }
+.brand-core-edge { fill: none; stroke: var(--clay); stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round; }
 .brand-title { font: 600 var(--fs-xl)/1.1 var(--serif); letter-spacing: -0.01em; white-space: nowrap; margin: 0; }
 .brand-title em { font-style: italic; font-weight: 500; }
 .brand-sub {
@@ -326,12 +328,13 @@ img { max-width: 100%; }
    one the camera zooms in on the place where the chef is. */
 :root {
   --t: 1;                                  /* how long things take; shorter when the story plays fast */
-  --wall-c: color-mix(in srgb, var(--t-start) 55%, var(--paper));
+  --wall-c: color-mix(in srgb, var(--clay-soft) var(--wall-warm, 34%), var(--paper-2));
   --floor-c: var(--paper-3);
   --night-wash: #1b2447;
   --console-h: 124px;
 }
 :root[data-theme="dark"] { --night-wash: #05081a; }
+:root[data-theme="dark"] { --wall-warm: 12%; }  /* how much of the warm tone the back wall has: a little in the dark theme */
 html, body { height: 100%; }
 /* The room of the scrollbar is kept on every page (nav.css); the story has nothing to scroll, so its scrollbar is only shown, and not an empty strip. */
 html { overflow-y: scroll; }

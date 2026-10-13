@@ -12,11 +12,6 @@
     });
     document.addEventListener("pointerdown", function (e) { if (menu.open && !menu.contains(e.target)) menu.open = false; });
     menu.addEventListener("focusout", function (e) { if (menu.open && e.relatedTarget && !menu.contains(e.relatedTarget)) menu.open = false; });
-    // Opening the menu closes the list of search hits, and the other way round.
-    menu.addEventListener("toggle", function () {
-      var list = document.getElementById("search-results");
-      if (menu.open && list) list.hidden = true;
-    });
     // The version list opens in place at the foot of the panel: bring it into view, or a short window would show only its first line.
     menu.addEventListener("click", function (e) {
       var b = e.target.closest ? e.target.closest(".menu-foot .vs-btn") : null;

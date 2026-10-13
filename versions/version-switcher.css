@@ -32,7 +32,7 @@
 }
 .vs-item:hover, .vs-item:focus-visible { background: var(--paper-2, #f1ede3); transform: translateX(2px); }
 .vs-item.is-here { background: var(--clay-soft, #f7e3d8); }
-.vs-top { display: flex; align-items: center; gap: 8px; }
+.vs-top { display: flex; align-items: center; gap: 5px; }
 .vs-name { font: 600 14px/1.3 var(--sans, system-ui, sans-serif); }
 .vs-tag {
   display: inline-block; padding: 3px 7px; border-radius: 6px; transform: rotate(-2deg);
@@ -55,7 +55,8 @@
 .vs-sub { margin: 2px 0 0; padding: 0 0 0 8px; list-style: none; }
 .vs-sub[hidden] { display: none; }
 .vs-sub .vs-item { padding: 7px 10px; }
-.vs-note { font: 400 13px/1.4 var(--sans, system-ui, sans-serif); color: var(--ink-2, #4a4842); }
+.vs-code { flex: 1; font: 400 14px/1.3 var(--sans, system-ui, sans-serif); color: var(--ink-2, #4a4842); }
+.vs-code::before { content: "\00b7\00a0"; }
 
 @media (max-width: 640px) {
   /* On a phone the list hangs from the header (which is sticky, so it is the reference), as wide as the screen allows. */
