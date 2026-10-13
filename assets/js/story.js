@@ -148,19 +148,21 @@
     requestAnimationFrame(fit);
   }
 
-  // Where you are: a vertical row of dots at the left edge of wide screens (one per stop on the page, with the
-  // name on hover or focus), and a thin line under the top bar on narrower ones. Both follow the scroll position.
+  // Where you are: a vertical row of dots beside the text of wide screens (one per stop on the page, the chapter
+  // number to the left of its dot, the name on hover or focus), and a thin line under the top bar on narrower
+  // ones. Both follow the scroll position.
   function stops() {
-    var list = [{ id: "start", label: "Start", zone: "start" }];
-    D.chapters.forEach(function (c) { list.push({ id: anchor(c), label: (c.n === 8 ? "Epilogue" : c.n) + " · " + voice.chapter(c).title, zone: c.zone }); });
-    list.push({ id: "map", label: voice.ui().hub, zone: "start" });
+    var list = [{ id: "start", num: "", label: "Start", zone: "start" }];
+    D.chapters.forEach(function (c) { list.push({ id: anchor(c), num: c.n === 8 ? "E" : String(c.n), label: (c.n === 8 ? "Epilogue" : c.n) + " · " + voice.chapter(c).title, zone: c.zone }); });
+    list.push({ id: "map", num: "", label: voice.ui().hub, zone: "start" });
     return list;
   }
   function rail(list) {
     return h("nav", { class: "rail", "aria-label": "Where you are on the page" },
       h("ol", { class: "rail-list" }, list.map(function (st) {
         return h("li", null, h("a", { class: "rail-item", href: "#" + st.id, "data-go": st.id, "data-zone": st.zone },
-          h("span", { class: "rail-dot", "aria-hidden": "true" }), h("span", { class: "rail-label" }, st.label)));
+          h("span", { class: "rail-num", "aria-hidden": "true" }, st.num), h("span", { class: "rail-dot", "aria-hidden": "true" }),
+          h("span", { class: "rail-label" }, st.label)));
       })));
   }
   function followScroll(list, railEl, line) {
@@ -188,6 +190,16 @@
     listen("scroll", queue, { passive: true });
     listen("resize", queue);
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(queue);
+    // The dots sit just left of the text column, wherever the layout puts it.
+    function place() {
+      var ch = document.querySelector(".chapter");
+      if (!ch) return;
+      var x = Math.max(railEl.offsetWidth + 8, ch.getBoundingClientRect().left - 18);
+      railEl.style.setProperty("--rail-x", Math.round(x) + "px");
+    }
+    listen("resize", place);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(place);
+    place();
     queue();
   }
 
