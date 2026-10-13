@@ -149,7 +149,7 @@
   }
 
   // Where you are: a vertical row of dots beside the text of wide screens (one per stop on the page, the chapter
-  // number to the left of its dot, the name on hover or focus), and a thin line under the top bar on narrower
+  // number inside its dot, the name on hover or focus), and a thin line under the top bar on narrower
   // ones. Both follow the scroll position.
   function stops() {
     var list = [{ id: "start", num: "", label: "Start", zone: "start" }];
@@ -161,8 +161,7 @@
     return h("nav", { class: "rail", "aria-label": "Where you are on the page" },
       h("ol", { class: "rail-list" }, list.map(function (st) {
         return h("li", null, h("a", { class: "rail-item", href: "#" + st.id, "data-go": st.id, "data-zone": st.zone },
-          h("span", { class: "rail-num", "aria-hidden": "true" }, st.num), h("span", { class: "rail-dot", "aria-hidden": "true" }),
-          h("span", { class: "rail-label" }, st.label)));
+          h("span", { class: "rail-dot", "aria-hidden": "true" }, st.num), h("span", { class: "rail-label" }, st.label)));
       })));
   }
   function followScroll(list, railEl, line) {
