@@ -1,0 +1,51 @@
+/* ==========================================================================
+   Agentic AI, Explained (v12): the start page. Two ways in side by side, a card each, and nothing else to decide. Uses the tokens
+   and the shared pieces of style.css (.bar, .btn, .eyebrow, .pic, data-zone); the prefixes here are start and path. Tokens only, as in DESIGN.md.
+   ========================================================================== */
+
+.start { max-width: 1120px; margin: 0 auto; padding-block: clamp(24px, 6vh, 64px) 48px; }
+.start-head { max-width: 46rem; }
+.start-head .eyebrow { color: var(--clay-ink); }
+.start-title { margin-top: 12px; font: 600 clamp(var(--fs-5xl), 5vw, calc(var(--fs-5xl) * 1.5))/1.06 var(--serif); letter-spacing: -0.025em; }
+.start-line { margin-top: 16px; font: 400 clamp(var(--fs-lg), 1.7vw, var(--fs-2xl))/1.5 var(--serif); color: var(--ink-2); }
+
+.paths { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(16px, 2.4vw, 28px); margin-top: clamp(24px, 5vh, 44px); }
+.path {
+  position: relative; display: flex; flex-direction: column; padding: clamp(16px, 2vw, 24px);
+  background: var(--surface); border: 1px solid var(--rule-strong); border-radius: var(--r-xl);
+  transition: border-color var(--dur-fast), box-shadow var(--dur-fast), transform var(--dur-fast);
+}
+.path:hover { border-color: var(--zc, var(--ink-3)); box-shadow: var(--shadow); transform: translateY(-2px); }
+.path:focus-within { border-color: var(--zc, var(--ink-3)); }
+.path .pic { max-width: 250px; width: 100%; margin: 0 auto 8px; }
+.path .eyebrow { color: var(--zc, var(--ink-3)); }
+.path-title { margin-top: 6px; font: 600 var(--fs-4xl)/1.15 var(--serif); letter-spacing: -0.015em; }
+/* The whole card is the link: the link of the title stretches over it. */
+.path-link { color: inherit; text-decoration: none; }
+.path-link::after { content: ""; position: absolute; inset: 0; border-radius: inherit; }
+.path-link:focus-visible { outline: none; }
+.path-link:focus-visible::after { outline: 2px solid var(--focus); outline-offset: 3px; }
+.path-text { margin-top: 10px; font: 400 var(--fs-lg)/1.55 var(--serif); color: var(--ink-2); }
+.path-go { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-top: auto; padding-top: 20px; }
+.path-go .btn { min-height: 46px; padding-inline: 20px; font-size: var(--fs-base); pointer-events: none; }
+.path-go .btn svg { width: 18px; height: 18px; }
+.path:hover .path-go .btn { background: var(--ink-hover); border-color: var(--ink-hover); }
+.path-note { font: 400 var(--fs-sm)/1.3 var(--sans); color: var(--ink-3); }
+
+.start-skip { margin-top: 28px; font: 400 var(--fs-md)/1.4 var(--sans); color: var(--ink-3); }
+.start-skip a { color: var(--clay-ink); text-underline-offset: 3px; }
+
+@media (max-width: 760px) {
+  .paths { grid-template-columns: minmax(0, 1fr); }
+  .path .pic { max-width: 170px; margin: 0 0 4px; }
+  .path-title { font-size: var(--fs-3xl); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .path { transition: none; }
+  .path:hover { transform: none; }
+}
+@media (forced-colors: active) {
+  .path { border: 1px solid CanvasText; }
+  .path-link:focus-visible::after { outline-color: Highlight; }
+}
+@media print { .bar, .skip-link { display: none; } }
