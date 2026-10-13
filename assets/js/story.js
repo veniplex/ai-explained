@@ -72,6 +72,7 @@
     var id = anchor(c), t = voice.chapter(c), u = voice.ui();
     var eyebrow = c.n === 8 ? "Epilogue" : "Chapter " + c.n;
     return h("section", { class: "chapter", id: id, "data-n": c.n, "data-zone": c.zone, "aria-labelledby": id + "-t", tabindex: "-1" },
+      h("div", { class: "ch-stick", "aria-hidden": "true" }, h("div", { class: "ch-stick-in" }, h("span", { class: "ch-stick-n" }, eyebrow), h("span", { class: "ch-stick-t" }, t.title))),
       h("div", { class: "ch-head" },
         h("div", null, h("p", { class: "eyebrow" }, eyebrow), h("h2", { class: "ch-title", id: id + "-t" }, t.title)),
         sk.doodleSvg(c.zone, "ch-icon", 31 + c.n, undefined, c.id)),

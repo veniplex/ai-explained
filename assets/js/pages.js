@@ -216,7 +216,9 @@
   function smoothTo(el, hash) {
     var reduce = sk.reduced();
     if (hash && location.hash !== hash) { try { history.pushState(null, "", hash); } catch (e) { location.hash = hash; } }
-    el.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+    // A heading sticks under the top bar (stickhead.js), so it is the part around it that is scrolled to: a heading that has been pushed out above would answer with its place at the end of its part.
+    var part = el.matches("h2") && el.parentNode && el.parentNode !== document.body ? el.parentNode : el;
+    part.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
     var head = el.matches("h2") ? el : el.querySelector("h2") || el;
     head.setAttribute("tabindex", "-1");
     try { head.focus({ preventScroll: true }); } catch (e) {}

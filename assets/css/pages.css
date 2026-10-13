@@ -189,7 +189,7 @@
 .gd-body { max-width: 760px; margin-inline: auto; }
 .bd-sub { margin-top: 18px; }
 .bd-sub h3 { margin-bottom: 8px; font: 600 var(--fs-md)/1.3 var(--sans); color: var(--ink); }
-.gd-section, .bd-section, .gd-terms { scroll-margin-top: 0; } /* the offset under the bar is the page's scroll-padding-top */
+.gd-section, .bd-section, .gd-terms { scroll-margin-top: calc(-1 * var(--stick-h, 0px)); } /* the offset under the bar is the page's scroll-padding-top, which also leaves room for a pinned heading; a part's top takes that room back */
 .gd-section { padding-top: 8px; margin-top: 36px; }
 .gd-section:first-child { margin-top: 0; }
 .gd-section h2 { display: flex; align-items: baseline; gap: 12px; margin-bottom: 14px; font: 600 var(--fs-3xl)/1.2 var(--serif); letter-spacing: -0.01em; }
@@ -298,7 +298,7 @@
 .gd-section > h2:focus, .gd-section-plain > h2:focus { outline: none; }
 .gd-section > h2:focus-visible, .gd-section-plain > h2:focus-visible { outline: 2px solid var(--focus); outline-offset: 4px; border-radius: var(--r-sm); }
 @media (prefers-reduced-motion: reduce) { .gd-section.is-hit > h2, .gd-section-plain.is-hit > h2 { animation: none; background-color: var(--clay-soft); } }
-.gd-section-plain { scroll-margin-top: 0; }
+.gd-section-plain { scroll-margin-top: calc(-1 * var(--stick-h, 0px)); }
 /* How far you have read: a thin line along the lower edge of the top bar. */
 .read-progress { position: absolute; left: 0; right: 0; bottom: -1px; height: 3px; pointer-events: none; opacity: 0; transition: opacity var(--dur-base); z-index: 2; }
 .read-progress.is-on { opacity: 1; }
@@ -320,3 +320,22 @@
   .gd-side-all { min-height: 44px; }
   .proto-link { display: inline-block; padding: 8px 4px; margin: -8px -4px; }
 }
+
+/* ---------- The heading you are in stays in view (stickhead.js) ------------------------------------------------ */
+/* A part's heading sticks under the top bar while its part is on the screen and is pushed out by the next heading. Its paper and rule are drawn behind it, so it
+   does not move or change size when it sticks. */
+.gd-section > h2, .gd-section-plain > h2, .bd > .bd-section > h2, .about > div > h2 {
+  position: sticky; top: calc(var(--bar-h) + env(safe-area-inset-top, 0px) + 8px); z-index: calc(var(--z-bar) - 5); isolation: isolate;
+}
+.gd-section > h2::before, .gd-section-plain > h2::before, .bd > .bd-section > h2::before, .about > div > h2::before {
+  content: ""; position: absolute; inset: -16px -14px -12px; z-index: -1; pointer-events: none; opacity: 0; transition: opacity var(--dur-fast);
+  background: var(--paper); border-bottom: 1px solid var(--rule); box-shadow: 0 8px 12px -10px color-mix(in srgb, var(--ink) 45%, transparent);
+}
+.gd-section > h2.is-stuck::before, .gd-section-plain > h2.is-stuck::before, .bd > .bd-section > h2.is-stuck::before, .about > div > h2.is-stuck::before { opacity: 1; }
+/* a jump to something inside a part (a source, a note), or the focus moving to a link, lands below the pinned heading */
+html { scroll-padding-top: calc(var(--bar-h) + 16px + var(--stick-h, 0px)); }
+@media (max-width: 700px) {
+  .gd-section > h2, .gd-section-plain > h2, .bd > .bd-section > h2, .about > div > h2 { font-size: var(--fs-2xl); }
+}
+@media (prefers-reduced-motion: reduce) { .gd-section > h2::before, .gd-section-plain > h2::before, .bd > .bd-section > h2::before, .about > div > h2::before { transition: none; } }
+@media print { .gd-section > h2, .gd-section-plain > h2, .bd > .bd-section > h2, .about > div > h2 { position: static; } .ch-stick { display: none; } }

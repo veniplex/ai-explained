@@ -68,6 +68,7 @@ The model **looks** at what is on the counter, **picks** a next step, **does** i
 | **Glossary** | 187 terms, each with an icon, a definition, related terms, a detailed technical description, references and a drawing of where it sits in the kitchen. A to Z or by topic. |
 | **Guides** | Seven long articles for people who build: how an agent works, context engineering, building an agent, securing agents, testing and running them, what is easily confused, where to learn more. Every claim points to a numbered source. |
 | **Search** | Press `/` to search the glossary, chapters and guides. Arrow keys choose, Enter opens, Esc closes. |
+| **Always oriented** | On long pages the heading of the part you are reading stays pinned under the top bar, so you always see where you are. |
 | **Hover cards** | Rest on any term for a short explanation and a link to its page. |
 | **Themes** | Light, dark or follow the device. |
 | **Offline** | Install it as an app (Chromium browsers; Share, then Add to Home Screen on iPhone and iPad) and it works without a network. |

@@ -1029,6 +1029,15 @@ a.formula-part:hover { color: var(--ink); }
 .deeper-open { padding-top: 6px; }
 .deeper-title { margin: 22px 0 0; font: 600 var(--fs-xl)/1.3 var(--serif); }
 
+/* The slim bar that keeps the chapter in view once its title has scrolled out (stickhead.js shows it; it is drawn by story.js and hidden from screen readers, which have the real heading). Its box has a height and no
+   room in the flow (the negative margin), so it is pushed out when the chapter ends. */
+.ch-stick { position: sticky; top: calc(var(--bar-h) + env(safe-area-inset-top, 0px)); z-index: calc(var(--z-bar) - 5); height: 44px; margin-bottom: -44px; pointer-events: none; opacity: 0; visibility: hidden; transition: opacity var(--dur-fast), visibility 0s linear var(--dur-fast); }
+.ch-stick.is-on { opacity: 1; visibility: visible; transition: opacity var(--dur-fast); }
+.ch-stick-in { display: flex; align-items: baseline; gap: 12px; height: 100%; margin-inline: -14px; padding: 0 14px; align-content: center; align-items: center; overflow: hidden; white-space: nowrap; background: var(--paper); border-bottom: 1px solid var(--rule); box-shadow: 0 8px 12px -10px color-mix(in srgb, var(--ink) 45%, transparent); }
+.ch-stick-n { flex: none; font: 500 var(--fs-2xs)/1 var(--mono); letter-spacing: var(--track-mono); text-transform: uppercase; color: var(--ink-3); }
+.ch-stick-t { min-width: 0; overflow: hidden; text-overflow: ellipsis; font: 600 var(--fs-2xl)/1.2 var(--serif); letter-spacing: -0.01em; color: var(--ink); }
+@media (prefers-reduced-motion: reduce) { .ch-stick, .ch-stick.is-on { transition: none; } }
+.chapter { scroll-margin-top: calc(-1 * var(--stick-h, 0px)); }
 .ch-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
 .ch-icon { flex: none; width: 64px; height: 64px; overflow: visible; margin-top: 4px; }
 .def-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }

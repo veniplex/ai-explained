@@ -10,7 +10,7 @@
    - the kitchen stays where it belongs: only the glossary pages load a kitchen script, drawing or text; the technical deep dive, the guides, the about page
      and the hover cards do not, and their text does not name the kitchen;
    - the top bar is the same everywhere: the brand, the five places, the search, the GitHub button, the theme button and the menu (the same places, for a narrow window), with the
-     version tab hanging under the bar; every page links the manifest and loads pwa.js, and every page that can be long loads totop.js;
+     version tab hanging under the bar; every page links the manifest and loads pwa.js, and every page that can be long loads totop.js, and every page of headings loads stickhead.js;
    - the app: manifest.webmanifest names icons that exist, sw.js sits in the folder (its scope), makes no request to another site, and its cache name and list are current;
    - the theme is set by one script (theme.js, first in the head) with three choices; the one request to a third party is the star count (github.js), nothing else fetches;
    - the search index and the hover texts are current (build-pages.js), and every page is where the build says it is;
@@ -157,6 +157,7 @@ function pageChecks(root) {
     if (!/<link rel="apple-touch-icon" href="(\.\.\/)*assets\/icons\/apple-touch-icon\.png">/.test(html)) err(f + ": no apple-touch-icon");
     if (!/<script src="(\.\.\/)*assets\/js\/pwa\.js"><\/script>/.test(html)) err(f + ": loads no pwa.js");
     if (f !== "story/index.html" && !/<script src="(\.\.\/)*assets\/js\/totop\.js"><\/script>/.test(html)) err(f + ": loads no totop.js (the button to the top)");
+    if (f !== "story/index.html" && f !== "index.html" && !/<script src="(\.\.\/)*assets\/js\/stickhead\.js"><\/script>/.test(html)) err(f + ": loads no stickhead.js (the heading you are in stays in view)");
     if (/<nav class="sections"/.test(html)) err(f + ": the row of sections is back");
     ["id=\"search\"", "id=\"site-search\"", "id=\"search-results\"", "id=\"theme-toggle\"", "id=\"gh-pill\"", "id=\"gh-stars\"", "id=\"gh-count\"", 'class="bar-actions"'].forEach((x) => { if (!html.includes(x)) err(f + ": the top bar needs " + x); });
     if (!/id="gh-pill" href="https:\/\/github\.com\/veniplex\/ai-explained" target="_blank" rel="noopener"/.test(html)) err(f + ": the GitHub button must open the repository in a new tab with rel=noopener");
