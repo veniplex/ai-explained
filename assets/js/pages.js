@@ -248,9 +248,9 @@
       queued = false;
       var doc = document.documentElement, top = doc.scrollTop || document.body.scrollTop, vh = window.innerHeight;
       if (article) {
-        var r = article.getBoundingClientRect(), start = r.top + top, span = Math.max(1, r.height - vh * 0.5);
-        var p = Math.max(0, Math.min(1, (top - start + vh * 0.0) / span));
-        if (top + vh >= doc.scrollHeight - 2) p = 1;
+        // How far down the page you are: the scroll position over the furthest the page can scroll, so the bar is empty at the top, full at the very bottom and
+        // moves steadily in between (measured against the article instead, it stopped short of the end and then jumped to full).
+        var p = Math.max(0, Math.min(1, top / Math.max(1, doc.scrollHeight - vh)));
         fill.style.transform = "scaleX(" + p.toFixed(4) + ")";
         meter.setAttribute("aria-valuenow", String(Math.round(p * 100)));
         meter.classList.toggle("is-on", top > 8);
@@ -264,6 +264,8 @@
     function queue() { if (!queued) { queued = true; requestAnimationFrame(update); } }
     window.addEventListener("scroll", queue, { passive: true });
     window.addEventListener("resize", queue);
+    // The page grows after it has loaded (the kitchen drawing, fonts, the list of references): measure again whenever its height changes.
+    if (window.ResizeObserver) new ResizeObserver(queue).observe(document.body);
     setTimeout(update, 120);
     setTimeout(update, 900);
     // Every link to a part of this page (the list, the numbers of the sources, a link on a heading) scrolls smoothly and puts you at the heading.

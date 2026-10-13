@@ -11,7 +11,7 @@
 "use strict";
 
 /* build:start */
-const BUILD = "ae17-e5b51d72bd";
+const BUILD = "ae17-0c8f58bfe1";
 const PRECACHE = [
   "./",
   "story/",
