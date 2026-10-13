@@ -10,7 +10,7 @@ How AI agents work, as of **October 2026**, in two ways to read the same topic, 
 - **Guides** (`guides/`) are notes on a pinboard, each with a line on what to expect. All seven (how an agent works, context engineering, building an agent, securing agents, testing and running them, what is easily confused, where to learn more) have one layout: who it is for, *what you will know afterwards*, numbered parts that each open with an *In short* line in plain words and end with the numbers of the sources they rest on, the terms used (each a glossary page) and the numbered list of sources. A thin line along the lower edge of the top bar shows how far you have read. A box at the left edge lists the parts of the guide you are in and one button, *Explore all guides*; it stays where it is while the page scrolls, and clicking a part scrolls to it smoothly (unless the visitor asked for reduced motion). Guides are technical and name no kitchen.
 - **About** (`about/`) says what the site is, where the facts come from and what is stored.
 
-The start page (`index.html`) is the first screen: two cards for the two ways in, written from the visitor's side (I am new to this, I want the full picture), and links to the guides and the glossary.
+The start page (`index.html`) is the first screen. At the top an agent works in front of the visitor: pick a goal and the loop (think, act, observe, and ask or answer) runs step by step. Below it come the two cards for the two ways in, written from the visitor's side (I am new to this, I want the full picture), a random term from the glossary to pull, and a shelf with a note for every guide. Everything except the demo and the random term is plain HTML, so the page works without the script.
 
 ## The top bar
 
@@ -58,7 +58,7 @@ No build step apart from the generated files, no frameworks, no requests to anyw
 
 | File | What it does |
 | --- | --- |
-| `index.html`, `assets/css/start.css`, `assets/js/start.js` | The start page: two cards (plain links), their pictures drawn with the pen of `sketch.js`, and the forwarding of older `#ch-…` links. |
+| `index.html`, `assets/css/start.css`, `assets/js/start.js` | The start page: the demo of an agent at work, two cards (plain links) with pictures drawn by the pen of `sketch.js`, the random glossary term (loads `glance.js` only when it comes near the screen), the shelf of guide notes, and the forwarding of older `#ch-…` links. `check-site.js` checks that the notes' reading times match the guides. |
 | `story/index.html`, `assets/css/kitchen.css`, `assets/js/kitchen.js` | The kitchen story: one room, one screen. In the last part (Technical) the real names are laid over the kitchen; resting the mouse on one focuses it and opens its card, a click pins the card, a tap opens it on a touch screen. Controls: Next, Back, Play, speed, scrubber, chapter chips (Start, 1 to 8, End and Technical; the chapter you are in opens a row of small dots, one per step, each a jump to that step), swipe, the arrow keys, Space. `kitchen.js` also makes the caption bridges. |
 | `assets/js/draw.js`, `props.js`, `data/props-*.js`, `data/kitchen.js`, `data/story.js`, `data/names.js`, `data/bridges.js` | The pen, the drawings, the kitchen as a list of things, the 62 steps, the 21 real names, and which bold word leads to which term. |
 | `technical/index.html` | The shell of the deep dive (chapters, map, recap) and the template of every generated page. It loads no kitchen script, drawing or text. |

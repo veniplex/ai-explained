@@ -66,7 +66,7 @@ test("a term page carries the kitchen place, the sections in order, and its refe
 
 test("the start page links to both ways, the glossary and the guides; old root links are forwarded", () => {
   const html = read("index.html");
-  ["story/", "technical/"].forEach((h) => assert.match(html, new RegExp('<a class="path-link" href="' + h + '"')));
+  ["story/", "technical/"].forEach((h) => assert.match(html, new RegExp('<a class="way" data-zone="[a-z]+" href="' + h + '"')));
   assert.match(html, /guides\//);
   assert.match(html, /glossary\//);
   assert.match(html, /#guide-/);

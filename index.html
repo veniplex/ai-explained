@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>AI explained: how AI agents work, in your own words</title>
-  <meta name="description" content="How AI agents work, in the words that suit you: a drawn kitchen story for beginners or a technical deep dive. With long guides and a glossary of over 180 AI terms. As of October 2026.">
+  <meta name="description" content="How AI agents work, in the words that suit you: a drawn kitchen story for beginners or a technical deep dive. With long guides and a glossary of AI terms. As of October 2026.">
   <meta name="theme-color" content="#faf9f5" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#1f1e1d" media="(prefers-color-scheme: dark)">
   <link rel="canonical" href="https://veniplex.github.io/ai-explained/">
@@ -16,7 +16,7 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta property="og:type" content="website">
   <meta property="og:title" content="AI explained: how AI agents work, in your own words">
-  <meta property="og:description" content="A drawn kitchen story for beginners and a technical deep dive with no analogy, plus long guides and a glossary of over 180 AI terms. Snapshot: October 2026.">
+  <meta property="og:description" content="A drawn kitchen story for beginners and a technical deep dive with no analogy, plus long guides and a glossary of AI terms. Snapshot: October 2026.">
   <meta property="og:url" content="https://veniplex.github.io/ai-explained/">
   <meta property="og:image" content="https://veniplex.github.io/ai-explained/assets/og.png">
   <meta property="og:image:width" content="1200">
@@ -41,7 +41,7 @@
   </script>
 </head>
 <body data-page="start" data-base="">
-  <a class="skip-link" href="#main">Skip to the two ways to start</a>
+  <a class="skip-link" href="#main">Skip to the content</a>
 
   <header class="bar">
     <div class="bar-main">
@@ -128,40 +128,89 @@
   </header>
 
   <main class="stage start" id="main" tabindex="-1">
-    <header class="start-head">
-      <h1 class="start-title">AI explained</h1>
-      <p class="start-line">Curious how an AI agent plans, uses tools and gets work done on its own? Pick the way that fits what you know already. You can switch at any time.</p>
-    </header>
+    <section class="start-hero" aria-labelledby="start-title">
+      <div class="start-copy">
+        <p class="eyebrow">How AI agents work</p>
+        <h1 class="start-title" id="start-title"><span class="start-word">AI explained<svg class="start-scribble" viewBox="0 0 300 16" preserveAspectRatio="none" aria-hidden="true" focusable="false"></svg></span></h1>
+        <p class="start-line">An AI agent takes a goal, thinks, uses tools and checks what happened, again and again, until the job is done. Watch one work, then pick the way in that suits you.</p>
+        <ul class="ways" aria-label="Two ways in">
+          <li><a class="way" data-zone="harness" href="story/">
+            <span class="way-pic" id="pic-story" aria-hidden="true"><svg viewBox="0 0 240 160" focusable="false"></svg></span>
+            <span class="way-text"><span class="way-eyebrow">I am new to this</span><b class="way-title">The kitchen story</b><span class="way-line">A restaurant kitchen builds itself on one screen while a chef shows what an agent does. Everyday words only.</span></span>
+            <svg class="way-go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a></li>
+          <li><a class="way" data-zone="orch" href="technical/">
+            <span class="way-pic way-pic-tech" id="pic-tech" aria-hidden="true"></span>
+            <span class="way-text"><span class="way-eyebrow">I want the full picture</span><b class="way-title">The technical deep dive</b><span class="way-line">Eight chapters in precise terms, with dated facts and sources. About 9 minutes, searchable.</span></span>
+            <svg class="way-go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a></li>
+        </ul>
+      </div>
 
-    <section class="paths" aria-label="Two ways to start">
-      <article class="path" data-zone="start">
-        <figure class="pic" id="pic-story" aria-hidden="true"><svg viewBox="0 0 240 160" focusable="false"></svg></figure>
-        <p class="eyebrow">I am new to this</p>
-        <h2 class="path-title"><a class="path-link" href="story/" aria-describedby="story-text">The kitchen story</a></h2>
-        <p class="path-text" id="story-text">Watch a restaurant kitchen build itself on one screen while a chef shows what an AI agent does. Everyday words only, and nothing to read up on first.</p>
-        <p class="path-go"><span class="btn btn-ink" aria-hidden="true">Watch the story <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span><span class="path-note">Click through, or press Play</span></p>
-      </article>
-
-      <article class="path" data-zone="tools">
-        <figure class="pic pic-tech" id="pic-tech" aria-hidden="true"></figure>
-        <p class="eyebrow">I want the full picture</p>
-        <h2 class="path-title"><a class="path-link" href="technical/" aria-describedby="technical-text">The technical deep dive</a></h2>
-        <p class="path-text" id="technical-text">Eight chapters in precise terms, with a map that grows as you read: how each part works, what to watch for, dated facts and the sources behind them. Every term has a glossary page when you want more.</p>
-        <p class="path-go"><span class="btn btn-ink" aria-hidden="true">Open the deep dive <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span><span class="path-note">About 9 minutes, searchable</span></p>
-      </article>
+      <section class="demo" id="demo" aria-labelledby="demo-title">
+        <header class="demo-head">
+          <p class="eyebrow">Try it</p>
+          <h2 class="demo-title" id="demo-title">Give an agent a goal</h2>
+        </header>
+        <div class="demo-goals" role="group" aria-label="Choose a goal" id="demo-goals"></div>
+        <ol class="demo-log" id="demo-log" aria-label="What the agent does, step by step"></ol>
+        <p class="demo-foot">
+          <button class="btn btn-sm" type="button" id="demo-replay" disabled>Replay</button>
+            <a class="demo-more" href="technical/#ch-4">How the loop works, in chapter 4 <span aria-hidden="true">→</span></a>
+        </p>
+        <p class="visually-hidden" id="demo-status" aria-live="polite"></p>
+        <noscript><p class="demo-noscript">This demo needs JavaScript. The deep dive explains the same loop in chapter 4.</p></noscript>
+      </section>
     </section>
 
-    <section class="start-more" aria-labelledby="more-title">
-      <h2 class="start-more-title" id="more-title">Looking for something specific?</h2>
-      <ul class="start-more-list">
-        <li><a href="guides/"><b>Guides</b><span>Long explainers on how agents work, how to give them context, and how to build, secure and test them.</span></a></li>
-        <li><a href="glossary/"><b>Glossary</b><span>Over 180 AI terms, each with a drawing, where it sits in the kitchen, a definition, a detailed description and references.</span></a></li>
+    <section class="pull" id="pull" aria-labelledby="pull-title" data-zone="know">
+      <header class="sec-head">
+        <h2 class="sec-title" id="pull-title">Pull a term from the glossary</h2>
+        <p class="sec-sub">Every term has a drawing, a definition and references. Here is one at random.</p>
+      </header>
+      <div class="pull-grid">
+        <article class="pull-card" id="pull-card" aria-live="polite">
+          <p class="pull-group" id="pull-group">Agents and loops</p>
+          <h3 class="pull-name"><a id="pull-name" href="glossary/agent-loop/">Agent loop</a></h3>
+          <p class="pull-text" id="pull-text">The cycle that turns a model into an agent: look, act, see the result, repeat.</p>
+          <p class="pull-go"><a class="btn btn-ink btn-sm" id="pull-open" href="glossary/agent-loop/">Read the whole term</a><button class="btn btn-sm" type="button" id="pull-next" hidden>Pull another</button></p>
+        </article>
+        <div class="pull-side">
+          <p class="pull-ask">Popular starting points</p>
+          <ul class="pull-chips">
+            <li><a class="chip" data-zone="tools" href="glossary/mcp/" data-q="MCP">MCP</a></li>
+            <li><a class="chip" data-zone="harness" href="glossary/agent-loop/" data-q="agent loop">Agent loop</a></li>
+            <li><a class="chip" data-zone="control" href="glossary/prompt-injection/" data-q="prompt injection">Prompt injection</a></li>
+            <li><a class="chip" data-zone="know" href="glossary/rag/" data-q="RAG">RAG</a></li>
+            <li><a class="chip" data-zone="control" href="glossary/human-in-the-loop/" data-q="human in the loop">Human in the loop</a></li>
+            <li><a class="chip" data-zone="ops" href="glossary/guardrails/" data-q="guardrails">Guardrails</a></li>
+          </ul>
+          <p class="pull-all"><a href="glossary/">Browse the whole glossary <span aria-hidden="true">→</span></a></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="shelf" aria-labelledby="shelf-title">
+      <header class="sec-head">
+        <h2 class="sec-title" id="shelf-title">Then go deeper</h2>
+        <p class="sec-sub">Long guides, each one question from start to finish: how agents work, what fills their context, how to build, secure and test them.</p>
+      </header>
+      <ul class="shelf-notes" id="shelf-notes">
+        <li><a class="snote" data-zone="harness" data-icon="loop" href="guides/how-it-works/"><span class="snote-tape" aria-hidden="true"></span><b>How an agent works</b><span class="snote-min">23 min read</span></a></li>
+        <li><a class="snote" data-zone="model" data-icon="window" href="guides/context/"><span class="snote-tape" aria-hidden="true"></span><b>Context engineering</b><span class="snote-min">22 min read</span></a></li>
+        <li><a class="snote" data-zone="tools" data-icon="ladder" href="guides/build/"><span class="snote-tape" aria-hidden="true"></span><b>Build your own</b><span class="snote-min">24 min read</span></a></li>
+        <li><a class="snote" data-zone="control" data-icon="shield" href="guides/secure/"><span class="snote-tape" aria-hidden="true"></span><b>Securing agents</b><span class="snote-min">25 min read</span></a></li>
+        <li><a class="snote" data-zone="ops" data-icon="checklist" href="guides/evaluate/"><span class="snote-tape" aria-hidden="true"></span><b>Testing and running</b><span class="snote-min">25 min read</span></a></li>
+        <li><a class="snote" data-zone="orch" data-icon="scales" href="guides/compare/"><span class="snote-tape" aria-hidden="true"></span><b>Easily confused</b><span class="snote-min">21 min read</span></a></li>
+        <li><a class="snote" data-zone="know" data-icon="books" href="guides/learn/"><span class="snote-tape" aria-hidden="true"></span><b>Where to learn more</b><span class="snote-min">15 min read</span></a></li>
+        <li><a class="snote snote-all" data-zone="start" href="guides/"><b>All the guides</b><span class="snote-min">Open the shelf <span aria-hidden="true">→</span></span></a></li>
       </ul>
     </section>
   </main>
 
   <script src="assets/vendor/rough.js"></script>
   <script src="assets/js/sketch.js"></script>
+  <script src="assets/js/icons.js"></script>
   <script src="assets/js/github.js"></script>
   <script src="assets/js/nav.js"></script>
   <script src="assets/js/search.js"></script>
