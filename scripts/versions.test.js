@@ -42,14 +42,15 @@ test("versions.js has one main version, first, and then every folder of versions
   assert.deepEqual(ids.slice(1), folders());
   assert.equal(new Set(ids).size, ids.length);
   list.forEach((v) => {
-    assert.ok(/^[A-Z][a-z]+$/.test(v.codename || "") && typeof v.guided === "boolean" && typeof v.pages === "boolean", v.id + " needs a one-word codename, guided and pages");
+    assert.ok(/^[A-Z][A-Za-z]+$/.test(v.codename || "") && typeof v.guided === "boolean" && typeof v.pages === "boolean", v.id + " needs a one-word codename, guided and pages");
     assert.ok(v.sections === undefined || typeof v.sections === "boolean", v.id + ": sections is true or false");
     assert.ok(exists(v.main ? "index.html" : "versions/" + v.id + "/index.html"), v.id + " has no index.html");
   });
-  // The codenames are unique and run alphabetically as the versions come: the oldest is the first in the alphabet.
-  const names = list.map((v) => v.codename).reverse();
+  // The codenames are unique, and the people run in historical order as the versions come: each has the year of its key contribution, oldest version first.
+  const names = list.map((v) => v.codename).reverse(), years = list.map((v) => v.year).reverse();
   assert.equal(new Set(names).size, names.length, "every version has a codename of its own");
-  assert.deepEqual(names, names.slice().sort(), "the codenames are in alphabetical order, oldest first");
+  assert.ok(years.every((y) => Number.isInteger(y) && y > 1800 && y < 2100), "every version has the year of its codename's key contribution");
+  years.forEach((y, i) => { if (i) assert.ok(y > years[i - 1], names[i] + " (" + y + ") must come after " + names[i - 1] + " (" + years[i - 1] + ")"); });
   assert.ok(exists("og.png") && exists("favicon.svg") && exists("versions/favicon.svg"));
 });
 
