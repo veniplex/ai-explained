@@ -1,7 +1,7 @@
 /* ==========================================================================
-   AI explained: the start page. A hero with a demo of an agent at work, the two ways in as cards, a random term from the glossary and a shelf of
-   the guides. Uses the tokens and the shared pieces of style.css (.bar, .btn, .chip, .eyebrow, .pic, data-zone); the prefixes here are start,
-   demo, st, ls, path, pull and snote. Tokens only, as in DESIGN.md.
+   AI explained: the start page. A hero with the two ways in as tiles beside a demo of an agent at work, a random term from the glossary and a shelf of
+   the guides. Uses the tokens and the shared pieces of style.css (.bar, .btn, .chip, .eyebrow, data-zone); the prefixes here are start,
+   demo, way, ls, pull and snote. Tokens only, as in DESIGN.md.
    ========================================================================== */
 
 .start { max-width: 1120px; margin: 0 auto; padding-block: clamp(20px, 5vh, 52px) 64px; }
@@ -57,44 +57,38 @@ code.ls-text { font: 500 var(--fs-sm)/1.45 var(--mono); color: var(--ink-2); }
 .demo-noscript { margin-top: 12px; font: 400 var(--fs-md)/1.5 var(--sans); color: var(--ink-3); }
 
 /* ---------- Sections below the hero --------------------------------------------------------------------- */
-.ways, .pull, .shelf { margin-top: clamp(44px, 8vh, 84px); }
+.pull, .shelf { margin-top: clamp(44px, 8vh, 84px); }
 .sec-head { max-width: 46rem; }
 .sec-title { font: 600 var(--fs-4xl)/1.15 var(--serif); letter-spacing: -0.015em; }
 .sec-sub { margin-top: 8px; font: 400 var(--fs-lg)/1.5 var(--serif); color: var(--ink-2); }
 
-/* ---------- The two ways in ----------------------------------------------------------------------------- */
-.paths { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(16px, 2.4vw, 28px); margin-top: 22px; }
-.path {
-  position: relative; display: flex; flex-direction: column; padding: clamp(16px, 2vw, 24px);
-  background: var(--surface); border: 1px solid var(--rule-strong); border-radius: var(--r-xl);
-  transition: border-color var(--dur-fast), box-shadow var(--dur-fast), transform var(--dur-fast);
+/* ---------- The two ways in: compact tiles in the hero, drawn like the notes of the shelf ------------------ */
+.ways { display: grid; gap: 14px; margin: 26px 0 0; padding: 0; list-style: none; }
+.ways li { margin: 0; }
+.way {
+  position: relative; display: grid; grid-template-columns: 112px minmax(0, 1fr) auto; align-items: center; gap: 4px 16px; padding: 14px 18px 14px 12px; isolation: isolate;
+  color: inherit; text-decoration: none; background: var(--zt); border: 1.5px solid var(--zc); border-radius: var(--r-md);
+  transform: rotate(var(--tilt, 0deg)); transition: transform var(--dur-base) var(--ease);
 }
-.path:hover { border-color: var(--zc, var(--ink-3)); box-shadow: var(--shadow); transform: translateY(-3px); }
-.path:focus-within { border-color: var(--zc, var(--ink-3)); }
-.path .pic { max-width: 250px; width: 100%; margin: 0 auto 8px; }
-.path .pic > svg, .path .pic > .pic-icon { transition: transform var(--dur-base) var(--ease); }
-.path:hover .pic > svg { transform: rotate(-2deg) scale(1.05); }
-.path:hover .pic-icon { transform: translateY(-4px) rotate(-4deg); }
-.path:hover .pic-icon:nth-of-type(even) { transform: translateY(-4px) rotate(4deg); }
-.path .eyebrow { color: var(--zc, var(--ink-3)); }
-.path-title { margin-top: 6px; font: 600 var(--fs-4xl)/1.15 var(--serif); letter-spacing: -0.015em; }
-/* The whole card is the link: the link of the title stretches over it. */
-.path-link { color: inherit; text-decoration: none; }
-.path-link::after { content: ""; position: absolute; inset: 0; border-radius: inherit; }
-.path-link:focus-visible { outline: none; }
-.path-link:focus-visible::after { outline: 2px solid var(--focus); outline-offset: 3px; }
-.path-text { margin-top: 10px; font: 400 var(--fs-lg)/1.55 var(--serif); color: var(--ink-2); }
-.path-go { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-top: auto; padding-top: 20px; }
-.path-go .btn { min-height: 46px; padding-inline: 20px; font-size: var(--fs-base); pointer-events: none; }
-.path-go .btn svg { width: 18px; height: 18px; transition: transform var(--dur-fast) var(--ease); }
-.path:hover .path-go .btn { background: var(--ink-hover); border-color: var(--ink-hover); }
-.path:hover .path-go .btn svg { transform: translateX(4px); }
-.path-note { font: 400 var(--fs-sm)/1.3 var(--sans); color: var(--ink-3); }
-
-/* The deep dive card: the four parts of an agent as plain icons in a row, instead of a kitchen picture. */
-.pic-tech { display: flex; align-items: center; justify-content: center; gap: 6px; aspect-ratio: 240 / 160; }
-.pic-tech .pic-icon { width: 44px; height: 44px; flex: none; }
-.pic-op { font: 500 var(--fs-xl)/1 var(--mono); color: var(--ink-3); }
+.ways li:nth-child(1) .way { --tilt: -0.5deg; }
+.ways li:nth-child(2) .way { --tilt: 0.4deg; }
+.way.is-sketched { background: none; border-color: transparent; }
+.way > .sk-bg { position: absolute; inset: -3px; z-index: -1; width: calc(100% + 6px); height: calc(100% + 6px); overflow: visible; pointer-events: none; }
+.way:hover, .way:focus-visible { transform: rotate(0deg) translateY(-3px); }
+.way:focus-visible { outline: 2px solid var(--focus); outline-offset: 4px; }
+.way-pic { display: block; width: 100%; }
+.way-pic svg { display: block; width: 100%; height: auto; overflow: visible; transition: transform var(--dur-base) var(--ease); }
+.way:hover .way-pic > svg { transform: rotate(-3deg) scale(1.06); }
+.way-text { display: grid; gap: 2px; min-width: 0; }
+.way-eyebrow { font: 500 var(--fs-2xs)/1.3 var(--mono); letter-spacing: var(--track-mono); text-transform: uppercase; color: var(--zc); }
+.way-title { font: 600 var(--fs-2xl)/1.2 var(--serif); letter-spacing: -0.01em; }
+.way-line { margin-top: 2px; font: 400 var(--fs-md)/1.45 var(--serif); color: var(--ink-2); }
+.way-go { width: 22px; height: 22px; color: var(--zc); transition: transform var(--dur-fast) var(--ease); }
+.way:hover .way-go { transform: translateX(4px); }
+/* The deep dive's picture has no kitchen: the four parts of an agent as plain icons in a row. */
+.way-pic-tech { display: grid; grid-template-columns: repeat(2, 38px); justify-content: center; gap: 4px 10px; }
+.way-pic-tech .pic-icon { width: 38px; height: 38px; }
+.way-pic-tech .pic-op { display: none; }
 
 /* ---------- Pull a term ------------------------------------------------------------------------------------ */
 .pull-grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr); gap: clamp(20px, 3vw, 40px); align-items: stretch; margin-top: 22px; }
@@ -149,25 +143,15 @@ code.ls-text { font: 500 var(--fs-sm)/1.45 var(--mono); color: var(--ink-2); }
 
 @media (max-width: 1040px) {
   .start-hero { grid-template-columns: minmax(0, 1fr); }
-  .paths { grid-template-columns: minmax(0, 1fr); }
-  .path { display: grid; grid-template-columns: 150px minmax(0, 1fr); column-gap: 18px; align-items: start; }
-  .path .pic { grid-row: 1 / span 4; margin: 0; max-width: none; align-self: center; }
-  .path-go { padding-top: 12px; }
-  /* The row of icons has to fit the 150px column of the picture. */
-  .pic-tech { gap: 2px; aspect-ratio: auto; }
-  .pic-tech .pic-icon { width: 26px; height: 26px; }
-  .pic-op { font-size: var(--fs-sm); }
   .pull-grid { grid-template-columns: minmax(0, 1fr); }
 }
+@media (max-width: 520px) {
+  .way { grid-template-columns: 76px minmax(0, 1fr); }
+  .way-go { display: none; }
+  .way-pic-tech { grid-template-columns: repeat(2, 30px); gap: 2px 6px; }
+  .way-pic-tech .pic-icon { width: 30px; height: 30px; }
+}
 @media (max-width: 760px) {
-  .paths { grid-template-columns: minmax(0, 1fr); }
-  .path { display: flex; }
-  .path .pic { max-width: 150px; margin: 0 0 4px; }
-  .path .pic-tech { max-width: none; justify-content: flex-start; }
-  .pic-tech { gap: 6px; }
-  .pic-tech .pic-icon { width: 44px; height: 44px; }
-  .pic-op { font-size: var(--fs-xl); }
-  .path-title { font-size: var(--fs-3xl); }
   .sec-title { font-size: var(--fs-3xl); }
   .pull-name { font-size: var(--fs-3xl); }
   .pull-text { font-size: var(--fs-lg); min-height: 0; }
@@ -182,12 +166,8 @@ code.ls-text { font: 500 var(--fs-sm)/1.45 var(--mono); color: var(--ink-2); }
 @media (prefers-reduced-motion: reduce) {
   .start-copy > *, .demo, .ls-new, .pull-swap { animation: none; }
   .rv { opacity: 1; transform: none; }
-  .path, .snote { transition: none; }
-  .path:hover, .path:hover .pic > svg, .path:hover .pic-icon, .path:hover .path-go .btn svg { transform: none; }
   .snote:hover, .snote:focus-visible { transform: rotate(var(--tilt, 0deg)); }
 }
 @media (forced-colors: active) {
-  .path, .demo, .pull-card, .snote { border: 1px solid CanvasText; }
-  .path-link:focus-visible::after { outline-color: Highlight; }
 }
 @media print { .bar, .skip-link { display: none; } }

@@ -10,8 +10,8 @@
   if (!sk) return;
   var h = sk.h, reduced = sk.reduced();
 
-  /* ---------- The cards of the two ways in ---------------------------------------------------- */
-  // The kitchen story's card: the chef thinking, with two options and a tick.
+  /* ---------- The pictures of the two ways in ----------------------------------------------------- */
+  // The kitchen story's tile: the chef thinking, with two options and a tick.
   var head = sk.head;
   var story = sk.$("#pic-story svg");
   if (story) sk.sketchInto(story, [
@@ -27,7 +27,7 @@
     { t: "path", a: "M184 58l6 6 10-13", sw: 2.4 }
   ], 31, { base: { r: 0.9 } });
 
-  // The deep dive's card has no kitchen picture: the four parts of an agent as plain icons (model, context, tools, loop).
+  // The deep dive's tile has no kitchen picture: the four parts of an agent as plain icons (model, context, tools, loop).
   var tech = sk.$("#pic-tech");
   if (tech) {
     [["model", "chef"], ["harness", "counter"], ["tools", "tools"], ["harness", "loop"]].forEach(function (p, i) {
@@ -35,6 +35,9 @@
       tech.appendChild(sk.doodleSvg(p[0], "pic-icon", 21 + i, undefined, p[1]));
     });
   }
+
+  // Both tiles are drawn like the notes of the guides.
+  sk.$$(".way").forEach(function (a, i) { sk.sketchBox(a, { seed: 23 + i * 17, boil: false, sw: 1.4, radius: 8, fill: "zt" }); });
 
   /* ---------- The scribble under the title ---------------------------------------------------- */
   var word = sk.$(".start-word"), scribble = sk.$(".start-scribble");
@@ -45,7 +48,7 @@
 
   /* ---------- The sections below the hero rise as they arrive ------------------------------------------ */
   if ("IntersectionObserver" in window && !reduced) {
-    sk.$$(".ways, .pull, .shelf").forEach(function (sec) {
+    sk.$$(".pull, .shelf").forEach(function (sec) {
       if (sec.getBoundingClientRect().top < window.innerHeight) return;
       sec.classList.add("rv");
       var io = new IntersectionObserver(function (es) {
