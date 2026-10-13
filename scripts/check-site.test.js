@@ -36,7 +36,7 @@ test("every shell and generated page loads files that exist and the version drop
   });
 });
 
-test("the top bar lists the same places and sections in the same order on every page, with the search in the middle", () => {
+test("the top bar lists the same places and sections in the same order on every page, with Start first", () => {
   ["index.html", "story/index.html", "glossary/skills/index.html", "guides/build/index.html", "technical/index.html"].forEach((p) => {
     const html = read(p), ids = [...html.matchAll(/data-sec="([a-z]+)"/g)].map((m) => m[1]);
     assert.deepEqual(ids, SECTIONS.concat(SECTIONS), p);

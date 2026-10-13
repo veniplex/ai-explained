@@ -1,8 +1,8 @@
 /* ==========================================================================
    AI explained: the top bar, the same on every page, and the pieces that belong to it. Loaded after the stylesheet of the page
    (style.css or kitchen.css), so it settles what they leave open. Tokens only, as in DESIGN.md.
-     - the bar: the brand, the search (a field-like button in the middle), the GitHub button with its star count, the theme button (System, Light, Dark); from 1320px
-       the five places sit on the same row, below that they move into a menu (the hamburger). Nothing in it moves from one page to the next.
+     - the bar: the brand, the search (a field-like button in the middle), the GitHub button with its star count, the theme button (System, Light, Dark); from 1340px
+       the six places sit on the same row, below that they move into a menu (the hamburger). Nothing in it moves from one page to the next.
      - the version tab: a small tab that hangs from the right edge of the bar and goes with it (on a phone the version button is at the foot of the menu)
      - the search: the button in the bar and the window it opens, with the field and the hits (search.js; the story has no search styles of its own)
      - the hover card of a term (popover.js), the button back to the top (totop.js)
@@ -48,29 +48,34 @@
    place is the ink pill (as in the menu); its weight does not change, so no word changes width. */
 .bar-links { display: flex; align-items: center; gap: 6px; }
 .bar-links a {
-  padding: 7px 12px; border: 1px solid var(--rule); border-radius: var(--r-pill); background: var(--paper-2); color: var(--ink-2); text-decoration: none; white-space: nowrap;
+  display: inline-flex; align-items: center; height: 36px; padding: 0 12px; border: 1px solid var(--rule); border-radius: var(--r-pill); background: var(--paper-2); color: var(--ink-2); text-decoration: none; white-space: nowrap;
   font: 500 var(--fs-sm)/1.2 var(--sans); transition: background-color var(--dur-fast), color var(--dur-fast), border-color var(--dur-fast);
 }
 .bar-links a:hover { background: var(--paper-3); border-color: var(--rule-strong); color: var(--ink); }
 .bar-links a:focus-visible { outline: 2px solid var(--focus); outline-offset: 1px; }
 .bar-links a[aria-current] { background: var(--ink); border-color: var(--ink); color: var(--paper); }
 @media (forced-colors: active) { .bar-links a { border-color: CanvasText; } .bar-links a[aria-current] { forced-color-adjust: none; background: Highlight; border-color: Highlight; color: HighlightText; } }
-@media (max-width: 1319px) {
+@media (max-width: 1339px) {
   .bar-links { display: none; }
   .bar-main { grid-template-columns: minmax(auto, 1fr) minmax(0, 380px) minmax(auto, 1fr); }
 }
 /* The menu is the way to the places where the bar has no room for them. */
-@media (min-width: 1320px) { .site-menu { display: none; } }
-/* From 1320px up everything is on one row: the brand, the five places in the room between (centred in it), then the search and the buttons at the right. Below that
-   the places are in the menu and the search is in the middle. */
-@media (min-width: 1320px) {
-  :root { --actions-w: 190px; } /* no menu button here, so the buttons need less room */
-  .bar-main { grid-template-columns: max-content minmax(max-content, 1fr) minmax(190px, 270px) var(--actions-w); }
+@media (min-width: 1340px) { .site-menu { display: none; } }
+/* From 1340px up everything is on one row: the brand at the left, the six places exactly in the middle of the window, and the search and the buttons at the right.
+   The two outer columns are equal (1fr each), so the places stay centred; the search takes the room the right column has left and turns into a plain magnifier
+   when that is little (the container queries below). Below 1340px the places are in the menu and the search is in the middle. */
+.bar-right { display: contents; }
+@media (min-width: 1340px) {
+  .bar-main { grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); }
   .bar-main .brand { grid-column: 1; grid-row: 1; }
   .bar-links { grid-column: 2; grid-row: 1; justify-self: center; }
-  .bar-main .search { grid-column: 3; grid-row: 1; justify-self: stretch; max-width: none; }
-  .bar-main .bar-actions { grid-column: 4; grid-row: 1; }
+  .bar-right { display: flex; grid-column: 3; grid-row: 1; align-items: center; justify-content: flex-end; gap: 12px; min-width: 0; }
+  .bar-right .search { flex: 0 1 270px; width: auto; min-width: 40px; max-width: none; container-type: inline-size; }
+  .bar-right .bar-actions { flex: none; width: auto; }
+  .bar-right .search-trigger { height: 36px; }
 }
+@container (max-width: 199px) { .search-trigger kbd { display: none; } }
+@container (max-width: 104px) { .search-trigger { width: 36px; margin-left: auto; padding: 0; justify-content: center; } .search-trigger .st-text { display: none; } }
 
 /* ---------- The GitHub button: a pill with the name and the number of stars -------------------- */
 .gh-pill {
@@ -85,10 +90,10 @@
 .gh-stars { display: inline-flex; align-items: center; gap: 4px; margin-left: 1px; padding-left: 8px; border-left: 1px solid var(--rule-strong); color: var(--ink-2); font-variant-numeric: tabular-nums; }
 .gh-stars[hidden] { display: none; }
 .gh-stars svg { width: 13px; height: 13px; flex: none; color: var(--clay); }
-@media (max-width: 1319px) { .gh-name { display: none; } .gh-pill { padding: 0 10px; min-width: 84px; } }
+@media (max-width: 1339px) { .gh-name { display: none; } .gh-pill { padding: 0 10px; min-width: 84px; } }
 @media (max-width: 400px) { .gh-stars { display: none; } .gh-pill { min-width: 0; } }
 
-/* ---------- The menu: below 1320px it holds the places the bar has no room for ----------------- */
+/* ---------- The menu: below 1340px it holds the places the bar has no room for ----------------- */
 .site-menu { position: relative; }
 .site-menu > summary { list-style: none; cursor: pointer; gap: 6px; user-select: none; }
 .site-menu > summary::-webkit-details-marker { display: none; }

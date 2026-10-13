@@ -28,7 +28,7 @@ const content = require("./site-content.js");
 const LOAD = ".";  // what the loaders of the older checkers call the folder of a version
 // The files of the site: its pages, assets and the few files at the top. Nothing of versions/, scripts/, docs/ and the other files of the repository.
 const SITE_DIRS = ["assets", "story", "technical", "glossary", "guides", "about"], SITE_TOP = ["index.html", "sw.js", "manifest.webmanifest", "DESIGN.md"];
-const SECTIONS = ["story", "technical", "guides", "glossary", "about"];
+const SECTIONS = ["start", "story", "technical", "guides", "glossary", "about"];
 const PLACES = SECTIONS;
 // The guides: the four long ones, the table, the build guide and the reading list (v4 allowed five).
 v4.LIMITS.guides = 7;
@@ -143,7 +143,7 @@ function pageChecks(root) {
     for (const m of html.matchAll(/<(?:script src|link rel="(?:stylesheet|preload)"[^>]*href)="([^"]+)"/g)) {
       if (!fs.existsSync(path.join(dir, m[1]))) err(f + ": " + m[1] + " does not exist");
     }
-    // The top bar: brand, the four places, the search, the GitHub button, the theme button, the menu (About and the version button's place).
+    // The top bar: brand, the six places (Start first), the search, the GitHub button, the theme button, the menu (About and the version button's place).
     const barLinks = (html.match(/<nav class="bar-links"[\s\S]*?<\/nav>/) || [""])[0], panel = (html.match(/<nav class="site-menu-panel"[\s\S]*?<\/nav>/) || [""])[0];
     const secsOf = (h) => Array.from(h.matchAll(/data-sec="([a-z]+)"/g)).map((m) => m[1]).join();
     if (secsOf(barLinks) !== PLACES.join()) err(f + ": the bar needs the places " + PLACES.join(", ") + " (got " + secsOf(barLinks) + ")");
@@ -166,9 +166,11 @@ function pageChecks(root) {
     if (!/<script src="(\.\.\/)*assets\/js\/github\.js"><\/script>/.test(html)) err(f + ": loads no github.js");
     const iconCount = ["theme-icon-system", "theme-icon-light", "theme-icon-dark"].filter((c) => html.includes(c)).length;
     if (iconCount !== 3) err(f + ": the theme button needs the three icons (system, light, dark)");
-    const current = (html.match(/data-sec="[a-z]+"[^>]*aria-current="page"/g) || []).length, perBar = [barLinks, panel].map((h) => (h.match(/aria-current="page"/g) || []).length);
+    const perBar = [barLinks, panel].map((h) => (h.match(/aria-current="page"/g) || []).length);
     const inBar = 1;
-    if (f === "index.html" ? current !== 0 : (perBar[1] !== 1 || perBar[0] !== inBar)) err(f + ": " + (f === "index.html" ? "the start page is in no section" : "the page's section is the current one, once in the bar and once in the menu") + " (found " + perBar.join("/") + ")");
+    if (perBar[1] !== 1 || perBar[0] !== inBar) err(f + ": the page's section is the current one, once in the bar and once in the menu (found " + perBar.join("/") + ")");
+    if (f === "index.html" && !/data-sec="start"[^>]*aria-current="page"/.test(html)) err(f + ": the start page is the current place (Start)");
+    if (f !== "index.html" && /data-sec="start"[^>]*aria-current="page"/.test(html)) err(f + ": only the start page marks Start as current");
     if (!/<script src="(\.\.\/)*versions\/versions\.js"><\/script>\s*<script src="(\.\.\/)*versions\/version-switcher\.js"><\/script>\s*<\/body>/.test(html)) err(f + ": versions.js and version-switcher.js must come last");
     if (!/<script src="[^"]*assets\/js\/search\.js"><\/script>/.test(html)) err(f + ": loads no search.js");
     if (f !== "story/index.html" && /data-mode|data-path|data-mode-set|mode-slot|class="place"/.test(html)) err(f + ": a voice or a way is fixed by the page again (no data-mode, no data-path)");
