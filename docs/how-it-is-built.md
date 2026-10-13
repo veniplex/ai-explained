@@ -50,7 +50,7 @@ The site can be installed (Chrome, Edge and other Chromium browsers; on an iPhon
 
 ## Releases and older versions
 
-The root of the repository is the current release, **1.0**. Every earlier version is a self-contained folder in `versions/`, unchanged. `versions/versions.js` is the one list of releases (newest first, the one with `main: true` is the root; each has the last name of a researcher whose work shaped AI as its codename, with the year of that work; the names run in historical order, Lovelace first); `versions/version-switcher.js` and `.css` draw the dropdown in every page, root and archived alike. `scripts/versions.test.js` fails when the list, the folders and the script tags disagree, or when an old address no longer forwards. `.claude/skills/new-version/SKILL.md` describes how the next release is cut.
+The root of the repository is the current release, **1.0**. Every earlier version is a self-contained folder in `versions/`, unchanged. `versions/versions.js` is the one list of releases (newest first, the one with `main: true` is the root; each has the last name of a researcher whose work shaped AI as its codename, with the year of that work; the names run in historical order, Lovelace first; the rule for naming a release and the queue of next names are in `docs/version-names.md`); `versions/version-switcher.js` and `.css` draw the dropdown in every page, root and archived alike. `scripts/versions.test.js` fails when the list, the folders and the script tags disagree, or when an old address no longer forwards. `.claude/skills/new-version/SKILL.md` describes how the next release is cut.
 
 ## How it is built
 

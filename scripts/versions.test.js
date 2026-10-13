@@ -50,8 +50,27 @@ test("versions.js has one main version, first, and then every folder of versions
   const names = list.map((v) => v.codename).reverse(), years = list.map((v) => v.year).reverse();
   assert.equal(new Set(names).size, names.length, "every version has a codename of its own");
   assert.ok(years.every((y) => Number.isInteger(y) && y > 1800 && y < 2100), "every version has the year of its codename's key contribution");
-  years.forEach((y, i) => { if (i) assert.ok(y > years[i - 1], names[i] + " (" + y + ") must come after " + names[i - 1] + " (" + years[i - 1] + ")"); });
+  years.forEach((y, i) => { if (i) assert.ok(y >= years[i - 1], names[i] + " (" + y + ") must not come before " + names[i - 1] + " (" + years[i - 1] + ")"); });
   assert.ok(exists("og.png") && exists("favicon.svg") && exists("versions/favicon.svg"));
+});
+
+test("docs/version-names.md keeps the next codenames: unused, in historical order, after the newest release", () => {
+  const doc = fs.readFileSync(path.join(root, "docs/version-names.md"), "utf8");
+  const block = (doc.match(/<!-- queue:start -->([\s\S]*?)<!-- queue:end -->/) || [])[1];
+  assert.ok(block, "docs/version-names.md has the queue between its queue:start and queue:end markers");
+  const rows = block.split("\n").map((l) => l.match(/^\|\s*([A-Za-z]+)\s*\|\s*(\d{4})\s*\|\s*(\S.*?)\s*\|$/)).filter(Boolean).map((m) => ({ name: m[1], year: +m[2] }));
+  assert.ok(rows.length >= 1, "at least one candidate is left; add more by the rule in docs/version-names.md");
+  const used = versions().map((v) => v.codename), newest = versions()[0];
+  const seen = new Set(used);
+  let year = newest.year;
+  rows.forEach((r) => {
+    assert.ok(/^[A-Z][A-Za-z]+$/.test(r.name), r.name + " is one capitalised word");
+    assert.ok(!seen.has(r.name), r.name + " is used already or listed twice");
+    seen.add(r.name);
+    assert.ok(r.year >= year, r.name + " (" + r.year + ") is out of historical order");
+    year = r.year;
+  });
+  ["CLAUDE.md", ".claude/skills/new-version/SKILL.md", "docs/how-it-is-built.md"].forEach((f) => assert.ok(fs.readFileSync(path.join(root, f), "utf8").includes("docs/version-names.md"), f + " points to docs/version-names.md"));
 });
 
 test("the main version is no folder of versions/, and no older version is named as the release", () => {

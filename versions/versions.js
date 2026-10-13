@@ -5,7 +5,7 @@
    guided: has the guided path (#ch-1 …), so a chapter link carries over. pages: has a page per term and per guide (terms/<id>/, guides/<id>/).
    sections: has a page per glossary term and per guide (glossary/<id>/, guides/<id>/).
    codename: the last name of a person whose work shaped AI as it is today, one word; year: the year of that key contribution. The names run in historical order as the versions come
-   (Lovelace 1843 … Vaswani 2017), researchers and scientists only. The dropdown shows the codename next to the id ("v1.0 · Vaswani"). */
+   (Lovelace 1843 … Vaswani 2017), researchers and scientists only (the rule and the next names: docs/version-names.md). The dropdown shows the codename next to the id ("v1.0 · Vaswani"). */
 window.AE_VERSIONS = {
   list: [
     { id: "v1.0", main: true, codename: "Vaswani", year: 2017, guided: true, pages: false, sections: true },
