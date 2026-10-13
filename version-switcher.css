@@ -18,6 +18,7 @@
   transition: opacity 0.16s var(--ease, ease), transform 0.2s var(--ease, ease);
 }
 .vs-menu[hidden] { display: none; }
+.vs.is-right .vs-menu { left: auto; right: 0; transform-origin: top right; }
 .vs.is-open .vs-menu { opacity: 1; transform: none; pointer-events: auto; }
 .vs-head {
   padding: 6px 10px 8px; font: 600 11px/1.2 var(--sans, system-ui, sans-serif); letter-spacing: 0.08em;
@@ -43,7 +44,7 @@
 @media (max-width: 640px) {
   /* On a phone the list hangs from the header (which is sticky, so it is the reference), as wide as the screen allows. */
   .vs { position: static; }
-  .vs-menu { left: 16px; right: 16px; top: calc(100% - 4px); width: auto; }
+  .vs-menu, .vs.is-right .vs-menu { left: 16px; right: 16px; top: calc(100% - 4px); width: auto; }
   .vs-full { display: none; }
   .vs-short { display: inline; }
 }
