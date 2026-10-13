@@ -79,7 +79,9 @@ function mentions(text, term) {
   return re.test(String(text).toLowerCase());
 }
 
-function check(v1, v3) {
+// opts.techOnly: the version has no kitchen voice for the chapters, entries, guides and small texts (v15: the kitchen is only in the story and the glossary).
+function check(v1, v3, opts) {
+  opts = opts || {};
   const errors = [];
   const err = (msg) => errors.push(msg);
   const entries = v3.entries || {};
@@ -151,7 +153,7 @@ function check(v1, v3) {
   const coreOf = (V) => wordCount(v3.hero && v3.hero.title, V.hero && V.hero.line, V.hero && V.hero.task,
     chapterIds.map((id) => { const c = (V.chapters || {})[id] || {}; return [c.title, c.problem, c.lead, c.text, c.example]; }),
     (V.recap || []).map((r) => [r.t, r.d]));
-  if (coreOf(K) > LIMITS.coreWords.kitchen) err("core path (kitchen): " + coreOf(K) + " words, limit " + LIMITS.coreWords.kitchen);
+  if (!opts.techOnly && coreOf(K) > LIMITS.coreWords.kitchen) err("core path (kitchen): " + coreOf(K) + " words, limit " + LIMITS.coreWords.kitchen);
   if (coreOf(T) > LIMITS.coreWords.tech) err("core path (technical): " + coreOf(T) + " words, limit " + LIMITS.coreWords.tech);
   if ((v3.recap || []).length !== LIMITS.recap) err("recap: expected " + LIMITS.recap + " items");
   if ((v3.guideList || []).length > LIMITS.guides) err("guides: " + v3.guideList.length + ", limit " + LIMITS.guides);
@@ -184,20 +186,21 @@ function check(v1, v3) {
   });
 
   // 8. The two voices
-  voiceChecks(v3, chapterIds, ids, err);
+  voiceChecks(v3, chapterIds, ids, err, opts);
 
   return errors;
 }
 
-function voiceChecks(v3, chapterIds, ids, err) {
+function voiceChecks(v3, chapterIds, ids, err, opts) {
+  opts = opts || {};
   const K = v3.kitchen || {}, T = v3.tech || {}, g = v3.guides || {};
   chapterIds.forEach((id) => {
-    if (!(K.chapters || {})[id]) err("kitchen.chapters." + id + ": missing"); else voice.checkKitchenChapter(id, K.chapters[id], err);
+    if (!opts.techOnly) { if (!(K.chapters || {})[id]) err("kitchen.chapters." + id + ": missing"); else voice.checkKitchenChapter(id, K.chapters[id], err); }
     if (!(T.chapters || {})[id]) err("tech.chapters." + id + ": missing"); else voice.checkTechChapter(id, T.chapters[id], err);
   });
   Object.keys(K.chapters || {}).concat(Object.keys(T.chapters || {})).forEach((id) => { if (chapterIds.indexOf(id) === -1) err("voice text for unknown chapter " + id); });
   ids.forEach((id) => {
-    if (!(K.entries || {})[id]) err("kitchen.entries." + id + ": missing"); else voice.checkKitchenEntry(id, K.entries[id], err);
+    if (!opts.techOnly) { if (!(K.entries || {})[id]) err("kitchen.entries." + id + ": missing"); else voice.checkKitchenEntry(id, K.entries[id], err); }
     const e = v3.entries[id];
     if (!e || typeof e !== "object") return;
     // The technical fields of an entry are the technical voice: no kitchen picture in them.
@@ -206,23 +209,25 @@ function voiceChecks(v3, chapterIds, ids, err) {
   Object.keys(K.entries || {}).forEach((id) => { if (ids.indexOf(id) === -1) err("kitchen.entries." + id + ": unknown entry"); });
   (g.glossary || []).forEach((t) => {
     if (!t || !t.term) return;
-    if (!(K.glossary || {})[t.term]) err("kitchen.glossary[" + t.term + "]: missing"); else voice.checkKitchenGlossaryDef(t.term, K.glossary[t.term], err);
+    if (!opts.techOnly) { if (!(K.glossary || {})[t.term]) err("kitchen.glossary[" + t.term + "]: missing"); else voice.checkKitchenGlossaryDef(t.term, K.glossary[t.term], err); }
     voice.lintTechText({ def: t.def }, "glossary[" + t.term + "]", err);
   });
   // Easily confused: the kitchen voice has a picture and a difference for each row; build: the six rungs.
-  const rows = (K.compare || {}).rows || {};
-  ((g.compare || {}).rows || []).forEach((r) => {
-    if (!rows[r.name]) err("kitchen.compare.rows[" + r.name + "]: missing");
-    else voice.lintKitchenText(rows[r.name], "kitchen.compare.rows[" + r.name + "]", err);
-  });
-  if (!(K.compare && K.compare.lede && K.compare.note)) err("kitchen.compare: needs lede and note"); else voice.lintKitchenText({ lede: K.compare.lede, note: K.compare.note }, "kitchen.compare", err);
-  const ladder = (K.build || {}).ladder || [];
-  if (ladder.length !== ((g.build || {}).ladder || []).length) err("kitchen.build.ladder: expected " + ((g.build || {}).ladder || []).length + " rungs");
-  if (!(K.build && K.build.lede && K.build.intro)) err("kitchen.build: needs lede and intro"); else voice.lintKitchenText(K.build, "kitchen.build", err);
+  if (!opts.techOnly) {
+    const rows = (K.compare || {}).rows || {};
+    ((g.compare || {}).rows || []).forEach((r) => {
+      if (!rows[r.name]) err("kitchen.compare.rows[" + r.name + "]: missing");
+      else voice.lintKitchenText(rows[r.name], "kitchen.compare.rows[" + r.name + "]", err);
+    });
+    if (!(K.compare && K.compare.lede && K.compare.note)) err("kitchen.compare: needs lede and note"); else voice.lintKitchenText({ lede: K.compare.lede, note: K.compare.note }, "kitchen.compare", err);
+    const ladder = (K.build || {}).ladder || [];
+    if (ladder.length !== ((g.build || {}).ladder || []).length) err("kitchen.build.ladder: expected " + ((g.build || {}).ladder || []).length + " rungs");
+    if (!(K.build && K.build.lede && K.build.intro)) err("kitchen.build: needs lede and intro"); else voice.lintKitchenText(K.build, "kitchen.build", err);
+  }
   ["compare", "build", "learn"].forEach((id) => { if (!((T.guides || {})[id] || {}).lede) err("tech.guides." + id + ": missing lede"); });
   voice.lintTechText({ guides: T.guides, compare: g.compare, ladder: (g.build || {}).ladder, recipe: (g.build || {}).recipe, patterns: (g.build || {}).patterns, flows: (g.build || {}).flows }, "tech", err);
   // The small texts of both voices.
-  [["kitchen", K], ["tech", T]].forEach(([name, V]) => {
+  [["kitchen", K], ["tech", T]].filter(([name]) => !(opts.techOnly && name === "kitchen")).forEach(([name, V]) => {
     const lint = name === "kitchen" ? voice.lintKitchenText : voice.lintTechText;
     if (!V.hero || !V.hero.line || !V.hero.task) err(name + ".hero: needs line and task");
     if (!Array.isArray(V.recap) || V.recap.length !== LIMITS.recap) err(name + ".recap: expected " + LIMITS.recap + " items");

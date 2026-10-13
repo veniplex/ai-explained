@@ -1,0 +1,74 @@
+/* ==========================================================================
+   AI explained (v15): the start page. Two ways in side by side, a card each, then a way to the guides and the glossary. Uses the tokens
+   and the shared pieces of style.css (.bar, .btn, .eyebrow, .pic, data-zone); the prefixes here are start and path. Tokens only, as in DESIGN.md.
+   ========================================================================== */
+
+.start { max-width: 1120px; margin: 0 auto; padding-block: clamp(24px, 6vh, 64px) 48px; }
+.start-head { max-width: 46rem; }
+.start-head .eyebrow { color: var(--clay-ink); }
+.start-title { margin-top: 12px; font: 600 clamp(var(--fs-5xl), 5vw, calc(var(--fs-5xl) * 1.5))/1.06 var(--serif); letter-spacing: -0.025em; }
+.start-line { margin-top: 16px; font: 400 clamp(var(--fs-lg), 1.7vw, var(--fs-2xl))/1.5 var(--serif); color: var(--ink-2); }
+
+.paths { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(16px, 2.4vw, 28px); margin-top: clamp(24px, 5vh, 44px); }
+.path {
+  position: relative; display: flex; flex-direction: column; padding: clamp(16px, 2vw, 24px);
+  background: var(--surface); border: 1px solid var(--rule-strong); border-radius: var(--r-xl);
+  transition: border-color var(--dur-fast), box-shadow var(--dur-fast), transform var(--dur-fast);
+}
+.path:hover { border-color: var(--zc, var(--ink-3)); box-shadow: var(--shadow); transform: translateY(-2px); }
+.path:focus-within { border-color: var(--zc, var(--ink-3)); }
+.path .pic { max-width: 250px; width: 100%; margin: 0 auto 8px; }
+.path .eyebrow { color: var(--zc, var(--ink-3)); }
+.path-title { margin-top: 6px; font: 600 var(--fs-4xl)/1.15 var(--serif); letter-spacing: -0.015em; }
+/* The whole card is the link: the link of the title stretches over it. */
+.path-link { color: inherit; text-decoration: none; }
+.path-link::after { content: ""; position: absolute; inset: 0; border-radius: inherit; }
+.path-link:focus-visible { outline: none; }
+.path-link:focus-visible::after { outline: 2px solid var(--focus); outline-offset: 3px; }
+.path-text { margin-top: 10px; font: 400 var(--fs-lg)/1.55 var(--serif); color: var(--ink-2); }
+.path-go { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-top: auto; padding-top: 20px; }
+.path-go .btn { min-height: 46px; padding-inline: 20px; font-size: var(--fs-base); pointer-events: none; }
+.path-go .btn svg { width: 18px; height: 18px; }
+.path:hover .path-go .btn { background: var(--ink-hover); border-color: var(--ink-hover); }
+.path-note { font: 400 var(--fs-sm)/1.3 var(--sans); color: var(--ink-3); }
+
+/* The deep dive card: the four parts of an agent as plain icons in a row, instead of a kitchen picture. */
+.pic-tech { display: flex; align-items: center; justify-content: center; gap: 6px; aspect-ratio: 240 / 160; }
+.pic-tech .pic-icon { width: 44px; height: 44px; flex: none; }
+.pic-op { font: 500 var(--fs-xl)/1 var(--mono); color: var(--ink-3); }
+
+/* Guides and glossary: not a way of reading, so not a card. */
+.start-more { margin-top: clamp(28px, 6vh, 52px); padding-top: 24px; border-top: 1px solid var(--rule); }
+.start-more-title { font: 600 var(--fs-xl)/1.2 var(--serif); }
+.start-more-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 14px 0 0; padding: 0; list-style: none; }
+.start-more-list a {
+  display: grid; gap: 4px; padding: 14px 16px; height: 100%; color: inherit; text-decoration: none;
+  background: var(--surface); border: 1px solid var(--rule-strong); border-radius: var(--r-lg);
+  transition: border-color var(--dur-fast), box-shadow var(--dur-fast);
+}
+.start-more-list a:hover { border-color: var(--ink-3); box-shadow: var(--shadow); }
+.start-more-list b { font: 600 var(--fs-lg)/1.25 var(--serif); }
+.start-more-list span { font: 400 var(--fs-md)/1.45 var(--sans); color: var(--ink-3); }
+
+@media (max-width: 1040px) {
+  .paths { grid-template-columns: minmax(0, 1fr); }
+  .path { display: grid; grid-template-columns: 150px minmax(0, 1fr); column-gap: 18px; align-items: start; }
+  .path .pic { grid-row: 1 / span 4; margin: 0; max-width: none; align-self: center; }
+  .path-go { padding-top: 12px; }
+}
+@media (max-width: 760px) {
+  .start-more-list { grid-template-columns: minmax(0, 1fr); }
+  .paths { grid-template-columns: minmax(0, 1fr); }
+  .path { display: flex; }
+  .path .pic { max-width: 150px; margin: 0 0 4px; }
+  .path-title { font-size: var(--fs-3xl); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .path { transition: none; }
+  .path:hover { transform: none; }
+}
+@media (forced-colors: active) {
+  .path { border: 1px solid CanvasText; }
+  .path-link:focus-visible::after { outline-color: Highlight; }
+}
+@media print { .bar, .skip-link { display: none; } }
