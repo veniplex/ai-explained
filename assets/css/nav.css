@@ -2,7 +2,7 @@
    AI explained: the top bar, the same on every page, and the pieces that belong to it. Loaded after the stylesheet of the page
    (style.css or kitchen.css), so it settles what they leave open. Tokens only, as in DESIGN.md.
      - the bar: the brand, the search (a field-like button in the middle), the GitHub button with its star count, the theme button (System, Light, Dark); from 1320px
-       the five places sit on a second row, below that they move into a menu (the hamburger). Nothing in it moves from one page to the next.
+       the five places sit on the same row, below that they move into a menu (the hamburger). Nothing in it moves from one page to the next.
      - the version tab: a small tab that hangs from the right edge of the bar and goes with it (on a phone the version button is at the foot of the menu)
      - the search: the button in the bar and the window it opens, with the field and the hits (search.js; the story has no search styles of its own)
      - the hover card of a term (popover.js), the button back to the top (totop.js)
@@ -12,10 +12,9 @@
 :root {
   --bar-main-h: 60px;
   --actions-w: 232px; /* the room of the GitHub button, the theme button and the menu */
-  --sec-h: 0px;
   --inset-l: env(safe-area-inset-left, 0px);  /* the notch of a phone held sideways (the page is set to cover the screen) */
   --inset-r: env(safe-area-inset-right, 0px);
-  --bar-h: calc(var(--bar-main-h) + var(--sec-h));
+  --bar-h: var(--bar-main-h);
   --z-search: 60;   /* the list of hits, above the menus */
   --z-pop: 70;      /* the hover card, above everything but the skip link */
   --scrim: rgba(20, 20, 19, 0.5); /* what dims the page behind the search window */
@@ -63,15 +62,15 @@
 }
 /* The menu is the way to the places where the bar has no room for them. */
 @media (min-width: 1320px) { .site-menu { display: none; } }
-/* From 1320px up the bar has two rows: the brand, the search and the buttons on the first, with the search exactly in the middle of the window, and the five places
-   centred on the second. (Five long labels and a centred search do not fit side by side on a laptop.) */
+/* From 1320px up everything is on one row: the brand, the search right next to it, the five places in the space that is left (centred in it) and the buttons at the
+   right. Below that the places are in the menu and the search is in the middle. */
 @media (min-width: 1320px) {
-  :root { --sec-h: 40px; }
-  .bar-main { height: var(--bar-h); grid-template-columns: minmax(0, 1fr) minmax(0, 380px) minmax(0, 1fr); grid-template-rows: var(--bar-main-h) var(--sec-h); }
+  :root { --actions-w: 190px; } /* no menu button here, so the buttons need less room */
+  .bar-main { grid-template-columns: max-content minmax(190px, 270px) minmax(max-content, 1fr) var(--actions-w); }
   .bar-main .brand { grid-column: 1; grid-row: 1; }
-  .bar-main .search { grid-column: 2; grid-row: 1; }
-  .bar-main .bar-actions { grid-column: 3; grid-row: 1; }
-  .bar-links { grid-column: 1 / -1; grid-row: 2; justify-self: center; align-self: start; }
+  .bar-main .search { grid-column: 2; grid-row: 1; justify-self: stretch; max-width: none; }
+  .bar-links { grid-column: 3; grid-row: 1; justify-self: center; }
+  .bar-main .bar-actions { grid-column: 4; grid-row: 1; }
 }
 
 /* ---------- The GitHub button: a pill with the name and the number of stars -------------------- */
