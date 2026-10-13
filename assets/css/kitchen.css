@@ -302,8 +302,10 @@ img { max-width: 100%; }
 }
 .brand { display: flex; align-items: center; gap: 12px; min-width: 0; color: var(--ink); text-decoration: none; }
 .brand-mark { width: 30px; height: 30px; flex: none; }
-.brand-ring { fill: none; stroke: var(--ink); stroke-width: 2.4; stroke-linecap: round; }
-.brand-dot { fill: var(--clay); }
+.brand-line { fill: none; stroke: var(--ink); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.brand-node-fill { fill: var(--surface); stroke: none; }
+.brand-core { fill: var(--clay); stroke: none; }
+.brand-core-edge { fill: none; stroke: var(--clay); stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round; }
 .brand-title { font: 600 var(--fs-xl)/1.1 var(--serif); letter-spacing: -0.01em; white-space: nowrap; margin: 0; }
 .brand-title em { font-style: italic; font-weight: 500; }
 .brand-sub {
