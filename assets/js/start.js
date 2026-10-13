@@ -89,13 +89,23 @@
   ];
 
   var elGoals = sk.$("#demo-goals"), elLog = sk.$("#demo-log"), elReplay = sk.$("#demo-replay"), elStatus = sk.$("#demo-status");
+  // Every run is also laid out, unseen, in the cell of the log: the box takes the height of the longest one (at the width it has) and never grows while a run plays.
+  function reserveRoom() {
+    var box = sk.$("#demo-logbox");
+    if (!box) return;
+    RUNS.forEach(function (run) {
+      var ghost = h("ol", { class: "ls-ghost", "aria-hidden": "true" });
+      run.steps.forEach(function (st) { addStep(st, true, ghost); });
+      box.appendChild(ghost);
+    });
+  }
   var goalBtns = [], current = 0, token = 0, timer = 0, started = false;
 
-  function addStep(step, instant) {
+  function addStep(step, instant, into) {
     var li = h("li", { class: "ls ls-" + step[0] + (instant ? "" : " ls-new"), "data-zone": ZONES[step[0]] },
       h("span", { class: "ls-kind" }, KINDS[step[0]]),
       step[0] === "act" ? h("code", { class: "ls-text" }, step[1]) : h("span", { class: "ls-text" }, step[1]));
-    elLog.appendChild(li);
+    (into || elLog).appendChild(li);
   }
 
   function finish(run) {
@@ -123,6 +133,7 @@
   }
 
   if (elGoals && elLog) {
+    reserveRoom();
     RUNS.forEach(function (r, i) {
       var b = h("button", { class: "chip demo-goal", type: "button", "aria-pressed": "false", "data-zone": ["harness", "tools", "know"][i], onclick: function () { play(i); } }, r.goal);
       goalBtns.push(b);

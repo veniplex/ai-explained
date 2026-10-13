@@ -38,11 +38,14 @@
 .demo-goal[aria-pressed="true"] { border-color: var(--zc); background: color-mix(in srgb, var(--zm) 45%, var(--zt)); color: var(--ink); }
 .demo-goal:focus-visible, .pull-chips .chip:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 
-/* The log: one line for every step, the newest at the bottom. */
-.demo-log {
-  min-height: 15.5em; margin: 14px 0 0; padding: 10px; list-style: none; display: grid; align-content: start; gap: 6px;
-  background: var(--paper); border: 1px solid var(--rule); border-radius: var(--r-lg); scrollbar-width: thin;
+/* The log: one line for every step, the newest at the bottom. The box is as high as the longest run from the start (the runs sit unseen in the same
+   cell, see start.js), so it never grows while a run plays. */
+.demo-logbox {
+  display: grid; margin: 14px 0 0; padding: 10px;
+  background: var(--paper); border: 1px solid var(--rule); border-radius: var(--r-lg);
 }
+.demo-logbox > ol { grid-area: 1 / 1; margin: 0; padding: 0; list-style: none; display: grid; align-content: start; gap: 6px; min-width: 0; }
+.demo-logbox > .ls-ghost { visibility: hidden; pointer-events: none; }
 .ls { display: grid; grid-template-columns: 4.9rem minmax(0, 1fr); gap: 10px; align-items: baseline; padding: 6px 8px; border-radius: var(--r-md); }
 .ls-new { animation: start-rise var(--dur-base) var(--ease) both; }
 .ls-kind { font: 600 var(--fs-2xs)/1.4 var(--mono); letter-spacing: var(--track-mono); text-transform: uppercase; color: var(--zc); }
