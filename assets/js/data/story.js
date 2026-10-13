@@ -19,7 +19,7 @@
     { n: 7, id: "helpers", hash: "ch-7", zone: "orch", title: "Helpers and the night shift", short: "7" },
     { n: 8, id: "kitchen-ops", hash: "ch-8", zone: "ops", title: "Running the kitchen", short: "8" },
     { n: 9, id: "end", hash: "ch-e", zone: "start", title: "The whole kitchen", short: "End" },
-    { n: 10, id: "names", hash: "map", zone: "start", title: "The real names", short: "Names" }
+    { n: 10, id: "names", hash: "map", zone: "start", title: "The real names", short: "Technical" }
   ];
 
   var HOME = [375, 652], COUNTER = [710, 652], TOOLS = [1050, 652], LOCKS = [1330, 652];
