@@ -61,17 +61,26 @@
         <a href="about/" data-sec="about">About</a>
       </nav>
       <div class="search" id="search" role="search">
-        <button class="icon-btn search-open" type="button" id="search-open" aria-label="Search the whole site" aria-controls="site-search" aria-expanded="false">
+        <button class="search-trigger" type="button" id="search-open" aria-label="Search the whole site" aria-haspopup="dialog" aria-expanded="false" aria-controls="search-modal">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg>
+          <span class="st-text">Search the whole site…</span>
+          <kbd aria-hidden="true">Ctrl K</kbd>
         </button>
-        <div class="search-field">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg>
-          <label class="visually-hidden" for="site-search">Search the whole site</label>
-          <input id="site-search" type="search" placeholder="Search the whole site…" autocomplete="off" spellcheck="false" aria-controls="search-results" aria-describedby="search-status">
-          <kbd aria-hidden="true">/</kbd>
+        <div class="sm" id="search-modal" role="dialog" aria-modal="true" aria-label="Search the whole site" hidden>
+          <div class="sm-backdrop"></div>
+          <div class="sm-panel">
+            <div class="sm-field">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg>
+              <label class="visually-hidden" for="site-search">Search the whole site</label>
+              <input id="site-search" type="search" placeholder="Search the whole site…" autocomplete="off" spellcheck="false" aria-controls="search-results" aria-describedby="search-status">
+              <button class="sm-close" type="button" id="search-close" aria-label="Close the search"><span aria-hidden="true">Esc</span></button>
+            </div>
+            <ul class="search-results" id="search-results" hidden></ul>
+            <p class="sm-hint" id="search-hint">Type to search the glossary, the guides and the chapters.</p>
+            <p class="sm-keys" aria-hidden="true"><span><kbd>↑</kbd><kbd>↓</kbd> choose</span><span><kbd>↵</kbd> open</span><span><kbd>Esc</kbd> close</span></p>
+            <p class="visually-hidden" id="search-status" aria-live="polite"></p>
+          </div>
         </div>
-        <ul class="search-results" id="search-results" hidden></ul>
-        <p class="visually-hidden" id="search-status" aria-live="polite"></p>
       </div>
       <div class="bar-actions">
         <a class="gh-pill" id="gh-pill" href="https://github.com/veniplex/ai-explained" target="_blank" rel="noopener" aria-label="AI explained on GitHub" title="AI explained on GitHub">

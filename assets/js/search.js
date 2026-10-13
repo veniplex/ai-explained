@@ -1,14 +1,20 @@
-/* AI explained: the search in the middle of the top bar, the same on every page. It searches all of it: the glossary (every term has its own page), the chapters
-   of the deep dive, the guides and the chapters of the kitchen story. The index (data/search-index.js, written by scripts/build-pages.js from the content
-   files) is loaded the first time the field is used, so no page pays for it before. Keys: / opens the field, Enter opens the first hit, the arrow keys
-   choose, Esc closes. Plain ES5, no frameworks. */
+/* AI explained: the search. The top bar holds a field-like button in the middle; it opens a window that floats over the page (a modal dialog, full screen on a
+   phone) with the field and the hits. It searches all of the site: the glossary (every term has its own page), the chapters of the deep dive, the guides and the
+   chapters of the kitchen story. The index (data/search-index.js, written by scripts/build-pages.js from the content files) is loaded the first time the window
+   opens, so no page pays for it before. Keys: / and Ctrl or Cmd + K open it, Enter opens the first hit, the arrow keys choose, Esc closes. Plain ES5, no frameworks. */
 (function () {
   "use strict";
 
   var body = document.body, wrap = document.getElementById("search");
   if (!wrap) return;
-  var input = document.getElementById("site-search"), list = document.getElementById("search-results"), status = document.getElementById("search-status"), openBtn = document.getElementById("search-open");
-  if (!input || !list) return;
+  var input = document.getElementById("site-search"), list = document.getElementById("search-results"), status = document.getElementById("search-status"), openBtn = document.getElementById("search-open"),
+    modal = document.getElementById("search-modal"), hint = document.getElementById("search-hint"), closeBtn = document.getElementById("search-close");
+  if (!input || !list || !modal || !openBtn) return;
+  // The window sits directly in the body, so no part of the bar (its stacking, its sticky position) can hold it back.
+  document.body.appendChild(modal);
+  var mac = /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent || "");
+  var kbd = openBtn.querySelector("kbd");
+  if (kbd) kbd.textContent = mac ? "⌘K" : "Ctrl K";
   var BASE = body.getAttribute("data-base") || "";
 
   function norm(x) { return String(x || "").toLowerCase().normalize("NFKD").replace(/[̀-ͯ]/g, ""); }
@@ -80,10 +86,11 @@
   }
 
   /* ---------- The list ----------------------------------------------------------------- */
-  var hits = [];
+  var hits = [], isOpen = false, lastFocus = null;
   function render() {
     while (list.firstChild) list.removeChild(list.firstChild);
     var q = input.value.trim();
+    if (hint) hint.hidden = !!q;
     if (!q) { list.hidden = true; status.textContent = ""; return; }
     if (failed) list.appendChild(el("li", "sr-empty", "The search could not load. The glossary and the guides in the menu list everything."));
     else if (!docs) list.appendChild(el("li", "sr-empty", "Searching…"));
@@ -106,6 +113,7 @@
     status.textContent = failed ? "The search could not load." : !docs ? "Searching." : !hits.length ? "Nothing matches." :
       shown + (shown === 1 ? " match" : " matches") + (hits.length > shown ? " shown, " + (hits.length - shown) + " more" : "") + ". Press Enter to open the first, or the down arrow to choose.";
   }
+  // The deep dive's map marks the terms that match while the window is open (app.js listens).
   function announce(on) {
     var ids = on ? hits.filter(function (x) { return x.entry; }).map(function (x) { return x.entry; }) : [];
     try { document.dispatchEvent(new CustomEvent("ae:search", { detail: { ids: ids, on: on } })); } catch (e) { /* old browser */ }
@@ -118,28 +126,46 @@
     announce(on && !!docs);
     render();
   }
-  function clearIt() { input.value = ""; hits = []; announce(false); render(); }
 
-  // The magnifier button (narrow screens) shows and hides the field; aria-expanded follows.
-  function setOpen(open) { wrap.classList.toggle("is-open", open); if (openBtn) openBtn.setAttribute("aria-expanded", open ? "true" : "false"); }
-  function closeUI() { setOpen(false); list.hidden = true; }
+  /* ---------- The window --------------------------------------------------------------- */
+  function open() {
+    if (isOpen) { input.focus(); input.select(); return; }
+    isOpen = true;
+    lastFocus = document.activeElement && document.activeElement !== document.body ? document.activeElement : openBtn;
+    modal.hidden = false;
+    document.documentElement.classList.add("sm-open");
+    openBtn.setAttribute("aria-expanded", "true");
+    load();
+    if (input.value.trim()) run(); else render();
+    input.focus();
+    input.select();
+  }
+  function close(restore) {
+    if (!isOpen) return;
+    isOpen = false;
+    modal.hidden = true;
+    document.documentElement.classList.remove("sm-open");
+    openBtn.setAttribute("aria-expanded", "false");
+    announce(false);
+    if (restore !== false && lastFocus && lastFocus.focus) lastFocus.focus();
+  }
 
-  setOpen(false);
+  openBtn.addEventListener("click", open);
+  if (closeBtn) closeBtn.addEventListener("click", function () { close(); });
+  modal.querySelector(".sm-backdrop").addEventListener("click", function () { close(); });
   input.addEventListener("input", run);
-  input.addEventListener("focus", function () { load(); if (input.value.trim()) render(); });
-  // Some browsers do not focus a link on mousedown, so the field's focusout would hide the list before the click lands.
+  // Some browsers do not focus a link on mousedown, so a click on a hit would first take the focus away from the field.
   list.addEventListener("mousedown", function (e) { e.preventDefault(); });
+  // A hit that leads to the page you are on (only the # changes) leaves the window open otherwise.
+  list.addEventListener("click", function (e) { if (e.target.closest && e.target.closest("a") && !e.defaultPrevented) close(false); });
+
   input.addEventListener("keydown", function (e) {
     if (e.key === "ArrowDown") {
       var first = list.querySelector("a");
       if (first) { first.focus(); e.preventDefault(); }
     } else if (e.key === "Enter") {
-      if (hits[0]) location.href = hits[0].href;
+      if (hits[0]) { var href = hits[0].href; close(false); location.href = href; }
       e.preventDefault();
-    } else if (e.key === "Escape") {
-      clearIt(); closeUI();
-      if (openBtn && getComputedStyle(openBtn).display !== "none") openBtn.focus(); else input.blur();
-      e.stopPropagation();
     }
   });
   list.addEventListener("keydown", function (e) {
@@ -149,26 +175,25 @@
       var n = k + (e.key === "ArrowDown" ? 1 : -1);
       if (n < 0) input.focus(); else if (items[n]) items[n].focus();
       e.preventDefault();
-    } else if (e.key === "Escape") { input.focus(); e.stopPropagation(); e.preventDefault(); }
+    }
   });
-  wrap.addEventListener("focusout", function (e) {
-    if (e.relatedTarget && wrap.contains(e.relatedTarget)) return;
-    setTimeout(function () { if (!wrap.contains(document.activeElement)) list.hidden = true; }, 0);
+  // Tab stays inside the window while it is open. No other key leaves it: the kitchen story steps on the arrow keys and Space, and must not while you search.
+  modal.addEventListener("keydown", function (e) {
+    e.stopPropagation();
+    if (e.key !== "Tab") return;
+    var items = Array.prototype.slice.call(modal.querySelectorAll("input, button, a[href]")).filter(function (x) { return !x.disabled && x.offsetParent !== null; });
+    if (!items.length) return;
+    var firstEl = items[0], lastEl = items[items.length - 1];
+    if (e.shiftKey && document.activeElement === firstEl) { lastEl.focus(); e.preventDefault(); }
+    else if (!e.shiftKey && document.activeElement === lastEl) { firstEl.focus(); e.preventDefault(); }
   });
-  if (openBtn) openBtn.addEventListener("click", function () {
-    var open = !wrap.classList.contains("is-open");
-    setOpen(open);
-    if (open) input.focus(); else clearIt();
-  });
-  document.addEventListener("pointerdown", function (e) {
-    if (!wrap.contains(e.target)) { list.hidden = true; if (!input.value) setOpen(false); }
-  });
+
   document.addEventListener("keydown", function (e) {
-    var t = e.target, typing = t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable);
+    if (e.key === "Escape" && isOpen) { close(); e.preventDefault(); e.stopPropagation(); return; }
+    if ((e.ctrlKey || e.metaKey) && !e.altKey && !e.shiftKey && (e.key === "k" || e.key === "K")) { e.preventDefault(); open(); return; }
+    var t = e.target, typing = t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.tagName === "SELECT" || t.isContentEditable);
     if (typing || e.key !== "/" || e.ctrlKey || e.metaKey || e.altKey) return;
     e.preventDefault();
-    var field = wrap.querySelector(".search-field");
-    if (field && getComputedStyle(field).display === "none") setOpen(true);
-    input.focus();
-  });
+    open();
+  }, true);
 })();

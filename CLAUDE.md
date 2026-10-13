@@ -40,7 +40,7 @@ A static, hand-drawn interactive map of agentic AI, published with GitHub Pages.
 ## Hard constraints
 
 - **No external requests.** No CDNs, web fonts, analytics or embeds. Self-host everything under `assets/`; videos are plain links. A PreToolUse hook blocks edits that load remote resources. The one exception, from v0.16-alpha on, is the star count on the GitHub pill: `assets/js/github.js` makes one GET to GitHub's public API (`api.github.com`, no cookies, hidden when it fails); `check-v16.js`, `check-v17.js` and `check-site.js` allow exactly that address in exactly that file and fails on any other `fetch`.
-- Accessibility promises: works with the keyboard alone (`/` focuses search, `Esc` closes; in v1, arrow keys step through the walkthrough and story), respects reduced motion, light and dark themes.
+- Accessibility promises: works with the keyboard alone (`/` or Ctrl/Cmd+K opens the search window, `Esc` closes; in v1, arrow keys step through the walkthrough and story), respects reduced motion, light and dark themes.
 - Deep links are public URLs: v0.1-alpha's `#block-<id>`, `#zone-<id>`, `#link-<id>`, `#step-<n>`, `#<guide>` and v3's, v4's, v5's, v6's, v7's, v8's, v9's, v10's, v11's, v12's and v13's, v14's, v15's, v16's and v17's (and the release's) `#ch-<n>`, `#ch-e`, `#map`, `#e-<id>`, `#guide-<id>`. Don't rename ids without a reason. The addresses `/vN-alpha/…` of the versions before the renaming keep working through `404.html`.
 
 ## Privacy (public repository)
