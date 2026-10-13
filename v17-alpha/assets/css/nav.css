@@ -2,7 +2,7 @@
    AI explained (v17): the top bar, the same on every page, and the pieces that belong to it. Loaded after the stylesheet of the page
    (style.css or kitchen.css), so it settles what they leave open. Tokens only, as in DESIGN.md.
      - the bar is one row: the brand, the five places (kitchen story, deep dive, guides, glossary, about), the search, the GitHub button with its star count, the
-       theme button (System, Light, Dark). Below 1260px the places move into a menu (the hamburger). Nothing in it moves from one page to the next.
+       theme button (System, Light, Dark). Below 1320px the places move into a menu (the hamburger). Nothing in it moves from one page to the next.
      - the version tab: a small tab that hangs from the right edge of the bar and goes with it (on a phone the version button is at the foot of the menu)
      - the search field and its list (the story has no search styles of its own)
      - the hover card of a term (popover.js), the button back to the top (totop.js)
@@ -42,21 +42,24 @@
 .bar .site-menu > summary { padding-inline: 12px; }
 .bar-main .search { justify-self: center; width: 100%; max-width: 380px; min-width: 0; }
 .bar-main .bar-actions { justify-self: end; margin-left: 0; gap: 4px; justify-content: flex-end; width: 100%; }
-.bar-links { display: flex; align-items: center; gap: 0; }
+/* Each place is a pill of its own, so a long label with a colon in it ("AI Agents: Technical Deep Dive") reads as one item and not as several. The current
+   place is the ink pill (as in the menu); its weight does not change, so no word changes width. */
+.bar-links { display: flex; align-items: center; gap: 6px; }
 .bar-links a {
-  padding: 7px 10px; border-radius: var(--r-pill); color: var(--ink-2); text-decoration: none; white-space: nowrap;
-  font: 500 var(--fs-sm)/1.2 var(--sans); transition: background-color var(--dur-fast), color var(--dur-fast);
+  padding: 7px 12px; border: 1px solid var(--rule); border-radius: var(--r-pill); background: var(--paper-2); color: var(--ink-2); text-decoration: none; white-space: nowrap;
+  font: 500 var(--fs-sm)/1.2 var(--sans); transition: background-color var(--dur-fast), color var(--dur-fast), border-color var(--dur-fast);
 }
-.bar-links a:hover { background: var(--paper-2); color: var(--ink); }
+.bar-links a:hover { background: var(--paper-3); border-color: var(--rule-strong); color: var(--ink); }
 .bar-links a:focus-visible { outline: 2px solid var(--focus); outline-offset: 1px; }
-.bar-links a[aria-current] { color: var(--ink); text-decoration: underline 2px var(--clay); text-underline-offset: 9px; }
+.bar-links a[aria-current] { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+@media (forced-colors: active) { .bar-links a { border-color: CanvasText; } .bar-links a[aria-current] { forced-color-adjust: none; background: Highlight; border-color: Highlight; color: HighlightText; } }
 @media (max-width: 1499px) { .bar .brand-tail { display: none; } }
-@media (max-width: 1259px) {
+@media (max-width: 1319px) {
   .bar-links { display: none; }
   .bar-main { grid-template-columns: auto minmax(0, 1fr) var(--actions-w); }
 }
 /* The menu is the way to the places where the bar has no room for them. */
-@media (min-width: 1260px) { .site-menu { display: none; } }
+@media (min-width: 1320px) { .site-menu { display: none; } }
 
 /* ---------- The GitHub button: a pill with the name and the number of stars -------------------- */
 .gh-pill {
@@ -64,16 +67,17 @@
   background: var(--surface); color: var(--ink); text-decoration: none; font: 500 var(--fs-sm)/1 var(--sans);
   transition: background-color var(--dur-fast), border-color var(--dur-fast);
 }
+.gh-pill { justify-content: center; min-width: 140px; } /* the width it has with the count, so the count arriving (or not) changes nothing */
 .gh-pill:hover { background: var(--paper-2); border-color: var(--ink-3); }
 .gh-pill:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 .gh-mark { width: 17px; height: 17px; flex: none; }
 .gh-stars { display: inline-flex; align-items: center; gap: 4px; margin-left: 1px; padding-left: 8px; border-left: 1px solid var(--rule-strong); color: var(--ink-2); font-variant-numeric: tabular-nums; }
 .gh-stars[hidden] { display: none; }
 .gh-stars svg { width: 13px; height: 13px; flex: none; color: var(--clay); }
-@media (max-width: 1259px) { .gh-name { display: none; } .gh-pill { padding: 0 10px; } }
-@media (max-width: 400px) { .gh-stars { display: none; } }
+@media (max-width: 1319px) { .gh-name { display: none; } .gh-pill { padding: 0 10px; min-width: 84px; } }
+@media (max-width: 400px) { .gh-stars { display: none; } .gh-pill { min-width: 0; } }
 
-/* ---------- The menu: below 1260px it holds the places the bar has no room for ----------------- */
+/* ---------- The menu: below 1320px it holds the places the bar has no room for ----------------- */
 .site-menu { position: relative; }
 .site-menu > summary { list-style: none; cursor: pointer; gap: 6px; user-select: none; }
 .site-menu > summary::-webkit-details-marker { display: none; }
