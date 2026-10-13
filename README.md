@@ -118,6 +118,10 @@ Every page has a version dropdown in its top bar. It lists all releases by numbe
 - Fonts DM Sans, DM Mono and Source Serif 4 by their project authors, under the SIL Open Font Licence (copies in `assets/fonts/`). They are self-hosted.
 - The sources behind every claim are linked on the pages themselves.
 
+## Licence
+
+[Creative Commons Attribution-NonCommercial 4.0](LICENSE) (CC BY-NC 4.0): you may share and adapt everything here, with credit to the project ("AI explained" and a link to this repository), but not for commercial purposes. The third-party files in `assets/vendor/` and `assets/fonts/` keep their own licences.
+
 ## Contributing
 
 Corrections are welcome, especially facts that have gone out of date. Open an issue or a pull request, and run `node scripts/check-site.js` first. Please keep personal information out of anything you submit: this repository is public.

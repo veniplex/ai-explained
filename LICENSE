@@ -1,0 +1,29 @@
+AI explained
+Copyright (c) 2026 the AI explained contributors
+
+This work, its text, drawings, code and pages, is licensed under the
+Creative Commons Attribution-NonCommercial 4.0 International licence
+(CC BY-NC 4.0, SPDX identifier CC-BY-NC-4.0).
+
+The full legal text is at
+https://creativecommons.org/licenses/by-nc/4.0/legalcode
+and a plain-language summary is at
+https://creativecommons.org/licenses/by-nc/4.0/
+
+In short, you are free to
+  - share: copy and redistribute it in any medium or format, and
+  - adapt: remix, transform and build upon it,
+under these terms:
+  - Attribution: you must give appropriate credit (name the project,
+    "AI explained", and link to https://github.com/veniplex/ai-explained),
+    provide a link to the licence, and indicate if changes were made.
+  - NonCommercial: you may not use it for commercial purposes.
+
+Third-party files keep their own licences and are not covered by the licence
+above: rough.js (MIT, assets/vendor/) and the fonts DM Sans, DM Mono and
+Source Serif 4 (SIL Open Font Licence, assets/fonts/). Their licence texts sit
+next to them.
+
+Please note that a NonCommercial licence is not an "open source" licence in
+the sense of the Open Source Definition: the source is public and free to read,
+share and adapt, but not for commercial use.
