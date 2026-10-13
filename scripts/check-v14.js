@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/* Content checks for v14-alpha: the kitchen story, the kitchen deep dive and the technical deep dive in one version.
+/* Content checks for v0.14-alpha: the kitchen story, the kitchen deep dive and the technical deep dive in one version.
    - the content: the rules of check-v4.js (both voices, word budgets, links, sources), without the v1 mapping v14 no longer has;
    - the story: the rules of check-v9.js (steps, things, voice of every caption, names over the kitchen);
    - the glossary and the long guides (v14-content.js): every term has an icon that icons.js draws, a kitchen sentence and links that resolve;
@@ -20,7 +20,7 @@ const v4 = require("./check-v4.js");
 const build = require("./build-v14-pages.js");
 const content = require("./v14-content.js");
 
-const DIR = "v14-alpha";
+const DIR = "versions/v0.14-alpha";
 const SECTIONS = ["story", "kitchen", "technical", "guides", "glossary", "about"];
 // The guides of v14: the four long ones, the table, the build guide and the reading list (v4 allowed five).
 v4.LIMITS.guides = 7;
@@ -87,7 +87,7 @@ function selfContained(root) {
   const errors = [];
   walk(path.join(root, DIR)).filter((f) => /\.(html|js|css|md)$/.test(f)).forEach((f) => {
     const rel = path.relative(root, f), text = fs.readFileSync(f, "utf8");
-    const named = (text.match(/\bv\d+-(alpha|beta)\b/g) || []).filter((v) => v !== DIR);
+    const named = (text.match(/\bv\d+(?:\.\d+)*-(alpha|beta)\b/g) || []).filter((v) => v !== path.basename(DIR));
     if (named.length) errors.push(rel + ": names another version (" + Array.from(new Set(named)).join(", ") + ")");
     if (/\.html$/.test(f)) {
       for (const m of text.matchAll(/(?:href|src)="((?:\.\.\/)+)([^"]*)"/g)) {

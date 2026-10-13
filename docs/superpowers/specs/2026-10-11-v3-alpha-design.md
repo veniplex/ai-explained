@@ -1,10 +1,10 @@
-# v3-alpha: a guided path instead of a 42-block map
+# v0.3-alpha: a guided path instead of a 42-block map
 
 Date: 2026-10-11 · Status: approved for spec, awaiting spec review
 
 ## 1. Why
 
-v1-alpha is accurate and well sourced, but too much for someone who knows nothing about AI:
+v0.1-alpha is accurate and well sourced, but too much for someone who knows nothing about AI:
 
 - The entry page shows 42 blocks, 8 zones and 6 connectors at once. A newcomer meets RAG, A2A, Embeddings, Compaction and SDKs before understanding anything.
 - Three parallel narratives tell the same story: the 9-picture story, the 16-step walkthrough (each step lights 4 to 8 blocks) and the five big ideas. On top come 13 guides and 110 glossary terms.
@@ -19,8 +19,8 @@ v1-alpha is accurate and well sourced, but too much for someone who knows nothin
 | Decision | Choice |
 | --- | --- |
 | Audience | Complete newcomers; one core path for everyone, optional depth per idea |
-| Language | English, like v1-alpha |
-| Metaphor | The restaurant kitchen from v1-alpha, kept as the single picture |
+| Language | English, like v0.1-alpha |
+| Metaphor | The restaurant kitchen from v0.1-alpha, kept as the single picture |
 | Depth content | 42 blocks merged into 21 entries; all sources kept |
 | Form | Guided scroll story in 7 chapters plus an epilogue; the map grows chapter by chapter and ends as a small hub |
 | Running example | One non-coding task followed through every chapter (section 4) |
@@ -29,14 +29,14 @@ v1-alpha is accurate and well sourced, but too much for someone who knows nothin
 
 In scope:
 
-- New self-contained folder `v3-alpha/` next to `v1-alpha/` (`v2-alpha/` belongs to another workstream). Fonts, `rough.js`, favicon and the stylesheet base are copied from v1-alpha; styling follows v1's design system (`DESIGN.md`: tokens, shared classes, naming), copied to `v3-alpha/DESIGN.md` with a short section on what v3 adds.
-- Content lives in `v3-alpha/assets/js/data/` (several files, no `data.js`); `scripts/check-v3.js` checks it, next to the existing `scripts/validate-data.js`.
+- New self-contained folder `v0.3-alpha/` next to `v0.1-alpha/` (`v0.2-alpha/` belongs to another workstream). Fonts, `rough.js`, favicon and the stylesheet base are copied from v0.1-alpha; styling follows v1's design system (`DESIGN.md`: tokens, shared classes, naming), copied to `v0.3-alpha/DESIGN.md` with a short section on what v3 adds.
+- Content lives in `v0.3-alpha/assets/js/data/` (several files, no `data.js`); `scripts/check-v3.js` checks it, next to the existing `scripts/validate-data.js`.
 - New content file, new rendering, new check script.
-- After v3-alpha is complete: the root `index.html` forwards to `v3-alpha/`, and the root README lists both versions.
+- After v0.3-alpha is complete: the root `index.html` forwards to `v0.3-alpha/`, and the root README lists both versions.
 
 Out of scope:
 
-- Any change to `v1-alpha/`. It stays online as the full reference.
+- Any change to `v0.1-alpha/`. It stays online as the full reference.
 - A German version or a language switch.
 - New illustrations beyond rough.js shapes and small inline SVG icons in the existing style.
 - A new Open Graph image (v3 copies v1's `og.png` for now).
@@ -71,7 +71,7 @@ The page is one long scroll. Each chapter has the same shape:
 
 Chapter 4 ends on the milestone line: **model + context + tools + loop = agent.**
 
-After the epilogue comes **"The whole kitchen"**: the complete hub map (section 8), followed by **"5 things to remember"**, the five big ideas from v1-alpha rewritten to point at v3 entries.
+After the epilogue comes **"The whole kitchen"**: the complete hub map (section 8), followed by **"5 things to remember"**, the five big ideas from v0.1-alpha rewritten to point at v3 entries.
 
 ### Figures inside the story
 
@@ -81,7 +81,7 @@ After the epilogue comes **"The whole kitchen"**: the complete hub map (section 
 
 ## 6. Entries (21)
 
-### 6.1 Mapping from v1-alpha
+### 6.1 Mapping from v0.1-alpha
 
 Every one of the 42 v1 block ids maps to exactly one v3 entry. The `from` field of each entry records this, and the check script enforces it.
 
@@ -111,7 +111,7 @@ Every one of the 42 v1 block ids maps to exactly one v3 entry. The `from` field 
 
 ### 6.2 Three levels per entry
 
-Entries open in the side drawer (as in v1-alpha).
+Entries open in the side drawer (as in v0.1-alpha).
 
 1. **Picture and sentence** (always visible): the kitchen picture (`kitchen`, one sentence) and a plain definition (`short`, one sentence).
 2. **Understand** (always visible): `how` (one or two short paragraphs), `example` (what it means in the flight task), `forYou` (one to three practical bullets: what this means when you use or choose AI tools). Levels 1 and 2 together: **at most 150 words**.
@@ -120,7 +120,7 @@ Entries open in the side drawer (as in v1-alpha).
    - `includes`: one line per merged concept, so every v1 term stays findable (for example "**Slash commands**: saved prompts you trigger by name, such as /review.").
    - `facts`: at most 4 dated facts with their source.
    - `sources`: all v1 sources of the merged blocks, de-duplicated by URL. The first three are shown; the rest sit behind "All sources (n)". Ordering: definitions and specifications, then official docs, then papers, then guides, blogs and videos.
-   - A closing line "Full detail in v1-alpha:" with links to the merged blocks there (`../v1-alpha/#block-<v1 id>`), generated from `from`.
+   - A closing line "Full detail in v0.1-alpha:" with links to the merged blocks there (`../v0.1-alpha/#block-<v1 id>`), generated from `from`.
 
 The metaphor appears only in level 1. Levels 2 and 3 speak plainly.
 
@@ -133,7 +133,7 @@ The metaphor appears only in level 1. Levels 2 and 3 speak plainly.
 
 ## 7. Guides: from 13 to 5
 
-Opened from the header menu as full-height sheets, as in v1-alpha.
+Opened from the header menu as full-height sheets, as in v0.1-alpha.
 
 | Guide | Content | Built from v1 |
 | --- | --- | --- |
@@ -141,7 +141,7 @@ Opened from the header menu as full-height sheets, as in v1-alpha.
 | Build your own | The ladder (single prompt → agent team), the recipe, patterns, protocols and the checklist, condensed | `ladder`, `recipe`, `patterns`, `protocols`, `checklist`, `flows` |
 | Glossary | Only terms that occur on the page or in entries, about 50 | `glossary` (filtered, re-pointed) |
 | Learn more | Curated talks, courses, papers; at most 5 items per group, beginners first | `learn` |
-| About | Snapshot date, how sources were chosen, privacy, credits, link to v1-alpha as the full reference | `about` |
+| About | Snapshot date, how sources were chosen, privacy, credits, link to v0.1-alpha as the full reference | `about` |
 
 Removed: the guides Story (it is now the page), Five ideas (now the recap), Steps (replaced by chapters), Context (now a figure in chapter 2), Decide and All blocks (replaced by the hub map). Also removed: the 16-step walkthrough player and its controls.
 
@@ -186,17 +186,17 @@ Removed: the guides Story (it is now the page), Five ideas (now the recap), Step
 | `#e-skills` | an entry's drawer (any v3 entry id) |
 | `#guide-glossary` | a guide: `compare`, `build`, `glossary`, `learn`, `about` |
 
-### 8.5 Kept from v1-alpha
+### 8.5 Kept from v0.1-alpha
 
 Keyboard use (`/` focuses search, `Esc` closes drawer or sheet), "reduce motion" (zones appear without stroke animation, the loop stands still), light and dark themes with a manual switch stored in `localStorage`, self-hosted fonts and scripts, no cookies, no analytics, no external requests, `noscript` fallback.
 
 ## 9. Data model
 
-`v3-alpha/assets/js/data.js` defines `window.AE3`:
+`v0.3-alpha/assets/js/data.js` defines `window.AE3`:
 
 ```js
 window.AE3 = {
-  meta:     { updated, snapshot, repo, v1 },            // v1: "../v1-alpha/"
+  meta:     { updated, snapshot, repo, v1 },            // v1: "../v0.1-alpha/"
   hero:     { title, line },
   example:  { task, short },
   chapters: [ { id, n, title, problem, kitchen, real: [...], example, entries: [...], figure } ],
@@ -247,4 +247,4 @@ Through the local preview (`python -m http.server`):
 
 - **Sticky map between 1024 and 1280 px** may squeeze the text column. Mitigation: the two-column layout uses a text column of at least 34 rem; below that it falls back to the narrow layout.
 - **Metaphor stretch**: the kitchen fits 8 chapters but not every merged concept. Mitigation: the metaphor appears only in chapter headers and level 1; levels 2 and 3 speak plainly.
-- **Losing nuance through merging**: mitigated by `includes` and by linking to v1-alpha as the full reference from About and from each entry's "Go deeper".
+- **Losing nuance through merging**: mitigated by `includes` and by linking to v0.1-alpha as the full reference from About and from each entry's "Go deeper".

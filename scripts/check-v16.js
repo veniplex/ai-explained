@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/* Content checks for v16-alpha: the kitchen story and the technical deep dive, with a glossary, guides and an about page shared by both.
+/* Content checks for v0.16-alpha: the kitchen story and the technical deep dive, with a glossary, guides and an about page shared by both.
    - the content: the rules of check-v4.js for the technical voice (word budgets, links, sources), without the kitchen voice of the chapters, the guides
      and the small texts (the kitchen is only in the story and in the glossary);
    - the story: the rules of check-v9.js (steps, things, voice of every caption, names over the kitchen);
@@ -23,7 +23,7 @@ const v4 = require("./check-v4.js");
 const build = require("./build-v16-pages.js");
 const content = require("./v16-content.js");
 
-const DIR = "v16-alpha";
+const DIR = "versions/v0.16-alpha";
 const SECTIONS = ["story", "technical", "guides", "glossary", "about"];
 const PLACES = ["story", "technical", "guides", "glossary"];
 // The guides of v16: the four long ones, the table, the build guide and the reading list (v4 allowed five).
@@ -98,7 +98,7 @@ function selfContained(root) {
   const errors = [];
   walk(path.join(root, DIR)).filter((f) => /\.(html|js|css|md)$/.test(f)).forEach((f) => {
     const rel = path.relative(root, f), text = fs.readFileSync(f, "utf8");
-    const named = (text.match(/\bv\d+-(alpha|beta)\b/g) || []).filter((v) => v !== DIR);
+    const named = (text.match(/\bv\d+(?:\.\d+)*-(alpha|beta)\b/g) || []).filter((v) => v !== path.basename(DIR));
     if (named.length) errors.push(rel + ": names another version (" + Array.from(new Set(named)).join(", ") + ")");
     if (/\.html$/.test(f)) {
       for (const m of text.matchAll(/(?:href|src)="((?:\.\.\/)+)([^"]*)"/g)) {

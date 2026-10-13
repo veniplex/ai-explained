@@ -2,25 +2,153 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AI explained</title>
-  <meta name="description" content="How AI agents work, explained in a hand-drawn kitchen story, a plain-words deep dive and a technical one, with guides and a glossary. Work in progress.">
-  <meta property="og:title" content="AI explained">
-  <meta property="og:image" content="https://veniplex.github.io/ai-explained/og.png">
-  <meta name="twitter:card" content="summary_large_image">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>AI explained: how AI agents work, in your own words</title>
+  <meta name="description" content="How AI agents work, in the words that suit you: a drawn kitchen story for beginners or a technical deep dive. With long guides and a glossary of over 180 AI terms. As of October 2026.">
+  <meta name="theme-color" content="#faf9f5" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#1f1e1d" media="(prefers-color-scheme: dark)">
   <link rel="canonical" href="https://veniplex.github.io/ai-explained/">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <!-- The newest version is the first entry of versions.js, so a new version is added in that one place. -->
-  <script src="versions.js"></script>
-  <!-- Forward to the newest version. Links made for v1-alpha (such as #block-mcp) keep going to v1-alpha. -->
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+  <meta name="application-name" content="AI explained">
+  <meta name="apple-mobile-web-app-title" content="AI explained">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="AI explained: how AI agents work, in your own words">
+  <meta property="og:description" content="A drawn kitchen story for beginners and a technical deep dive with no analogy, plus long guides and a glossary of over 180 AI terms. Snapshot: October 2026.">
+  <meta property="og:url" content="https://veniplex.github.io/ai-explained/">
+  <meta property="og:image" content="https://veniplex.github.io/ai-explained/assets/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="assets/fonts/source-serif-4-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/dm-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/start.css">
+  <link rel="stylesheet" href="assets/css/nav.css">
+  <script src="assets/js/theme.js"></script>
   <script>
-    var h = location.hash;
-    var v1 = /^#(block-|zone-|link-|step-|(story|ideas|steps|context|compare|patterns|protocols|decide|build|blocks|glossary|learn|about)$)/.test(h);
-    var newest = window.AE_VERSIONS && window.AE_VERSIONS.list[0].id;
-    if (v1 || newest) location.replace((v1 ? "v1-alpha" : newest) + "/" + (v1 ? "" : location.search) + h);
+    /* Links made for the story's older addresses (#ch-3, #map, #e-skills, #guide-glossary) lead to the same place in the story or in the guides. */
+    (function () {
+      var h = location.hash;
+      // Links made for v0.1-alpha (#block-mcp, #zone-model, #story ...) lead to that version, which lives in versions/ now.
+      if (/^#(block-|zone-|link-|step-|(story|ideas|steps|context|compare|patterns|protocols|decide|build|blocks|glossary|learn|about)$)/.test(h)) { location.replace("versions/v0.1-alpha/" + h); return; }
+      if (/^#(ch-[1-8e]|map|e-[a-z0-9-]+)$/.test(h)) location.replace("story/" + location.search + h);
+      else if (/^#guide-(about|glossary)$/.test(h)) location.replace(h.slice(7) + "/" + location.search);
+      else if (/^#guide-(how-it-works|context|build|secure|evaluate|compare|learn)$/.test(h)) location.replace("guides/" + h.slice(7) + "/" + location.search);
+    })();
   </script>
 </head>
-<body>
-  <p>Forwarding to the newest version. <noscript>This needs JavaScript. All versions are listed in the <a href="https://github.com/veniplex/ai-explained">GitHub repository</a>.</noscript></p>
+<body data-page="start" data-base="">
+  <a class="skip-link" href="#main">Skip to the two ways to start</a>
+
+  <header class="bar">
+    <div class="bar-main">
+      <a class="brand" href="./" aria-label="AI explained: the start">
+        <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
+          <path class="brand-ring" d="M25.6 12.4C23.9 7.6 18.6 5 13.8 6.6 8.9 8.2 6.3 13.6 7.9 18.5c1.6 4.9 6.9 7.6 11.8 6 2.6-.9 4.6-2.8 5.6-5.2"/>
+          <path class="brand-ring" d="M26.6 6.8l-.9 5.8-5.6-1.6"/>
+          <circle class="brand-dot" cx="16.6" cy="16" r="3.4"/>
+        </svg>
+        <span class="brand-title">AI<span class="brand-tail"> <em>explained</em></span></span>
+      </a>
+      <nav class="bar-links" aria-label="Main">
+        <a href="story/" data-sec="story">ELI5: AI as Kitchen Chef</a>
+        <a href="technical/" data-sec="technical">AI Agents: Technical Deep Dive</a>
+        <a href="guides/" data-sec="guides">Guides</a>
+        <a href="glossary/" data-sec="glossary">Glossary</a>
+        <a href="about/" data-sec="about">About</a>
+      </nav>
+      <div class="search" id="search" role="search">
+        <button class="icon-btn search-open" type="button" id="search-open" aria-label="Search the whole site" aria-controls="site-search" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg>
+        </button>
+        <div class="search-field">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg>
+          <label class="visually-hidden" for="site-search">Search the whole site</label>
+          <input id="site-search" type="search" placeholder="Search the whole site…" autocomplete="off" spellcheck="false" aria-controls="search-results" aria-describedby="search-status">
+          <kbd aria-hidden="true">/</kbd>
+        </div>
+        <ul class="search-results" id="search-results" hidden></ul>
+        <p class="visually-hidden" id="search-status" aria-live="polite"></p>
+      </div>
+      <div class="bar-actions">
+        <a class="gh-pill" id="gh-pill" href="https://github.com/veniplex/ai-explained" target="_blank" rel="noopener" aria-label="AI explained on GitHub" title="AI explained on GitHub">
+          <svg class="gh-mark" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 0-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.4-.5-1.6.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.6.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3"/></svg>
+          <span class="gh-name">GitHub</span>
+          <span class="gh-stars" id="gh-stars" hidden><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.6l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.2 1.2-6.5L2.5 9.5l6.6-.9z"/></svg><span id="gh-count"></span></span>
+        </a>
+        <button class="icon-btn" id="theme-toggle" type="button" aria-label="Colour theme: System. Switch to Light" title="Theme: System (click for Light)">
+          <svg class="theme-icon-system" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4.5" width="18" height="12" rx="2"/><path d="M8.5 20h7M12 16.5V20"/></svg>
+          <svg class="theme-icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>
+          <svg class="theme-icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7z"/></svg>
+        </button>
+        <details class="site-menu" id="site-menu">
+          <summary class="btn btn-ghost site-menu-btn" aria-label="Menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg><span class="site-menu-label">Menu</span></summary>
+          <nav class="site-menu-panel" aria-label="Menu">
+            <p class="menu-head">Ways in</p>
+            <ul>
+              <li><a href="story/" data-sec="story"><b>ELI5: AI as Kitchen Chef</b><span>One drawn kitchen on one screen. No jargon.</span></a></li>
+              <li><a href="technical/" data-sec="technical"><b>AI Agents: Technical Deep Dive</b><span>Eight chapters in precise terms, with dated facts and sources.</span></a></li>
+            </ul>
+            <p class="menu-head">Look things up</p>
+            <ul>
+              <li><a href="guides/" data-sec="guides"><b>Guides</b><span>Long explainers: how agents work, and how to build, secure and test them.</span></a></li>
+              <li><a href="glossary/" data-sec="glossary"><b>Glossary</b><span>Every AI term with a short definition and where it fits.</span></a></li>
+              <li><a href="about/" data-sec="about"><b>About</b><span>What this site is, its sources and privacy.</span></a></li>
+            </ul>
+            <div class="menu-foot" data-version-menu></div>
+          </nav>
+        </details>
+      </div>
+    </div>
+    <div class="version-tab" data-version-slot></div>
+  </header>
+
+  <main class="stage start" id="main" tabindex="-1">
+    <header class="start-head">
+      <p class="eyebrow">Start here · October 2026</p>
+      <h1 class="start-title">AI explained</h1>
+      <p class="start-line">Curious how an AI agent plans, uses tools and gets work done on its own? Pick the way that fits what you know already. You can switch at any time.</p>
+    </header>
+
+    <section class="paths" aria-label="Two ways to start">
+      <article class="path" data-zone="start">
+        <figure class="pic" id="pic-story" aria-hidden="true"><svg viewBox="0 0 240 160" focusable="false"></svg></figure>
+        <p class="eyebrow">I am new to this</p>
+        <h2 class="path-title"><a class="path-link" href="story/" aria-describedby="story-text">The kitchen story</a></h2>
+        <p class="path-text" id="story-text">Watch a restaurant kitchen build itself on one screen while a chef shows what an AI agent does. Everyday words only, and nothing to read up on first.</p>
+        <p class="path-go"><span class="btn btn-ink" aria-hidden="true">Watch the story <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span><span class="path-note">Click through, or press Play</span></p>
+      </article>
+
+      <article class="path" data-zone="tools">
+        <figure class="pic pic-tech" id="pic-tech" aria-hidden="true"></figure>
+        <p class="eyebrow">I want the full picture</p>
+        <h2 class="path-title"><a class="path-link" href="technical/" aria-describedby="technical-text">The technical deep dive</a></h2>
+        <p class="path-text" id="technical-text">Eight chapters in precise terms, with a map that grows as you read: how each part works, what to watch for, dated facts and the sources behind them. Every term has a glossary page when you want more.</p>
+        <p class="path-go"><span class="btn btn-ink" aria-hidden="true">Open the deep dive <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span><span class="path-note">About 9 minutes, searchable</span></p>
+      </article>
+    </section>
+
+    <section class="start-more" aria-labelledby="more-title">
+      <h2 class="start-more-title" id="more-title">Looking for something specific?</h2>
+      <ul class="start-more-list">
+        <li><a href="guides/"><b>Guides</b><span>Long explainers on how agents work, how to give them context, and how to build, secure and test them.</span></a></li>
+        <li><a href="glossary/"><b>Glossary</b><span>Over 180 AI terms, each with a drawing, where it sits in the kitchen, a definition, a detailed description and references.</span></a></li>
+      </ul>
+    </section>
+  </main>
+
+  <script src="assets/vendor/rough.js"></script>
+  <script src="assets/js/sketch.js"></script>
+  <script src="assets/js/github.js"></script>
+  <script src="assets/js/nav.js"></script>
+  <script src="assets/js/search.js"></script>
+  <script src="assets/js/start.js"></script>
+  <script src="assets/js/totop.js"></script>
+  <script src="assets/js/pwa.js"></script>
+  <script src="versions/versions.js"></script>
+  <script src="versions/version-switcher.js"></script>
 </body>
 </html>

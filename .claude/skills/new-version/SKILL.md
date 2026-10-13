@@ -1,31 +1,33 @@
 ---
 name: new-version
-description: Cut a new version of the site (e.g. v1-alpha -> v1-beta or v2) as its own folder, and add it to versions.js (root redirect and dropdown), README and metadata.
+description: Cut a new release of the site. The current root site moves into versions/<id>/ unchanged, the root becomes the new release, and versions/versions.js (dropdown, root routing) is updated.
 disable-model-invocation: true
-argument-hint: "<new-folder-name> [from-folder]"
+argument-hint: "<new-release-id> e.g. v1.1 or v2.0"
 ---
 
-# New version
+# New release
 
-Each version is a self-contained static site in its own folder (`v1-alpha/`, …). Old versions stay online unchanged, so their links keep working. The root `index.html` forwards to the first version in `versions.js` (the newest), except that deep links made for an older version (such as v1-alpha's `#block-mcp`) keep going to that version.
+The site root is the **main release** (`veniplex.github.io/ai-explained/`): the first entry of `versions/versions.js`, the one with `main: true`. Every earlier version is a self-contained, frozen folder in `versions/<id>/` and stays online unchanged. Edits for the next release happen at the root; the release being replaced is archived first.
 
-`$ARGUMENTS`: the new folder name (required, must start with `v`), and optionally the folder to copy from (default: the newest existing version).
+`$ARGUMENTS`: the id of the new release (required): `v<major>.<minor>`, for example `v1.1` or `v2.0`. Pre-releases are named `v0.<n>-alpha` (the alpha versions before 1.0 are v0.1-alpha, v0.3-alpha … v0.17-alpha) and sit in the dropdown's collapsed "Alpha versions" group; a release has no suffix.
 
 ## Steps
 
-1. **Check.** Work on a branch, not `main`. Confirm the new folder doesn't exist yet. Run `node scripts/validate-data.js`, and for a source without `assets/js/data.js` (v3 style, content in `assets/js/data/`) also `node scripts/check-v3.js`; both must pass before you copy.
-2. **Copy** the source folder to the new one with everything in it, including `assets/fonts/` and `assets/vendor/` (`cp -r`; the guard hook only blocks *edits* to vendored files, not copies).
-3. **In the new folder:**
-   - Set `meta.updated` to today (YYYY-MM-DD) and `meta.snapshot` to "<Month> <Year>": in `assets/js/data.js`, or in `assets/js/data/core.js` for a version without `data.js` (v3 style).
-   - `index.html`: update `canonical`, `og:url`, `og:image` and any other absolute URL that names the old folder.
-   - `README.md`: title and the version line at the top, the live-site URL and the path in the GitHub Pages steps.
-   - `grep -rn "<old-folder>" <new-folder>/` must come back empty, except where the text means the old version on purpose.
-4. **Repository root:**
-   - `versions.js`: add the new version as the **first** entry of `list` (id, a one-line `note`, `guided` when it has `#ch-N` chapters, `pages` when it has `terms/<id>/` and `guides/<id>/` pages). That one edit moves the root redirect and puts the version at the top of the dropdown, marked as current. Nothing in the root `index.html` names the newest version, so leave that file alone, including v1-alpha's routing for its hashes (`#block-…`, `#zone-…`, `#link-…`, `#step-…` and the v1 guide names such as `#story` or `#glossary`). If the new version changes its deep links, extend that routing so the old version's links keep landing on the old version.
-   - `README.md`: add a row to the version table (newest first) and update the sentence about which version the root forwards to (keep the note that v1-alpha deep links stay on v1-alpha).
-   - The new folder's `index.html` (copied from the old one) already loads `../versions.js` and `../version-switcher.js` before `</body>`; keep both, and make sure the generated term and guide pages get them too (`node scripts/build-v<N>-pages.js`).
+1. **Check.** Work on a branch, not `main`. Run `node scripts/check-site.js` and `node --test scripts/*.test.js`; both must pass before you archive. Note the id of the current main release (the first entry of `versions/versions.js`, say `v1.0`) and confirm `versions/<that id>/` does not exist yet.
+2. **Archive the current release:** `node scripts/archive-release.js` (without an argument it uses the id of the main entry). It copies the root site into `versions/<id>/`, points the dropdown scripts, the icon, the canonical and `og:` addresses and the service worker at their new place, and writes a README for the folder. It refuses to overwrite a folder. Do this **before** changing anything at the root.
+3. **Update `versions/versions.js`** (nothing else in `versions/` changes): take `main: true` off the entry of the release you just archived, and add the new release as the **first** entry (`id`, a one-line `note`, `main: true`, and `guided`, `pages`, `sections` as for the other entries). That one edit moves the dropdown's "current" mark; the root `index.html` never names a release, so leave its routing alone.
+4. **Change the root** to be the new release (content, pages, styles). Then:
+   - `node scripts/build-pages.js` regenerates the glossary, guide and about pages, `glance.js`, `search-index.js` and `sw.js` (the cache prefix `ae-<id>-` comes from `versions.js`, so the new release never touches the cache of an archived one). Always run it after a change anywhere in the site, or `check-site.js` fails with "out of date".
+   - `README.md`: bump the release number and date (`Release 1.0 · facts as of October 2026`), and the "Releases and older versions" section if the story it tells changed. Re-render the pictures with `node docs/readme/render.js` when the site's look changed.
+   - Dated facts need a month and year; set `meta.updated` / `meta.snapshot` in `assets/js/data/core.js` to today.
 5. **Verify.**
-   - `node scripts/validate-data.js` (now checks every folder with a `data.js`), and `node scripts/check-v3.js` for v3-style folders (it reads `v3-alpha/` only, so extend it to cover the new folder).
-   - Start the `site` preview (`.claude/launch.json`). Open `/`: it must land on `/<new>/`. Open the dropdown in the header of the new and of an old version: the new one is marked "Current" and every version is listed. Open `/#block-mcp`: it must land on `/v1-alpha/#block-mcp` with that block open. Open `/#e-skills`: it must land on `/<new>/#e-skills` with that entry open. Open `/<old>/` to confirm it still works.
-   - Check the browser console for 404s (a missed relative path shows up there).
-6. **Report** the diff summary. Don't commit or push unless asked. The GitHub Pages workflow deploys the whole repository root on every push to `main`, so merging publishes the new version.
+   - `node scripts/check-site.js` and `node --test scripts/*.test.js` (the tests also check the list against the folders, the old addresses and the archived copy).
+   - Preview with the `site` entry of `.claude/launch.json`. `/` shows the new release; open the dropdown on it and on an archived one: the new one is marked "Current" and every release is listed, and choosing one lands on the same page of that release when it exists. `/#block-mcp` must land on `/versions/v0.1-alpha/#block-mcp`; `/#e-skills` on `/story/#e-skills`; an old address such as `/v0.12-alpha/` must forward to `/versions/v0.12-alpha/`.
+   - Check the browser console for 404s.
+6. **PR.** Summary and a "Details" list, nothing else (see CLAUDE.md for the privacy rules). Merging publishes the release: the Pages workflow deploys the whole repository root on every push to `main`.
+
+## Why it is built like this
+
+- Archived releases are copies, not moves: their URLs change once (to `/versions/<id>/`), `404.html` forwards the old `/<id>/…` addresses, and they never change again.
+- The shared dropdown files (`versions.js`, `version-switcher.js`, `.css`, `favicon.svg`) live in `versions/`, so an archived page reaches them with a plain `../…versions.js` and needs no edit when a later release is added.
+- The root service worker has the whole site as scope and ignores `versions/` apart from those shared files, so it never serves a stale archived page.

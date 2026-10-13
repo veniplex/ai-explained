@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/* Content checks for v13-alpha: the kitchen story, the kitchen deep dive and the technical deep dive in one version.
+/* Content checks for v0.13-alpha: the kitchen story, the kitchen deep dive and the technical deep dive in one version.
    - the content: the rules of check-v4.js (both voices, word budgets, links, sources), without the v1 mapping v13 no longer has;
    - the story: the rules of check-v9.js (steps, things, voice of every caption, names over the kitchen);
    - the bridge between story and deep dives: every name of the kitchen is a term with a reference page in both deep dives and sits in the chapter the deep
@@ -18,7 +18,7 @@ const v9 = require("./check-v9.js");
 const v4 = require("./check-v4.js");
 const build = require("./build-v13-pages.js");
 
-const DIR = "v13-alpha";
+const DIR = "versions/v0.13-alpha";
 const SECTIONS = ["story", "kitchen", "technical", "guides", "references"];
 
 const walk = (d) => fs.readdirSync(d, { withFileTypes: true }).flatMap((e) => e.isDirectory() ? (e.name === "vendor" ? [] : walk(path.join(d, e.name))) : [path.join(d, e.name)]);
@@ -83,7 +83,7 @@ function selfContained(root) {
   const errors = [];
   walk(path.join(root, DIR)).filter((f) => /\.(html|js|css|md)$/.test(f)).forEach((f) => {
     const rel = path.relative(root, f), text = fs.readFileSync(f, "utf8");
-    const named = (text.match(/\bv\d+-(alpha|beta)\b/g) || []).filter((v) => v !== DIR);
+    const named = (text.match(/\bv\d+(?:\.\d+)*-(alpha|beta)\b/g) || []).filter((v) => v !== path.basename(DIR));
     if (named.length) errors.push(rel + ": names another version (" + Array.from(new Set(named)).join(", ") + ")");
     if (/\.html$/.test(f)) {
       for (const m of text.matchAll(/(?:href|src)="((?:\.\.\/)+)([^"]*)"/g)) {

@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/* Content checks for v9-alpha, the kitchen that builds itself: the chapters and the steps (every step names things, people and
+/* Content checks for v0.9-alpha, the kitchen that builds itself: the chapters and the steps (every step names things, people and
    poses that exist, coordinates lie in the room), the kitchen voice of every caption and bubble in the story (the same banned words
    as v4 to v8), the technical captions of the last chapter (no kitchen words), the names laid over the kitchen (every term is a
    v6 term, every term of v6 is named, outlines lie in the room), and no request to anywhere outside the folder.
@@ -10,7 +10,7 @@ const path = require("node:path");
 const vm = require("node:vm");
 const { KITCHEN_BAN, TECH_BAN, banned, withoutBridges, plainText, words } = require("./check-voice.js");
 
-const DIR = "v9-alpha";
+const DIR = "versions/v0.9-alpha";
 const ZONES = ["start", "model", "harness", "control", "know", "tools", "orch", "ops"];
 const LAYERS = ["wall", "furn", "top", "floor", "people", "front"];
 const KINDS = ["say", "think", "sign", "shout", "sfx"];
@@ -34,7 +34,7 @@ function load(root, dir = DIR) {
   return sandbox.window.COMIC;
 }
 // The terms of v6 (their ids), read from its entries file.
-function v6Terms(root, dir = "v6-alpha") {
+function v6Terms(root, dir = "versions/v0.6-alpha") {
   const src = fs.readFileSync(path.join(root, dir, "assets/js/data/entries.js"), "utf8");
   return Array.from(src.matchAll(/^  "?([a-z-]+)"?: \{\n    chapter:/gm)).map((m) => m[1]);
 }
@@ -53,15 +53,15 @@ function lintTech(text, at, err) {
   if (/—|–| - /.test(text)) err(at + ": no dashes; use a full stop or a comma");
 }
 
-// opts.dir: the version folder to check (default v9-alpha); opts.terms: the version whose terms every name must be one of
-// (default v6-alpha); opts.scan: false to skip the look for requests to outside the folder (v10-alpha has its own, because its
+// opts.dir: the version folder to check (default v0.9-alpha); opts.terms: the version whose terms every name must be one of
+// (default v0.6-alpha); opts.scan: false to skip the look for requests to outside the folder (v0.10-alpha has its own, because its
 // deep dive holds the links of its sources).
 function check(root, opts) {
   opts = opts || {};
   const dir = opts.dir || DIR, errors = [], err = (m) => errors.push(m);
   let C;
   try { C = load(root, dir); } catch (e) { return ["could not load " + dir + ": " + e.message]; }
-  const K = C.kitchen, steps = C.steps || [], chapters = C.chapters || [], names = C.names || [], terms = v6Terms(root, opts.terms || "v6-alpha");
+  const K = C.kitchen, steps = C.steps || [], chapters = C.chapters || [], names = C.names || [], terms = v6Terms(root, opts.terms || "versions/v0.6-alpha");
   if (!K || !Array.isArray(K.actors)) return ["kitchen.js must define COMIC.kitchen with a list of actors"];
   const inRoom = (p, pad) => Array.isArray(p) && p.length === 2 && p.every((n) => typeof n === "number") && p[0] >= -pad && p[0] <= K.w + pad && p[1] >= -pad && p[1] <= K.h + pad;
 
@@ -153,7 +153,7 @@ function check(root, opts) {
   const named = new Set();
   names.forEach((n, k) => {
     const na = "name " + n.id;
-    if (!terms.includes(n.id)) err(na + ": not a term of " + (opts.terms || "v6-alpha"));
+    if (!terms.includes(n.id)) err(na + ": not a term of " + (opts.terms || "versions/v0.6-alpha"));
     if (named.has(n.id)) err(na + ": named twice");
     named.add(n.id);
     if (!ZONES.includes(n.zone)) err(na + ": zone " + n.zone);

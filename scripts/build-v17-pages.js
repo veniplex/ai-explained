@@ -1,12 +1,12 @@
 #!/usr/bin/env node
-/* Writes what v17-alpha generates from its content (assets/js/data/) and its shell (v17-alpha/technical/index.html):
-     v17-alpha/glossary/index.html             the glossary
-     v17-alpha/glossary/<id>/index.html        one page per term (the 21 main terms and every other term of the glossary)
-     v17-alpha/guides/index.html               the guides, shown as notes
-     v17-alpha/guides/<id>/index.html          one page per guide
-     v17-alpha/about/index.html                the about page
-     v17-alpha/assets/js/data/glance.js        the sentence of every term for the hover card (popover.js)
-     v17-alpha/assets/js/data/search-index.js  what the search (search.js) looks through
+/* Writes what v0.17-alpha generates from its content (assets/js/data/) and its shell (v0.17-alpha/technical/index.html):
+     v0.17-alpha/glossary/index.html             the glossary
+     v0.17-alpha/glossary/<id>/index.html        one page per term (the 21 main terms and every other term of the glossary)
+     v0.17-alpha/guides/index.html               the guides, shown as notes
+     v0.17-alpha/guides/<id>/index.html          one page per guide
+     v0.17-alpha/about/index.html                the about page
+     v0.17-alpha/assets/js/data/glance.js        the sentence of every term for the hover card (popover.js)
+     v0.17-alpha/assets/js/data/search-index.js  what the search (search.js) looks through
    The pages are the shell with their own title, description and address, so a link shows a proper title and preview; app.js fills in the content. The pages of
    the glossary also load the kitchen of the story (the drawing script, the kitchen, the names and the kitchen sentences), because every term shows where it sits
    in the kitchen; the guides and the about page load none of it. Each page also carries its text in a <noscript> block, so a reader without JavaScript, a link
@@ -21,7 +21,7 @@ const crypto = require("node:crypto");
 const content = require("./v17-content.js");
 const v9 = require("./check-v9.js");
 
-const DIR = "v17-alpha";
+const DIR = "versions/v0.17-alpha";
 const SITE = "https://veniplex.github.io/ai-explained/";
 const TAIL = " · AI explained";
 const GLANCE = DIR + "/assets/js/data/glance.js", INDEX = DIR + "/assets/js/data/search-index.js";

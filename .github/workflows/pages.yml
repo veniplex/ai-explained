@@ -1,4 +1,4 @@
-# Publishes the repository root (all versions, e.g. v1-alpha/) to GitHub Pages.
+# Publishes the repository root (the current release plus the archived versions in versions/) to GitHub Pages.
 # Requires Settings → Pages → Build and deployment → Source: "GitHub Actions".
 name: Deploy to GitHub Pages
 

@@ -9,24 +9,24 @@ const { loadV4 } = require("./check-v4.js");
 const v9 = require("./check-v9.js");
 
 const root = path.resolve(__dirname, "..");
-const read = (f) => fs.readFileSync(path.join(root, "v12-alpha", f), "utf8");
+const read = (f) => fs.readFileSync(path.join(root, "versions/v0.12-alpha", f), "utf8");
 
-test("v12-alpha passes the content checks (story, deep dive, bridges)", () => {
+test("v0.12-alpha passes the content checks (story, deep dive, bridges)", () => {
   assert.deepEqual(check(root), []);
 });
 
 test("every term has a page and a name over the kitchen", () => {
-  const D = loadV4(root, "v12-alpha"), C = v9.load(root, "v12-alpha");
+  const D = loadV4(root, "versions/v0.12-alpha"), C = v9.load(root, "versions/v0.12-alpha");
   Object.keys(D.entries).forEach((id) => {
-    assert.ok(fs.existsSync(path.join(root, "v12-alpha/terms", id, "index.html")), "terms/" + id + "/");
+    assert.ok(fs.existsSync(path.join(root, "versions/v0.12-alpha/terms", id, "index.html")), "terms/" + id + "/");
     assert.ok(C.names.some((n) => n.id === id), id + " is named over the kitchen");
   });
 });
 
 test("a bold word in a caption without a bridge is reported", () => {
   const dir = fs.mkdtempSync(path.join(require("node:os").tmpdir(), "ae12-"));
-  fs.cpSync(path.join(root, "v12-alpha"), path.join(dir, "v12-alpha"), { recursive: true });
-  const f = path.join(dir, "v12-alpha/assets/js/data/bridges.js");
+  fs.cpSync(path.join(root, "versions/v0.12-alpha"), path.join(dir, "versions/v0.12-alpha"), { recursive: true });
+  const f = path.join(dir, "versions/v0.12-alpha/assets/js/data/bridges.js");
   fs.writeFileSync(f, fs.readFileSync(f, "utf8").replace('    "sandbox": "sandbox",\n', ""));
   const errors = bridgeChecks(dir);
   assert.ok(errors.some((e) => /"sandbox" has no bridge/.test(e)), errors.join("\n"));
@@ -34,11 +34,11 @@ test("a bold word in a caption without a bridge is reported", () => {
 });
 
 test("the term and guide pages come from dive/index.html, one level below the shell's own paths", () => {
-  const D = loadV4(root, "v12-alpha"), list = Object.keys(pages(root));
+  const D = loadV4(root, "versions/v0.12-alpha"), list = Object.keys(pages(root));
   assert.equal(list.length, Object.keys(D.entries).length + D.guideList.length);
-  const html = pages(root)["v12-alpha/terms/mcp/index.html"];
+  const html = pages(root)["versions/v0.12-alpha/terms/mcp/index.html"];
   assert.match(html, /<body data-page="entry" data-id="mcp" data-base="..\/..\/">/);
-  assert.match(html, /<link rel="canonical" href="https:\/\/veniplex\.github\.io\/ai-explained\/v12-alpha\/terms\/mcp\/">/);
+  assert.match(html, /<link rel="canonical" href="https:\/\/veniplex\.github\.io\/ai-explained\/versions\/v0.12-alpha\/terms\/mcp\/">/);
   assert.match(html, /<link rel="stylesheet" href="..\/..\/assets\/css\/style\.css">/);
   assert.doesNotMatch(html, /class="places?"/, "no switch between the halves in the top bar");
   assert.match(html, /<a class="brand" href="..\/..\/" aria-label="Agentic AI, Explained: back to the start">/);
@@ -49,7 +49,7 @@ test("the term and guide pages come from dive/index.html, one level below the sh
 
 test("the kitchen story and the deep dive load files that exist", () => {
   for (const f of ["index.html", "story/index.html", "dive/index.html"]) {
-    const html = read(f), dir = path.dirname(path.join(root, "v12-alpha", f));
+    const html = read(f), dir = path.dirname(path.join(root, "versions/v0.12-alpha", f));
     for (const m of html.matchAll(/<(?:script src|link rel="stylesheet" href)="([^"]+)"/g)) assert.ok(fs.existsSync(path.join(dir, m[1])), f + ": " + m[1]);
   }
   for (const f of ["index.html", "story/index.html"]) {

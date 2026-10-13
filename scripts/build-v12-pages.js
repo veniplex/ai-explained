@@ -1,7 +1,7 @@
 #!/usr/bin/env node
-/* Writes one small HTML page per term and per guide of v12-alpha, from v12-alpha/dive/index.html (see build-v4-pages.js):
-     v12-alpha/terms/<id>/index.html   and   v12-alpha/guides/<id>/index.html
-   The shell is the start page of the deep dive (v12-alpha/index.html is the page where the visitor picks a half, v12-alpha/story/ the kitchen story).
+/* Writes one small HTML page per term and per guide of v0.12-alpha, from v0.12-alpha/dive/index.html (see build-v4-pages.js):
+     v0.12-alpha/terms/<id>/index.html   and   v0.12-alpha/guides/<id>/index.html
+   The shell is the start page of the deep dive (v0.12-alpha/index.html is the page where the visitor picks a half, v0.12-alpha/story/ the kitchen story).
    Since v11 a page also carries its text in a <noscript> block (the sentence, how it works, the details), so a reader without
    JavaScript, a link preview or a search engine finds the content too. The script draws the page as before.
    Run from the repository root:   node scripts/build-v12-pages.js          (write the pages)
@@ -12,7 +12,7 @@ const path = require("node:path");
 const v4 = require("./build-v4-pages.js");
 const { loadV4, plain } = require("./check-v4.js");
 
-const DIR = "v12-alpha";
+const DIR = "versions/v0.12-alpha";
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 const para = (s) => "<p>" + esc(plain(s)) + "</p>";
 

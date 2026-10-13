@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Securing an agent: permissions, sandboxes and prompt injection · Guide · AI explained</title>
+  <meta name="description" content="An agent reads text written by strangers while it holds real permissions. This guide builds the defence in layers: what the harness enforces, what a sandbox isolates, what hooks add, why prompt…">
+  <meta name="theme-color" content="#faf9f5" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#1f1e1d" media="(prefers-color-scheme: dark)">
+  <link rel="canonical" href="https://veniplex.github.io/ai-explained/versions/v0.16-alpha/guides/secure/">
+  <link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Securing an agent: permissions, sandboxes and prompt injection · Guide">
+  <meta property="og:description" content="An agent reads text written by strangers while it holds real permissions. This guide builds the defence in layers: what the harness enforces, what a sandbox isolates, what hooks add, why prompt…">
+  <meta property="og:url" content="https://veniplex.github.io/ai-explained/versions/v0.16-alpha/guides/secure/">
+  <meta property="og:image" content="https://veniplex.github.io/ai-explained/versions/v0.16-alpha/assets/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="../../assets/fonts/source-serif-4-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../assets/fonts/dm-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <link rel="stylesheet" href="../../assets/css/places.css">
+  <link rel="stylesheet" href="../../assets/css/nav.css">
+  <link rel="stylesheet" href="../../assets/css/pages.css">
+  <script src="../../assets/js/theme.js"></script>
+
+</head>
+<body data-page="guide" data-id="secure" data-base="../../">
+  <a class="skip-link" href="#main">Skip to the content</a>
+
+  <header class="bar">
+    <div class="bar-main">
+      <a class="brand" href="../../" aria-label="AI explained: the start">
+        <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
+          <path class="brand-ring" d="M25.6 12.4C23.9 7.6 18.6 5 13.8 6.6 8.9 8.2 6.3 13.6 7.9 18.5c1.6 4.9 6.9 7.6 11.8 6 2.6-.9 4.6-2.8 5.6-5.2"/>
+          <path class="brand-ring" d="M26.6 6.8l-.9 5.8-5.6-1.6"/>
+          <circle class="brand-dot" cx="16.6" cy="16" r="3.4"/>
+        </svg>
+        <span class="brand-title">AI<span class="brand-tail"> <em>explained</em></span></span>
+      </a>
+      <nav class="bar-links" aria-label="Main">
+        <a href="../../story/" data-sec="story">Kitchen story</a>
+        <a href="../../technical/" data-sec="technical">Deep dive</a>
+        <a href="../../guides/" data-sec="guides" aria-current="page">Guides</a>
+        <a href="../../glossary/" data-sec="glossary">Glossary</a>
+      </nav>
+      <div class="search" id="search" role="search">
+        <button class="icon-btn search-open" type="button" id="search-open" aria-label="Search the whole site" aria-controls="site-search" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg>
+        </button>
+        <div class="search-field">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg>
+          <label class="visually-hidden" for="site-search">Search the whole site</label>
+          <input id="site-search" type="search" placeholder="Search the whole site…" autocomplete="off" spellcheck="false" aria-controls="search-results" aria-describedby="search-status">
+          <kbd aria-hidden="true">/</kbd>
+        </div>
+        <ul class="search-results" id="search-results" hidden></ul>
+        <p class="visually-hidden" id="search-status" aria-live="polite"></p>
+      </div>
+      <div class="bar-actions">
+        <a class="gh-pill" id="gh-pill" href="https://github.com/veniplex/ai-explained" target="_blank" rel="noopener" aria-label="AI explained on GitHub" title="AI explained on GitHub">
+          <svg class="gh-mark" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 0-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.4-.5-1.6.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.6.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3"/></svg>
+          <span class="gh-name">GitHub</span>
+          <span class="gh-stars" id="gh-stars" hidden><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.6l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.2 1.2-6.5L2.5 9.5l6.6-.9z"/></svg><span id="gh-count"></span></span>
+        </a>
+        <button class="icon-btn" id="theme-toggle" type="button" aria-label="Colour theme: System. Switch to Light" title="Theme: System (click for Light)">
+          <svg class="theme-icon-system" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4.5" width="18" height="12" rx="2"/><path d="M8.5 20h7M12 16.5V20"/></svg>
+          <svg class="theme-icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>
+          <svg class="theme-icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7z"/></svg>
+        </button>
+        <details class="site-menu" id="site-menu">
+          <summary class="btn btn-ghost site-menu-btn" aria-label="Menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg><span class="site-menu-label"><span class="l-narrow">Menu</span><span class="l-wide">More</span></span><svg class="site-menu-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9.5l6 6 6-6"/></svg></summary>
+          <nav class="site-menu-panel" aria-label="Menu">
+            <div class="menu-main">
+              <p class="menu-head">Ways in</p>
+              <ul>
+                <li><a href="../../story/" data-sec="story"><b>Kitchen story</b><span>One drawn kitchen on one screen. No jargon.</span></a></li>
+                <li><a href="../../technical/" data-sec="technical"><b>Technical deep dive</b><span>Eight chapters in precise terms, with dated facts and sources.</span></a></li>
+              </ul>
+              <p class="menu-head">Look things up</p>
+              <ul>
+                <li><a href="../../guides/" data-sec="guides" aria-current="page"><b>Guides</b><span>Long explainers: how agents work, and how to build, secure and test them.</span></a></li>
+                <li><a href="../../glossary/" data-sec="glossary"><b>Glossary</b><span>Every AI term with a short definition and where it fits.</span></a></li>
+              </ul>
+            </div>
+            <ul class="menu-more">
+              <li><a href="../../about/" data-sec="about"><b>About</b><span>What this site is, its sources and privacy.</span></a></li>
+            </ul>
+            <div class="menu-foot" data-version-slot></div>
+          </nav>
+        </details>
+      </div>
+    </div>
+  </header>
+
+  <main class="stage" id="main" tabindex="-1">
+    <noscript>
+      <article class="page">
+        <h1>Securing an agent: permissions, sandboxes and prompt injection</h1>
+        <p>An agent reads text written by strangers while it holds real permissions. This guide builds the defence in layers: what the harness enforces, what a sandbox isolates, what hooks add, why prompt injection cannot be filtered away, how to handle credentials, and where a person must say yes.</p>
+        <p>For anyone who builds, configures or approves the work of an AI agent. No security background is needed; it helps to know that an agent is a model that calls tools in a loop, and the guide explains the rest as it goes.</p>
+        <ul>
+          <li>Describe the threat model of an agent that reads untrusted text and can act.</li>
+          <li>Write allow, ask and deny rules with argument patterns, and explain why deny wins.</li>
+          <li>Say what a sandbox isolates in files, network and processes, and what it leaves open.</li>
+          <li>Explain why prompt injection cannot be fully filtered, and apply the lethal trifecta and the Rule of Two.</li>
+          <li>Scope credentials, place approvals and keep audit logs so that people neither rubber-stamp nor get ignored.</li>
+        </ul>
+        <h2>What can go wrong</h2>
+        <p>An agent can act, not only talk, and it reads text that strangers wrote. Security means making sure that such text can never take control of what the agent does.</p>
+        <p>An agent works in a loop. The model reads its context, the text it can see at this moment, and asks for a tool call, a request to run a function such as a search or a file write. The harness, the program around the model, runs the call, adds the result to the context, and the model decides again. Unlike a chatbot, an agent holds capabilities, because its tools send messages, edit files, spend money and run code. And it takes in untrusted input, because the same loop reads web pages, emails and tool results written by people who are not its owner. security for an agent is the work of keeping the second from commanding the first.</p>
+        <p>A threat model answers four questions in writing. What is worth protecting: private data, money, accounts, the machine? Where can text enter the context: the request, fetched pages, files, tool results, even the descriptions of the tools? What can the agent do with its tools? And who might misuse it: anyone who can place text where the agent will read it, or the author of an extension it loads?</p>
+        <p>Three sources of failure should be kept apart. The first is an honest mistake: the model misreads a request and deletes the wrong folder. The second is manipulation: text in the context steers the model towards an attacker's goal (prompt-injection). The third is a compromised part, such as a malicious tool server, skill or plugin that runs with the agent's rights. This is not theoretical: in July 2026 Hugging Face disclosed an intrusion “driven, end to end, by an autonomous AI agent system”, which entered through code execution in its dataset processing and then moved into internal clusters.</p>
+        <p>The guiding principle is that the model is not the place to enforce a rule. Its behaviour is probabilistic and can be influenced by everything in its context, so a rule in the system-prompt is a request. A rule enforced by code in the harness is a guarantee. The defences that follow reduce what the agent can do, contain what it does, check what it is about to do and record what it did, in layers, so that no single control has to be perfect.</p>
+        <h2>Permissions: allow, ask, deny</h2>
+        <p>Before each action, the program around the model checks a list of rules and decides: do it, ask a person first, or refuse. The safest lists give the agent only what the task needs.</p>
+        <p>permissions are a policy that the harness evaluates before each tool call runs. A rule names a tool and, often, a pattern for its arguments, the values the model filled in, such as a path, a command or a domain. In Claude Code's syntax Bash(npm run test *) matches test commands, Read(./.env) matches reading one file, and WebFetch(domain:example.com) matches requests to one site. A matching rule gives one of three decisions (table below); when none matches, the default is normally ask.</p>
+        <p>The order of evaluation matters. Claude Code checks deny rules first, then ask, then allow, and the first match decides (October 2026). So a broad deny such as Bash(aws *) also blocks aws s3 ls, even if a narrower allow rule names that exact command: an allow can never carve an exception out of a deny. Denying a tool by its bare name removes it from the model's view altogether. OpenAI's Codex combines an approval policy with three sandbox modes (read-only, workspace-write and full access) and keeps network access off by default.</p>
+        <p>Patterns on arguments are fragile, and the documentation says so. Bash(curl *) does not match /usr/bin/curl or sh -c 'curl ...', and a rule that denies reading a file does not stop a Python script that opens the file itself. So use rules for intent and a sandbox, described next, for enforcement. The rule to apply throughout is least privilege: give the agent the fewest rights the task needs, keep read rights apart from write rights, and list paths and domains explicitly. “May run the test command” is a small permission; “may run shell commands” is close to “may do anything”.</p>
+        <p>A permission-mode sets the general posture, from a read-only planning mode to modes that accept edits or skip prompts. Claude Code's auto mode hands routine approvals to a classifier, a separate model that reviews each action before it runs. Anthropic published its error rates (March 2026): 0.4 per cent false alarms on 10,000 real actions, but 17 per cent of 52 genuinely overeager actions slipped through, and Anthropic says it is not a drop-in replacement for careful human review on high-stakes infrastructure.</p>
+        <h2>Sandboxes: containing what the agent does</h2>
+        <p>A sandbox is a walled area in which the agent's programs run. It limits which files they can touch and which sites they can contact, whatever they were told to do.</p>
+        <p>A sandbox limits what a running process can reach, whatever the process was told to do. Permissions decide whether a call may start; a sandbox bounds the damage once it runs, which matters for any tool that runs code. Isolation has four layers. Filesystem: which paths can be read and which can be written. Network: which hosts can be contacted. Processes and resources: limits on CPU, memory and time, and no view of other processes. Lifetime: an environment created for the task and discarded afterwards, so nothing persists between runs.</p>
+        <p>Claude Code's built-in sandbox shows the mechanism (October 2026). It uses the operating system's own tools, Seatbelt on macOS and bubblewrap on Linux, and the limits apply to every shell command and the child processes it starts. Writes are allowed in the working directory and a temporary directory. Reads are open on the whole computer by default, except some protected paths, so credential files must be blocked explicitly. Network traffic has no direct route out: it goes through a local proxy that checks each host against an allowlist, which starts empty. File tools, tool servers and hooks run outside it. Anthropic reported that the sandbox cut permission prompts by 84 per cent internally.</p>
+        <p>Strength varies with the boundary. Containers share the host's kernel, the core of the operating system, so they are light, but a kernel flaw can let code escape. Micro-virtual machines have their own kernel and a stronger boundary at a higher start-up cost, and hosted cloud sessions move the problem off your machine entirely. Claude Code's documentation compares six isolation tiers and recommends a virtual machine or a hosted session for untrusted repositories.</p>
+        <p>A sandbox does not stop the agent from misusing what is inside it: project files can be overwritten, and credentials in reach can be sent out through any allowed domain. An allowlist that includes a general-purpose host, such as a code-hosting site, a paste service or an API with a write endpoint, is a route for exfiltration, the sending of data to someone who should not have it. The documentation adds that the proxy decides from the requested host name without inspecting encrypted traffic, so a technique called domain fronting can reach hosts outside the list. Filtering outbound traffic (egress-filtering) needs narrow lists.</p>
+        <h2>Hooks: rules that run outside the model</h2>
+        <p>Hooks are small programs that run automatically at fixed moments, for example just before a tool is used. Because they are ordinary code, they apply a rule every time, not only when the model remembers it.</p>
+        <p>hooks are scripts or functions that the harness runs at fixed points in the loop: when a session starts, when a message is submitted, before and after each tool call, before compaction and when the agent tries to stop. Claude Code documents 33 such events (October 2026); other harnesses have fewer. A hook runs every time its event fires, whatever the model thinks. A common shape has emerged across Claude Code, Codex and Cursor: the hook receives the event as JSON on standard input, may print JSON on standard output, and exit code 2 blocks the action.</p>
+        <p>In Claude Code a PreToolUse hook, one that runs before a tool call, receives the tool name and the full arguments. Exit code 0 lets the call go ahead, unless printed JSON denies it. Exit code 2 blocks it, and the message on standard error goes back to the model. Any other exit code, a crash or invalid JSON counts as a non-blocking error and the action goes ahead. That is failing open, and a security check must be written to fail closed: catch its own errors and exit with 2. Command hooks time out after 600 seconds by default, so keep them fast.</p>
+        <p>Before a call, a hook can block an edit to a protected file, check an amount against a limit or rewrite an input. After a call, it can run the tests, scan the output for secrets and append an audit entry. A stop hook can refuse to let the agent finish until the tests pass. guardrails, checks that block unsafe inputs and outputs, are often built this way; in the OpenAI Agents SDK a tripped guardrail halts the run. A guardrail that is itself a model is probabilistic and needs evaluating like any other model.</p>
+        <p>Hooks run with your rights, so install only hooks from sources you trust, and read any hook in a repository you have cloned: it is code that runs on your machine.</p>
+        <h2>Prompt injection: why text can steer the agent</h2>
+        <p>Prompt injection is text that tries to give the agent orders, hidden in a page, an email or a file it reads. The model cannot reliably tell such text apart from real instructions.</p>
+        <p>The model receives one sequence of tokens, the small pieces of text it reads. The system prompt, the person's request, a fetched page and a tool result are joined into that sequence. Role markers, which label who wrote each part, are conventions the model was trained to respect, not an enforced boundary, so an instruction in a fetched page can compete with the real one. Direct injection is typed by the person using the system, usually to make it break its own rules (jailbreak). Indirect injection, described by Greshake and colleagues in 2023, is planted in content that the agent reads later: a web page, an email, a PDF, a calendar invite or a tool result.</p>
+        <p>It cannot be fully filtered. Detection is a classification of natural language, and attackers can rephrase, translate, encode, split an instruction across sources, or hide it in markup, white-on-white text or images that the model reads and a person does not see. Every classifier misses some attacks, and an attacker can try many variants. Guardrail models such as Llama Guard and Prompt Shields lower the rate and are worth having. Simon Willison notes that vendors often claim to catch 95 per cent of attacks, and that in web security 95 per cent is a failing grade. Unlike SQL injection, where parameterised queries separate commands from data, no such separation exists yet.</p>
+        <p>So design for the case in which injection sometimes succeeds, and limit the consequences. Let a model that reads untrusted text hold no tools and return only fields in a fixed format (structured-output), such as a price and a date, so there is no free text to carry orders onward. Validate every argument and require approval for actions that follow untrusted reading. Claude Code's auto mode screens tool output with a probe, and its action classifier never sees tool results, because that is where hostile text enters. The research design CaMeL (2025) goes furthest: the plan is written from the trusted request alone, a quarantined model reads the untrusted data, and the system tracks which values may flow into which arguments.</p>
+        <h2>The lethal trifecta and the Rule of Two</h2>
+        <p>Data theft needs three things at once: private data, untrusted text, and a way to send data out. Take away any one of the three and that kind of attack has no path.</p>
+        <p>Simon Willison (June 2025) names three capabilities that together make data theft by injection possible: access to private data, exposure to untrusted content, and the ability to communicate externally. With all three, the lethal-trifecta attack runs in order. The attacker's text arrives through the untrusted content, tells the agent to collect something private, and tells it to send the result out. Remove any one of the three and that path closes.</p>
+        <p>The third leg is wider than it looks. Any request to an address the attacker controls can carry data in its path or query string. An image in rendered Markdown sends such a request when it is displayed. A link to click, a public pull request or a write to a shared document is a way out too. Hence narrow outbound allowlists, stripping images and links from rendered output, and approval for every message that leaves the system.</p>
+        <p>Meta's Agents Rule of Two (October 2025) turns this into a design rule. Until prompt injection can be reliably detected, a session should combine at most two of three properties: [A] it processes untrustworthy inputs, [B] it has access to sensitive systems or private data, and [C] it can change state or communicate externally. If a task needs all three in one session, the agent should not run autonomously: a person must approve the outward steps, or another reliable check must stand in. In Meta's examples, a travel assistant [AB] that browses and holds the user's details has bookings and payments approved by a person, and a browsing assistant [AC] runs in a restrictive sandbox without preloaded session data.</p>
+        <h2>Credentials, identity and extensions</h2>
+        <p>Agents use keys and passwords to reach other services. Give each agent its own narrow, short-lived keys, keep them out of the model's reach, and treat add-ons as code from strangers.</p>
+        <p>A credential is anything that proves identity to another service: an API key, a password, an access token. secrets are the credentials and other values that must not leak. Every secret the agent can see is one an injection can try to send out, so the safest place is outside its reach. Claude Code's sandbox can mask a credential: commands inside see a placeholder, and the proxy substitutes the real value only on requests to hosts you allowed. Docker's agent sandboxes do the same, so the real key never enters the micro-virtual machine. Without this, a sandboxed command inherits the harness's environment variables, secrets included.</p>
+        <p>Scope each credential to the task. Prefer a separate identity for the agent over borrowing a person's full account, read-only tokens where reading is enough, tokens limited to one resource, and short lifetimes, so a stolen token expires soon. Where an agent acts for many users, it should act with each user's own delegated rights, typically through OAuth, the standard for granting limited access without sharing a password. Otherwise it becomes a confused-deputy: a program with broad rights that an attacker tricks into using them on the attacker's behalf.</p>
+        <p>Extensions deserve the same scrutiny as code you wrote. An mcp-server, a skill or a plugin is code and instructions from someone else that run with the agent's rights, and the descriptions of its tools enter the context. The MCP specification says that descriptions of tool behaviour, such as annotations, should be considered untrusted unless they come from a trusted server, and that hosts must obtain explicit user consent before invoking any tool. A description that changes after you approved it can steer the model (tool-poisoning). Pin versions and review updates.</p>
+        <h2>Human approval and approval fatigue</h2>
+        <p>Asking a person before risky actions only works if the person actually reads the request. Too many requests teach people to click yes without looking.</p>
+        <p>human-in-the-loop checkpoints pay off for actions that are irreversible, costly, external or high in privilege. A good approval request shows exactly what will run: the tool, the full arguments, the target, what changes and why the agent wants it. Show the real arguments from the harness, because the agent's own description of its action is model-written text and can be manipulated like any other.</p>
+        <p>Approval fatigue is the main way this control fails. Anthropic found that Claude Code users approve 93 per cent of permission prompts (March 2026). A control that is accepted nearly every time has stopped checking anything. The answers are fewer and better prompts, a sandbox so that the routine ones disappear, allow rules for actions that are safe and reversible, and review at natural checkpoints such as the plan or the pull request instead of at every step.</p>
+        <p>Oversight also changes with experience. In Anthropic's study of agent autonomy (February 2026), new Claude Code users fully auto-approved about 20 per cent of sessions and experienced users over 40 per cent, while experienced users interrupted more often: in about 9 per cent of turns against 5. Oversight moves from approving each step to monitoring and stepping in. On the most complex tasks the agent asked for clarification more than twice as often as on the simplest ones, and more often than people interrupted it. The study also estimates that only about 0.8 per cent of actions appear irreversible, a classification it marks as uncertain; irreversible actions are where approvals belong.</p>
+        <h2>Audit logs and incidents</h2>
+        <p>An audit log is a record of everything the agent did, kept where the agent cannot change it. It shows what happened when something goes wrong, and which rules need adjusting.</p>
+        <p>An audit log is the evidence. Record every tool call with its arguments, its result, the decision (allow, ask or deny, and who approved), the identity of the agent and of the credentials it used, the time and the identifier of the run's trace, the full record of the run. Write it from the harness or a hook, so a manipulated model cannot leave entries out. Keep it append-only (entries can be added, never changed), out of the agent's reach, and redact secrets and personal data (pii) before writing.</p>
+        <p>The log answers incident questions such as what the agent read before it sent a message. It shows which ask rules are always approved (candidates for allow rules) and which deny rules fire often, and it serves a governance audit. Set the retention period in advance, balancing investigations against data protection.</p>
+        <p>Prepare for an incident before one happens: know how to stop all runs of an agent at once, revoke and rotate its credentials, and find its traces and logs. Afterwards, find which control let the action through, close the gap and turn the attack into a test case.</p>
+        <h2>Putting it together</h2>
+        <p>The layers work together: few rights, a walled area, fixed rules in code, a person for the risky steps, and a record of everything. Then test them by trying to break the agent.</p>
+        <p>Work from design towards evidence: apply the Rule of Two, narrow the privileges, add isolation, enforce rules in code, place approvals where they matter and keep the record. Use public lists as a review checklist. The OWASP Top 10 for Agentic Applications (December 2025) names risks such as agent goal hijack, tool misuse, identity and privilege abuse, the agentic supply chain and rogue agents. OWASP's LLM Top 10, whose 2026 edition appeared in August 2026, covers the most critical risks of applications built on large language models.</p>
+        <p>Unattended runs need the strictest settings. A background agent should run in a sandbox with a budget for turns, time and spend, and every ask rule should become a deny, with the blocked request written to a place where a person reviews it later. Test the defences as you would test features: add injection cases to your evals, run them after every change and have someone try to break the agent before launch (red-teaming).</p>
+      </article>
+      <p class="noscript">This page is interactive and needs JavaScript. All of its text is also in <code>assets/js/data/</code> in the <a href="https://github.com/veniplex/ai-explained">GitHub repository</a>.</p>
+    </noscript>
+  </main>
+
+  <script src="../../assets/vendor/rough.js"></script>
+  <script src="../../assets/js/data/core.js"></script>
+  <script src="../../assets/js/data/entries.js"></script>
+  <script src="../../assets/js/data/sources.js"></script>
+  <script src="../../assets/js/data/guides.js"></script>
+  <script src="../../assets/js/data/voice-ui-tech.js"></script>
+  <script src="../../assets/js/data/voice-tech.js"></script>
+  <script src="../../assets/js/data/glossary.js"></script>
+  <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
+  <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
+  <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
+  <script src="../../assets/js/data/voice-guides-long-tech-d.js"></script>
+  <script src="../../assets/js/data/glance.js"></script>
+  <script src="../../assets/js/sketch.js"></script>
+  <script src="../../assets/js/icons.js"></script>
+  <script src="../../assets/js/voice.js"></script>
+  <script src="../../assets/js/terms.js"></script>
+  <script src="../../assets/js/map.js"></script>
+  <script src="../../assets/js/story.js"></script>
+  <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/pages.js"></script>
+  <script src="../../assets/js/app.js"></script>
+  <script src="../../assets/js/github.js"></script>
+  <script src="../../assets/js/nav.js"></script>
+  <script src="../../assets/js/search.js"></script>
+  <script src="../../assets/js/popover.js"></script>
+  <script src="../../../versions.js"></script>
+  <script src="../../../version-switcher.js"></script>
+</body>
+</html>

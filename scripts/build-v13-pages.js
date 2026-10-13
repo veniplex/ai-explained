@@ -1,12 +1,12 @@
 #!/usr/bin/env node
-/* Writes what v13-alpha generates from its content (assets/js/data/) and its two shells:
-     v13-alpha/<way>/references/index.html          the list of references          (way: kitchen or technical)
-     v13-alpha/<way>/references/<id>/index.html     one reference per term
-     v13-alpha/<way>/guides/index.html              the list of guides
-     v13-alpha/<way>/guides/<id>/index.html         one page per guide
-     v13-alpha/assets/js/data/glance.js             the sentence of every term for the hover card (popover.js)
-     v13-alpha/assets/js/data/search-index.js       what the search (search.js) looks through: both voices of everything
-   The pages are the shells (v13-alpha/kitchen/index.html and v13-alpha/technical/index.html) with their own title, description and address, so a link
+/* Writes what v0.13-alpha generates from its content (assets/js/data/) and its two shells:
+     v0.13-alpha/<way>/references/index.html          the list of references          (way: kitchen or technical)
+     v0.13-alpha/<way>/references/<id>/index.html     one reference per term
+     v0.13-alpha/<way>/guides/index.html              the list of guides
+     v0.13-alpha/<way>/guides/<id>/index.html         one page per guide
+     v0.13-alpha/assets/js/data/glance.js             the sentence of every term for the hover card (popover.js)
+     v0.13-alpha/assets/js/data/search-index.js       what the search (search.js) looks through: both voices of everything
+   The pages are the shells (v0.13-alpha/kitchen/index.html and v0.13-alpha/technical/index.html) with their own title, description and address, so a link
    shows a proper title and preview; app.js fills in the content. Each also carries its text in a <noscript> block, so a reader without JavaScript, a link
    preview or a search engine finds the content too (in the words of its own way: the kitchen pages in the kitchen voice, the technical pages in the
    technical one).
@@ -18,7 +18,7 @@ const path = require("node:path");
 const { loadV4, plain } = require("./check-v4.js");
 const v9 = require("./check-v9.js");
 
-const DIR = "v13-alpha";
+const DIR = "versions/v0.13-alpha";
 const WAYS = ["kitchen", "technical"];
 const SITE = "https://veniplex.github.io/ai-explained/";
 const TAIL = " · Agentic AI, Explained";

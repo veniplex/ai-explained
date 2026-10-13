@@ -29,7 +29,7 @@ process.stdin.on("end", function () {
     process.exit(2);
   }
 
-  var m = rel.match(/^(v[^/]+)\/assets\/js\/data\.js$/);
+  var m = rel.match(/^versions\/(v[^/]+)\/assets\/js\/data\.js$/);
   if (!m) process.exit(0);
   try {
     execFileSync(process.execPath, [path.join(ROOT, "scripts/validate-data.js"), "--quiet", m[1]], { stdio: "pipe", cwd: ROOT });

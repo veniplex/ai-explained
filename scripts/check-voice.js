@@ -1,8 +1,8 @@
 #!/usr/bin/env node
-/* Checks for the two voices of v4-alpha: the kitchen voice (AE3.kitchen) and the technical voice (AE3.tech, plus the
+/* Checks for the two voices of v0.4-alpha: the kitchen voice (AE3.kitchen) and the technical voice (AE3.tech, plus the
    technical fields of AE3.entries). The kitchen voice may not slip into technical words, the technical voice may not
    use the kitchen picture. check-v4.js runs the full check; from the command line this lints single files while writing:
-     node scripts/check-voice.js v4-alpha/assets/js/data/voice-kitchen-a.js [more files…]
+     node scripts/check-voice.js v0.4-alpha/assets/js/data/voice-kitchen-a.js [more files…]
    It loads the base data, then the files given, and reports problems for what those files define. */
 "use strict";
 const fs = require("node:fs");
@@ -64,7 +64,7 @@ function lintTechText(value, at, err) {
 
 function checkKitchenChapter(id, c, err) {
   const at = "kitchen.chapters." + id, B = BUDGET.kChapter;
-  // The kitchen `problem` is optional: v6-alpha shows one shared problem line (the technical one) above both voices.
+  // The kitchen `problem` is optional: v0.6-alpha shows one shared problem line (the technical one) above both voices.
   ["title", "lead", "example"].concat(c && c.problem !== undefined ? ["problem"] : []).forEach((f) => { if (!c || !c[f] || typeof c[f] !== "string") err(at + ": missing " + f); });
   if (!c || !Array.isArray(c.text) || c.text.length < 1 || c.text.length > 3) { err(at + ": text needs 1 to 3 paragraphs"); return; }
   if (words(c.title) > B.title) err(at + ".title: " + words(c.title) + " words, limit " + B.title);
@@ -136,7 +136,7 @@ if (require.main === module) {
   const root = path.resolve(__dirname, "..");
   const given = process.argv.slice(2).map((f) => path.resolve(f));
   if (!given.length) { console.error("usage: node scripts/check-voice.js <voice file…>"); process.exit(2); }
-  // The shared data (core, entries, sources, guides) sits next to the voice files, in v4-alpha or v5-alpha.
+  // The shared data (core, entries, sources, guides) sits next to the voice files, in v0.4-alpha or v0.5-alpha.
   const dataDir = path.dirname(given[0]);
   const base = ["core.js", "entries.js", "sources.js", "guides.js"].map((f) => path.join(dataDir, f));
   let data, own;

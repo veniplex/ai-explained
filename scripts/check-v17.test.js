@@ -9,27 +9,27 @@ const { pages, stale } = require("./build-v17-pages.js");
 const content = require("./v17-content.js");
 
 const root = path.resolve(__dirname, "..");
-const read = (f) => fs.readFileSync(path.join(root, "v17-alpha", f), "utf8");
+const read = (f) => fs.readFileSync(path.join(root, "versions/v0.17-alpha", f), "utf8");
 const TRAIL = '<script src="%versions.js"></script>\\s*<script src="%version-switcher.js"></script>\\s*</body>';
 
-test("v17-alpha passes the content checks (voices, story, bridges, kitchen only where it belongs, top bar, generated files, self-containment)", () => {
+test("v0.17-alpha passes the content checks (voices, story, bridges, kitchen only where it belongs, top bar, generated files, self-containment)", () => {
   assert.deepEqual(check(root), []);
 });
 
 test("every term of the glossary has a page, and so has every guide, and the generated files are current", () => {
   const D = content.load(root), ids = Object.keys(D.entries).concat(D.glossary.map((g) => g.id));
   assert.ok(ids.length >= 180, "the start page promises over 180 terms");
-  ids.forEach((id) => assert.ok(fs.existsSync(path.join(root, "v17-alpha", "glossary", id, "index.html")), "glossary/" + id));
-  D.guideList.forEach((g) => assert.ok(fs.existsSync(path.join(root, "v17-alpha", "guides", g.id, "index.html")), "guides/" + g.id));
-  ["glossary", "guides", "about"].forEach((d) => assert.ok(fs.existsSync(path.join(root, "v17-alpha", d, "index.html")), d));
-  ["kitchen", "references"].forEach((d) => assert.ok(!fs.existsSync(path.join(root, "v17-alpha", d)), d + " is gone"));
+  ids.forEach((id) => assert.ok(fs.existsSync(path.join(root, "versions/v0.17-alpha", "glossary", id, "index.html")), "glossary/" + id));
+  D.guideList.forEach((g) => assert.ok(fs.existsSync(path.join(root, "versions/v0.17-alpha", "guides", g.id, "index.html")), "guides/" + g.id));
+  ["glossary", "guides", "about"].forEach((d) => assert.ok(fs.existsSync(path.join(root, "versions/v0.17-alpha", d, "index.html")), d));
+  ["kitchen", "references"].forEach((d) => assert.ok(!fs.existsSync(path.join(root, "versions/v0.17-alpha", d)), d + " is gone"));
   assert.deepEqual(stale(root), []);
 });
 
 test("every shell and generated page loads files that exist and the version dropdown from the right depth", () => {
-  const files = Object.keys(pages(root)).map((f) => f.replace(/^v17-alpha\//, "")).concat(["index.html", "story/index.html", "technical/index.html"]);
+  const files = Object.keys(pages(root)).map((f) => f.replace(/^versions\/v0.17-alpha\//, "")).concat(["index.html", "story/index.html", "technical/index.html"]);
   files.filter((f) => /\.html$/.test(f)).forEach((f) => {
-    const html = read(f), dir = path.dirname(path.join(root, "v17-alpha", f)), depth = f.split("/").length - 1, up = "../".repeat(depth + 1);
+    const html = read(f), dir = path.dirname(path.join(root, "versions/v0.17-alpha", f)), depth = f.split("/").length - 1, up = "../".repeat(depth + 1);
     for (const m of html.matchAll(/<(?:script src|link rel="stylesheet" href)="([^"#?]+)"/g)) assert.ok(fs.existsSync(path.join(dir, m[1])), f + ": " + m[1]);
     assert.match(html, new RegExp(TRAIL.replace(/%/g, up.replace(/\./g, "\\."))), f + ": versions.js and version-switcher.js come last");
     assert.ok(html.includes('class="bar-actions"'), f + " has no header to put the dropdown in");
@@ -55,7 +55,7 @@ test("only the story and the glossary load the kitchen; the deep dive, the guide
 });
 
 test("a term page carries the kitchen place, the sections in order, and its references", () => {
-  const src = fs.readFileSync(path.join(root, "v17-alpha/assets/js/pages.js"), "utf8");
+  const src = fs.readFileSync(path.join(root, "versions/v0.17-alpha/assets/js/pages.js"), "utf8");
   const body = src.slice(src.indexOf("V3.locator ? V3.locator.section(t)"), src.indexOf("autolink(body, id)"));
   const order = ["V3.locator.section", "definition(t)", "relatedChips(t.related)", "detail(t)", "referencesOf(T.refs(id)"].map((x) => body.indexOf(x));
   order.forEach((i, n) => assert.ok(i >= 0, "the term page lacks part " + n));
@@ -85,8 +85,8 @@ test("the hover texts and the search index cover every term of the glossary, in 
 
 test("a version named in v17's own files is reported", () => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "ae16-"));
-  fs.cpSync(path.join(root, "v17-alpha"), path.join(dir, "v17-alpha"), { recursive: true });
-  fs.writeFileSync(path.join(dir, "v17-alpha/NOTES.md"), "builds on v12-alpha\n");
+  fs.cpSync(path.join(root, "versions/v0.17-alpha"), path.join(dir, "versions/v0.17-alpha"), { recursive: true });
+  fs.writeFileSync(path.join(dir, "versions/v0.17-alpha/NOTES.md"), "builds on v0.12-alpha\n");
   const errors = selfContained(dir);
   assert.ok(errors.length > 0, "expected a report");
   fs.rmSync(dir, { recursive: true });

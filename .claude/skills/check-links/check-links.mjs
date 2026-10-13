@@ -1,9 +1,9 @@
 #!/usr/bin/env node
-// Checks every external URL in <version>/assets/js/data.js, or lists facts that may be stale.
+// Checks every external URL in versions/<version>/assets/js/data.js, or lists facts that may be stale.
 //
-//   node .claude/skills/check-links/check-links.mjs [--version v1-alpha] [--limit N]
+//   node .claude/skills/check-links/check-links.mjs [--version v0.1-alpha] [--limit N]
 //        [--concurrency 8] [--timeout 20] [--json report.json]
-//   node .claude/skills/check-links/check-links.mjs --stale 6 [--version v1-alpha]
+//   node .claude/skills/check-links/check-links.mjs --stale 6 [--version v0.1-alpha]
 //
 // Pages: HEAD, then GET if HEAD fails. YouTube videos: the oEmbed endpoint (as the README describes).
 // Exit code 1 when at least one link is dead.
@@ -18,10 +18,10 @@ const opt = (name, def) => { const i = args.indexOf("--" + name); return i === -
 
 const versions = opt("version", null)
   ? [opt("version")]
-  : fs.readdirSync(ROOT).filter((d) => /^v\d/.test(d) && fs.existsSync(path.join(ROOT, d, "assets/js/data.js")));
+  : fs.readdirSync(path.join(ROOT, "versions")).filter((d) => /^v\d/.test(d) && fs.existsSync(path.join(ROOT, "versions", d, "assets/js/data.js")));
 
 function load(version) {
-  const file = path.join(ROOT, version, "assets/js/data.js");
+  const file = path.join(ROOT, "versions", version, "assets/js/data.js");
   const sandbox = { window: {} };
   vm.runInNewContext(fs.readFileSync(file, "utf8"), sandbox, { filename: file });
   return sandbox.window.AE;

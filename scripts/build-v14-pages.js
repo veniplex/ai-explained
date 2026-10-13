@@ -1,13 +1,13 @@
 #!/usr/bin/env node
-/* Writes what v14-alpha generates from its content (assets/js/data/) and its two shells:
-     v14-alpha/<way>/glossary/index.html            the glossary                  (way: kitchen or technical)
-     v14-alpha/<way>/glossary/<id>/index.html       one page per term (the 21 main terms and the terms only the glossary has)
-     v14-alpha/<way>/guides/index.html              the guides, shown as notes
-     v14-alpha/<way>/guides/<id>/index.html         one page per guide
-     v14-alpha/<way>/about/index.html               the about page
-     v14-alpha/assets/js/data/glance-<way>.js       the sentence of every term for the hover card (popover.js)
-     v14-alpha/assets/js/data/search-index-<way>.js what the search (search.js) looks through
-   The pages are the shells (v14-alpha/kitchen/index.html and v14-alpha/technical/index.html) with their own title, description and address, so a link
+/* Writes what v0.14-alpha generates from its content (assets/js/data/) and its two shells:
+     v0.14-alpha/<way>/glossary/index.html            the glossary                  (way: kitchen or technical)
+     v0.14-alpha/<way>/glossary/<id>/index.html       one page per term (the 21 main terms and the terms only the glossary has)
+     v0.14-alpha/<way>/guides/index.html              the guides, shown as notes
+     v0.14-alpha/<way>/guides/<id>/index.html         one page per guide
+     v0.14-alpha/<way>/about/index.html               the about page
+     v0.14-alpha/assets/js/data/glance-<way>.js       the sentence of every term for the hover card (popover.js)
+     v0.14-alpha/assets/js/data/search-index-<way>.js what the search (search.js) looks through
+   The pages are the shells (v0.14-alpha/kitchen/index.html and v0.14-alpha/technical/index.html) with their own title, description and address, so a link
    shows a proper title and preview; app.js fills in the content. Each also carries its text in a <noscript> block, so a reader without JavaScript, a link
    preview or a search engine finds the content too (in the words of its own way: the kitchen pages in the kitchen voice, the technical pages in the
    technical one).
@@ -20,7 +20,7 @@ const { plain } = require("./check-v4.js");
 const content = require("./v14-content.js");
 const v9 = require("./check-v9.js");
 
-const DIR = "v14-alpha";
+const DIR = "versions/v0.14-alpha";
 const WAYS = ["kitchen", "technical"];
 const SITE = "https://veniplex.github.io/ai-explained/";
 const TAIL = " · AI explained";

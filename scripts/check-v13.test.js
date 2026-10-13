@@ -9,28 +9,28 @@ const { pages, stale } = require("./build-v13-pages.js");
 const { loadV4 } = require("./check-v4.js");
 
 const root = path.resolve(__dirname, "..");
-const read = (f) => fs.readFileSync(path.join(root, "v13-alpha", f), "utf8");
+const read = (f) => fs.readFileSync(path.join(root, "versions/v0.13-alpha", f), "utf8");
 const TRAIL = '<script src="%versions.js"></script>\\s*<script src="%version-switcher.js"></script>\\s*</body>';
 
-test("v13-alpha passes the content checks (voices, story, bridges, three ways, top bar, generated files, self-containment)", () => {
+test("v0.13-alpha passes the content checks (voices, story, bridges, three ways, top bar, generated files, self-containment)", () => {
   assert.deepEqual(check(root), []);
 });
 
 test("every term has a reference page and a guide list in both ways, and the generated files are current", () => {
-  const D = loadV4(root, "v13-alpha");
+  const D = loadV4(root, "versions/v0.13-alpha");
   ["kitchen", "technical"].forEach((way) => {
-    Object.keys(D.entries).forEach((id) => assert.ok(fs.existsSync(path.join(root, "v13-alpha", way, "references", id, "index.html")), way + "/references/" + id));
-    D.guideList.forEach((g) => assert.ok(fs.existsSync(path.join(root, "v13-alpha", way, "guides", g.id, "index.html")), way + "/guides/" + g.id));
-    assert.ok(fs.existsSync(path.join(root, "v13-alpha", way, "references", "index.html")));
-    assert.ok(fs.existsSync(path.join(root, "v13-alpha", way, "guides", "index.html")));
+    Object.keys(D.entries).forEach((id) => assert.ok(fs.existsSync(path.join(root, "versions/v0.13-alpha", way, "references", id, "index.html")), way + "/references/" + id));
+    D.guideList.forEach((g) => assert.ok(fs.existsSync(path.join(root, "versions/v0.13-alpha", way, "guides", g.id, "index.html")), way + "/guides/" + g.id));
+    assert.ok(fs.existsSync(path.join(root, "versions/v0.13-alpha", way, "references", "index.html")));
+    assert.ok(fs.existsSync(path.join(root, "versions/v0.13-alpha", way, "guides", "index.html")));
   });
   assert.deepEqual(stale(root), []);
 });
 
 test("every shell and generated page loads files that exist and the version dropdown from the right depth", () => {
-  const files = Object.keys(pages(root)).map((f) => f.replace(/^v13-alpha\//, "")).concat(["index.html", "story/index.html", "kitchen/index.html", "technical/index.html"]);
+  const files = Object.keys(pages(root)).map((f) => f.replace(/^versions\/v0.13-alpha\//, "")).concat(["index.html", "story/index.html", "kitchen/index.html", "technical/index.html"]);
   files.filter((f) => /\.html$/.test(f)).forEach((f) => {
-    const html = read(f), dir = path.dirname(path.join(root, "v13-alpha", f)), depth = f.split("/").length - 1, up = "../".repeat(depth + 1);
+    const html = read(f), dir = path.dirname(path.join(root, "versions/v0.13-alpha", f)), depth = f.split("/").length - 1, up = "../".repeat(depth + 1);
     for (const m of html.matchAll(/<(?:script src|link rel="stylesheet" href)="([^"#?]+)"/g)) assert.ok(fs.existsSync(path.join(dir, m[1])), f + ": " + m[1]);
     assert.match(html, new RegExp(TRAIL.replace(/%/g, up.replace(/\./g, "\\."))), f + ": versions.js and version-switcher.js come last");
     assert.ok(html.includes('class="bar-actions"'), f + " has no header to put the dropdown in");
@@ -65,7 +65,7 @@ test("the start page links to the three ways; old root links are forwarded", () 
 });
 
 test("the hover texts and the search index cover every term, one file per way, each in its own voice only", () => {
-  const D = loadV4(root, "v13-alpha");
+  const D = loadV4(root, "versions/v0.13-alpha");
   ["kitchen", "technical"].forEach((way) => {
     const g = read("assets/js/data/glance-" + way + ".js"), s = read("assets/js/data/search-index-" + way + ".js"), mine = way === "kitchen" ? "k" : "t", other = way === "kitchen" ? "t" : "k";
     Object.keys(D.entries).forEach((id) => {
@@ -81,8 +81,8 @@ test("the hover texts and the search index cover every term, one file per way, e
 
 test("a version named in v13's own files is reported", () => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "ae13-"));
-  fs.cpSync(path.join(root, "v13-alpha"), path.join(dir, "v13-alpha"), { recursive: true });
-  fs.writeFileSync(path.join(dir, "v13-alpha/NOTES.md"), "builds on v12-alpha\n");
+  fs.cpSync(path.join(root, "versions/v0.13-alpha"), path.join(dir, "versions/v0.13-alpha"), { recursive: true });
+  fs.writeFileSync(path.join(dir, "versions/v0.13-alpha/NOTES.md"), "builds on v0.12-alpha\n");
   const errors = selfContained(dir);
   assert.ok(errors.length > 0, "expected a report");
   fs.rmSync(dir, { recursive: true });

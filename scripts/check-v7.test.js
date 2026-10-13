@@ -6,7 +6,7 @@ const { check, load, v6Terms } = require("./check-v7.js");
 
 const root = path.resolve(__dirname, "..");
 
-test("the pages of v7-alpha pass the content checks", () => {
+test("the pages of v0.7-alpha pass the content checks", () => {
   assert.deepEqual(check(root), []);
 });
 
