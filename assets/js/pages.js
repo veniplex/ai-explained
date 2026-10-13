@@ -65,7 +65,7 @@
     ALIAS = { map: map, re: new RegExp("(^|[^A-Za-z0-9-])(" + names.map(escapeRe).join("|") + ")(?:s|es)?(?![A-Za-z0-9-])", "gi") };
     return ALIAS;
   }
-  var SKIP_IN = "a, code, pre, svg, button, h1, h2, h3, h4, h5, h6, .links, .chips, .locator, .pager, .term-aka, .mini-map, .kmap, .fig, .formula, .note-grid, .gl-card, .side, .code, .eyebrow, label";
+  var SKIP_IN = "a, code, pre, svg, button, h1, h2, h3, h4, h5, h6, .links, .gd-sources, .link-meta, .chips, .locator, .pager, .term-aka, .mini-map, .kmap, .fig, .formula, .note-grid, .gl-card, .side, .code, .eyebrow, label";
   function linkBlock(block, selfId) {
     var A = aliases(), seen = {}, walker = document.createTreeWalker(block, NodeFilter.SHOW_TEXT, null), nodes = [], n;
     while ((n = walker.nextNode())) { if (n.parentNode && !n.parentNode.closest(SKIP_IN)) nodes.push(n); }
