@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/* Content checks for v8-alpha, the comic strip: the chapters and their panels (format, drawings that exist),
+/* Content checks for v0.8-alpha, the comic strip: the chapters and their panels (format, drawings that exist),
    the kitchen voice of every caption, bubble and title (the same banned words as v4 to v6), the strips with the real names
    (every term is a v6 term, every term of v6 is named), and no request to anywhere outside the folder.
    Run from the repository root: node scripts/check-v8.js */
@@ -9,7 +9,7 @@ const path = require("node:path");
 const vm = require("node:vm");
 const { KITCHEN_BAN, banned, withoutBridges, words } = require("./check-voice.js");
 
-const DIR = "versions/v8-alpha";
+const DIR = "versions/v0.8-alpha";
 const ZONES = ["start", "model", "harness", "control", "know", "tools", "orch", "ops"];
 const BGS = ["kitchen", "market", "night", "plain"];
 const KINDS = ["say", "think", "sign", "shout", "sfx"];
@@ -32,7 +32,7 @@ function load(root) {
 }
 // The terms of v6 (their ids), read from its entries file.
 function v6Terms(root) {
-  const src = fs.readFileSync(path.join(root, "versions/v6-alpha/assets/js/data/entries.js"), "utf8");
+  const src = fs.readFileSync(path.join(root, "versions/v0.6-alpha/assets/js/data/entries.js"), "utf8");
   return Array.from(src.matchAll(/^  "?([a-z-]+)"?: \{\n    chapter:/gm)).map((m) => m[1]);
 }
 

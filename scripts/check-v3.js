@@ -1,7 +1,7 @@
 #!/usr/bin/env node
-/* Content checks for v3-alpha. Run from the repository root: node scripts/check-v3.js
+/* Content checks for v0.3-alpha. Run from the repository root: node scripts/check-v3.js
    Exits with code 1 and lists every problem when a check fails. Rules come from
-   docs/superpowers/specs/2026-10-11-v3-alpha-design.md (sections 6, 7 and 10). */
+   docs/superpowers/specs/2026-10-11-v0.3-alpha-design.md (sections 6, 7 and 10). */
 "use strict";
 const fs = require("node:fs");
 const path = require("node:path");
@@ -17,8 +17,8 @@ function loadScripts(files) {
   files.forEach((f) => vm.runInContext(fs.readFileSync(f, "utf8"), ctx, { filename: f }));
   return ctx.window;
 }
-function loadV1(root) { return loadScripts([path.join(root, "versions/v1-alpha/assets/js/data.js")]).AE; }
-function loadV3(root) { return loadScripts(V3_FILES.map((f) => path.join(root, "versions/v3-alpha/assets/js", f))).AE3; }
+function loadV1(root) { return loadScripts([path.join(root, "versions/v0.1-alpha/assets/js/data.js")]).AE; }
+function loadV3(root) { return loadScripts(V3_FILES.map((f) => path.join(root, "versions/v0.3-alpha/assets/js", f))).AE3; }
 
 // Inline markup to plain text: [[id|label]] -> label, [[id]] -> id, [t](url) -> t, **b** -> b, `c` -> c.
 function plain(text) {
@@ -184,5 +184,5 @@ if (require.main === module) {
     try { errors = check(v1, v3); } catch (e) { errors = ["checker crashed: " + e.message]; }
   }
   if (errors.length) { console.error(errors.length + " problem(s):\n- " + errors.join("\n- ")); process.exit(1); }
-  console.log("v3-alpha content checks passed.");
+  console.log("v0.3-alpha content checks passed.");
 }

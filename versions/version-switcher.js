@@ -20,10 +20,12 @@
     else if (from && from.guided && to.guided && /^#(ch-[1-9e]|map)$/.test(hash)) path += hash;
     return path;
   }
+  // A pre-release has a stage in its name (v0.17-alpha); a release does not (v1.0).
+  function isPre(id) { return /-[a-z]+$/.test(id || ""); }
   function find(list, id) { for (var i = 0; i < list.length; i++) if (list[i].id === id) return list[i]; return null; }
   // The start page of a version, from the folder of this script: the main version is the site root, one level up.
   function home(v) { return v ? (v.main ? "../" : v.id + "/") : "./"; }
-  // "v6-alpha" -> "v6", for the narrow header; "v1.0.0" stays as it is.
+  // "v0.6-alpha" -> "v6", for the narrow header; "v1.0" stays as it is.
   function short(id) { return id.replace(/-.*$/, ""); }
   // Which version a page belongs to, from the path of the page and the path of the site root ("/ai-explained/"): { id, rest } (rest: the path inside the version).
   function where(list, pathname, siteRoot) {
@@ -34,7 +36,7 @@
     return { id: main ? main.id : "", rest: inside.replace(/index\.html$/, "") };
   }
 
-  if (typeof module !== "undefined" && module.exports) module.exports = { target: target, short: short, where: where };
+  if (typeof module !== "undefined" && module.exports) module.exports = { target: target, short: short, where: where, isPre: isPre };
   if (!DATA || !DATA.list || !DATA.list.length || typeof document === "undefined") return;
 
   var script = document.currentScript, base = script && script.src ? script.src.replace(/[^/]*$/, "") : new URL("./", location.href).href;
@@ -87,7 +89,7 @@
   btn.appendChild(chevron());
 
   menu.appendChild(el("li", "vs-head", "Versions"));
-  list.forEach(function (v) {
+  function entry(v) {
     var li = el("li"), a = el("a", "vs-item" + (v.id === here ? " is-here" : ""));
     a.setAttribute("data-v", v.id);
     a.href = new URL(target(list, here, rest, location.hash, v.id), base).href;
@@ -98,17 +100,42 @@
     a.appendChild(top);
     a.appendChild(el("span", "vs-note", v.note));
     li.appendChild(a);
-    menu.appendChild(li);
-  });
+    return li;
+  }
+  // The releases are listed; the alpha versions (and any other pre-release) are folded into one group that is closed until it is opened, or until you are on one of them.
+  var releases = list.filter(function (v) { return !isPre(v.id); }), pre = list.filter(function (v) { return isPre(v.id); });
+  releases.forEach(function (v) { menu.appendChild(entry(v)); });
+  if (pre.length) {
+    var group = el("li", "vs-group"), gbtn = el("button", "vs-group-btn"), gsub = el("ul", "vs-sub");
+    gbtn.type = "button";
+    gbtn.setAttribute("aria-controls", "vs-alpha");
+    gbtn.appendChild(el("span", "vs-group-name", "Alpha versions"));
+    gbtn.appendChild(el("span", "vs-group-count", String(pre.length)));
+    gbtn.appendChild(chevron());
+    gsub.id = "vs-alpha";
+    pre.forEach(function (v) { gsub.appendChild(entry(v)); });
+    function fold(open) {
+      gbtn.setAttribute("aria-expanded", open ? "true" : "false");
+      gsub.hidden = !open;
+      group.classList.toggle("is-open", open);
+    }
+    fold(isPre(here));
+    gbtn.addEventListener("click", function (e) { e.stopPropagation(); fold(gsub.hidden); });
+    group.appendChild(gbtn);
+    group.appendChild(gsub);
+    menu.appendChild(group);
+  }
   wrap.appendChild(btn);
   wrap.appendChild(menu);
   host.insertBefore(wrap, host.firstChild);
 
-  function items() { return Array.prototype.slice.call(menu.querySelectorAll("a")); }
+  // What the arrow keys visit: the entries that can be seen (those of a closed group cannot) and the button of the group.
+  function items() { return Array.prototype.slice.call(menu.querySelectorAll("a, .vs-group-btn")).filter(function (n) { return !n.closest(".vs-sub[hidden]"); }); }
+  function links() { return Array.prototype.slice.call(menu.querySelectorAll("a")); }
   // The links follow the page: a chapter or a card opened since the page loaded is carried over too. A list that would run off the
   // right edge of the window hangs from the right edge of its button instead.
   function open() {
-    items().forEach(function (a) { a.href = new URL(target(list, here, rest, location.hash, a.getAttribute("data-v")), base).href; });
+    links().forEach(function (a) { a.href = new URL(target(list, here, rest, location.hash, a.getAttribute("data-v")), base).href; });
     menu.hidden = false;
     wrap.classList.toggle("is-right", btn.getBoundingClientRect().left + Math.min(320, window.innerWidth - 32) > window.innerWidth - 8);
     btn.setAttribute("aria-expanded", "true");

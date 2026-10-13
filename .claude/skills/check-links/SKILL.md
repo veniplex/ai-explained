@@ -13,7 +13,7 @@ The README promises that every source link was checked when the snapshot was mad
 
 - Links (all versions, about 600 URLs, a few minutes):
   `node .claude/skills/check-links/check-links.mjs --json "$TMPDIR/links.json"`
-  Add `--version v1-alpha` for one version, `--limit 20` for a quick smoke test.
+  Add `--version v0.1-alpha` for one version, `--limit 20` for a quick smoke test.
 - Stale facts (no network): `node .claude/skills/check-links/check-links.mjs --stale 6`
   (the number is months; default 6).
 

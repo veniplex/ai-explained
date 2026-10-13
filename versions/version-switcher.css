@@ -40,6 +40,21 @@
   font: 500 10px/1 var(--mono, ui-monospace, monospace); letter-spacing: 0.06em; text-transform: uppercase;
 }
 .vs-item.is-here .vs-tag { background: var(--surface, #fff); }
+/* The alpha versions: one row that opens a list inside the dropdown. */
+.vs-group { margin-top: 4px; padding-top: 4px; border-top: 1px solid var(--rule, #d8d2c2); }
+.vs-group-btn {
+  display: flex; align-items: center; gap: 8px; width: 100%; padding: 9px 10px; border: 0; border-radius: 8px; background: none; cursor: pointer; text-align: left;
+  font: 600 14px/1.3 var(--sans, system-ui, sans-serif); color: var(--ink, #1f1e1d);
+}
+.vs-group-btn:hover, .vs-group-btn:focus-visible { background: var(--paper-2, #f1ede3); }
+.vs-group-btn:focus-visible { outline: 2px solid var(--focus, #8f3f23); outline-offset: -2px; }
+.vs-group-name { flex: 1; }
+.vs-group-count { font: 500 11px/1 var(--mono, ui-monospace, monospace); color: var(--ink-3, #6f6c63); }
+.vs-group-btn .vs-chevron { transition: transform 0.2s var(--ease, ease); }
+.vs-group-btn[aria-expanded="true"] .vs-chevron { transform: rotate(180deg); }
+.vs-sub { margin: 2px 0 0; padding: 0 0 0 8px; list-style: none; }
+.vs-sub[hidden] { display: none; }
+.vs-sub .vs-item { padding: 7px 10px; }
 .vs-note { font: 400 13px/1.4 var(--sans, system-ui, sans-serif); color: var(--ink-2, #4a4842); }
 
 @media (max-width: 640px) {
@@ -50,7 +65,7 @@
   .vs-short { display: inline; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .vs-menu, .vs-item, .vs-chevron { transition: none; }
+  .vs-menu, .vs-item, .vs-chevron, .vs-group-btn .vs-chevron { transition: none; }
   .vs-menu { transform: none; }
   .vs-item:hover, .vs-item:focus-visible { transform: none; }
 }

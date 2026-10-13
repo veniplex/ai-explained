@@ -8,11 +8,11 @@
   <!-- GitHub Pages serves this page for any unknown address, at any depth, so the paths start at the site root (/ai-explained/). -->
   <link rel="icon" href="/ai-explained/favicon.svg" type="image/svg+xml">
   <script>
-    /* The older versions moved into versions/ (…/v12-alpha/terms/mcp/ is now …/versions/v12-alpha/terms/mcp/). An address that names one of them is sent there,
-       with its query and hash, so every link made before the move still works. An address already inside versions/ is not sent again. */
+    /* The older versions moved into versions/ and were renamed (…/v12-alpha/terms/mcp/ is now …/versions/v0.12-alpha/terms/mcp/). An address that names one of them by its
+       old name is sent to the new place, with its query and hash, so every link made before the move still works. An address that already has the new name is not sent again. */
     (function () {
-      var m = location.pathname.match(/^(.*?\/)(v\d+-[a-z0-9]+)(\/.*)?$/);
-      if (m && !/\/versions\/$/.test(m[1])) location.replace(m[1] + "versions/" + m[2] + (m[3] || "/") + location.search + location.hash);
+      var m = location.pathname.match(/^(.*?\/)(?:versions\/)?v(\d+)-([a-z0-9]+)(\/.*)?$/);
+      if (m) location.replace(m[1] + "versions/v0." + m[2] + "-" + m[3] + (m[4] || "/") + location.search + location.hash);
     })();
   </script>
   <style>

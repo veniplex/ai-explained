@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/* Content checks for the site (the main version, v1.0.0, at the root of the repository): the kitchen story and the technical deep dive, with a glossary, guides and an about page shared by both.
+/* Content checks for the site (the main version, v1.0, at the root of the repository): the kitchen story and the technical deep dive, with a glossary, guides and an about page shared by both.
    - the content: the rules of check-v4.js for the technical voice (word budgets, links, sources), without the kitchen voice of the chapters, the guides
      and the small texts (the kitchen is only in the story and in the glossary);
    - the story: the rules of check-v9.js (steps, things, voice of every caption, names over the kitchen);
@@ -110,12 +110,12 @@ function outsideChecks(root) {
 }
 
 // The site stands by itself: no other version is named or linked. The two scripts of the version dropdown (versions/versions.js and versions/version-switcher.js, at the
-// end of every page) are the only reference to the rest of the repository, and the start page names v1-alpha once, to forward the links made for it.
+// end of every page) are the only reference to the rest of the repository, and the start page names v0.1-alpha once, to forward the links made for it.
 function selfContained(root) {
   const errors = [];
   siteFiles(root).filter((f) => /\.(html|js|css|md)$/.test(f)).forEach((f) => {
     const rel = path.relative(root, f), text = fs.readFileSync(f, "utf8");
-    const named = (text.match(/\bv\d+-(alpha|beta)\b/g) || []).filter((v) => !(rel === "index.html" && v === "v1-alpha"));
+    const named = (text.match(/\bv\d+(?:\.\d+)*-(alpha|beta)\b/g) || []).filter((v) => !(rel === "index.html" && v === "v0.1-alpha"));
     if (named.length) errors.push(rel + ": names another version (" + Array.from(new Set(named)).join(", ") + ")");
     if (/\.html$/.test(f)) {
       for (const m of text.matchAll(/(?:href|src)="((?:\.\.\/)*)([^"]*)"/g)) {

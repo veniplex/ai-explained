@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/* Content checks for what v14-alpha adds to the content of v13: the glossary (assets/js/data/glossary.js and voice-glossary-kitchen.js) and the long
+/* Content checks for what v0.14-alpha adds to the content of v13: the glossary (assets/js/data/glossary.js and voice-glossary-kitchen.js) and the long
    guides (voice-guides-long-tech-a.js, -b.js and voice-guides-long-kitchen-a.js, -b.js). Used by check-v14.js; from the command line it lints the data files while
    they are being written:
      node scripts/v14-content.js
@@ -8,7 +8,7 @@
 const path = require("node:path");
 const voice = require("./check-voice.js");
 
-const DIR = "versions/v14-alpha";
+const DIR = "versions/v0.14-alpha";
 // The drawings of assets/js/icons.js, by name. icons.js must draw every one of them (check-v14.js verifies).
 const ICONS = ["net", "book", "books", "lock", "key", "shield", "search", "link", "plug", "wrench", "gear", "loop", "clock", "calendar", "scales", "flask", "bars",
   "gauge", "coin", "team", "tree", "fork", "merge", "pencil", "note", "doc", "folder", "db", "cloud", "chip", "stack", "funnel", "target", "flag", "bell", "eye",

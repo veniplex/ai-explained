@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>How an AI agent works · Agentic AI, Explained</title>
+  <meta name="description" content="AI agents, explained in one hand-drawn restaurant kitchen that builds itself on a single screen, as of October 2026. Every real name leads to a deep-dive page with the mechanism, dated facts and checked sources.">
+  <meta name="theme-color" content="#faf9f5" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#1f1e1d" media="(prefers-color-scheme: dark)">
+  <link rel="canonical" href="https://veniplex.github.io/ai-explained/versions/v0.12-alpha/story/">
+  <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="How an AI agent works, in one kitchen that builds itself">
+  <meta property="og:description" content="One Saturday in a restaurant kitchen explains AI agents: a chef who remembers nothing, a counter, tools, locks and a night shift. The real names go over the kitchen at the end, and each one opens a deep-dive page. Snapshot: October 2026.">
+  <meta property="og:url" content="https://veniplex.github.io/ai-explained/versions/v0.12-alpha/story/">
+  <meta property="og:image" content="https://veniplex.github.io/ai-explained/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="../assets/fonts/source-serif-4-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../assets/fonts/dm-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../assets/css/kitchen.css">
+  <link rel="stylesheet" href="../assets/css/places.css">
+  <script>
+    /* Set the theme before first paint: the saved choice, else the system setting.
+       The stylesheet reads only data-theme, so this always sets it. */
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem("ae-theme"); } catch (e) {}
+      if (t !== "light" && t !== "dark") t = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      document.documentElement.setAttribute("data-theme", t);
+    })();
+  </script>
+</head>
+<body data-page="kitchen" data-base="">
+  <a class="skip-link" href="#main">Skip to the kitchen</a>
+
+  <header class="bar">
+    <a class="brand" href="../" aria-label="Agentic AI, Explained: back to the start">
+      <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
+        <path class="brand-ring" d="M25.6 12.4C23.9 7.6 18.6 5 13.8 6.6 8.9 8.2 6.3 13.6 7.9 18.5c1.6 4.9 6.9 7.6 11.8 6 2.6-.9 4.6-2.8 5.6-5.2"/>
+        <path class="brand-ring" d="M26.6 6.8l-.9 5.8-5.6-1.6"/>
+        <circle class="brand-dot" cx="16.6" cy="16" r="3.4"/>
+      </svg>
+      <span class="brand-title">Agentic AI<span class="brand-tail">, <em>explained</em></span></span>
+    </a>
+    <span class="brand-sub">One kitchen that builds itself · October 2026</span>
+
+
+    <div class="bar-actions">
+      <button class="icon-btn" id="theme-toggle" type="button" aria-label="Switch colour theme" title="Switch colour theme">
+        <svg class="theme-icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>
+        <svg class="theme-icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="chapbar">
+    <nav class="pages" id="pages" aria-label="Chapters of the story"></nav>
+  </div>
+
+  <main class="stage" id="main" tabindex="-1">
+    <h1 class="visually-hidden">How an AI agent works, told as one restaurant kitchen that builds itself</h1>
+    <noscript>
+      <p class="noscript">This kitchen draws itself with JavaScript, so it needs it. The same story is told in words in the <a href="../dive/">deep dive</a>, and as one map in <a href="../../v0.1-alpha/">v0.1-alpha</a>.</p>
+    </noscript>
+    <svg class="sk" id="sk" aria-hidden="true" focusable="false">
+      <g id="world">
+        <g id="kitchen">
+          <g id="room"></g>
+          <g id="back"></g>
+          <rect class="night-wash" x="-4200" y="-2600" width="9800" height="5800"/>
+          <g id="front"></g>
+        </g>
+        <g id="halos"></g>
+      </g>
+    </svg>
+    <div class="hworld" id="hworld">
+      <div id="bubs"></div>
+      <div id="labs"></div>
+    </div>
+    <div class="banner" id="banner" aria-hidden="true"><span class="banner-n" id="banner-n"></span><span class="banner-t" id="banner-t"></span></div>
+    <div class="defcard" id="defcard" role="dialog" aria-modal="false" aria-labelledby="def-term" hidden>
+      <button class="defcard-x" type="button" id="def-close" aria-label="Close">×</button>
+      <p class="eyebrow" id="def-kw"></p>
+      <h2 id="def-term" tabindex="-1"></h2>
+      <p class="def-text" id="def-text"></p>
+      <p class="def-links"><a class="btn btn-ink btn-sm" id="def-more" href="#">Open the deep dive <span aria-hidden="true">→</span></a><a class="def-chapter" id="def-chapter" href="#">The chapter</a></p>
+    </div>
+  </main>
+
+  <footer class="console" id="console">
+    <input class="scrub" id="scrub" type="range" min="0" max="1" value="0" step="1" aria-label="Step of the story">
+    <div class="narr">
+      <p class="where"><span id="chno">Start</span><span class="dotsep" aria-hidden="true">·</span><span id="chname">How an AI agent works</span><span class="stepn" id="stepn">1/1</span></p>
+      <p class="cap" id="cap" aria-live="polite"></p>
+    </div>
+    <div class="ctrl" role="group" aria-label="Move through the story">
+      <button class="btn btn-ghost" type="button" id="btn-back" aria-label="Back one step" aria-disabled="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
+        <span class="btn-label btn-label-long">Back</span>
+      </button>
+      <button class="btn btn-ghost" type="button" id="btn-play" aria-label="Play the story">
+        <svg class="ic-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>
+        <svg class="ic-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="display:none"><path d="M7 5h3.6v14H7zM13.4 5H17v14h-3.4z"/></svg>
+        <span class="btn-label btn-label-long">Play</span>
+      </button>
+      <button class="btn btn-ghost speed" type="button" id="btn-speed" aria-label="Speed: 2 seconds per step. Press to change.">
+        <svg viewBox="0 0 36 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path class="chev c1" d="M5 5l7 7-7 7"/><path class="chev c2" d="M15 5l7 7-7 7"/><path class="chev c3" d="M25 5l7 7-7 7"/></svg>
+        <span class="speed-n" id="speed-n">2 s</span>
+      </button>
+      <button class="btn btn-ink" type="button" id="btn-next">
+        <span class="btn-label">Next</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </button>
+    </div>
+  </footer>
+
+  <script src="../assets/vendor/rough.js"></script>
+  <script src="../assets/js/draw.js"></script>
+  <script src="../assets/js/props.js"></script>
+  <script src="../assets/js/data/props-extra-a.js"></script>
+  <script src="../assets/js/data/props-extra-b.js"></script>
+  <script src="../assets/js/data/props-extra-c.js"></script>
+  <script src="../assets/js/data/props-v9.js"></script>
+  <script src="../assets/js/data/kitchen.js"></script>
+  <script src="../assets/js/data/story.js"></script>
+  <script src="../assets/js/data/names.js"></script>
+  <script src="../assets/js/data/bridges.js"></script>
+  <script src="../assets/js/kitchen.js"></script>
+  <script src="../../versions.js"></script>
+  <script src="../../version-switcher.js"></script>
+</body>
+</html>

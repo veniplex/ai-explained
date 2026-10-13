@@ -1,7 +1,7 @@
 #!/usr/bin/env node
-/* Content checks for v11-alpha: the kitchen story and the deep dive in one version.
-   - the story: the rules of v9-alpha (check-v9.js: steps, things, voice of every caption, names over the kitchen);
-   - the deep dive: the rules of v4-alpha (check-v4.js: both voices, word budgets, links, term and guide pages);
+/* Content checks for v0.11-alpha: the kitchen story and the deep dive in one version.
+   - the story: the rules of v0.9-alpha (check-v9.js: steps, things, voice of every caption, names over the kitchen);
+   - the deep dive: the rules of v0.4-alpha (check-v4.js: both voices, word budgets, links, term and guide pages);
    - the bridge between them: every name of the kitchen is a term with a page and sits in the chapter the deep dive puts it in, every
      bold word of a caption leads to a term (data/bridges.js), and the page of every term can draw its place in the kitchen;
    - nothing is requested from outside the folder.
@@ -12,7 +12,7 @@ const path = require("node:path");
 const v9 = require("./check-v9.js");
 const v4 = require("./check-v4.js");
 
-const DIR = "versions/v11-alpha";
+const DIR = "versions/v0.11-alpha";
 
 // The bridges of the kitchen story, loaded as the browser does.
 function loadBridges(root) {

@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/* Content checks for the glossary of v16-alpha (assets/js/data/glossary.js, glossary-refs.js and voice-glossary-kitchen.js) and the long guides
+/* Content checks for the glossary of v0.16-alpha (assets/js/data/glossary.js, glossary-refs.js and voice-glossary-kitchen.js) and the long guides
    (voice-guides-long-tech-a.js, -b.js, -c.js). Used by check-v16.js; from the command line it lints the data files while
    they are being written:
      node scripts/v16-content.js
@@ -8,7 +8,7 @@
 const path = require("node:path");
 const voice = require("./check-voice.js");
 
-const DIR = "versions/v16-alpha";
+const DIR = "versions/v0.16-alpha";
 // The drawings of assets/js/icons.js, by name. icons.js must draw every one of them (check-v16.js verifies).
 const ICONS = ["net", "book", "books", "lock", "key", "shield", "search", "link", "plug", "wrench", "gear", "loop", "clock", "calendar", "scales", "flask", "bars",
   "gauge", "coin", "team", "tree", "fork", "merge", "pencil", "note", "doc", "folder", "db", "cloud", "chip", "stack", "funnel", "target", "flag", "bell", "eye",

@@ -1,6 +1,6 @@
 # How AI explained is built
 
-This is the technical README of the site at the root of the repository (release 1.0.0): what every part does, how the pages are generated and what is checked. The main README is [`README.md`](../README.md).
+This is the technical README of the site at the root of the repository (release 1.0): what every part does, how the pages are generated and what is checked. The main README is [`README.md`](../README.md).
 
 How AI agents work, as of **October 2026**, in two ways to read the same topic, plus guides, a glossary and an about page that belong to both. The kitchen appears in two places only: the kitchen story, and the glossary, where every term shows where it sits in the kitchen.
 
@@ -16,12 +16,12 @@ The start page (`index.html`) is the first screen: two cards for the two ways in
 
 The same on every page, and nothing in it moves from one page to the next (the room of the scrollbar is always kept, the current place is marked without changing the width of its word, and the buttons at the right have a width of their own, so the star count arriving late moves nothing): the brand (it leads back to the start page); the five places as plain links, with the current one underlined (**ELI5: AI as Kitchen Chef**, **AI Agents: Technical Deep Dive**, Guides, Glossary, About), from 1260px up; **the search in the middle**; a **GitHub pill** with the number of stars; the **theme button**; and, below 1260px, a menu (the hamburger) that holds the same five places with a line each.
 
-- **Version.** The dropdown that lists all releases (1.0.0 first, marked current, then the archived alpha versions in `versions/`) is a small tab that hangs from the right edge of the bar and goes with it (the bar is sticky), from 761px up. On a phone it is the last line of the menu. `nav.js` moves the button between the two.
+- **Version.** The dropdown that lists all releases (1.0 first, marked current, then the archived alpha versions in `versions/`) is a small tab that hangs from the right edge of the bar and goes with it (the bar is sticky), from 761px up. On a phone it is the last line of the menu. `nav.js` moves the button between the two.
 - **Theme.** Three choices, stepped by one button: *System* (the default; the page follows the device, also while it is open), *Light* and *Dark*. Only Light and Dark are stored, in the visitor's own browser (`ae17-theme`); no cookies. A choice an older version saved under another key is not read, so a first visit is always on System.
 - **GitHub.** The pill links to the repository. `github.js` asks GitHub's public API for the number of stars (one GET, no cookies, kept for ten minutes in the tab); if the request fails, the count stays hidden. It is the one request this site makes to anyone else.
 - **Search** looks through everything: the glossary, the chapters of the deep dive, the guides, the about page and the chapters of the story. `/` opens it, Enter opens the first hit, the arrow keys choose, Esc closes. The index (`assets/js/data/search-index.js`) is loaded the first time the field is used.
 - **Hover cards.** A term anywhere (a chip, a block of the map, a word in the text, a bold word of the story) shows a short technical explanation and a link to its glossary page when the mouse rests on it or the keyboard focuses it. Touch screens get no card; a tap opens the page. Esc closes it.
-- **The heading you are in stays in view.** On the long pages (a guide, a glossary term, the about page) the heading of the part you are reading sticks just under the top bar once it would scroll out, and the next part's heading pushes it away when that part arrives; a thin rule and a soft shadow mark it while it is pinned. In the deep dive a slim bar with the chapter's number and title does the same once the chapter's own title has scrolled out. The sticking is CSS (`position: sticky`, in `pages.css` and `style.css`); `stickhead.js` marks the pinned heading, shows the chapter bar and sets `--stick-h`, which the scroll offsets use so a jump lands below the pinned heading. Printing and reduced motion are respected.
+- **The heading you are in stays in view.** On the long pages (a guide, a glossary term, the about page) the heading of the part you are reading sticks just under the top bar once it would scroll out, and the next part's heading pushes it away when that part arrives; a thin rule marks it while it is pinned. In the deep dive a slim bar with the chapter's number and title does the same once the chapter's own title has scrolled out. The sticking is CSS (`position: sticky`, in `pages.css` and `style.css`); `stickhead.js` marks the pinned heading, shows the chapter bar and sets `--stick-h`, which the scroll offsets use so a jump lands below the pinned heading. Printing and reduced motion are respected.
 - **To the top.** On every page that is at least two windows high, a round button at the bottom right appears once you have scrolled down by most of a window (`totop.js`). It scrolls smoothly (or jumps, with reduced motion) and puts focus on the page's heading.
 
 ## The app
@@ -45,12 +45,12 @@ The site can be installed (Chrome, Edge and other Chromium browsers; on an iPhon
 | `guides/` | the list of guides |
 | `guides/secure/`, `guides/compare/` … | one guide: `how-it-works`, `context`, `build`, `secure`, `evaluate`, `compare`, `learn` |
 | `about/` | what the site is, its sources and privacy |
-| `#block-…`, `#zone-…`, `#link-…`, `#step-…` and the v1 guide names on the start page | forwarded to `versions/v1-alpha/`, the first map, which still answers them |
-| `/v12-alpha/…` and every other old address of an alpha version | `404.html` forwards it to `/versions/v12-alpha/…`, keeping the rest of the address |
+| `#block-…`, `#zone-…`, `#link-…`, `#step-…` and the v1 guide names on the start page | forwarded to `versions/v0.1-alpha/`, the first map, which still answers them |
+| `/v0.12-alpha/…` and every other old address of an alpha version | `404.html` forwards it to `/versions/v0.12-alpha/…`, keeping the rest of the address |
 
 ## Releases and older versions
 
-The root of the repository is the current release, **1.0.0**. Every earlier version is a self-contained folder in `versions/`, unchanged. `versions/versions.js` is the one list of releases (newest first, the one with `main: true` is the root); `versions/version-switcher.js` and `.css` draw the dropdown in every page, root and archived alike. `scripts/versions.test.js` fails when the list, the folders and the script tags disagree, or when an old address no longer forwards. `.claude/skills/new-version/SKILL.md` describes how the next release is cut.
+The root of the repository is the current release, **1.0**. Every earlier version is a self-contained folder in `versions/`, unchanged. `versions/versions.js` is the one list of releases (newest first, the one with `main: true` is the root); `versions/version-switcher.js` and `.css` draw the dropdown in every page, root and archived alike. `scripts/versions.test.js` fails when the list, the folders and the script tags disagree, or when an old address no longer forwards. `.claude/skills/new-version/SKILL.md` describes how the next release is cut.
 
 ## How it is built
 

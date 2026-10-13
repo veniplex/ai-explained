@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en" data-mode="kitchen">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Testing and running agents in production · Kitchen guide · AI explained</title>
+  <meta name="description" content="A chef who shines on a quiet night can slip on a busy one, and a new supplier can change the food without anyone noticing. This guide shows how a restaurant tastes, films, counts and governs its…">
+  <meta name="theme-color" content="#faf9f5" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#1f1e1d" media="(prefers-color-scheme: dark)">
+  <link rel="canonical" href="https://veniplex.github.io/ai-explained/versions/v0.14-alpha/kitchen/guides/evaluate/">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Testing and running agents in production · Kitchen guide">
+  <meta property="og:description" content="A chef who shines on a quiet night can slip on a busy one, and a new supplier can change the food without anyone noticing. This guide shows how a restaurant tastes, films, counts and governs its…">
+  <meta property="og:url" content="https://veniplex.github.io/ai-explained/versions/v0.14-alpha/kitchen/guides/evaluate/">
+  <meta property="og:image" content="https://veniplex.github.io/ai-explained/versions/v0.14-alpha/assets/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="../../../assets/fonts/source-serif-4-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../../assets/fonts/dm-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../../assets/css/style.css">
+  <link rel="stylesheet" href="../../../assets/css/places.css">
+  <link rel="stylesheet" href="../../../assets/css/nav.css">
+  <link rel="stylesheet" href="../../../assets/css/pages.css">
+  <script>
+    /* Set the theme before first paint: the saved choice, else the system setting.
+       The stylesheet reads only data-theme, so this always sets it. */
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem("ae-theme"); } catch (e) {}
+      if (t !== "light" && t !== "dark") t = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      document.documentElement.setAttribute("data-theme", t);
+    })();
+  </script>
+
+</head>
+<body data-page="guide" data-id="evaluate" data-path="kitchen" data-base="../../../">
+  <a class="skip-link" href="#main">Skip to the content</a>
+
+  <header class="bar">
+    <div class="bar-main">
+      <a class="brand" href="../../../" aria-label="AI explained: the start">
+        <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
+          <path class="brand-ring" d="M25.6 12.4C23.9 7.6 18.6 5 13.8 6.6 8.9 8.2 6.3 13.6 7.9 18.5c1.6 4.9 6.9 7.6 11.8 6 2.6-.9 4.6-2.8 5.6-5.2"/>
+          <path class="brand-ring" d="M26.6 6.8l-.9 5.8-5.6-1.6"/>
+          <circle class="brand-dot" cx="16.6" cy="16" r="3.4"/>
+        </svg>
+        <span class="brand-title">AI<span class="brand-tail"> <em>explained</em></span></span>
+      </a>
+      <div class="search" id="search" role="search">
+        <button class="icon-btn search-open" type="button" id="search-open" aria-label="Search the whole site" aria-controls="site-search" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg>
+        </button>
+        <div class="search-field">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg>
+          <label class="visually-hidden" for="site-search">Search the whole site</label>
+          <input id="site-search" type="search" placeholder="Search the whole site…" autocomplete="off" spellcheck="false" aria-controls="search-results" aria-describedby="search-status">
+          <kbd aria-hidden="true">/</kbd>
+        </div>
+        <ul class="search-results" id="search-results" hidden></ul>
+        <p class="visually-hidden" id="search-status" aria-live="polite"></p>
+      </div>
+      <div class="bar-actions">
+        <details class="site-menu" id="site-menu">
+          <summary class="btn btn-ghost site-menu-btn" aria-label="Menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg><span class="site-menu-label">Menu</span><svg class="site-menu-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9.5l6 6 6-6"/></svg></summary>
+          <nav class="site-menu-panel" aria-label="Sections">
+            <p class="menu-head">Explained simply</p>
+            <ul>
+              <li><a href="../../../story/" data-sec="story"><b>Kitchen story</b><span>One drawn kitchen on one screen. No jargon.</span></a></li>
+              <li><a href="../../../kitchen/" data-sec="kitchen"><b>Kitchen deep dive</b><span>The same chapters in more detail, still no jargon.</span></a></li>
+            </ul>
+            <p class="menu-head">For people who build</p>
+            <ul>
+              <li><a href="../../../technical/" data-sec="technical"><b>Technical deep dive</b><span>Precise terms and mechanisms, no analogy.</span></a></li>
+            </ul>
+            <p class="menu-head">Look things up</p>
+            <ul>
+              <li><a href="../../../kitchen/guides/" data-sec="guides" aria-current="page"><b>Guides</b><span>Long explainers: how agents work, and how to build, secure and test them.</span></a></li>
+              <li><a href="../../../kitchen/glossary/" data-sec="glossary"><b>Glossary</b><span>Every AI term with a short definition and where it fits.</span></a></li>
+              <li><a href="../../../kitchen/about/" data-sec="about"><b>About</b><span>What this site is, its sources and privacy.</span></a></li>
+            </ul>
+          </nav>
+        </details>
+        <button class="icon-btn" id="theme-toggle" type="button" aria-label="Switch colour theme" title="Switch colour theme">
+          <svg class="theme-icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>
+          <svg class="theme-icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7z"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="stage" id="main" tabindex="-1">
+    <noscript>
+      <article class="page">
+        <h1>Testing and running agents in production</h1>
+        <p>A chef who shines on a quiet night can slip on a busy one, and a new supplier can change the food without anyone noticing. This guide shows how a restaurant tastes, films, counts and governs its chef so the food stays good.</p>
+        <ul>
+          <li>Build a set of test orders from real services and real slips.</li>
+          <li>Tell tasting the plate from watching the way it was cooked.</li>
+          <li>Know why one good night proves little.</li>
+          <li>Read a film of a service, and name the levers of the bill and the waiting time.</li>
+          <li>Grade a chef by risk and bring it in step by step.</li>
+        </ul>
+        <h2>Why a restaurant tastes its food</h2>
+        <p>A chef cooks a little differently every night, and a new supplier or a reworded house rule changes the food in ways nobody tasted. So the restaurant runs a taste panel, which the kitchen calls evals: past orders, a way to run the chef on each, and a judge for each. After every change you run it and compare. Without it every change is a bet.</p>
+        <h2>Choosing the test orders</h2>
+        <p>Start with twenty to fifty orders from real services, each with its starting state and what counts as right. Add tricky ones: a stall with a hidden note, a sold-out day, and an order that cannot be done within the budget, where the right answer is to say so.</p>
+        <p>Do not show the chef the answers, and keep a few orders back. Every real slip becomes a new test.</p>
+        <h2>The plate, the way, and the judges</h2>
+        <p>Look at the plate first: does the order book hold three stalls, within budget, no soft tomatoes? Then look at the way it was cooked: which cupboards opened, how many steps, whether it touched the till. Judge the plate first, because there are many good routes.</p>
+        <p>Three judges score the plates. A ruler checks exact things, cheap and steady. A second taster, another chef with a score sheet, copes with free-form answers but has its own tastes, so check it against the owner, who is the reference and slow.</p>
+        <h2>The same order, cooked again</h2>
+        <p>Cook each test order several times, because the chef is never exactly the same twice. pass@k asks whether at least one of several tries works: can the chef ever do it? pass^k asks whether every try works: can you count on it? The second is lower, and matters more when nobody watches.</p>
+        <p>With twenty tests, one test is worth five points, so a small gap may be noise.</p>
+        <h2>Failures stay on the panel</h2>
+        <p>Every real slip joins the panel as a test, so a fix stays fixed. Run the whole panel whenever the chef, the house rules, a tool or the supplier changes, and hold back the change if the score drops.</p>
+        <p>Public contests, which the kitchen calls benchmarks, set many chefs the same standard dishes. They suit a shortlist and say little about your own kitchen.</p>
+        <h2>Cameras over the pass</h2>
+        <p>A camera films each service, cut into short clips: every step, what was asked, what came back, how long it took and what it cost. The kitchen calls this tracing. A failed service stops being a mystery: you find the clip.</p>
+        <p>Film from the first day, blur anything secret, and sort failed services by kind. Fix the biggest kind first.</p>
+        <h2>The bill and the waiting time</h2>
+        <p>Every word the chef reads and writes is paid for, and the counter is read again before each move, so a long service costs far more than a quick question. Track the cost of a good service, not of a try: a cheaper chef that needs three tries is not cheaper.</p>
+        <p>Keep the top of the counter the same each time, so it is cheap to read again (prompt caching). Give easy steps to a cheaper chef. Put a limit on every service for steps, time and money.</p>
+        <h2>The inspector and the house rules book</h2>
+        <p>Keep a register of every chef: who owns it, which keys it has, and a risk grade. A chef who only reads prices needs light checks. One who spends money or handles guests' private details needs deeper panels and your OK. This is governance.</p>
+        <p>Bring a chef in step by step: first it proposes and you act, then it acts and you approve, and only then does it work alone within limits, with a stop button in reach. The inspector, meaning the law and the standard frameworks, cares about what the kitchen is used for, not about the stove.</p>
+      </article>
+      <p class="noscript">This page is interactive and needs JavaScript. All of its text is also in <code>assets/js/data/</code> in the <a href="https://github.com/veniplex/ai-explained">GitHub repository</a>.</p>
+    </noscript>
+  </main>
+
+  <script src="../../../assets/vendor/rough.js"></script>
+  <script src="../../../assets/js/data/core.js"></script>
+  <script src="../../../assets/js/data/entries.js"></script>
+  <script src="../../../assets/js/data/sources.js"></script>
+  <script src="../../../assets/js/data/guides.js"></script>
+  <script src="../../../assets/js/data/voice-ui-kitchen.js"></script>
+  <script src="../../../assets/js/data/voice-ui-tech.js"></script>
+  <script src="../../../assets/js/data/voice-kitchen-a.js"></script>
+  <script src="../../../assets/js/data/voice-kitchen-b.js"></script>
+  <script src="../../../assets/js/data/voice-tech.js"></script>
+  <script src="../../../assets/js/data/voice-guides-kitchen.js"></script>
+  <script src="../../../assets/js/data/glossary.js"></script>
+  <script src="../../../assets/js/data/voice-glossary-kitchen.js"></script>
+  <script src="../../../assets/js/data/voice-guides-long-kitchen-a.js"></script>
+  <script src="../../../assets/js/data/voice-guides-long-kitchen-b.js"></script>
+  <script src="../../../assets/js/data/voice-guides-tech.js"></script>
+  <script src="../../../assets/js/data/glance-kitchen.js"></script>
+  <script src="../../../assets/js/sketch.js"></script>
+  <script src="../../../assets/js/icons.js"></script>
+  <script src="../../../assets/js/draw.js"></script>
+  <script src="../../../assets/js/props.js"></script>
+  <script src="../../../assets/js/data/props-extra-a.js"></script>
+  <script src="../../../assets/js/data/props-extra-b.js"></script>
+  <script src="../../../assets/js/data/props-extra-c.js"></script>
+  <script src="../../../assets/js/data/props-kitchen.js"></script>
+  <script src="../../../assets/js/data/kitchen.js"></script>
+  <script src="../../../assets/js/data/story.js"></script>
+  <script src="../../../assets/js/data/names.js"></script>
+  <script src="../../../assets/js/locator.js"></script>
+  <script src="../../../assets/js/voice.js"></script>
+  <script src="../../../assets/js/terms.js"></script>
+  <script src="../../../assets/js/map.js"></script>
+  <script src="../../../assets/js/story.js"></script>
+  <script src="../../../assets/js/guide-views.js"></script>
+  <script src="../../../assets/js/pages.js"></script>
+  <script src="../../../assets/js/app.js"></script>
+  <script src="../../../assets/js/nav.js"></script>
+  <script src="../../../assets/js/search.js"></script>
+  <script src="../../../assets/js/popover.js"></script>
+  <script src="../../../../versions.js"></script>
+  <script src="../../../../version-switcher.js"></script>
+</body>
+</html>

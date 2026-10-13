@@ -1,12 +1,12 @@
 #!/usr/bin/env node
-/* Content checks for v6-alpha: the rules of v4-alpha and v5-alpha (both voices, word budgets, links, term and guide
+/* Content checks for v0.6-alpha: the rules of v0.4-alpha and v0.5-alpha (both voices, word budgets, links, term and guide
    pages), plus the arrows: every passage of a chapter says which pieces of the map it is about.
    Run from the repository root: node scripts/check-v6.js */
 "use strict";
 const path = require("node:path");
 const { loadV4, run } = require("./check-v4.js");
 
-const DIR = "versions/v6-alpha";
+const DIR = "versions/v0.6-alpha";
 const PAGES = ["./build-v6-pages.js", "node scripts/build-v6-pages.js"];
 
 // Problems with AE3.points: one list per paragraph and one for the example, in each voice, only naming pieces that are

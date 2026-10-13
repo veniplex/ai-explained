@@ -1,7 +1,7 @@
 #!/usr/bin/env node
-/* Writes one small HTML page per term and per guide of v4-alpha, from v4-alpha/index.html:
-     v4-alpha/terms/<id>/index.html   and   v4-alpha/guides/<id>/index.html
-   (build-v5-pages.js does the same for v5-alpha.)
+/* Writes one small HTML page per term and per guide of v0.4-alpha, from v0.4-alpha/index.html:
+     v0.4-alpha/terms/<id>/index.html   and   v0.4-alpha/guides/<id>/index.html
+   (build-v5-pages.js does the same for v0.5-alpha.)
    The pages are the same shell as the home page with their own title, description and address,
    so a link shows a proper title and preview. app.js fills in the content from assets/js/data/.
    Run from the repository root:   node scripts/build-v4-pages.js          (write the pages)
@@ -27,7 +27,7 @@ function swap(html, from, to) {
 }
 
 // Where the shell page is and how its paths change two levels down. v4 to v6 have the shell at the top of the version folder
-// ("flat"); v10-alpha has it in dive/ (the folder itself is the kitchen story), so its pages are one level deeper than the shell.
+// ("flat"); v0.10-alpha has it in dive/ (the folder itself is the kitchen story), so its pages are one level deeper than the shell.
 const LAYOUTS = {
   flat: {
     shell: "index.html",
@@ -51,7 +51,7 @@ const LAYOUTS = {
       return swap(html, '<a class="place" href="./"', '<a class="place" href="../../dive/"');
     }
   },
-  // v12-alpha: the same shell in dive/, but the top bar has no tabs any more (the start page, index.html, is where the visitor picks a half).
+  // v0.12-alpha: the same shell in dive/, but the top bar has no tabs any more (the start page, index.html, is where the visitor picks a half).
   start: {
     shell: "dive/index.html",
     homeBody: '<body data-page="home" data-base="../">',
@@ -74,7 +74,7 @@ function pageFor(home, dir, kind, id, title, description, layout) {
   return html;
 }
 
-function pages(root, dir = "versions/v4-alpha", layoutName = "flat") {
+function pages(root, dir = "versions/v0.4-alpha", layoutName = "flat") {
   const layout = LAYOUTS[layoutName];
   const home = fs.readFileSync(path.join(root, dir, layout.shell), "utf8");
   const D = loadV4(root, dir);
@@ -89,7 +89,7 @@ function pages(root, dir = "versions/v4-alpha", layoutName = "flat") {
   return out;
 }
 
-function existing(root, dir = "versions/v4-alpha") {
+function existing(root, dir = "versions/v0.4-alpha") {
   const found = [];
   ["terms", "guides"].forEach((kind) => {
     const base = path.join(root, dir, kind);
@@ -100,7 +100,7 @@ function existing(root, dir = "versions/v4-alpha") {
 }
 
 // Problems with the generated pages: missing, out of date, or left over from a term or guide that no longer exists.
-function stale(root, dir = "versions/v4-alpha", layoutName = "flat") {
+function stale(root, dir = "versions/v0.4-alpha", layoutName = "flat") {
   const want = pages(root, dir, layoutName), problems = [];
   Object.keys(want).forEach((f) => {
     const p = path.join(root, f);
@@ -111,7 +111,7 @@ function stale(root, dir = "versions/v4-alpha", layoutName = "flat") {
   return problems;
 }
 
-function write(root, dir = "versions/v4-alpha", layoutName = "flat") {
+function write(root, dir = "versions/v0.4-alpha", layoutName = "flat") {
   const want = pages(root, dir, layoutName);
   existing(root, dir).forEach((f) => { if (!want[f]) fs.rmSync(path.dirname(path.join(root, f)), { recursive: true }); });
   Object.keys(want).forEach((f) => {
@@ -136,4 +136,4 @@ function cli(dir, script, layoutName = "flat") {
 
 module.exports = { pages, stale, write, cli };
 
-if (require.main === module) cli("versions/v4-alpha", "build-v4-pages.js");
+if (require.main === module) cli("versions/v0.4-alpha", "build-v4-pages.js");

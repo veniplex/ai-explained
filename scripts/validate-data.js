@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /* Checks the content in <version>/assets/js/data.js for broken references and missing fields.
-   Usage: node scripts/validate-data.js [version-folder ...]   (default: every folder of versions/ that has a data.js, v1-alpha etc.)
+   Usage: node scripts/validate-data.js [version-folder ...]   (default: every folder of versions/ that has a data.js, v0.1-alpha etc.)
    Exits 1 if any error is found; warnings never fail the run. */
 "use strict";
 
@@ -129,7 +129,7 @@ function validate(file) {
   return { errors: errors, warnings: warnings };
 }
 
-// The older versions live in versions/; a folder can be named with or without that prefix (v1-alpha or versions/v1-alpha).
+// The older versions live in versions/; a folder can be named with or without that prefix (v0.1-alpha or versions/v0.1-alpha).
 function versions() {
   return fs.readdirSync(path.join(ROOT, "versions")).filter(function (d) {
     return /^v\d/.test(d) && fs.existsSync(path.join(ROOT, "versions", d, "assets/js/data.js"));

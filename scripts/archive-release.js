@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /* Archives the release at the root of the site into versions/<id>/, so that the root can become the next release.
    Usage: node scripts/archive-release.js [id] [--out <folder>]
-   id      the folder name for the release being archived (default: the id of the main entry in versions/versions.js, e.g. v1.0.0).
+   id      the folder name for the release being archived (default: the id of the main entry in versions/versions.js, e.g. v1.0).
    --out   write the copy to this folder instead of versions/<id>/ (for trying it out; nothing else is touched).
    What it does: copies the site files of the root (the pages, assets/, the manifest, the service worker, DESIGN.md) and writes a README for the folder, then
    - points the scripts and the icon at the shared files of versions/ (one more ../ in front of versions.js, version-switcher.js and favicon.svg),
@@ -57,7 +57,7 @@ function main() {
   var out = outIdx !== -1 ? path.resolve(args[outIdx + 1] || "") : null;
   if (outIdx !== -1) args.splice(outIdx, 2);
   var id = args[0] || mainId();
-  if (!/^v\d[\w.-]*$/.test(id)) throw new Error("the id must look like v1.0.0 or v18-alpha: " + id);
+  if (!/^v\d[\w.-]*$/.test(id)) throw new Error("the id must look like v1.0 or v0.18-alpha: " + id);
   var dest = out || path.join(ROOT, "versions", id);
   if (fs.existsSync(dest)) throw new Error(path.relative(ROOT, dest) + " exists already; an archived release is never overwritten");
 

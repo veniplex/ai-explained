@@ -1,7 +1,7 @@
 /* AI explained: the heading you are in stays in view. On the long pages (a guide, a glossary term, the about page) the heading of the part you are reading sticks
    just under the top bar once it would scroll out, and the heading of the next part takes its place when that part reaches the top. In the deep dive the same job
    is done by a slim bar with the chapter's number and title (.ch-stick, drawn by story.js). The sticking itself is CSS (position: sticky); this script only marks
-   the heading that is pinned right now (.is-stuck: a thin rule and a soft shadow under it), shows the chapter bar when the chapter's own title has scrolled out, and
+   the heading that is pinned right now (.is-stuck: a thin rule under it), shows the chapter bar when the chapter's own title has scrolled out, and
    tells the page how tall a pinned heading is (--stick-h) so a jump to a source or a note lands below it. Plain ES5. */
 (function () {
   "use strict";

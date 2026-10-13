@@ -32,8 +32,8 @@
     /* Links made for the story's older addresses (#ch-3, #map, #e-skills, #guide-glossary) lead to the same place in the story or in the guides. */
     (function () {
       var h = location.hash;
-      // Links made for v1-alpha (#block-mcp, #zone-model, #story ...) lead to that version, which lives in versions/ now.
-      if (/^#(block-|zone-|link-|step-|(story|ideas|steps|context|compare|patterns|protocols|decide|build|blocks|glossary|learn|about)$)/.test(h)) { location.replace("versions/v1-alpha/" + h); return; }
+      // Links made for v0.1-alpha (#block-mcp, #zone-model, #story ...) lead to that version, which lives in versions/ now.
+      if (/^#(block-|zone-|link-|step-|(story|ideas|steps|context|compare|patterns|protocols|decide|build|blocks|glossary|learn|about)$)/.test(h)) { location.replace("versions/v0.1-alpha/" + h); return; }
       if (/^#(ch-[1-8e]|map|e-[a-z0-9-]+)$/.test(h)) location.replace("story/" + location.search + h);
       else if (/^#guide-(about|glossary)$/.test(h)) location.replace(h.slice(7) + "/" + location.search);
       else if (/^#guide-(how-it-works|context|build|secure|evaluate|compare|learn)$/.test(h)) location.replace("guides/" + h.slice(7) + "/" + location.search);

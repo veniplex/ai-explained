@@ -1,0 +1,96 @@
+# Design system (v0.6-alpha)
+
+All of it lives in `assets/css/style.css`. Every value below is a custom property on `:root`; dark mode redefines the colours only, under `:root[data-theme="dark"]`.
+
+## Theme
+
+The script in the `<head>` of `index.html` always sets `data-theme` before first paint: the saved choice (`localStorage` key `ae-theme`), otherwise the system setting. `app.js` follows system changes while nothing is saved. The stylesheet reads only `data-theme`, so each colour is written once per theme. The two `<meta name="theme-color">` tags repeat `--paper`; keep them in sync by hand.
+
+## Colour
+
+| Token | Use |
+| --- | --- |
+| `--paper`, `--paper-2`, `--paper-3` | page, hover and quiet fills, tracks |
+| `--surface` | cards, menus, buttons |
+| `--ink`, `--ink-2`, `--ink-3` | text: primary, body, meta. `--ink-3` passes 4.5:1 on `--paper`, `--paper-2` and `--surface` (not on `--paper-3`, which is for tracks only) |
+| `--rule`, `--rule-strong` | borders and dividers |
+| `--focus` | focus rings |
+| `--clay` | accent **fills and graphics only** (dots, tokens, the current step) |
+| `--clay-ink` | accent **text** and links. Passes 4.5:1 on paper and on `--clay-soft` |
+| `--clay-soft`, `--clay-mid` | accent backgrounds; finished steps |
+| `--ok`, `--bad`, `--part`, `--warn` and their `-soft` pairs | status. Own values, so recolouring a zone never changes a status |
+| `--sk-ink`, `--sk-paper` | the rough.js sketch layer |
+| `--shadow` | menus and hover labels |
+
+**Zones.** Each zone has a label ink `--z-*`, a tint `--t-*` and a mid `--m-*`. Any element with `data-zone` gets them as `--zc`, `--zt` and `--zm`, plus `--zh`, the highlight behind text (the mid in light mode, three quarters mid and one quarter paper in dark mode, so light text stays above 4.5:1). Source-type badges borrow the zone hues as a categorical palette.
+
+## Type
+
+Three families: `--serif` (headings, reading text), `--sans` (UI), `--mono` (counters, badges, code).
+
+| Token | Size | Use |
+| --- | --- | --- |
+| `--fs-2xs` | 11px | mono badges, `kbd` |
+| `--fs-xs` | 12px | eyebrows, captions |
+| `--fs-sm` | 13.5px | meta, chips, notes |
+| `--fs-md` | 15px | UI text, lists, tables |
+| `--fs-base` | 16px | body and reading text |
+| `--fs-lg` | 17.5px | ledes, small headings |
+| `--fs-xl` | 19.5px | zone and card titles |
+| `--fs-2xl` | 22px | section headings |
+| `--fs-3xl` | 26px | large headings, numerals |
+| `--fs-4xl` | 30px | page titles |
+| `--fs-5xl` | 38px | display numerals, the top of the title clamps |
+
+Weights: 400, 500, 600, and 650 for bold. Tracking: `--track-caps` for uppercase sans labels, `--track-mono` for mono labels. Text inside SVG drawings (`.lp-*`, `.pd-*`, `.sk-label`) is sized in viewBox units and stays off this scale.
+
+## Shape, space and motion
+
+- **Radius:** `--r-xs` 4, `--r-sm` 6, `--r-md` 10, `--r-lg` 14, `--r-xl` 18, `--r-pill`. Circles use `50%`; the highlighter stroke keeps its uneven radius on purpose.
+- **Spacing:** a 2px grid. 1–3px values are only for optical nudges.
+- **Dots:** `--dot` (9px) and `--dot-ring` (1.6px).
+- **Motion:** easing `--ease`; durations `--dur-fast` (hover), `--dur-base` (small moves, fades), `--dur-slow` (panels), `--dur-reveal` (first-paint fades), `--dur-draw` (sketch strokes, connector flow), `--dur-boil` (line boil). `prefers-reduced-motion` cuts all of them.
+- **Layers:** `--z-bar` < `--z-rail` < `--z-menu` < `--z-skip`. Small local values (-1, 0, 2) are only used inside an isolated stacking context.
+
+## Shared pieces
+
+| Class | What it is |
+| --- | --- |
+| `.btn` | pill button. Variants: `-ink` (primary), `-ghost` (no border until hover), `-sm` |
+| `.icon-btn` | 40px round icon button. Variants: `-outline`, `-ink` |
+| `.link-btn` | a button that looks like a link |
+| `.eyebrow` | small uppercase label (also applied to `thead th`) |
+| `.badge` | small mono label. Variant: `-clay` |
+| `.tag` | status label that may wrap. Variants: `-yes`, `-no`, `-part` |
+| `.chip` | zone-coloured block button; needs `data-zone` |
+| `.card` | bordered panel on `--surface`; each use sets its own padding |
+| `.zdot` | zone dot; needs a `data-zone` ancestor |
+
+Every button has hover, active (1px press), focus-visible (the global ring) and disabled (35% opacity, no pointer events) states. A control that looks smaller than 24px still gets a hit area at least 24px tall. (v1's player, story dots and walkthrough steps are not part of v4 or v5.)
+
+## Naming
+
+- State: `is-*` (`is-open`, `is-on`, `is-selected`), or an ARIA attribute where one exists (`aria-current`, `aria-expanded`).
+- Variant: the base class plus a suffix (`btn-ink`, `tag-yes`, `ctx-seg-strong`, `bd-list-warn`, `link-type-video`).
+- Short prefixes in use: `blk` block on the map, `bd` the body of a term page, `lp` agent-loop drawing, `pd` pattern diagram, `sk` sketch layer, `ctx` context-window bars, `conn` connector.
+
+## v4 additions
+
+- Prefixes: `kmap` the kitchen map (`kmap-tall`, `kmap-hub`, `kmap-mini`), `ch` a chapter (`ch-title`, `ch-problem`, `ch-section`), `hub` the whole kitchen, `fig` a figure inside a chapter, `pic` a kitchen picture, `deeper` the details of a term page (technical voice), `formula` the four parts shown next to the kitchen picture in the hero, `page` a term or guide page (`page-head`, `page-title`, `page-lede`, `page-body`), `crumb` the link back to the guided path, `pager` the previous and next links, `rail` the dots at the left edge that show where you are, `progress` the thin line that does the same on narrow screens.
+- States: `is-framed` (the kitchen frame has appeared), `is-current` / `is-past` (reading progress on the map), `is-drawing` (a piece drawing itself in).
+- Map pieces carry `data-from="n"` (shown from chapter n on) and `data-ch="n"` (belongs to chapter n).
+
+## v5 additions: the two voices side by side
+
+- `.voice` is one column of one voice (`voice-kitchen`: white card; `voice-technical`: quiet grey card). `.vtag` names it (`vtag-kitchen`, `vtag-technical`) with a chef's hat or a chip. Both are drawn by the same view code from `voice.kitchen` and `voice.tech`.
+- Layout: `.spread` (two columns of a chapter), `.hero-voices`, `.pair` (the two columns of a term page), `.idea-voices`, `.cmp-pair`, `.rung-pair`, `.gloss-entry` (term, kitchen, technical). All use `repeat(2, minmax(0, 1fr))` with `clamp(16px, 2.4vw, 32px)` between, and fall to one column below 900px, kitchen first.
+- The sticky map column shows from 1480px (and 660px tall); below that each chapter holds its own `.mini-map`. The names on the map are the kitchen word with the technical one beside it (`.zone-nick`, `.conn-sub`, `.you-sub`).
+- There is no `data-mode`, no switch and no `.mode*` class. Pictures are always shown in the kitchen column; the technical column keeps its plain symbols (`.ch-icon`, `.def-icon`, `.formula-icon`).
+
+## v6 additions: the map in the middle
+
+- `.trio` is the three-column grid: `.voice-kitchen` (left), `.trio-mid` (middle), `.voice-technical` (right). The hero (`.hero-voices`: the four parts of an agent), every chapter (`.spread`: the map so far), every term page (the map with the term marked) and every idea of the recap (`.idea-mid`: number and both names) use it. `--mid-w` is the width of the middle, `--mid-gap` the room for the arrows.
+- Three columns need 1300px and 620px of height. Narrower, the middle moves above the two voices (areas `"m m" "k t"`) and its map becomes two compact columns; below 900px everything is one column in the order middle, kitchen, technical. The arrows are only drawn in the three-column layout.
+- The map is `.kmap-spine`: one column, the open chapter in full, every other piece folded to its heading (`.is-current` / not). It sits in `.spread-map` (`aria-hidden`, its links out of the tab order: the chips under the chapter are the keyboard route to the same terms) and is sticky beside the text.
+- `.passage` is a piece of text an arrow can start from (`data-points="model reasoning"`: entry ids, `you` or `zone`). `.is-focus` marks the one in view of each column with a bar at its left edge; `.is-ref` marks what it is about on the map (highlighter on a block, underline on a title). `.arrows` is the SVG laid over the spread, `.arrow-line` and `.arrow-dot` its strokes, in the colour of the chapter's zone (`--zc`).
+- `.ch-top` is what both voices share in a chapter: number, the kitchen name with the technical one under it (`.ch-nick`), and the question (`.ch-problem`), centred above the spread.

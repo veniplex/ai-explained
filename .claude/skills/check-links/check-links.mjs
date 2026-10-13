@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 // Checks every external URL in versions/<version>/assets/js/data.js, or lists facts that may be stale.
 //
-//   node .claude/skills/check-links/check-links.mjs [--version v1-alpha] [--limit N]
+//   node .claude/skills/check-links/check-links.mjs [--version v0.1-alpha] [--limit N]
 //        [--concurrency 8] [--timeout 20] [--json report.json]
-//   node .claude/skills/check-links/check-links.mjs --stale 6 [--version v1-alpha]
+//   node .claude/skills/check-links/check-links.mjs --stale 6 [--version v0.1-alpha]
 //
 // Pages: HEAD, then GET if HEAD fails. YouTube videos: the oEmbed endpoint (as the README describes).
 // Exit code 1 when at least one link is dead.

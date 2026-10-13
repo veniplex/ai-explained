@@ -139,7 +139,7 @@ function pages(root) {
 /* ---------- The service worker ------------------------------------------------------------- */
 // sw.js is written by hand; only the block between its two markers is generated: the name of the cache (the release's name and a hash of every file of the
 // site, so it changes whenever one does) and the files kept on install: everything under assets/, the main pages and the guides, and the files of the version dropdown.
-// The name starts with the release (ae-v1.0.0-…), so the worker of a release that moved into versions/ never deletes the cache of the one at the root.
+// The name starts with the release (ae-v1.0-…), so the worker of a release that moved into versions/ never deletes the cache of the one at the root.
 const SW = "sw.js";
 const SITE_DIRS = ["assets", "story", "technical", "glossary", "guides", "about"], SITE_FILES = ["index.html", "manifest.webmanifest"];
 const release = () => {

@@ -9,10 +9,10 @@ const { pages, stale } = require("./build-v14-pages.js");
 const content = require("./v14-content.js");
 
 const root = path.resolve(__dirname, "..");
-const read = (f) => fs.readFileSync(path.join(root, "versions/v14-alpha", f), "utf8");
+const read = (f) => fs.readFileSync(path.join(root, "versions/v0.14-alpha", f), "utf8");
 const TRAIL = '<script src="%versions.js"></script>\\s*<script src="%version-switcher.js"></script>\\s*</body>';
 
-test("v14-alpha passes the content checks (voices, story, bridges, three ways, top bar, generated files, self-containment)", () => {
+test("v0.14-alpha passes the content checks (voices, story, bridges, three ways, top bar, generated files, self-containment)", () => {
   assert.deepEqual(check(root), []);
 });
 
@@ -20,18 +20,18 @@ test("every term of the glossary has a page, and so has every guide, in both way
   const D = content.load(root), ids = Object.keys(D.entries).concat(D.glossary.map((g) => g.id));
   assert.ok(ids.length >= 180, "the start page promises over 180 terms");
   ["kitchen", "technical"].forEach((way) => {
-    ids.forEach((id) => assert.ok(fs.existsSync(path.join(root, "versions/v14-alpha", way, "glossary", id, "index.html")), way + "/glossary/" + id));
-    D.guideList.forEach((g) => assert.ok(fs.existsSync(path.join(root, "versions/v14-alpha", way, "guides", g.id, "index.html")), way + "/guides/" + g.id));
-    ["glossary", "guides", "about"].forEach((d) => assert.ok(fs.existsSync(path.join(root, "versions/v14-alpha", way, d, "index.html")), way + "/" + d));
-    assert.ok(!fs.existsSync(path.join(root, "versions/v14-alpha", way, "references")), "the references are the glossary now");
+    ids.forEach((id) => assert.ok(fs.existsSync(path.join(root, "versions/v0.14-alpha", way, "glossary", id, "index.html")), way + "/glossary/" + id));
+    D.guideList.forEach((g) => assert.ok(fs.existsSync(path.join(root, "versions/v0.14-alpha", way, "guides", g.id, "index.html")), way + "/guides/" + g.id));
+    ["glossary", "guides", "about"].forEach((d) => assert.ok(fs.existsSync(path.join(root, "versions/v0.14-alpha", way, d, "index.html")), way + "/" + d));
+    assert.ok(!fs.existsSync(path.join(root, "versions/v0.14-alpha", way, "references")), "the references are the glossary now");
   });
   assert.deepEqual(stale(root), []);
 });
 
 test("every shell and generated page loads files that exist and the version dropdown from the right depth", () => {
-  const files = Object.keys(pages(root)).map((f) => f.replace(/^versions\/v14-alpha\//, "")).concat(["index.html", "story/index.html", "kitchen/index.html", "technical/index.html"]);
+  const files = Object.keys(pages(root)).map((f) => f.replace(/^versions\/v0.14-alpha\//, "")).concat(["index.html", "story/index.html", "kitchen/index.html", "technical/index.html"]);
   files.filter((f) => /\.html$/.test(f)).forEach((f) => {
-    const html = read(f), dir = path.dirname(path.join(root, "versions/v14-alpha", f)), depth = f.split("/").length - 1, up = "../".repeat(depth + 1);
+    const html = read(f), dir = path.dirname(path.join(root, "versions/v0.14-alpha", f)), depth = f.split("/").length - 1, up = "../".repeat(depth + 1);
     for (const m of html.matchAll(/<(?:script src|link rel="stylesheet" href)="([^"#?]+)"/g)) assert.ok(fs.existsSync(path.join(dir, m[1])), f + ": " + m[1]);
     assert.match(html, new RegExp(TRAIL.replace(/%/g, up.replace(/\./g, "\\."))), f + ": versions.js and version-switcher.js come last");
     assert.ok(html.includes('class="bar-actions"'), f + " has no header to put the dropdown in");
@@ -82,8 +82,8 @@ test("the hover texts and the search index cover every term of the glossary, one
 
 test("a version named in v14's own files is reported", () => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "ae14-"));
-  fs.cpSync(path.join(root, "versions/v14-alpha"), path.join(dir, "versions/v14-alpha"), { recursive: true });
-  fs.writeFileSync(path.join(dir, "versions/v14-alpha/NOTES.md"), "builds on v12-alpha\n");
+  fs.cpSync(path.join(root, "versions/v0.14-alpha"), path.join(dir, "versions/v0.14-alpha"), { recursive: true });
+  fs.writeFileSync(path.join(dir, "versions/v0.14-alpha/NOTES.md"), "builds on v0.12-alpha\n");
   const errors = selfContained(dir);
   assert.ok(errors.length > 0, "expected a report");
   fs.rmSync(dir, { recursive: true });

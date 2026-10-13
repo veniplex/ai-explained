@@ -1033,7 +1033,7 @@ a.formula-part:hover { color: var(--ink); }
    room in the flow (the negative margin), so it is pushed out when the chapter ends. */
 .ch-stick { position: sticky; top: calc(var(--bar-h) + env(safe-area-inset-top, 0px)); z-index: calc(var(--z-bar) - 5); height: 44px; margin-bottom: -44px; pointer-events: none; opacity: 0; visibility: hidden; transition: opacity var(--dur-fast), visibility 0s linear var(--dur-fast); }
 .ch-stick.is-on { opacity: 1; visibility: visible; transition: opacity var(--dur-fast); }
-.ch-stick-in { display: flex; align-items: baseline; gap: 12px; height: 100%; margin-inline: -14px; padding: 0 14px; align-content: center; align-items: center; overflow: hidden; white-space: nowrap; background: var(--paper); border-bottom: 1px solid var(--rule); box-shadow: 0 8px 12px -10px color-mix(in srgb, var(--ink) 45%, transparent); }
+.ch-stick-in { display: flex; align-items: baseline; gap: 12px; height: 100%; margin-inline: -14px; padding: 0 14px; align-content: center; align-items: center; overflow: hidden; white-space: nowrap; background: var(--paper); border-bottom: 1px solid var(--rule); }
 .ch-stick-n { flex: none; font: 500 var(--fs-2xs)/1 var(--mono); letter-spacing: var(--track-mono); text-transform: uppercase; color: var(--ink-3); }
 .ch-stick-t { min-width: 0; overflow: hidden; text-overflow: ellipsis; font: 600 var(--fs-2xl)/1.2 var(--serif); letter-spacing: -0.01em; color: var(--ink); }
 @media (prefers-reduced-motion: reduce) { .ch-stick, .ch-stick.is-on { transition: none; } }

@@ -87,11 +87,11 @@ test("a version named in the site's own files, or a link into versions/, is repo
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "ae-site-"));
   fs.cpSync(path.join(root, "about"), path.join(dir, "about"), { recursive: true });
   assert.deepEqual(selfContained(dir), [], "the copy of about/ alone is fine");
-  fs.writeFileSync(path.join(dir, "about/NOTES.md"), "builds on v12-alpha\n");
+  fs.writeFileSync(path.join(dir, "about/NOTES.md"), "builds on v0.12-alpha\n");
   assert.ok(selfContained(dir).some((e) => /names another version/.test(e)), "a named version is reported");
   fs.rmSync(path.join(dir, "about/NOTES.md"));
   const html = fs.readFileSync(path.join(dir, "about/index.html"), "utf8");
-  fs.writeFileSync(path.join(dir, "about/index.html"), html.replace("</body>", '<a href="../versions/v12-alpha/">old</a></body>'));
+  fs.writeFileSync(path.join(dir, "about/index.html"), html.replace("</body>", '<a href="../versions/v0.12-alpha/">old</a></body>'));
   assert.ok(selfContained(dir).some((e) => /links into versions/.test(e)), "a link into versions/ is reported");
   fs.writeFileSync(path.join(dir, "about/index.html"), html.replace("</body>", '<a href="../../outside.html">out</a></body>'));
   assert.ok(selfContained(dir).some((e) => /leaves the site/.test(e)), "a link above the site root is reported");
