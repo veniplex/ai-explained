@@ -22,7 +22,12 @@ function loadScripts(files) {
   return ctx.window;
 }
 function loadV1(root) { return loadScripts([path.join(root, "v1-alpha/assets/js/data.js")]).AE; }
-function loadV4(root, dir = "v4-alpha") { return loadScripts(V3_FILES.map((f) => path.join(root, dir, "assets/js", f))).AE3; }
+// A version may split a voice file in two (voice-ui-kitchen.js and voice-ui-tech.js); the halves are loaded when they exist.
+const SPLIT_FILES = ["data/voice-ui-kitchen.js", "data/voice-ui-tech.js", "data/voice-guides-kitchen.js", "data/voice-guides-tech.js"];
+function loadV4(root, dir = "v4-alpha") {
+  const files = V3_FILES.concat(SPLIT_FILES).map((f) => path.join(root, dir, "assets/js", f)).filter((f) => fs.existsSync(f));
+  return loadScripts(files).AE3;
+}
 
 // Inline markup to plain text: [[id|label]] -> label, [[id]] -> id, [t](url) -> t, **b** -> b, `c` -> c.
 function plain(text) {
@@ -107,21 +112,24 @@ function check(v1, v3) {
     if (!Array.isArray(e.forYou) || e.forYou.length < 1 || e.forYou.length > 3) err("entry " + id + ": forYou needs 1 to 3 items");
     const d = e.deeper || {};
     if (!Array.isArray(d.details) || !d.details.length) err("entry " + id + ": missing deeper.details");
-    if (!Array.isArray(e.from) || !e.from.length) err("entry " + id + ": missing from");
-    else if ((d.includes || []).length < e.from.length - 1) err("entry " + id + ": needs an includes line for each merged block");
+    // `from` (the v1 blocks an entry merges) exists in v4 to v12 only; v13 has no reference to other versions (check(null, …)).
+    if (v1 && (!Array.isArray(e.from) || !e.from.length)) err("entry " + id + ": missing from");
+    else if (v1 && (d.includes || []).length < e.from.length - 1) err("entry " + id + ": needs an includes line for each merged block");
     const words = wordCount(e.short, e.how, e.example, e.forYou);
     if (words > LIMITS.entryWords) err("entry " + id + ": levels 1 and 2 have " + words + " words, limit " + LIMITS.entryWords);
     (e.related || []).forEach((r) => { if (!has(r)) err("entry " + id + ": unknown related " + r); });
   });
 
   // 3. Every v1 block maps to exactly one entry
-  const owner = {};
-  ids.forEach((id) => ((entries[id] || {}).from || []).forEach((b) => { (owner[b] = owner[b] || []).push(id); }));
-  Object.keys(v1.blocks).forEach((b) => {
-    const o = owner[b] || [];
-    if (o.length !== 1) err("v1 block " + b + ": mapped to " + (o.length ? o.join(", ") : "no entry"));
-  });
-  Object.keys(owner).forEach((b) => { if (!v1.blocks[b]) err("from: unknown v1 block " + b); });
+  if (v1) {
+    const owner = {};
+    ids.forEach((id) => ((entries[id] || {}).from || []).forEach((b) => { (owner[b] = owner[b] || []).push(id); }));
+    Object.keys(v1.blocks).forEach((b) => {
+      const o = owner[b] || [];
+      if (o.length !== 1) err("v1 block " + b + ": mapped to " + (o.length ? o.join(", ") : "no entry"));
+    });
+    Object.keys(owner).forEach((b) => { if (!v1.blocks[b]) err("from: unknown v1 block " + b); });
+  }
 
   // 4. References
   eachString(v3, (s, at) => {
