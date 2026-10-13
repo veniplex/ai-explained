@@ -259,6 +259,40 @@
     put(g, [T(1092, 826, "Light and dark, keyboard friendly,", { size: 17, font: "serif", f: "ink2", anchor: "start" }), T(1092, 850, "installable, works offline.", { size: 17, font: "serif", f: "ink2", anchor: "start" })], 0, 0);
   };
 
-  (SCENES[SCENE] || SCENES.banner)();
-  document.documentElement.setAttribute("data-ready", "1");
+  /* ---------- 5. a look inside: real screenshots of the site, pinned up like photographs ---------- */
+  var SHOTS = [
+    { id: "story", cap: "The kitchen story: a kitchen builds itself, one step at a time", r: -1.1 },
+    { id: "technical", cap: "The deep dive: eight chapters in precise terms", r: 0.9 },
+    { id: "glossary", cap: "A glossary page: where a term sits in the kitchen", r: 0.7 },
+    { id: "guide", cap: "A guide: long, with sources and its own section list", r: -0.8 }
+  ];
+  SCENES.screens = function () {
+    var W = 1600, H = 1240, theme = q.get("theme") === "dark" ? "dark" : "light";
+    size(W, H);
+    sheetBg(W, H);
+    var g = el("g", {}, svg), loading = [];
+    put(g, [T(800, 56, "A look inside", { size: 34, weight: 600, font: "serif" }), T(800, 84, "real pages of the site, in the light and the dark theme", { size: 17, italic: true, font: "serif", f: "ink3" })], 0, 0);
+    SHOTS.forEach(function (s, i) {
+      var x = 84 + (i % 2) * 776, y = 130 + Math.floor(i / 2) * 560, w = 680, h = 425;
+      var f = el("g", { transform: "translate(" + x + " " + y + ") rotate(" + s.r + " " + w / 2 + " " + h / 2 + ")" }, g);
+      put(f, [S.rrect(-14, -14, w + 28, h + 28, 10, { f: "surface", w: 2.4, r: 0.9 })], 0, 0);
+      var img = el("image", { x: 0, y: 0, width: w, height: h, preserveAspectRatio: "xMidYMid slice", href: "/__shots/" + s.id + "-" + theme + ".png" }, f);
+      loading.push(new Promise(function (ok, fail) {
+        var probe = new Image();
+        probe.onload = ok;
+        probe.onerror = function () { fail(new Error("no screenshot " + s.id)); };
+        probe.src = "/__shots/" + s.id + "-" + theme + ".png";
+      }));
+      put(f, [S.rect(0, 0, w, h, { w: 1.6, r: 0.4, k: "rule" }), S.poly([[w / 2 - 44, -26], [w / 2 + 44, -20], [w / 2 + 40, -2], [w / 2 - 48, -8]], { f: "m-tools", w: 1.2, r: 0.4, k: "z-tools" }),
+        T(w / 2, h + 52, s.cap, { size: 21, italic: true, font: "serif", f: "ink2" })], 0, 0);
+    });
+    return Promise.all(loading);
+  };
+
+  Promise.resolve((SCENES[SCENE] || SCENES.banner)()).then(function () {
+    document.documentElement.setAttribute("data-ready", "1");
+  }, function (e) {
+    document.documentElement.setAttribute("data-error", String(e && e.message || e));
+    document.documentElement.setAttribute("data-ready", "1");
+  });
 })();

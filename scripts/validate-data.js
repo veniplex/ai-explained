@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /* Checks the content in <version>/assets/js/data.js for broken references and missing fields.
-   Usage: node scripts/validate-data.js [version-folder ...]   (default: every version folder, v1-alpha etc.)
+   Usage: node scripts/validate-data.js [version-folder ...]   (default: every folder of versions/ that has a data.js, v1-alpha etc.)
    Exits 1 if any error is found; warnings never fail the run. */
 "use strict";
 
@@ -129,10 +129,11 @@ function validate(file) {
   return { errors: errors, warnings: warnings };
 }
 
+// The older versions live in versions/; a folder can be named with or without that prefix (v1-alpha or versions/v1-alpha).
 function versions() {
-  return fs.readdirSync(ROOT).filter(function (d) {
-    return /^v\d/.test(d) && fs.existsSync(path.join(ROOT, d, "assets/js/data.js"));
-  });
+  return fs.readdirSync(path.join(ROOT, "versions")).filter(function (d) {
+    return /^v\d/.test(d) && fs.existsSync(path.join(ROOT, "versions", d, "assets/js/data.js"));
+  }).map(function (d) { return "versions/" + d; });
 }
 
 var targets = process.argv.slice(2).filter(function (a) { return a[0] !== "-"; });
@@ -141,7 +142,8 @@ if (!targets.length) targets = versions();
 
 var failed = false;
 targets.forEach(function (v) {
-  var file = path.isAbsolute(v) && /\.js$/.test(v) ? v : path.join(ROOT, v, "assets/js/data.js");
+  var dir = fs.existsSync(path.join(ROOT, v)) ? v : path.join("versions", v);
+  var file = path.isAbsolute(v) && /\.js$/.test(v) ? v : path.join(ROOT, dir, "assets/js/data.js");
   var r = validate(file);
   var label = path.relative(ROOT, file).replace(/\\/g, "/");
   if (r.errors.length) failed = true;

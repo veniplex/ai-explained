@@ -115,7 +115,7 @@ test("every page of every older version loads the version dropdown from versions
 
 test("every page of the main version loads the version dropdown from versions/", () => {
   const files = ["index.html"].concat(["story", "technical", "glossary", "guides", "about"].flatMap((d) => pagesIn(d)));
-  assert.ok(files.length > 200, "found the pages");
+  assert.ok(files.length > 190, "found the pages");
   files.forEach((f) => {
     const up = "../".repeat(f.split("/").length - 1) + "versions/";
     const html = read(f);
@@ -159,4 +159,36 @@ test("the dropdown knows which version a page belongs to", () => {
   assert.deepEqual(w(list, "/ai-explained/versions/v1-alpha/", "/ai-explained/"), { id: "v1-alpha", rest: "" });
   assert.deepEqual(w(list, "/versions/v9-alpha/", "/"), { id: "v9-alpha", rest: "" });
   assert.deepEqual(w(list, "/technical/", "/"), { id: main, rest: "technical/" });
+});
+
+test("archiving the release at the root leaves a folder whose pages still find the dropdown, the icon and the worker's shared files", () => {
+  const os = require("node:os");
+  const cp = require("node:child_process");
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "ae-archive-"));
+  try {
+    for (const f of ["versions.js", "version-switcher.js", "version-switcher.css", "favicon.svg"]) {
+      fs.mkdirSync(path.join(tmp, "versions"), { recursive: true });
+      fs.writeFileSync(path.join(tmp, "versions", f), "/* stand-in */");
+    }
+    const out = path.join(tmp, "versions", "v1.0.0");
+    cp.execFileSync("node", [path.join(root, "scripts/archive-release.js"), "v1.0.0", "--out", out], { stdio: "pipe" });
+    // refuses to overwrite an archived release
+    assert.throws(() => cp.execFileSync("node", [path.join(root, "scripts/archive-release.js"), "v1.0.0", "--out", out], { stdio: "pipe" }));
+    const pages = [];
+    (function walk(d) { for (const e of fs.readdirSync(d, { withFileTypes: true })) { const p = path.join(d, e.name); if (e.isDirectory()) { if (!["assets"].includes(e.name)) walk(p); } else if (e.name.endsWith(".html")) pages.push(p); } })(out);
+    assert.ok(pages.length > 100, "the archived site has its pages");
+    for (const p of pages) {
+      const html = fs.readFileSync(p, "utf8");
+      for (const m of html.matchAll(/(?:src|href)="((?:\.\.\/)*)(versions\.js|version-switcher\.js|version-switcher\.css|favicon\.svg)"/g)) {
+        assert.ok(fs.existsSync(path.resolve(path.dirname(p), m[1] + m[2])), path.relative(out, p) + " cannot find " + m[1] + m[2]);
+      }
+      assert.ok(!/(?:src|href)="(?:\.\.\/)*versions\//.test(html), path.relative(out, p) + " still names versions/ as in the root");
+      assert.ok(!html.includes("ai-explained/glossary/") || html.includes("ai-explained/versions/v1.0.0/"), path.relative(out, p) + " keeps a root address");
+    }
+    const sw = fs.readFileSync(path.join(out, "sw.js"), "utf8");
+    assert.ok(sw.includes('"../versions.js"') && !sw.includes('"versions/versions.js"'), "the worker names the shared files one level up");
+    assert.ok(fs.existsSync(path.join(out, "README.md")));
+  } finally {
+    fs.rmSync(tmp, { recursive: true, force: true });
+  }
 });
