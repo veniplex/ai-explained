@@ -50,6 +50,13 @@ const LAYOUTS = {
       html = html.replace(/(href|src)="\.\.\//g, '$1="../../');
       return swap(html, '<a class="place" href="./"', '<a class="place" href="../../dive/"');
     }
+  },
+  // v12-alpha: the same shell in dive/, but the top bar has no tabs any more (the start page, index.html, is where the visitor picks a half).
+  start: {
+    shell: "dive/index.html",
+    homeBody: '<body data-page="home" data-base="../">',
+    base: "../../",
+    paths(html) { return html.replace(/(href|src)="\.\.\//g, '$1="../../'); }
   }
 };
 

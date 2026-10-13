@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Instruction files · Agentic AI, Explained</title>
+  <meta name="description" content="Instruction files hold standing rules in plain text. The harness puts them in the context at the start of every new chat or job.">
+  <meta name="theme-color" content="#faf9f5" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#1f1e1d" media="(prefers-color-scheme: dark)">
+  <link rel="canonical" href="https://veniplex.github.io/ai-explained/v12-alpha/terms/instructions/">
+  <link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Instruction files">
+  <meta property="og:description" content="Instruction files hold standing rules in plain text. The harness puts them in the context at the start of every new chat or job.">
+  <meta property="og:url" content="https://veniplex.github.io/ai-explained/v12-alpha/terms/instructions/">
+  <meta property="og:image" content="https://veniplex.github.io/ai-explained/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="../../assets/fonts/source-serif-4-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../assets/fonts/dm-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <link rel="stylesheet" href="../../assets/css/places.css">
+  <script>
+    /* Set the theme before first paint: the saved choice, else the system setting.
+       The stylesheet reads only data-theme, so this always sets it. */
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem("ae-theme"); } catch (e) {}
+      if (t !== "light" && t !== "dark") t = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      document.documentElement.setAttribute("data-theme", t);
+    })();
+  </script>
+  <script>
+    /* Set the way of explaining before first paint: the address (?view=kitchen or ?view=technical), else the saved choice, else
+       the kitchen when the visitor has just come from the kitchen story (so a beginner is not thrown into technical words, and
+       the voice stays for the rest of the visit), else the technical words (the kitchen has its own story; this part is the reference). */
+    (function () {
+      var m = null;
+      try { m = new URLSearchParams(location.search).get("view"); } catch (e) {}
+      if (m !== "kitchen" && m !== "technical") { try { m = localStorage.getItem("ae10-mode"); } catch (e) {} }
+      if (m !== "kitchen" && m !== "technical") {
+        try {
+          if (/\/v12-alpha\/story\/(index\.html)?(\?|$)/.test(document.referrer.replace(location.origin, ""))) sessionStorage.setItem("ae12-voice", "kitchen");
+          m = sessionStorage.getItem("ae12-voice");
+        } catch (e) {}
+      }
+      document.documentElement.setAttribute("data-mode", m === "kitchen" ? "kitchen" : "technical");
+    })();
+  </script>
+</head>
+<body data-page="entry" data-id="instructions" data-base="../../">
+  <a class="skip-link" href="#main">Skip to the content</a>
+
+  <header class="bar">
+    <a class="brand" href="../../" aria-label="Agentic AI, Explained: back to the start">
+      <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
+        <path class="brand-ring" d="M25.6 12.4C23.9 7.6 18.6 5 13.8 6.6 8.9 8.2 6.3 13.6 7.9 18.5c1.6 4.9 6.9 7.6 11.8 6 2.6-.9 4.6-2.8 5.6-5.2"/>
+        <path class="brand-ring" d="M26.6 6.8l-.9 5.8-5.6-1.6"/>
+        <circle class="brand-dot" cx="16.6" cy="16" r="3.4"/>
+      </svg>
+      <span class="brand-title">Agentic AI<span class="brand-tail">, <em>explained</em></span></span>
+    </a>
+
+    <div class="bar-actions">
+      <div class="mode-slot" id="mode-slot"></div>
+      <div class="search" id="search">
+        <button class="icon-btn search-open" type="button" id="search-open" aria-label="Find a term" aria-controls="block-search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg>
+        </button>
+        <div class="search-field">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg>
+          <label class="visually-hidden" for="block-search">Find a term</label>
+          <input id="block-search" type="search" placeholder="Find a term…" autocomplete="off" spellcheck="false" aria-controls="search-results" aria-describedby="search-status">
+          <kbd aria-hidden="true">/</kbd>
+        </div>
+        <ul class="search-results" id="search-results" hidden></ul>
+        <p class="visually-hidden" id="search-status" aria-live="polite"></p>
+      </div>
+      <p class="visually-hidden" id="mode-live" role="status" aria-live="polite"></p>
+      <button class="btn btn-ghost" type="button" data-go="map" aria-label="Map">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6.5l6-2.5 6 2.5 6-2.5v13l-6 2.5-6-2.5-6 2.5z"/><path d="M9 4v13M15 6.5v13"/></svg>
+        <span class="btn-label">Map</span>
+      </button>
+      <button class="btn btn-ghost" type="button" id="menu-btn" aria-label="Guides" aria-expanded="false" aria-controls="menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6.5h16M4 12h16M4 17.5h10"/></svg>
+        <span class="btn-label">Guides</span>
+      </button>
+      <button class="icon-btn" id="theme-toggle" type="button" aria-label="Switch colour theme" title="Switch colour theme">
+        <svg class="theme-icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>
+        <svg class="theme-icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="stage" id="main" tabindex="-1">
+    <noscript>
+      <article class="page page-entry">
+        <h1>Instruction files</h1>
+        <p>Instruction files hold standing rules in plain text. The harness puts them in the context at the start of every new chat or job.</p>
+        <p>They are written in Markdown, plain text with a little formatting for headings and lists. Agents that write code read files such as AGENTS.md or CLAUDE.md; chat apps offer the same idea as custom instructions. Typical contents are house rules, how a project is organised and your preferences. They sit in the context on every request, so every line takes up room: keep them short.</p>
+        <p>Instruction files are a standing briefing: how to build and test, conventions, a map of the project, what to avoid. AGENTS.md is the open format shared across agent apps, now stewarded by the Agentic AI Foundation under the Linux Foundation. Many harnesses also read their own file, such as CLAUDE.md, GEMINI.md, Cursor rules or Copilot instructions.</p>
+        <p>Files can be layered: a global file for personal preferences, a project file the team shares in its code repository, and files in sub-folders for local rules. They load at the start of every chat or job, so every line costs context on every turn.</p>
+        <p>Keep them short and specific; models skim past long or auto-generated files. Put task-specific procedures into skills, which load only when needed, and link to documentation instead of pasting it in. Treat the file like code: review it, prune it and test whether it actually changes behaviour.</p>
+        <p>Measure the effect. A 2026 study found that generic overviews of a repository add cost without improving results, while precise instructions are followed.</p>
+      </article>
+      <p class="noscript">This page is interactive and needs JavaScript. All of its text is also in <code>assets/js/data/</code> in the <a href="https://github.com/veniplex/ai-explained">GitHub repository</a>, and <a href="../../../v1-alpha/">v1-alpha</a> has the same topics as one map.</p>
+    </noscript>
+  </main>
+
+  <!-- The guides menu opens on interaction. -->
+  <nav class="menu" id="menu" aria-label="Guides" hidden></nav>
+
+  <script src="../../assets/vendor/rough.js"></script>
+  <script src="../../assets/js/data/core.js"></script>
+  <script src="../../assets/js/data/entries.js"></script>
+  <script src="../../assets/js/data/sources.js"></script>
+  <script src="../../assets/js/data/guides.js"></script>
+  <script src="../../assets/js/data/voice-ui.js"></script>
+  <script src="../../assets/js/data/voice-kitchen-a.js"></script>
+  <script src="../../assets/js/data/voice-kitchen-b.js"></script>
+  <script src="../../assets/js/data/voice-tech.js"></script>
+  <script src="../../assets/js/data/voice-guides.js"></script>
+  <script src="../../assets/js/sketch.js"></script>
+  <script src="../../assets/js/draw.js"></script>
+  <script src="../../assets/js/props.js"></script>
+  <script src="../../assets/js/data/props-extra-a.js"></script>
+  <script src="../../assets/js/data/props-extra-b.js"></script>
+  <script src="../../assets/js/data/props-extra-c.js"></script>
+  <script src="../../assets/js/data/props-v9.js"></script>
+  <script src="../../assets/js/data/kitchen.js"></script>
+  <script src="../../assets/js/data/story.js"></script>
+  <script src="../../assets/js/data/names.js"></script>
+  <script src="../../assets/js/locator.js"></script>
+  <script src="../../assets/js/voice.js"></script>
+  <script src="../../assets/js/map.js"></script>
+  <script src="../../assets/js/story.js"></script>
+  <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/pages.js"></script>
+  <script src="../../assets/js/app.js"></script>
+  <script src="../../../versions.js"></script>
+  <script src="../../../version-switcher.js"></script>
+</body>
+</html>
