@@ -21,8 +21,8 @@ const PEOPLE = ["chef", "owner", "person"];
 const LIMITS = { cap: 40, bubble: 24, title: 8, def: 36, steps: [40, 80], names: [1, 21] };
 
 // The drawings, the kitchen, the story and the names, loaded as the browser does, without a document.
-function load(root) {
-  const base = path.join(root, DIR, "assets/js");
+function load(root, dir = DIR) {
+  const base = path.join(root, dir, "assets/js");
   const sandbox = { window: {}, console };
   sandbox.window.window = sandbox.window;
   vm.createContext(sandbox);
@@ -34,8 +34,8 @@ function load(root) {
   return sandbox.window.COMIC;
 }
 // The terms of v6 (their ids), read from its entries file.
-function v6Terms(root) {
-  const src = fs.readFileSync(path.join(root, "v6-alpha/assets/js/data/entries.js"), "utf8");
+function v6Terms(root, dir = "v6-alpha") {
+  const src = fs.readFileSync(path.join(root, dir, "assets/js/data/entries.js"), "utf8");
   return Array.from(src.matchAll(/^  "?([a-z-]+)"?: \{\n    chapter:/gm)).map((m) => m[1]);
 }
 
@@ -53,11 +53,15 @@ function lintTech(text, at, err) {
   if (/—|–| - /.test(text)) err(at + ": no dashes; use a full stop or a comma");
 }
 
-function check(root) {
-  const errors = [], err = (m) => errors.push(m);
+// opts.dir: the version folder to check (default v9-alpha); opts.terms: the version whose terms every name must be one of
+// (default v6-alpha); opts.scan: false to skip the look for requests to outside the folder (v10-alpha has its own, because its
+// deep dive holds the links of its sources).
+function check(root, opts) {
+  opts = opts || {};
+  const dir = opts.dir || DIR, errors = [], err = (m) => errors.push(m);
   let C;
-  try { C = load(root); } catch (e) { return ["could not load " + DIR + ": " + e.message]; }
-  const K = C.kitchen, steps = C.steps || [], chapters = C.chapters || [], names = C.names || [], terms = v6Terms(root);
+  try { C = load(root, dir); } catch (e) { return ["could not load " + dir + ": " + e.message]; }
+  const K = C.kitchen, steps = C.steps || [], chapters = C.chapters || [], names = C.names || [], terms = v6Terms(root, opts.terms || "v6-alpha");
   if (!K || !Array.isArray(K.actors)) return ["kitchen.js must define COMIC.kitchen with a list of actors"];
   const inRoom = (p, pad) => Array.isArray(p) && p.length === 2 && p.every((n) => typeof n === "number") && p[0] >= -pad && p[0] <= K.w + pad && p[1] >= -pad && p[1] <= K.h + pad;
 
@@ -149,7 +153,7 @@ function check(root) {
   const named = new Set();
   names.forEach((n, k) => {
     const na = "name " + n.id;
-    if (!terms.includes(n.id)) err(na + ": not a v6 term");
+    if (!terms.includes(n.id)) err(na + ": not a term of " + (opts.terms || "v6-alpha"));
     if (named.has(n.id)) err(na + ": named twice");
     named.add(n.id);
     if (!ZONES.includes(n.zone)) err(na + ": zone " + n.zone);
@@ -169,7 +173,7 @@ function check(root) {
 
   // Nothing is requested from outside the folder: no http(s) URL in scripts or styles, and no @import.
   const walk = (d) => fs.readdirSync(d, { withFileTypes: true }).flatMap((e) => e.isDirectory() ? (e.name === "vendor" ? [] : walk(path.join(d, e.name))) : [path.join(d, e.name)]);
-  walk(path.join(root, DIR, "assets")).filter((f) => /\.(js|css)$/.test(f)).forEach((f) => {
+  if (opts.scan !== false) walk(path.join(root, dir, "assets")).filter((f) => /\.(js|css)$/.test(f)).forEach((f) => {
     const src = fs.readFileSync(f, "utf8").replace(/http:\/\/www\.w3\.org\/2000\/svg/g, "");
     if (/https?:\/\//.test(src) || /@import/.test(src)) err(path.relative(root, f) + ": must not load or name anything outside the folder");
   });
