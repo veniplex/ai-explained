@@ -138,7 +138,7 @@ window.AE3.entries = {
     deeper: {
       details: [
         "MCP defines how a host (the app running the agent, see [[harness]]) connects, through MCP clients (the part of the host that talks to one server), to MCP servers. Servers offer **tools** (actions), **resources** (data) and **prompts** (templates). They run on your own computer or remotely over the web (HTTP), with access granted through OAuth, the standard behind “allow this app access” screens.",
-        "Since its launch, MCP, an open standard (a public format any app can use), has been adopted across the industry. The current revision (2026-07-28) simplified the core so that a server no longer has to remember each client between requests, which lets remote servers spread across many machines. It moved optional features, such as long-running tasks and interactive interfaces (MCP Apps), into formal extensions.",
+        "Since its launch, MCP, an open standard (a public format any app can use), has been adopted across the industry. The current revision (2026-07-28) simplified the core so that a server no longer has to remember each client between requests, which lets remote servers spread across many machines. It moved long-running tasks out of the core into a formal extension. Interactive interfaces (MCP Apps) are another official extension.",
         "Use MCP for integrations many agents can reuse (GitHub, Jira, Slack, databases, internal systems) and to make your own product usable by AI agents. Do not load many servers with hundreds of tools into every chat or job: use tool search, or code execution with MCP, where tools appear as code so large intermediate results never enter the context. Treat every server as untrusted code that holds your credentials (logins and keys): check who publishes it and what access it asks for, stay on a version you have checked, review changes to its tool descriptions, and use OAuth 2.1 with per-user, least-privilege scopes, so each user grants only the access the task needs."
       ],
       includes: []
@@ -215,7 +215,7 @@ window.AE3.entries = {
     deeper: {
       details: [
         "Instruction files are a standing briefing: how to build and test, conventions, a map of the project, what to avoid. AGENTS.md is the open format shared across agent apps, now stewarded by the Agentic AI Foundation under the Linux Foundation. Many harnesses also read their own file, such as `CLAUDE.md`, `GEMINI.md`, Cursor rules or Copilot instructions.",
-        "Files can be layered: a global file for personal preferences, a project file the team shares in its code repository, and files in sub-folders for local rules. They load at the start of every chat or job, so every line costs context on every turn.",
+        "Files can be layered: a global file for personal preferences, a project file the team shares in its code repository, and files in sub-folders for local rules. Files above the working folder load at the start of every chat or job; some harnesses load sub-folder files only when the agent works in that folder. Either way, every line costs context.",
         "Keep them short and specific; models skim past long or auto-generated files. Put task-specific procedures into [[skills]], which load only when needed, and link to documentation instead of pasting it in. Treat the file like code: review it, prune it and test whether it actually changes behaviour.",
         "Measure the effect. A 2026 study found that generic overviews of a repository add cost without improving results, while precise instructions are followed."
       ],
@@ -237,14 +237,14 @@ window.AE3.entries = {
     ],
     deeper: {
       details: [
-        "A skill packages procedural know-how: a `SKILL.md` file with a name and a description in its header plus Markdown instructions, and optionally scripts, templates and reference files. At the start of a chat or job only each skill's name and description sit in the context, a few dozen tokens each. When a task matches, the model reads the full `SKILL.md`, and only then the extra files it needs. This is called progressive disclosure.",
+        "A skill packages procedural know-how: a `SKILL.md` file with a name and a description in its header plus Markdown instructions, and optionally scripts, templates and reference files. At the start of a chat or job only each skill's name and description sit in the context, about 100 tokens each. When a task matches, the model reads the full `SKILL.md`, and only then the extra files it needs. This is called progressive disclosure.",
         "Anthropic introduced skills in October 2025 and published the format as an open standard, a public specification any app can adopt, in December 2025. By October 2026 more than 40 products support it, including Codex, GitHub Copilot, VS Code, Cursor and Gemini CLI.",
         "Use skills for repeatable procedures, for company conventions too large for the [[instructions|instruction file]], and for helper scripts, so the agent runs tested code instead of writing it from scratch. Write the description for triggering (“Use when…”), because it decides whether the skill loads. Keep `SKILL.md` focused, move details into referenced files, keep skills in version control and test them with [[evals]].",
         "Read skills from untrusted sources before installing them, since they can contain code. Turn successful work and existing procedures into skills, and share them through plugins."
       ],
       includes: [
         { name: "Playbooks & runbooks", text: "A written, step-by-step procedure for a recurring task, with checks and a definition of done. Best stored as a skill." },
-        { name: "Slash commands & prompt templates", text: "Saved prompts you start by name, such as /review. In 2026 most harnesses folded them into skills." },
+        { name: "Slash commands & prompt templates", text: "Saved prompts you start by name, such as /review. In 2026 several major harnesses folded them into skills." },
         { name: "Plugins & extensions", text: "Installable bundles of skills, commands, sub-agents, hooks and MCP servers, so a whole setup can be shared with one install. They can run code with your permissions, so install only ones you trust." }
       ]
     },
@@ -391,7 +391,7 @@ window.AE3.entries = {
     deeper: {
       details: [
         "Prompt injection happens when instructions hidden in content the agent reads (a web page, an email, an issue, a PDF, a tool result) hijack its behaviour. No current model is immune, and a line in the prompt such as “ignore malicious instructions” is no defence.",
-        "Simon Willison's **lethal trifecta** names the dangerous combination: access to private data, exposure to untrusted content and the ability to communicate externally. An agent with all three can be tricked into sending your data to an attacker. Meta's **Rule of Two** turns this into a design rule: without human approval, one chat or job should combine at most two of the three.",
+        "Simon Willison's **lethal trifecta** names the dangerous combination: access to private data, exposure to untrusted content and the ability to communicate externally. An agent with all three can be tricked into sending your data to an attacker. Meta's **Rule of Two** is a related design rule: without human approval, one chat or job should combine at most two of untrusted input, access to sensitive data or systems, and the ability to change state or communicate externally.",
         "Defences are architectural: remove one leg of the trifecta, grant least privilege, run in a [[sandbox]] whose outgoing traffic is limited to an allowlist of domains, require human approval for sensitive actions ([[permissions]]), keep planning separate from untrusted data, and use short-lived, narrowly scoped credentials instead of long-lived, broad tokens. The OWASP lists for LLM and agentic applications work as checklists.",
         "Check all this before you give an agent email, browsing, customer data or production systems, and before you install third-party [[mcp|MCP servers]], skills or plugins, which are a supply-chain risk. Pin and review them, watch for tool descriptions that change (tool poisoning), and use OAuth with per-user, least-privilege scopes for remote MCP servers."
       ],

@@ -186,7 +186,7 @@ window.AE3.sources = {
     ],
     "facts": [
       {
-        "text": "Current Claude models think adaptively by default; the effort setting (low, medium, high, xhigh, max) is the main control, and manual thinking budgets are being retired.",
+        "text": "Current Claude models think adaptively by default; the effort setting (low, medium, high, xhigh, max) is the main control, and the newest models reject manual thinking budgets (`budget_tokens`).",
         "source": "https://platform.claude.com/docs/en/build-with-claude/effort"
       },
       {
@@ -194,7 +194,7 @@ window.AE3.sources = {
         "source": "https://developers.openai.com/api/docs/guides/reasoning"
       },
       {
-        "text": "Gemini uses a thinking level (low, medium, high), with thought summaries available on request.",
+        "text": "Gemini uses a thinking level (low, medium and high, plus minimal on some models), with thought summaries available on request.",
         "source": "https://ai.google.dev/gemini-api/docs/thinking"
       },
       {
@@ -208,7 +208,7 @@ window.AE3.sources = {
         "title": "What Is a Reasoning Model?",
         "by": "IBM Think (Dave Bergmann)",
         "url": "https://www.ibm.com/think/topics/reasoning-model",
-        "year": 2026,
+        "year": 2025,
         "note": "Plain-language explainer of reasoning/thinking models and test-time compute."
       },
       {
@@ -304,7 +304,7 @@ window.AE3.sources = {
       },
       {
         "text": "Chroma's Context Rot study (July 2025) tested 18 models and found performance “grows increasingly unreliable as input length grows”, even on deliberately simple tasks.",
-        "source": "https://research.trychroma.com/context-rot"
+        "source": "https://www.trychroma.com/research/context-rot"
       }
     ],
     "sources": [
@@ -313,7 +313,7 @@ window.AE3.sources = {
         "title": "What is a context window?",
         "by": "IBM Think",
         "url": "https://www.ibm.com/think/topics/context-window",
-        "year": 2026,
+        "year": 2024,
         "note": "Defines context window, tokens, and trade-offs of larger windows."
       },
       {
@@ -355,14 +355,6 @@ window.AE3.sources = {
         "url": "https://www.trychroma.com/research/context-rot",
         "year": 2025,
         "note": "18-model study: accuracy degrades as input length grows."
-      },
-      {
-        "type": "paper",
-        "title": "Context Rot: How Increasing Input Tokens Impacts LLM Performance",
-        "by": "Chroma (Kelly Hong, Anton Troynikov, Jeff Huber)",
-        "url": "https://research.trychroma.com/context-rot",
-        "year": 2025,
-        "note": "Technical report: 18 LLMs degrade non-uniformly as input length grows."
       },
       {
         "type": "guide",
@@ -467,7 +459,7 @@ window.AE3.sources = {
         "title": "What Is Prompt Engineering?",
         "by": "IBM Think",
         "url": "https://www.ibm.com/think/topics/prompt-engineering",
-        "year": 2026,
+        "year": 2025,
         "note": "Accessible definition of prompt engineering with common techniques."
       },
       {
@@ -1278,7 +1270,7 @@ window.AE3.sources = {
       },
       {
         "type": "guide",
-        "title": "Harness engineering",
+        "title": "Harness engineering for coding agent users",
         "by": "Birgitta Böckeler (Thoughtworks), martinfowler.com",
         "url": "https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html",
         "year": 2026,
@@ -2258,7 +2250,7 @@ window.AE3.sources = {
         "source": "https://www.anthropic.com/engineering/claude-code-auto-mode"
       },
       {
-        "text": "Anthropic's February 2026 study of agent autonomy also found that about 73% of tool calls on its API involve a human in the loop and only about 0.8% of actions look irreversible.",
+        "text": "Anthropic's February 2026 study of agent autonomy also found that about 73% of tool calls on its API appear to have a human in the loop in some way and only about 0.8% of actions appear to be irreversible.",
         "source": "https://www.anthropic.com/research/measuring-agent-autonomy"
       }
     ],
@@ -2424,7 +2416,7 @@ window.AE3.sources = {
         "source": "https://www.anthropic.com/engineering/claude-code-sandboxing"
       },
       {
-        "text": "Claude Code's docs compare six isolation tiers and recommend a VM or a hosted cloud session for untrusted repositories.",
+        "text": "Claude Code's docs compare six sandboxing approaches and recommend a dedicated VM or a hosted cloud session for untrusted repositories.",
         "source": "https://code.claude.com/docs/en/sandbox-environments"
       },
       {
@@ -2994,7 +2986,7 @@ window.AE3.sources = {
         "type": "blog",
         "title": "Don’t Build Multi-Agents",
         "by": "Cognition (Walden Yan)",
-        "url": "https://cognition.ai/blog/dont-build-multi-agents",
+        "url": "https://cognition.com/blog/dont-build-multi-agents",
         "year": 2025,
         "note": "Context-sharing principles; case for single-threaded agents."
       },
@@ -3002,7 +2994,7 @@ window.AE3.sources = {
         "type": "blog",
         "title": "Multi-Agents: What's Actually Working",
         "by": "Cognition",
-        "url": "https://cognition.ai/blog/multi-agents-working",
+        "url": "https://cognition.com/blog/multi-agents-working",
         "year": 2026,
         "note": "2026 update: reviewer loops, smart-friend escalation, managers."
       },
@@ -3748,7 +3740,7 @@ window.AE3.sources = {
         "source": "https://www.imda.gov.sg/-/media/imda/files/about/emerging-tech-and-research/artificial-intelligence/mgf-for-agentic-ai.pdf"
       },
       {
-        "text": "NIST says its AI Risk Management Framework is being revised; the Generative AI Profile (NIST AI 600-1) lists 12 risks, including prompt injection.",
+        "text": "NIST says its AI Risk Management Framework is being revised; the Generative AI Profile (NIST AI 600-1) lists 12 risks; prompt injection is covered under its information security risk.",
         "source": "https://www.nist.gov/itl/ai-risk-management-framework"
       }
     ],

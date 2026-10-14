@@ -130,7 +130,7 @@
         <h2>Definition</h2>
         <p>A setting that tells a model how much reasoning, and therefore how many tokens, to spend on a task. Higher effort suits hard, multi-step problems; lower effort is faster and cheaper for simple ones.</p>
         <h2>Detailed technical description</h2>
-        <p>Effort is usually exposed as a coarse setting, such as low, medium or high, that caps or guides how many tokens the model may spend on reasoning before it answers. Some APIs express it as a token budget instead. It changes how long the model thinks, not what it knows, so it cannot fix a missing fact or a poor prompt.</p>
+        <p>Effort is usually exposed as a coarse setting, such as low, medium or high, that guides how much work the model puts into a response, including how much it reasons before it answers. It is a signal, not a hard cap, and it also affects the length of the answer and the number of tool calls. Some APIs express it as a token budget instead. It changes how long the model thinks, not what it knows, so it cannot fix a missing fact or a poor prompt.</p>
         <p>Set it per task, not once for a whole system. An agent can use low effort for routing and simple lookups, and high effort for planning or debugging. Too much effort on easy steps wastes money and time, and too little on hard steps produces shallow plans and skipped checks. Measure both on your own tasks with evals.</p>
       </article>
       <p class="noscript">This page is interactive and needs JavaScript. All of its text is also in <code>assets/js/data/</code> in the <a href="https://github.com/veniplex/ai-explained">GitHub repository</a>.</p>

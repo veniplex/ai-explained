@@ -13,7 +13,7 @@
 
 /* build:start */
 const PREFIX = "ae-v1.0-";
-const BUILD = PREFIX + "cdbcb99835";
+const BUILD = PREFIX + "1d9aeabeec";
 const PRECACHE = [
   "./",
   "story/",
