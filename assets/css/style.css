@@ -955,11 +955,15 @@ tbody th { font-weight: 600; }
 .rail-item.is-past .rail-dot { background: var(--clay-mid); box-shadow: inset 0 0 0 2px var(--clay); color: var(--ink); }
 .rail-item[aria-current] .rail-dot { background: var(--zc, var(--clay)); box-shadow: inset 0 0 0 2px var(--zc, var(--clay)); transform: scale(1.25); color: var(--paper); }
 .rail-label {
-  position: absolute; left: calc(100% + 8px); top: 50%; padding: 5px 10px; border: 1px solid var(--rule); border-radius: var(--r-md);
-  background: var(--surface); box-shadow: var(--shadow); white-space: nowrap; color: var(--ink);
-  opacity: 0; pointer-events: none; transform: translate(-4px, -50%); transition: opacity var(--dur-fast), transform var(--dur-fast) var(--ease);
+  position: absolute; right: calc(100% + 8px); top: 50%; width: max-content; max-width: var(--rail-label-w, 200px);
+  padding: 5px 10px; border: 1px solid var(--rail-edge, var(--rule)); border-radius: var(--r-md);
+  background: var(--surface); box-shadow: var(--shadow); color: var(--ink); text-align: right;
+  opacity: 0; pointer-events: none; transform: translate(4px, -50%); transition: opacity var(--dur-fast), transform var(--dur-fast) var(--ease);
 }
 .rail-item:hover .rail-label, .rail-item:focus-visible .rail-label { opacity: 1; transform: translate(0, -50%); }
+.rail.no-labels .rail-label { display: none; }
+.rail { transition: opacity var(--dur-base); }
+.rail.is-faded { opacity: 0; pointer-events: none; }
 .rail-item:hover .rail-dot, .rail-item:focus-visible .rail-dot { transform: scale(1.25); }
 .progress {
   position: fixed; z-index: var(--z-rail); left: 0; right: 0; top: calc(var(--bar-h) + env(safe-area-inset-top, 0px)); height: 3px;
@@ -970,9 +974,13 @@ tbody th { font-weight: 600; }
   .rail { display: block; }
   .progress { display: none; }
 }
-/* With the map beside the text the dots need a strip of their own at the left of the chapters. */
+/* The dots (and the name that opens to their left) get a strip of their own at the left of the chapters and of the
+   whole-system map, so nothing sits under them. It grows with the window. */
+@media (min-width: 1280px) and (min-height: 480px) {
+  .fig-loop .loop { margin-left: 28px; max-width: min(520px, calc(100% - 28px)); }
+}
 @media (min-width: 1280px) and (min-height: 660px) {
-  .story { padding-left: 56px; }
+  .story, .hub { padding-left: clamp(64px, calc(100vw - 1250px), 170px); }
 }
 
 /* ---------- Responsive ------------------------------------------------------ */
