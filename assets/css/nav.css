@@ -15,6 +15,15 @@
   --inset-l: env(safe-area-inset-left, 0px);  /* the notch of a phone held sideways (the page is set to cover the screen) */
   --inset-r: env(safe-area-inset-right, 0px);
   --bar-h: var(--bar-main-h);
+  /* One content container for every text page (the deep dive, the guides, the glossary, About): the same width at the same window size. Pages with a list at the
+     left edge (a term, a guide) and the dots of the deep dive hang just outside the container's left edge, so every text page reserves their room (--lead) from 960px up
+     and the container is the same with or without them. */
+  --page-w: 1120px;                          /* the widest the container gets */
+  --side-w: clamp(224px, 19vw, 272px);       /* the list at the left edge */
+  --side-gap: 24px;                          /* between that list (or the dots) and the container */
+  --lead: 0px;
+  --content-w: min(var(--page-w), calc(100% - var(--lead)));  /* as wide as the page's own box: write it only for a child of .stage */
+  --prose-w: 780px;                          /* a line of running text stays this long inside the wider container */
   --z-search: 60;   /* the list of hits, above the menus */
   --z-pop: 70;      /* the hover card, above everything but the skip link */
   --scrim: rgba(20, 20, 19, 0.5); /* what dims the page behind the search window */
@@ -24,6 +33,7 @@
 @media (max-width: 760px) {
   :root { --bar-main-h: 54px; }
 }
+@media (min-width: 960px) { :root { --lead: calc(var(--side-w) + var(--side-gap)); } }
 
 /* ---------- The bar: brand, places, search, actions ------------------------------ */
 /* Nothing in the bar changes place from one page to the next: the scrollbar's room is always kept (see the end of this file), the current place is marked without
@@ -316,7 +326,6 @@ html.sm-open { overflow: hidden; }
 }
 
 /* ---------- The lists of the glossary and guides ----------------------------------------- */
-.page-list { max-width: 1040px; }
 .ref-group { margin-top: 36px; }
 .ref-group-title { display: flex; align-items: center; gap: 10px; font: 600 var(--fs-2xl)/1.2 var(--serif); }
 .ref-group-title a { color: inherit; text-decoration: none; }
@@ -345,7 +354,7 @@ html.sm-open { overflow: hidden; }
 html { scrollbar-gutter: stable; }
 
 /* ---------- The notch: the text of a page keeps clear of it (the story is a picture and goes under it) ---------- */
-body:not([data-page="kitchen"]) > .stage:not(:has(.side-layout)) { padding-inline: max(var(--gutter), var(--inset-l)) max(var(--gutter), var(--inset-r)); }
+body:not([data-page="kitchen"]) > .stage { padding-inline: max(var(--gutter), var(--inset-l)) max(var(--gutter), var(--inset-r)); }
 
 /* ---------- The button back to the top (totop.js) ------------------------------------------------------- */
 .to-top {

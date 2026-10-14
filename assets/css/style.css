@@ -748,7 +748,7 @@ tbody th { font-weight: 600; }
 
 /* Hero */
 .hero {
-  max-width: 1180px; margin: 0 auto; min-height: calc(100svh - var(--bar-h));
+  width: var(--content-w); margin: 0 auto; min-height: calc(100svh - var(--bar-h));
   display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: clamp(24px, 5vw, 72px); align-items: center;
   padding-block: 32px;
 }
@@ -766,8 +766,8 @@ tbody th { font-weight: 600; }
 
 /* Story: chapters on the left, the growing map on the right */
 .story {
-  max-width: 1440px; margin: 0 auto;
-  display: grid; grid-template-columns: minmax(34rem, 1fr) minmax(0, 1.05fr); gap: clamp(28px, 4vw, 64px); align-items: start;
+  width: var(--content-w); margin: 0 auto;
+  display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: clamp(28px, 3vw, 56px); align-items: start;
 }
 .chapters { min-width: 0; }
 .chapter { max-width: 640px; padding-block: clamp(48px, 9vh, 96px); border-top: 1px solid var(--rule); }
@@ -804,7 +804,7 @@ tbody th { font-weight: 600; }
   grid-template-areas: "you you" "chef tools" "kitchen kitchen" "recipes helpers" "ops ops";
 }
 .kmap-hub {
-  max-width: 1400px; margin: 0 auto; row-gap: 18px; column-gap: 0;
+  margin: 0 auto; row-gap: 18px; column-gap: 0;
   grid-template-columns: minmax(200px, 1fr) 96px minmax(0, 2.1fr) 96px minmax(200px, 1fr);
   grid-template-areas:
     ".       .  you     .  ."
@@ -880,15 +880,15 @@ tbody th { font-weight: 600; }
 .kmap-mini .you-text, .kmap-mini .you-text b { font-size: var(--fs-sm); }
 
 /* Hub, recap and stamp */
-.hub { padding-block: clamp(56px, 10vh, 120px) 40px; border-top: 1px solid var(--rule); }
+.hub { width: var(--content-w); margin: 0 auto; padding-block: clamp(56px, 10vh, 120px) 40px; border-top: 1px solid var(--rule); }
 .hub:focus { outline: none; }
-.hub-head { max-width: 1400px; margin: 0 auto 28px; }
+.hub-head { margin: 0 0 28px; }
 .hub-head .eyebrow { color: var(--clay-ink); }
 .hub-title { margin-top: 10px; font: 600 clamp(var(--fs-4xl), 3.6vw, calc(var(--fs-5xl) * 1.2))/1.1 var(--serif); letter-spacing: -0.02em; }
 .hub-lede { margin-top: 10px; font: italic 400 var(--fs-lg)/1.5 var(--serif); color: var(--ink-3); }
-.recap { max-width: 900px; margin: clamp(56px, 9vh, 96px) auto 0; }
+.recap { margin: clamp(56px, 9vh, 96px) 0 0; }
 .recap-title { margin-bottom: 18px; font: 600 clamp(var(--fs-3xl), 3vw, var(--fs-5xl))/1.15 var(--serif); }
-.stamp { max-width: 900px; margin: 48px auto 0; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; font: 400 var(--fs-sm)/1.5 var(--sans); color: var(--ink-3); }
+.stamp { margin: 48px 0 0; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; font: 400 var(--fs-sm)/1.5 var(--sans); color: var(--ink-3); }
 .stamp .badge { transform: rotate(-2deg); text-transform: uppercase; }
 
 /* Drawer additions: the example, "go deeper", sources */
@@ -909,8 +909,7 @@ tbody th { font-weight: 600; }
 .menu { grid-template-columns: 1fr; width: min(380px, calc(100vw - 32px)); }
 
 /* ---------- Term and guide pages ---------------------------------------------- */
-.page { max-width: 760px; margin: 0 auto; padding-block: clamp(24px, 5vh, 56px) clamp(48px, 9vh, 96px); }
-.page-guide { max-width: 1120px; }
+.page { width: var(--content-w); margin: 0 auto; padding-block: clamp(24px, 5vh, 56px) clamp(48px, 9vh, 96px); }
 .page-head { margin-bottom: 26px; padding-bottom: 20px; border-bottom: 1px solid var(--rule); }
 .crumb {
   display: inline-flex; align-items: center; gap: 8px; margin-bottom: 18px; padding: 4px 0;
@@ -974,15 +973,6 @@ tbody th { font-weight: 600; }
   .rail { display: block; }
   .progress { display: none; }
 }
-/* The dots (and the name that opens to their left) get a strip of their own at the left of the chapters and of the
-   whole-system map, so nothing sits under them. It grows with the window. */
-@media (min-width: 1280px) and (min-height: 480px) {
-  .fig-loop .loop { margin-left: 28px; max-width: min(520px, calc(100% - 28px)); }
-}
-@media (min-width: 1280px) and (min-height: 660px) {
-  .story, .hub { padding-left: clamp(64px, calc(100vw - 1250px), 170px); }
-}
-
 /* ---------- Responsive ------------------------------------------------------ */
 @media (max-width: 1240px) {
   .brand-sub { display: none; }
@@ -995,11 +985,11 @@ tbody th { font-weight: 600; }
   .kmap-hub > .conn { display: none; }
 }
 /* Narrow or short screens: one column with a small map in each chapter; the sticky map would not fit. */
-@media (max-width: 1023px), (max-height: 659px) {
+@media (max-width: 1279px), (max-height: 659px) {
   .story { grid-template-columns: minmax(0, 1fr); }
   .story-map { display: none; }
   .mini-map { display: block; margin-top: 20px; }
-  .chapter { max-width: 680px; margin-inline: auto; }
+  .chapter { max-width: var(--prose-w); }
 }
 @media (max-width: 760px) {
   :root { --bar-h: 54px; }

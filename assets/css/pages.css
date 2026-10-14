@@ -8,16 +8,12 @@
    ========================================================================== */
 
 /* ---------- A page with a list at its left edge: a term (all terms) and a guide (its parts) ---------- */
-/* The list sits against the left edge of the window, outside the text. The text is centred in the window, and where the window is too narrow for both, it
-   takes what is left beside the list. Below 960px the list is a closed box above the text. */
-.stage:has(.side-layout) { padding-inline: 0; }
-.side-layout {
-  --side-w: 296px; --text-w: 780px;
-  display: grid; grid-template-columns: minmax(var(--side-w), 1fr) minmax(0, var(--text-w)) minmax(0, 1fr); align-items: start; padding-top: 15px;
-}
-.side-layout-guide { --text-w: 860px; }
-.side-layout > .side { grid-column: 1; align-self: start; position: sticky; top: calc(var(--bar-h) + 16px); width: var(--side-w); padding-left: var(--gutter); box-sizing: content-box; max-width: calc(100% - var(--gutter)); }
-.side-layout > .page { grid-column: 2; max-width: none; margin: 0; padding-top: clamp(4px, 2vh, 20px); padding-inline: clamp(20px, 3vw, 40px); }
+/* Every text page has the same container (--content-w, nav.css). The list hangs just outside its left edge, one gap away: where the window is wide it sits in the
+   free margin beside the container, where it is not, the container moves right and takes what is left beside the list (--lead keeps that room on every text page, so the
+   container is as wide with a list as without). Below 960px the list is a closed box above the text. */
+.side-layout { display: grid; grid-template-columns: minmax(var(--lead), 1fr) var(--content-w) minmax(0, 1fr); align-items: start; padding-top: 15px; }
+.side-layout > .side { grid-column: 1; justify-self: end; align-self: start; position: sticky; top: calc(var(--bar-h) + 16px); width: var(--side-w); margin-right: var(--side-gap); }
+.side-layout > .page { grid-column: 2; width: auto; margin: 0; padding-top: clamp(4px, 2vh, 20px); }
 /* The box is a plain frame. Its content sits in .gl-side-body, a div of our own that gets the height: a <details> keeps its content in a box of its own in current
    browsers, and a flex column set on the <details> never reached the list inside, which is why the list of terms could not scroll. */
 .gl-side-box { border: 1px solid var(--rule-strong); border-radius: var(--r-lg); background: var(--surface); overflow: hidden; }
@@ -71,15 +67,9 @@
 @media (min-width: 960px) {
   .gl-side-box > summary { pointer-events: none; cursor: default; }
 }
-@media (max-width: 1371px) and (min-width: 960px) {
-  .side-layout { grid-template-columns: var(--side-w) minmax(0, 1fr); }
-  .side-layout > .side { padding-left: var(--gutter); }
-  .side-layout > .page { grid-column: 2; max-width: var(--text-w); margin-inline: auto; width: 100%; }
-}
 @media (max-width: 959px) {
-  .side-layout { display: block; padding-inline: max(var(--gutter), var(--inset-l)) max(var(--gutter), var(--inset-r)); padding-top: 28px; } /* clear of the version tab that hangs from the top bar */
-  .side-layout > .side { position: static; width: auto; max-width: none; padding-left: 0; margin-bottom: 20px; }
-  .side-layout > .page { padding-inline: 0; margin: 0 auto; max-width: var(--text-w); }
+  .side-layout { display: block; padding-top: 28px; } /* clear of the version tab that hangs from the top bar */
+  .side-layout > .side { position: static; width: auto; margin: 0 0 20px; }
   /* Room under the last line for the button back to the top, so it does not cover the link to the next term. */
   .side-layout > .page, .page-glossary { padding-bottom: 80px; }
   /* The open box never grows taller than the window: it scrolls inside, and the list of terms has a height of its own (a short window shows part of it). */
@@ -115,7 +105,6 @@
 @media (max-width: 560px) { .term-icon { width: 56px; height: 56px; } }
 
 /* ---------- The glossary ------------------------------------------------------------------------- */
-.page-glossary { max-width: 1120px; }
 .gl-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 18px; }
 .gl-search { width: min(380px, 100%); }
 /* nav.css hides every .search-field below 900px (the top bar's search turns into a button); the filter of the glossary is not that field and stays. */
@@ -156,8 +145,6 @@
 @media (max-width: 959px), (pointer: coarse) { .gl-chip { min-height: 40px; } }
 
 /* ---------- The guides: a pinboard of notes ------------------------------------------------------- */
-.page-guides { max-width: 1080px; }
-.page-guide { max-width: none; }
 .note-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(290px, 100%), 1fr)); gap: 34px 28px; margin: 40px 0 0; padding: 0; list-style: none; }
 .note-grid li { margin: 0; }
 .note-card {
@@ -224,7 +211,6 @@
 @media (max-width: 860px) { .gd-section h2 { font-size: var(--fs-2xl); } .gd-section > p { font-size: var(--fs-base); } }
 
 /* ---------- About ------------------------------------------------------------------------------------------ */
-.page-about { max-width: 1000px; }
 
 @media print { .side, .gl-tools, .gl-filter, .gd-side, .read-progress { display: none; } .side-layout { display: block; } }
 
