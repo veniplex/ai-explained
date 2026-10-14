@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -129,6 +130,9 @@
         <p>The matching socket on the chef's side: one for each appliance, it asks the appliance what it offers and carries the chef's requests across.</p>
         <h2>Definition</h2>
         <p>The part of an AI application that opens a connection to one MCP server and speaks the protocol with it: listing its tools and sending calls. A host application usually runs one client for each server it connects to.</p>
+        <h2>Try it</h2>
+        <h3>A conversation between client and server</h3>
+        <p>Step through the messages a client and an MCP server exchange, from the first greeting to a tool call. This demo needs JavaScript.</p>
         <h2>Detailed technical description</h2>
         <p>The client starts the connection, negotiates which protocol version and capabilities both sides support, then asks the server for its list of tools, resources and prompts. When the model requests a tool, the client forwards the call as a json-rpc message, waits for the reply and returns it. It also manages the transport, such as a local process or a remote HTTP connection.</p>
         <p>Because the client sits between the model and the server, it is a natural place for controls: timeouts, size limits on results, logging and approval of calls. Servers can also ask the client to do things, for example to request a model completion or ask the person for input, and the client must decide whether to allow it. A one-to-one link keeps each server isolated from the others.</p>
@@ -146,6 +150,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -168,6 +173,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>

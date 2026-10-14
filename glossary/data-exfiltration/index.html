@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -129,6 +130,9 @@
         <p>The chef, fooled by a planted note, quietly sends the owner's private books out of the kitchen, folded into an order to a stall, a parcel label or a message.</p>
         <h2>Definition</h2>
         <p>Getting private information out of a system to a place the owner did not intend. With agents it usually means a hidden instruction makes the agent send secrets out through a request, a link, an image or a message.</p>
+        <h2>Try it</h2>
+        <h3>The lethal trifecta</h3>
+        <p>Tick what your agent can do and see whether it has all three of the abilities that make a hidden instruction dangerous. This demo needs JavaScript.</p>
         <h2>Detailed technical description</h2>
         <p>For agents, the usual route is a tool call or a rendered output that carries data to an outside address. The agent might fetch a URL with the secret in its query string, write to a public place, send an email, or output a markdown image whose link includes the data, which a client then loads automatically. Often the instruction behind it comes from indirect-prompt-injection.</p>
         <p>Defences work at the channel. Block or allowlist outbound destinations (egress-filtering), do not render remote images or links automatically from untrusted output, and keep secrets out of the agent's reach. Review what leaves the system in an audit-log. Detection after the fact is weak, because once data has left it cannot be recalled, so prevention at the exit point is worth more.</p>
@@ -146,6 +150,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -168,6 +173,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>

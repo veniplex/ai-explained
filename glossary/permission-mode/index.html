@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -129,6 +130,9 @@
         <p>A kitchen setting that decides which cupboards the chef may open alone and which need the owner's OK first.</p>
         <h2>Definition</h2>
         <p>A harness setting that decides which actions an agent may take without asking first. Typical modes range from asking before every change to running freely inside a sandbox.</p>
+        <h2>Try it</h2>
+        <h3>Allow, ask or deny</h3>
+        <p>Write the rules, and see what happens to each action an agent proposes. Then switch on the hook and see what a rule outside the model adds. This demo needs JavaScript.</p>
         <h2>Detailed technical description</h2>
         <p>A mode is a policy that the harness applies to each tool call before it runs. A strict mode asks for approval for every write, command or network request. A middle mode allows reads and edits in the project but asks for other actions. A permissive mode runs everything without asking. Allow and deny lists refine the mode, for example permitting one named command but blocking others.</p>
         <p>Enforcement should be in the harness, not in the prompt, since a model can be talked out of an instruction but cannot override code that denies the call. Permissive modes are only reasonable inside a sandbox with limited files, network and secrets. Choose the mode per task, and review settings that were loosened to get past a one-off prompt and then left in place.</p>
@@ -146,6 +150,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -168,6 +173,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>

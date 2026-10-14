@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -129,6 +130,9 @@
         <p>Instead of hanging every tool on the wall, there is one catalogue: the chef looks up the few tools the job needs, and only those are brought to the counter.</p>
         <h2>Definition</h2>
         <p>A way to avoid loading hundreds of tool definitions into the context: the model gets a search tool, looks up the tools a task needs and only those are added. It saves tokens and helps the model choose the right tool from a large set.</p>
+        <h2>Try it</h2>
+        <h3>Fill a context window</h3>
+        <p>Step through a coding task and watch what takes up room in the window. Then switch on a remedy and run it again. This demo needs JavaScript.</p>
         <h2>Detailed technical description</h2>
         <p>The tools are indexed by name and description, often with a lighter summary kept in the context. The model issues a search with keywords or a description of the need, gets back the best matches and then receives their full schemas for use. Some systems rank with keywords, others with embedding similarity, and a few let the model browse by category.</p>
         <p>It keeps the fixed prompt small and stable, which also helps prompt-caching, and it avoids the confusion that comes from choosing among hundreds of similar tools. The trade-off is an extra step and the risk that a poor description means the right tool is never found. Write descriptions with the words users would use, and check how often the right tool is retrieved.</p>
@@ -146,6 +150,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -168,6 +173,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>

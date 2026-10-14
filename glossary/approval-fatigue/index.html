@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -129,6 +130,9 @@
         <p>The chef asks 'OK to go ahead?' so often that the owner just nods without looking. A check that always gets a yes protects nothing.</p>
         <h2>Definition</h2>
         <p>The habit of clicking approve without reading when an agent asks for permission too often. Constant prompts teach people to say yes, which defeats the check. Better designs ask rarely, for risky actions, and make safe actions automatic inside a sandbox.</p>
+        <h2>Try it</h2>
+        <h3>Allow, ask or deny</h3>
+        <p>Write the rules, and see what happens to each action an agent proposes. Then switch on the hook and see what a rule outside the model adds. This demo needs JavaScript.</p>
         <h2>Detailed technical description</h2>
         <p>The effect is easy to see in logs: approval rates near one hundred per cent and decisions made within a second or two. At that point the check gives a false sense of safety, because the one dangerous request is approved along with the hundred harmless ones. It grows when prompts are frequent, look alike, show raw technical output, or block progress without any explanation.</p>
         <p>Reduce the number of prompts instead of asking people to try harder. Allow clearly safe actions automatically within a sandbox, batch related requests, and reserve interruptions for actions that are irreversible or reach outside the environment. Make each prompt specific, showing the exact command and its target, and make risky ones look different from routine ones. Measure approval rates and times as a health signal.</p>
@@ -146,6 +150,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -168,6 +173,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>

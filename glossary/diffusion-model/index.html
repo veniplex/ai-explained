@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -129,6 +130,10 @@
         <p>A painter-chef who starts from a smudge of random colour and tidies it step by step until a picture matching the order appears, instead of writing it word by word.</p>
         <h2>Definition</h2>
         <p>A generative model that learns to turn random noise into an image, audio or video by removing noise step by step, guided by a text description. It is the basis of most image generators; text models mostly use transformers instead.</p>
+        <h2>Try it elsewhere</h2>
+        <ul>
+          <li><a href="https://poloclub.github.io/diffusion-explainer/">Diffusion Explainer</a>, Georgia Tech, Polo Club: How Stable Diffusion turns a text prompt into an image, step by step.</li>
+        </ul>
         <h2>Detailed technical description</h2>
         <p>Training adds noise to real examples in steps and teaches a network to predict and remove it. To generate, the process starts from pure noise and runs many denoising steps, each guided by an encoding of the text prompt. Working in a compressed latent space makes this affordable. Guidance strength trades prompt fidelity against variety, and the number of steps trades quality against time.</p>
         <p>Typical weaknesses are rendering text inside images, exact counts, hands, and consistent characters across several images. Outputs can reflect biases and copyrighted styles in the training data. Agents usually call a diffusion model as a tool, with a prompt written by the language model. Some newer systems combine diffusion with transformers, so the line between the two families is blurring.</p>
@@ -146,6 +151,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -168,6 +174,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>

@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -129,6 +130,10 @@
         <p>A dial on the chef's daring. Turn it down and the chef always reaches for the usual seasoning; turn it up and it tries surprising combinations, sometimes brilliant, sometimes odd.</p>
         <h2>Definition</h2>
         <p>A setting that controls how random a model's choice of the next token is. Low values make output more predictable and repeatable; high values make it more varied. Related settings, such as top-p, limit which candidate tokens may be picked at all.</p>
+        <h2>Try it elsewhere</h2>
+        <ul>
+          <li><a href="https://poloclub.github.io/transformer-explainer/">Transformer Explainer</a>, Georgia Tech, Polo Club: A small GPT-2 runs live in your browser: type a sentence, watch the attention and the next-token chances, and change temperature, top-k and top-p.</li>
+        </ul>
         <h2>Detailed technical description</h2>
         <p>At every step the model scores all possible next tokens. The sampler then picks one: temperature reshapes the scores, top-k keeps only the k best, and top-p keeps the smallest set whose probabilities add up to p.</p>
         <p>A temperature of zero makes the choice nearly deterministic, but identical output is still not guaranteed, because of how computation is done on shared hardware. Some reasoning models fix these settings and do not let you change them.</p>
@@ -146,6 +151,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -168,6 +174,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>

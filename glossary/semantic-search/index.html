@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -129,6 +130,10 @@
         <p>Finding cookbook pages by what they mean: ask for 'fixing a stuck cake' and the page on 'rescuing a sunken sponge' comes up, even if no word matches. Exact names it may miss.</p>
         <h2>Definition</h2>
         <p>Searching by meaning instead of exact words: the query and the documents are turned into embeddings and the closest ones are returned. A search for 'car repair' can find a page about 'fixing a vehicle', but it can miss exact names and codes, which keyword search handles well.</p>
+        <h2>Try it elsewhere</h2>
+        <ul>
+          <li><a href="https://projector.tensorflow.org/">Embedding Projector</a>, TensorFlow: Explore embeddings as points in space and see which ones sit close together.</li>
+        </ul>
         <h2>Detailed technical description</h2>
         <p>The pipeline has two stages. At index time each document or chunk is turned into an embedding and stored, usually in a vector-database. At query time the question is embedded by the same model, and the nearest stored vectors are returned. Because the comparison is by meaning, it handles synonyms and paraphrase well, and can work across languages with a suitable model.</p>
         <p>Its weaknesses are exact matching and explanation. Part numbers, rare names, version strings and negations are often not captured well, and the system cannot say why a result matched. Results are always returned, even when nothing relevant exists, so apply a similarity threshold or a reranker. Pairing it with keyword search, as in hybrid-search, covers most gaps.</p>
@@ -146,6 +151,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -168,6 +174,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>

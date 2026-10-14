@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -129,6 +130,9 @@
         <p>The standard order slip used at the hatch to a supplier: one line for what to do, one for the details and a number, so the reply finds its way back to the right ticket.</p>
         <h2>Definition</h2>
         <p>A small protocol for calling remote functions by sending JSON messages that carry a method name, parameters and an id, and receiving a result or an error. MCP uses JSON-RPC 2.0 for the messages between client and server.</p>
+        <h2>Try it</h2>
+        <h3>A conversation between client and server</h3>
+        <p>Step through the messages a client and an MCP server exchange, from the first greeting to a tool call. This demo needs JavaScript.</p>
         <h2>Detailed technical description</h2>
         <p>A request has a version field, a method name, optional parameters and an id. The reply carries the same id and either a result or an error with a code and message. A message without an id is a notification and gets no reply. Replies can arrive out of order, and the id lets the caller match each one. The format does not depend on how messages travel.</p>
         <p>MCP uses it both ways, so a client calls a server and a server may also send requests to the client. Messages move over standard input and output for local servers, or over HTTP for remote ones. Common mistakes are mismatched ids, ignoring error responses and not handling a closed connection. Debugging usually means logging the raw messages on both sides.</p>
@@ -146,6 +150,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -168,6 +173,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>

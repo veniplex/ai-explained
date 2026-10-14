@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -129,6 +130,10 @@
         <p>Learning by trying: the chef cooks, gets a score for how the plate turned out, and slowly makes the moves that earned high scores more likely.</p>
         <h2>Definition</h2>
         <p>Training by trial and reward: the model tries something, receives a score for the outcome and is adjusted to make high-scoring behaviour more likely. In language models it is used to teach preferences, step-by-step reasoning and tool use.</p>
+        <h2>Try it elsewhere</h2>
+        <ul>
+          <li><a href="https://cs.stanford.edu/people/karpathy/reinforcejs/">REINFORCEjs</a>, Andrej Karpathy: Small browser demos of agents learning by trial and reward.</li>
+        </ul>
         <h2>Detailed technical description</h2>
         <p>The model generates an attempt, a reward function scores it, and the update raises the probability of the choices that led to higher scores. Because the reward often arrives only at the end of a long attempt, the method must work out which earlier steps deserve credit. Training also needs enough variety in attempts, so the model must explore, not only repeat what it already does.</p>
         <p>The model optimises exactly the reward it is given, not the intention behind it. Weak or gameable rewards lead to reward hacking, such as special-casing a test instead of solving the problem. Rewards from a rlhf reward model, a rule or an automatic check each have different failure modes, and agent training needs realistic environments to avoid learning habits that fail in production.</p>
@@ -146,6 +151,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -168,6 +174,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>

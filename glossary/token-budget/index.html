@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -129,6 +130,9 @@
         <p>A spending cap on one order: only so many bite-sized pieces (tokens) of reading, thinking and writing, whatever the chef would like. It stops a runaway order from eating the week's money.</p>
         <h2>Definition</h2>
         <p>A limit on how many tokens a request, a reasoning phase or a whole agent run may use. It caps cost and prevents runaway loops, and is often set together with limits on steps and time.</p>
+        <h2>Try it</h2>
+        <h3>Fill a context window</h3>
+        <p>Step through a coding task and watch what takes up room in the window. Then switch on a remedy and run it again. This demo needs JavaScript.</p>
         <h2>Detailed technical description</h2>
         <p>Budgets can be set at several levels. A maximum on output tokens stops one reply from running on. A cap on thinking tokens bounds reasoning effort. A run-level budget counts all input and output tokens across steps and stops the loop when it is spent. Counts come from the usage fields the API returns, so the harness can add them up after each call.</p>
         <p>A budget that is too tight cuts answers off or makes the agent give up on hard tasks, and one that is too loose lets a stuck loop burn money before it stops. Decide what happens at the limit: finish with a partial result, summarise and hand over, or fail loudly. Because every step resends the history, cost grows faster than step count, so combine budgets with compaction and limits on steps and time.</p>
@@ -146,6 +150,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -168,6 +173,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>

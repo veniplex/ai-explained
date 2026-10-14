@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -129,6 +130,9 @@
         <p>Hand the chef only the keys the job needs, and only while the job lasts: one cupboard, not the master ring. A slip or a trick can then spoil only one shelf.</p>
         <h2>Definition</h2>
         <p>The rule that something gets only the access it needs for its task, and only for as long as it needs it. For agents that means narrow tool lists, read-only access where possible and short-lived credentials, so a mistake or an attack can do limited harm.</p>
+        <h2>Try it</h2>
+        <h3>Allow, ask or deny</h3>
+        <p>Write the rules, and see what happens to each action an agent proposes. Then switch on the hook and see what a rule outside the model adds. This demo needs JavaScript.</p>
         <h2>Detailed technical description</h2>
         <p>To apply it, list what the task needs and grant only that. Give a read-only token when the agent only reads, restrict file access to one directory, expose only the tools the task uses, and allow network access only to named hosts. Use credentials that expire and can be revoked, and separate identities for separate agents so that actions can be traced.</p>
         <p>The usual error is convenience: one broad key shared by every agent, or a tool that accepts any command because narrowing it takes work. Narrow tools are better than broad ones guarded by a prompt. Re-check permissions as the task changes, since access added for a one-off need tends to remain. Limiting access does not stop an attack, but it limits what a successful attack can reach.</p>
@@ -146,6 +150,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -168,6 +173,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>

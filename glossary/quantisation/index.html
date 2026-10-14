@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -129,6 +130,9 @@
         <p>Writing the chef's measurements with fewer decimals: whole spoons instead of grams to the hundredth. The chef takes less room and works faster, and the plates hardly change.</p>
         <h2>Definition</h2>
         <p>Storing a model's weights with fewer bits, for example 8 or 4 instead of 16, so that it takes less memory and runs faster. Quality drops a little, often very little, which lets large open-weight models run on modest hardware.</p>
+        <h2>Try it</h2>
+        <h3>Fewer bits, smaller model</h3>
+        <p>Pick a model size and the number of bits per weight. See how much memory the weights need, and what rounding does to a row of weights. This demo needs JavaScript.</p>
         <h2>Detailed technical description</h2>
         <p>Weights are stored as floating-point numbers, commonly 16 bits each. Quantisation maps them to a smaller set of values, such as 8-bit or 4-bit integers, with a scale factor for each small group of weights. At run time the values are scaled back, or the arithmetic is done at low precision directly. Memory use falls roughly in proportion to the bits, and because decoding is limited by memory bandwidth, speed often improves too.</p>
         <p>Quality loss grows as bits fall, and it is not uniform: some tasks, such as long reasoning, exact arithmetic or rare languages, suffer more than casual chat. Methods that protect the most sensitive weights or calibrate on sample data lose less. Always test the quantised model on your own golden-set, not only on generic scores. The cache can also be quantised, which helps with long-context but adds its own error.</p>
@@ -146,6 +150,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -168,6 +173,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>

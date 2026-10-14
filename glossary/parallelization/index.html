@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -129,6 +130,9 @@
         <p>Several cooks working at once on parts that do not depend on each other, or one dish cooked several times so the results can be compared.</p>
         <h2>Definition</h2>
         <p>Running independent sub-tasks, or several attempts at one task, at the same time. It shortens waiting time and can raise reliability, but total cost and load on rate limits go up.</p>
+        <h2>Try it</h2>
+        <h3>One worker or several</h3>
+        <p>Split six equal jobs across more workers and see what happens to the time and to the number of tokens used. This demo needs JavaScript.</p>
         <h2>Detailed technical description</h2>
         <p>There are two forms. In sectioning, different parts of a task run at once and the outputs are joined. In voting, the same task runs several times and the answers are compared, merged or chosen by majority. Both need the calls to be independent: if one needs another's output, they must run in sequence. Orchestration code usually starts the calls together and waits for all of them, or for the first few to finish.</p>
         <p>Total wall-clock time falls to that of the slowest call, but tokens and spend add up, and bursts of requests hit rate-limit errors. Handle partial failure on purpose: decide whether one failed branch cancels the rest, is retried or is skipped. Merging is a common source of errors, so check that combined outputs agree with each other. Voting only helps if the attempts differ enough to fail in different ways.</p>
@@ -146,6 +150,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -168,6 +173,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>

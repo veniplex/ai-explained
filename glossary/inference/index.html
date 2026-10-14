@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -129,6 +130,10 @@
         <p>Actually cooking the order, as against years of cookery school. Every ticket is one cooking run, and most of the restaurant's running costs are these runs.</p>
         <h2>Definition</h2>
         <p>Running a trained model to produce output, as opposed to training it. Every request is an inference call, and its cost and speed depend on model size, context length and output length. Most of the ongoing expense of an AI product is inference.</p>
+        <h2>Try it elsewhere</h2>
+        <ul>
+          <li><a href="https://poloclub.github.io/transformer-explainer/">Transformer Explainer</a>, Georgia Tech, Polo Club: A small GPT-2 runs live in your browser: type a sentence, watch the attention and the next-token chances, and change temperature, top-k and top-p.</li>
+        </ul>
         <h2>Detailed technical description</h2>
         <p>Inference has two phases. In prefill, the model processes the whole prompt in parallel and builds the kv-cache. In decoding, it generates one token at a time, each step reading the model weights and the cache. Prefill is limited by computation and decoding mostly by memory bandwidth. This is why long prompts raise time to first token, and why output length drives total latency.</p>
         <p>Providers raise throughput by batching requests from many users on one accelerator, which trades a little latency for far lower cost per token. Techniques such as quantisation, smaller models and caching cut cost further. For agents, inference cost compounds because each step resends a growing history. Measure tokens per task, not per call, and set a token-budget to keep runs in bounds.</p>
@@ -146,6 +151,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -168,6 +174,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>

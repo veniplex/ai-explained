@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -146,6 +147,9 @@
         <p>The order of evaluation matters. Claude Code checks deny rules first, then ask, then allow, and the first match decides (October 2026). So a broad deny such as Bash(aws *) also blocks aws s3 ls, even if a narrower allow rule names that exact command: an allow can never carve an exception out of a deny. Denying a tool by its bare name removes it from the model's view altogether. OpenAI's Codex combines an approval policy with three sandbox modes (read-only, workspace-write and full access) and keeps network access off by default.</p>
         <p>Patterns on arguments are fragile, and the documentation says so. Bash(curl *) does not match /usr/bin/curl or sh -c 'curl ...', and a rule that denies reading a file does not stop a Python script that opens the file itself. So use rules for intent and a sandbox, described next, for enforcement. The rule to apply throughout is least privilege: give the agent the fewest rights the task needs, keep read rights apart from write rights, and list paths and domains explicitly. “May run the test command” is a small permission; “may run shell commands” is close to “may do anything”.</p>
         <p>A permission-mode sets the general posture, from a read-only planning mode to modes that accept edits or skip prompts. Claude Code's auto mode hands routine approvals to a classifier, a separate model that reviews each action before it runs. Anthropic published its error rates (March 2026): 0.4 per cent false alarms on 10,000 real actions, but 17 per cent of 52 genuinely overeager actions slipped through, and Anthropic says it is not a drop-in replacement for careful human review on high-stakes infrastructure.</p>
+        <h3>Try it</h3>
+        <h4>Allow, ask or deny</h4>
+        <p>Write the rules, and see what happens to each action an agent proposes. Then switch on the hook and see what a rule outside the model adds. This demo needs JavaScript.</p>
         <h2>Sandboxes: containing what the agent does</h2>
         <p>A sandbox is a walled area in which the agent's programs run. It limits which files they can touch and which sites they can contact, whatever they were told to do.</p>
         <p>A sandbox limits what a running process can reach, whatever the process was told to do. Permissions decide whether a call may start; a sandbox bounds the damage once it runs, which matters for any tool that runs code. Isolation has four layers. Filesystem: which paths can be read and which can be written. Network: which hosts can be contacted. Processes and resources: limits on CPU, memory and time, and no view of other processes. Lifetime: an environment created for the task and discarded afterwards, so nothing persists between runs.</p>
@@ -163,16 +167,31 @@
         <p>The model receives one sequence of tokens, the small pieces of text it reads. The system prompt, the person's request, a fetched page and a tool result are joined into that sequence. Role markers, which label who wrote each part, are conventions the model was trained to respect, not an enforced boundary, so an instruction in a fetched page can compete with the real one. Direct injection is typed by the person using the system, usually to make it break its own rules (jailbreak). Indirect injection, described by Greshake and colleagues in 2023, is planted in content that the agent reads later: a web page, an email, a PDF, a calendar invite or a tool result.</p>
         <p>It cannot be fully filtered. Detection is a classification of natural language, and attackers can rephrase, translate, encode, split an instruction across sources, or hide it in markup, white-on-white text or images that the model reads and a person does not see. Every classifier misses some attacks, and an attacker can try many variants. Guardrail models such as Llama Guard and Prompt Shields lower the rate and are worth having. Simon Willison notes that vendors often claim to catch 95 per cent of attacks, and that in web security 95 per cent is a failing grade. Unlike SQL injection, where parameterised queries separate commands from data, no such separation exists yet.</p>
         <p>So design for the case in which injection sometimes succeeds, and limit the consequences. Let a model that reads untrusted text hold no tools and return only fields in a fixed format (structured-output), such as a price and a date, so there is no free text to carry orders onward. Validate every argument and require approval for actions that follow untrusted reading. Claude Code's auto mode screens tool output with a probe, and its action classifier never sees tool results, because that is where hostile text enters. The research design CaMeL (2025) goes furthest: the plan is written from the trusted request alone, a quarantined model reads the untrusted data, and the system tracks which values may flow into which arguments.</p>
+        <h3>Try it elsewhere</h3>
+        <ul>
+          <li><a href="https://promptairlines.com/">Prompt Airlines</a>, Wiz: Try to talk an airline's chatbot into giving you a free ticket. No sign-up to start.</li>
+        </ul>
         <h2>The lethal trifecta and the Rule of Two</h2>
         <p>Data theft needs three things at once: private data, untrusted text, and a way to send data out. Take away any one of the three and that kind of attack has no path.</p>
         <p>Simon Willison (June 2025) names three capabilities that together make data theft by injection possible: access to private data, exposure to untrusted content, and the ability to communicate externally. With all three, the lethal-trifecta attack runs in order. The attacker's text arrives through the untrusted content, tells the agent to collect something private, and tells it to send the result out. Remove any one of the three and that path closes.</p>
         <p>The third leg is wider than it looks. Any request to an address the attacker controls can carry data in its path or query string. An image in rendered Markdown sends such a request when it is displayed. A link to click, a public pull request or a write to a shared document is a way out too. Hence narrow outbound allowlists, stripping images and links from rendered output, and approval for every message that leaves the system.</p>
         <p>Meta's Agents Rule of Two (October 2025) turns this into a design rule. Until prompt injection can be reliably detected, a session should combine at most two of three properties: [A] it processes untrustworthy inputs, [B] it has access to sensitive systems or private data, and [C] it can change state or communicate externally. If a task needs all three in one session, the agent should not run autonomously: a person must approve the outward steps, or another reliable check must stand in. In Meta's examples, a travel assistant [AB] that browses and holds the user's details has bookings and payments approved by a person, and a browsing assistant [AC] runs in a restrictive sandbox without preloaded session data.</p>
+        <h3>Try it</h3>
+        <h4>The lethal trifecta</h4>
+        <p>Tick what your agent can do and see whether it has all three of the abilities that make a hidden instruction dangerous. This demo needs JavaScript.</p>
         <h2>Credentials, identity and extensions</h2>
         <p>Agents use keys and passwords to reach other services. Give each agent its own narrow, short-lived keys, keep them out of the model's reach, and treat add-ons as code from strangers.</p>
         <p>A credential is anything that proves identity to another service: an API key, a password, an access token. secrets are the credentials and other values that must not leak. Every secret the agent can see is one an injection can try to send out, so the safest place is outside its reach. Claude Code's sandbox can mask a credential: commands inside see a placeholder, and the proxy substitutes the real value only on requests to hosts you allowed. Docker's agent sandboxes do the same, so the real key never enters the micro-virtual machine. Without this, a sandboxed command inherits the harness's environment variables, secrets included.</p>
         <p>Scope each credential to the task. Prefer a separate identity for the agent over borrowing a person's full account, read-only tokens where reading is enough, tokens limited to one resource, and short lifetimes, so a stolen token expires soon. Where an agent acts for many users, it should act with each user's own delegated rights, typically through OAuth, the standard for granting limited access without sharing a password. Otherwise it becomes a confused-deputy: a program with broad rights that an attacker tricks into using them on the attacker's behalf.</p>
         <p>Extensions deserve the same scrutiny as code you wrote. An mcp-server, a skill or a plugin is code and instructions from someone else that run with the agent's rights, and the descriptions of its tools enter the context. The MCP specification says that descriptions of tool behaviour, such as annotations, should be considered untrusted unless they come from a trusted server, and that hosts must obtain explicit user consent before invoking any tool. A description that changes after you approved it can steer the model (tool-poisoning). Pin versions and review updates.</p>
+        <h3>Try it</h3>
+        <h4>Signing in without sharing a password</h4>
+        <p>Step through the authorisation-code flow with PKCE: how an app gets a short-lived token for one task without ever seeing a password. This demo needs JavaScript.</p>
+        <h4>Try it elsewhere</h4>
+        <ul>
+          <li><a href="https://www.oauth.com/playground/">OAuth 2.0 Playground</a>, oauth.com: Run the real flows (authorisation code, PKCE, device code and more) against a test server and see every request.</li>
+          <li><a href="https://jwt.io/">JWT Debugger</a>, Auth0: Decode a JSON Web Token and see its parts. Use test tokens only, never a real one.</li>
+        </ul>
         <h2>Human approval and approval fatigue</h2>
         <p>Asking a person before risky actions only works if the person actually reads the request. Too many requests teach people to click yes without looking.</p>
         <p>human-in-the-loop checkpoints pay off for actions that are irreversible, costly, external or high in privilege. A good approval request shows exactly what will run: the tool, the full arguments, the target, what changes and why the agent wants it. Show the real arguments from the harness, because the agent's own description of its action is model-written text and can be manipulated like any other.</p>
@@ -201,6 +220,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -213,6 +233,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>
   <script src="../../assets/js/github.js"></script>

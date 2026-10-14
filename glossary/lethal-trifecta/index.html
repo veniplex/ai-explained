@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -129,6 +130,9 @@
         <p>A dangerous mix in one kitchen: the chef holds the owner's private books, reads notes from strangers and can send things outside. One slipped note could then do harm.</p>
         <h2>Definition</h2>
         <p>A name for the dangerous combination of three things in one agent: access to private data, exposure to untrusted content and a way to communicate outside. With all three, a hidden instruction can steal the data. Removing any one of them breaks the attack.</p>
+        <h2>Try it</h2>
+        <h3>The lethal trifecta</h3>
+        <p>Tick what your agent can do and see whether it has all three of the abilities that make a hidden instruction dangerous. This demo needs JavaScript.</p>
         <h2>Detailed technical description</h2>
         <p>Each leg alone is manageable. An agent with private data but no untrusted input has nothing hostile to read. One with untrusted input but no sensitive data has little to steal. One with no outward channel cannot send anything. With all three, indirect-prompt-injection in a page or email can tell the agent to read the data and send it out, and the model cannot reliably tell the instruction from legitimate content.</p>
         <p>The reliable defence is architectural: remove at least one leg for a given task. That can mean read-only access to private data, tools that cannot make outbound requests (egress-filtering), or separating the agent that reads untrusted pages from the one that holds the data. Filtering the model's text is not enough, since an attacker needs only one phrasing that gets through.</p>
@@ -146,6 +150,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -168,6 +173,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>

@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -131,6 +132,9 @@
         <p>Hooks are small programs the harness (the app around the model) runs automatically at fixed moments. Guardrails check what goes into and comes out of the model.</p>
         <p>A hook runs at a set moment, for example before a tool is used, after a file is edited or before the agent says it is done. It always runs, whatever the model decides. It can block an action, tidy a file or run a test.</p>
         <p>Guardrails check inputs and outputs for problems: off-topic or unsafe requests, personal data, answers in the wrong format.</p>
+        <h2>Try it</h2>
+        <h3>Allow, ask or deny</h3>
+        <p>Write the rules, and see what happens to each action an agent proposes. Then switch on the hook and see what a rule outside the model adds. This demo needs JavaScript.</p>
         <h2>Detailed technical description</h2>
         <p>Hooks are deterministic: their behaviour is guaranteed by code, not by the model's judgement. The harness fires lifecycle events, for example at the start of a chat or job, when a prompt is submitted, before and after each tool call, before compaction and when the agent stops, and runs your scripts on them.</p>
         <p>A hook can block an action (editing protected files), change its input, add fresh context such as today's ticket, format code after every edit, run tests before the agent may finish, notify a person or write an audit log. A stop hook enforces the definition of done, for example that tests pass. Keep hooks fast, since a slow hook on every tool call delays every turn, and never install hooks from untrusted sources: they run with your permissions.</p>
@@ -151,6 +155,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -173,6 +178,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>

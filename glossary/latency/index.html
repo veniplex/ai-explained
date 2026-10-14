@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -129,6 +130,10 @@
         <p>How long the guest waits: first from ticket to the first forkful, then how fast the rest arrives. A bigger counter, deeper thinking and more errands for tools all add to the wait.</p>
         <h2>Definition</h2>
         <p>How long a system takes to respond. For models it is usually split into the time to the first token and the speed of generation after that. Latency rises with context length, reasoning effort and the number of tool calls, and it is traded against quality and cost.</p>
+        <h2>Try it elsewhere</h2>
+        <ul>
+          <li><a href="https://artificialanalysis.ai/">Artificial Analysis</a>, Artificial Analysis: Independent comparisons of models and providers: quality, price and speed.</li>
+        </ul>
         <h2>Detailed technical description</h2>
         <p>Time to first token covers the network, queueing and the processing of the whole prompt, so it grows with prompt length. After that, tokens are produced one at a time, so total time is roughly the time to first token plus the output length divided by generation speed. In an agent, each step adds a model call and a tool call, so delays add up across a run. streaming hides some of the wait.</p>
         <p>Averages mislead: the slowest few percent of requests define how a system feels, so track percentiles such as the 95th. Levers include shorter prompts, prompt-caching, a smaller model, a lower effort setting, shorter outputs and running independent calls in parallel. Each lever has a cost in quality or money, so measure before and after. Retries after timeouts can make a slow system slower still.</p>
@@ -146,6 +151,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -168,6 +174,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>

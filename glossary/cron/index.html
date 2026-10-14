@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -129,6 +130,10 @@
         <p>A wall clock with alarms: every weekday at eight the prep list is started, whether or not the owner is in the building.</p>
         <h2>Definition</h2>
         <p>A scheduler that starts a job at fixed times, such as every weekday at eight; the name comes from the Unix tool cron. Scheduled agent runs use it for recurring work like reports, checks and clean-ups, with nobody present to start them.</p>
+        <h2>Try it elsewhere</h2>
+        <ul>
+          <li><a href="https://crontab.guru/">crontab.guru</a>, Cronitor: Type a cron expression and read it back in plain words.</li>
+        </ul>
         <h2>Detailed technical description</h2>
         <p>A cron expression has five fields: minute, hour, day of month, month and day of week. The scheduler checks the clock every minute and starts any job whose fields match. Cloud schedulers add features such as time zones, retries and overlap rules. A scheduled agent run starts in a fresh session with a fixed prompt, so everything it needs must be in that prompt, its files or its stored memory.</p>
         <p>Typical problems are clock and time-zone surprises around daylight saving, overlapping runs when one run is slower than the interval, and silent failures because nobody is watching. Make jobs idempotent so a repeat does no harm, set a time limit and a token-budget, and send an alert when a run fails or produces nothing. Since no person is present to approve actions, keep the agent's permissions narrow.</p>
@@ -146,6 +151,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -168,6 +174,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>

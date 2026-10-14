@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -129,6 +130,9 @@
         <p>Cut a mountain of vegetables into piles, give each pile to a different cook, then have one last cook combine all the prepared piles into one dish.</p>
         <h2>Definition</h2>
         <p>A pattern in which a large input is split into pieces, each processed independently by a model call (map), and the partial results are then combined by one final call (reduce). It is used to summarise or analyse material that does not fit in one context window.</p>
+        <h2>Try it</h2>
+        <h3>One worker or several</h3>
+        <p>Split six equal jobs across more workers and see what happens to the time and to the number of tokens used. This demo needs JavaScript.</p>
         <h2>Detailed technical description</h2>
         <p>In the map step, the input is split into chunks, such as pages or files, and the same prompt runs on each chunk, usually in parallel. The outputs should be small and structured. In the reduce step, one call receives all partial outputs and combines them. If they still do not fit in one context window, reduce in several rounds, merging in groups until a single result remains.</p>
         <p>Information that needs two distant chunks together is lost, because each map call sees only its own piece. Chunk boundaries can cut a sentence or table in half, and different chunks may disagree in style or in facts. Keep the map output tied to its source location so that claims can be checked. With very long contexts, a single call is sometimes simpler, but quality there can vary, see long-context.</p>
@@ -146,6 +150,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -168,6 +173,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>

@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -129,6 +130,10 @@
         <p>A timed, step-by-step record of one order's journey through the kitchen: each tool picked up, each decision, how long it took and what it cost, with the sub-steps nested like a family tree.</p>
         <h2>Definition</h2>
         <p>The recorded path of one request or agent run as a tree of timed steps, called spans: each model call, tool call and decision with its inputs, outputs, duration and cost. Traces are the main tool for debugging agents.</p>
+        <h2>Try it elsewhere</h2>
+        <ul>
+          <li><a href="https://langfuse.com/docs/demo">Langfuse demo project</a>, Langfuse: A shared project with example traces of model runs, to click through before setting anything up.</li>
+        </ul>
         <h2>Detailed technical description</h2>
         <p>A trace has a root span for the whole request and child spans for each step, nested to match the call structure. Each span records a start time, a duration, inputs, outputs, the model used, token counts and any error. A viewer shows the tree and a timeline, so you can see which step took the longest, which tool call returned an error, and what the model saw just before a bad decision.</p>
         <p>Traces can get large, because they hold full prompts and tool outputs, and they may contain personal or secret data. Redact before storing and limit who can read them. Sample heavily in production but keep every failed run. Useful practice is to search traces for patterns, such as repeated tool calls, then turn real failures into cases for a golden-set. Traces are a core part of observability.</p>
@@ -146,6 +151,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -168,6 +174,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>

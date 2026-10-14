@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -131,6 +132,14 @@
         <p>AI is billed per token: the small pieces of text that go in and come out.</p>
         <p>An agent sends its whole context again at every step, so long jobs cost much more than one question. Common ways to cut the bill: keeping the context lean; caching, which re-uses the unchanged start of each request at a lower price; the right model for each step; and batching, which runs work that can wait more cheaply.</p>
         <p>Models run at a provider: the model's maker, a big cloud platform, a host for models anyone can download, or your own computer. Providers differ in price, usage limits and where your data is processed.</p>
+        <h2>Try it</h2>
+        <h3>The request is sent again every turn</h3>
+        <p>Step through four turns of one task. Each turn sends everything so far again. Switch on caching, change the prices, and see what the bill does. This demo needs JavaScript.</p>
+        <h3>Try it elsewhere</h3>
+        <ul>
+          <li><a href="https://models.dev/">models.dev</a>, an open-source project: A table of models with their prices, context limits and features. Prices change, so read the current ones there.</li>
+          <li><a href="https://artificialanalysis.ai/">Artificial Analysis</a>, Artificial Analysis: Independent comparisons of models and providers: quality, price and speed.</li>
+        </ul>
         <h2>Detailed technical description</h2>
         <p>Agent cost is roughly tokens per turn, times turns, times price, and it grows quickly because the whole context is re-sent every turn. The biggest levers are prompt caching (re-using the unchanged start of each request at a fraction of the price and delay), routing easy steps to smaller models, setting reasoning effort per step, a lean context (compaction, sub-agents, short tool output, tool search), batch APIs at roughly half price for work that can wait, and parallel tool calls.</p>
         <p>Measure cost per successful task: a cheaper model that needs three attempts is not cheaper. Set a budget per run before you scale, but do not optimise cost before quality is acceptable. Put the system prompt, tools and instructions first and keep them unchanged so the cache works; a timestamp at the start breaks it. When speed matters, stream the output and use faster models for interactive steps.</p>
@@ -151,6 +160,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -173,6 +183,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>

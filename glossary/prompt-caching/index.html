@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -129,6 +130,9 @@
         <p>Keeping the unchanging top part of the order ticket already read and ready, so the chef skips rereading it. That saves time and the bill.</p>
         <h2>Definition</h2>
         <p>Re-using the processed form of an unchanged prompt prefix, which cuts cost and latency. A request that matches a cached prefix is a cache hit and is billed at a lower rate, so keep stable text first and changing text last.</p>
+        <h2>Try it</h2>
+        <h3>The request is sent again every turn</h3>
+        <p>Step through four turns of one task. Each turn sends everything so far again. Switch on caching, change the prices, and see what the bill does. This demo needs JavaScript.</p>
         <h2>Detailed technical description</h2>
         <p>When a request arrives, the provider checks whether the start of the prompt matches a prefix it has already processed. If so, it reuses the stored attention state, the kv-cache, instead of recomputing it, and only the new tail is processed. The match must be exact and from the beginning, so a changed character early in the prompt breaks the reuse for everything after it. Cached entries expire after a short time unless refreshed by use.</p>
         <p>Order the prompt for reuse: system instructions, tool definitions and reference material first, then the conversation, then the latest message. Do not put a timestamp, a user name or a random id near the top. Changing the tool list or the model also invalidates the cache. Some providers need explicit markers to say where the cached prefix ends, others detect it automatically, so check the documentation of the one you use.</p>
@@ -146,6 +150,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -168,6 +173,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>

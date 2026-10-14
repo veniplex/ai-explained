@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -129,6 +130,13 @@
         <p>One appliance with the standard plug on it: it offers a set of tools, supplies and ready-made order notes to any kitchen that plugs in.</p>
         <h2>Definition</h2>
         <p>A program that exposes tools, resources and prompts to AI applications over the Model Context Protocol. One server can be used by any application that speaks the protocol.</p>
+        <h2>Try it</h2>
+        <h3>A conversation between client and server</h3>
+        <p>Step through the messages a client and an MCP server exchange, from the first greeting to a tool call. This demo needs JavaScript.</p>
+        <h3>Try it elsewhere</h3>
+        <ul>
+          <li><a href="https://modelcontextprotocol.io/docs/tools/inspector">MCP Inspector</a>, Model Context Protocol: The official tool for testing an MCP server: list its tools and call them. It runs on your own computer (Node 22.19 or newer), not in the browser.</li>
+        </ul>
         <h2>Detailed technical description</h2>
         <p>A server can run on your own machine, talking over standard input and output, or remotely over HTTP, where access is usually granted with oauth. Tools are actions, resources are readable items such as files or records, and prompts are ready-made templates.</p>
         <p>A server can reach whatever the account behind it can reach, and its tool descriptions are read by the model. Install only servers you trust, and watch for tool-poisoning.</p>
@@ -146,6 +154,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -168,6 +177,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>

@@ -183,16 +183,56 @@ function checkLongGuides(A) {
   return errors;
 }
 
+// The "Try it" parts (data/demos.js): every demo has its script, every id exists, every address is https, and nothing names the kitchen (guides may not).
+function checkDemos(A, root) {
+  const fs = require("node:fs"), errors = [], err = (m) => errors.push(m), D = A.demos;
+  if (!D || !D.list || !D.links || !D.terms || !D.guides) return ["demos: data/demos.js needs list, links, terms and guides"];
+  const known = ids(A), KINDS = ["live", "scripted", "recorded"], ZONES = ["start", "model", "harness", "control", "know", "tools", "orch", "ops"];
+  const usedDemo = new Set(), usedLink = new Set();
+  Object.keys(D.list).forEach((id) => {
+    const d = D.list[id], at = "demos.list." + id;
+    if (!/^[a-z0-9]+(-[a-z0-9]+)*$/.test(id)) err(at + ": id must be lower-case words joined by hyphens");
+    if (!d.title || !d.lede || !d.note) err(at + ": needs title, lede and note");
+    if (!KINDS.includes(d.kind)) err(at + ": kind must be one of " + KINDS.join(", "));
+    if (!ZONES.includes(d.zone)) err(at + ": zone must be one of " + ZONES.join(", "));
+    if (!fs.existsSync(path.join(root, "assets/js/demos", id + ".js"))) err(at + ": assets/js/demos/" + id + ".js does not exist");
+    if (/\b(kitchen|chef|restaurant)\b/i.test([d.title, d.lede, d.note].join(" "))) err(at + ": the text names the kitchen (the demos are shown in the guides too)");
+  });
+  Object.keys(D.links).forEach((id) => {
+    const l = D.links[id], at = "demos.links." + id;
+    ["title", "url", "by", "note"].forEach((f) => { if (!l[f] || typeof l[f] !== "string") err(at + ": needs " + f); });
+    if (!/^https:\/\//.test(l.url || "")) err(at + ": the address must be https");
+    if (/\b(kitchen|chef|restaurant)\b/i.test([l.title, l.by, l.note].join(" "))) err(at + ": the text names the kitchen");
+  });
+  const spec = (s, at) => {
+    (s.demos || []).forEach((d) => { if (!D.list[d]) err(at + ": unknown demo " + d); usedDemo.add(d); });
+    (s.links || []).forEach((l) => { if (!D.links[l]) err(at + ": unknown link " + l); usedLink.add(l); });
+    if (!(s.demos || []).length && !(s.links || []).length) err(at + ": names no demo and no link");
+  };
+  Object.keys(D.terms).forEach((id) => { if (!known.has(id)) err("demos.terms." + id + ": no such term"); spec(D.terms[id], "demos.terms." + id); });
+  Object.keys(D.guides).forEach((g) => {
+    const guide = ((A.tech || {}).longGuides || {})[g];
+    if (!guide) { err("demos.guides." + g + ": no such guide"); return; }
+    Object.keys(D.guides[g]).forEach((sec) => {
+      if (!guide.sections.some((x) => x.id === sec)) err("demos.guides." + g + "." + sec + ": the guide has no such part");
+      spec(D.guides[g][sec], "demos.guides." + g + "." + sec);
+    });
+  });
+  Object.keys(D.list).forEach((id) => { if (!usedDemo.has(id)) err("demos.list." + id + ": no term or guide shows it"); });
+  Object.keys(D.links).forEach((id) => { if (!usedLink.has(id)) err("demos.links." + id + ": no term or guide shows it"); });
+  return errors;
+}
+
 function load(root) {
   const fs = require("node:fs"), p = path.join(root, DIR, "assets/js/data");
-  const files = ["core.js", "entries.js", "sources.js", "guides.js", "glossary.js", "glossary-refs.js", "voice-ui-tech.js", "voice-tech.js", 
+  const files = ["core.js", "entries.js", "sources.js", "guides.js", "glossary.js", "glossary-refs.js", "demos.js", "voice-ui-tech.js", "voice-tech.js", 
     "voice-glossary-kitchen.js", "voice-guides-long-tech-a.js", "voice-guides-long-tech-b.js", "voice-guides-long-tech-c.js", "voice-guides-long-tech-d.js"].map((f) => path.join(p, f)).filter((f) => fs.existsSync(f));
   return voice.loadScripts(files);
 }
 
-function check(root) { const A = load(root); return checkGlossary(A).concat(checkLongGuides(A)); }
+function check(root) { const A = load(root); return checkGlossary(A).concat(checkLongGuides(A), checkDemos(A, root)); }
 
-module.exports = { ICONS, CATS, ARTICLES, VIEWS, LIMITS, sourcePool, checkGlossary, checkLongGuides, check, load };
+module.exports = { ICONS, CATS, ARTICLES, VIEWS, LIMITS, sourcePool, checkGlossary, checkLongGuides, checkDemos, check, load };
 
 if (require.main === module) {
   const errors = check(path.resolve(__dirname, ".."));

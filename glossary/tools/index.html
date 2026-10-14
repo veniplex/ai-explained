@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -130,6 +131,9 @@
         <h2>Definition</h2>
         <p>A tool is something the model can ask to have done, such as a web search or a new row in a spreadsheet.</p>
         <p>The model writes a structured request: which tool, with which inputs. The harness, the software around the model, runs the tool and puts the result into the context. Tools can search, handle files, run code or work inside other apps. As a last resort, computer use lets the model ask for clicks and typing on screen, which the harness carries out, slower and less reliably.</p>
+        <h2>Try it</h2>
+        <h3>Who does what in a tool call</h3>
+        <p>Step through one tool call. The model only writes the call; the harness checks it and runs the tool. Try a broken call and see where it stops. This demo needs JavaScript.</p>
         <h2>Detailed technical description</h2>
         <p>Each tool is described to the model by a name, a description and a JSON Schema, a formal description of its inputs. The model replies with a structured tool call (also called function calling): the tool's name plus its inputs. The harness runs the code and returns the result as a new message; the model never executes anything itself. Tools come built in (a command line, file editing, web search, code execution), from MCP servers or from your own code.</p>
         <p>Tool design is user-experience design for models: clear names, a focused purpose, helpful error messages and short, useful output. Use tools for live data, for changing things and for exact work such as arithmetic. Avoid dozens of overlapping tools, which confuse the model and fill the context; design tools around tasks, not one per function of another service's API (its interface for programs). Current practice: fewer, more capable tools; tool search, which loads definitions only when needed; programmatic tool calling, where the model writes code that calls the tools so intermediate data stays out of the context; and strict schemas for reliable inputs.</p>
@@ -149,6 +153,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -171,6 +176,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>

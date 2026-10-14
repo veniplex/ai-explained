@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -129,6 +130,9 @@
         <p>A head chef who works out the jobs only once the order is in, then hands each part to a helper cook.</p>
         <h2>Definition</h2>
         <p>A pattern in which a lead model breaks a task down at run time and delegates the parts to workers. Unlike fixed parallel branches, the number and kind of sub-tasks are decided by the model for each input.</p>
+        <h2>Try it</h2>
+        <h3>One worker or several</h3>
+        <p>Split six equal jobs across more workers and see what happens to the time and to the number of tokens used. This demo needs JavaScript.</p>
         <h2>Detailed technical description</h2>
         <p>The orchestrator receives the task, plans in a first model call, and writes a brief for each worker. A worker is a separate model call, often with its own tools and a clean context, that returns a result. The orchestrator then reads all results and either finishes, asks for more work or merges them into one answer. Because the plan is made at run time, the same code handles very different inputs.</p>
         <p>The weak point is the brief. If it leaves out a constraint, the worker cannot know it, and the orchestrator may only notice after merging. Workers can also duplicate effort or leave gaps. Cap the number of workers and rounds, ask each worker for a short structured result, and log every brief so a bad plan can be traced. See sub-agent for the worker side.</p>
@@ -146,6 +150,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -168,6 +173,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>

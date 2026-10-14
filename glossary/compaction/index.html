@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -129,6 +130,9 @@
         <p>When the counter fills up, the chef tidies it: older orders and notes are swapped for a short summary, so a long shift can carry on.</p>
         <h2>Definition</h2>
         <p>Summarising older parts of a conversation so that a long run keeps fitting into the context window. The summary keeps decisions and open items and drops detail, so what is lost is a trade-off to design for.</p>
+        <h2>Try it</h2>
+        <h3>Fill a context window</h3>
+        <p>Step through a coding task and watch what takes up room in the window. Then switch on a remedy and run it again. This demo needs JavaScript.</p>
         <h2>Detailed technical description</h2>
         <p>A harness triggers compaction when the context nears its limit, or when the agent or user requests it. A model call writes a summary of the older turns, and that summary replaces them while recent turns stay word for word. Good summaries keep the goal, decisions made, constraints, file names, open questions and the next step.</p>
         <p>The risk is silent loss. A detail that seemed minor, such as an exact error message or a rule the user stated early, may be dropped, and the agent will not know it is gone. Repeated compaction compounds this, since later summaries are written from earlier summaries. Keep important facts in files or long-term-memory where they can be reloaded exactly.</p>
@@ -146,6 +150,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -168,6 +173,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>
