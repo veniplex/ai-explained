@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -129,6 +130,9 @@
         <p>The kitchen itself, the whole room where all those sockets are fitted. It decides which appliances are plugged in and asks the owner before a risky one is switched on.</p>
         <h2>Definition</h2>
         <p>The AI application that a person uses and that runs one or more MCP clients, for example a chat app, a code editor or an agent harness. It decides which servers to connect, shows approval prompts and passes tool results to the model.</p>
+        <h2>Try it</h2>
+        <h3>A conversation between client and server</h3>
+        <p>Step through the messages a client and an MCP server exchange, from the first greeting to a tool call. This demo needs JavaScript.</p>
         <h2>Detailed technical description</h2>
         <p>A host holds the settings for which servers to start, handles sign-in and decides which tools are offered to the model in each conversation. When the model asks for a tool, the host applies its policy: allow, ask the person or deny. It also decides how tool descriptions and results are placed in the context, which affects both cost and safety.</p>
         <p>Since the host is the trusted component, weak choices there spread everywhere. Auto-approving all tools, enabling servers from unknown sources or ignoring changes in a server's tool list invite abuse such as tool-poisoning. Good hosts show what a call will do before it runs, let people set per-server permissions and keep logs. Different hosts offer different controls, so check them before relying on a server.</p>
@@ -146,6 +150,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -168,6 +173,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>

@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -129,6 +130,10 @@
         <p>A vector database is a shelf where every cookbook page sits next to the pages most like it in meaning, so the chef can grab a handful of similar ones quickly.</p>
         <h2>Definition</h2>
         <p>A database built to store embeddings and quickly find those nearest to a query embedding. It is the usual store behind semantic search and rag, and many also add metadata filters and keyword search.</p>
+        <h2>Try it elsewhere</h2>
+        <ul>
+          <li><a href="https://projector.tensorflow.org/">Embedding Projector</a>, TensorFlow: Explore embeddings as points in space and see which ones sit close together.</li>
+        </ul>
         <h2>Detailed technical description</h2>
         <p>A vector database stores each embedding with an id and metadata, and answers nearest-neighbour queries. Exact search compares the query with every vector, which is slow at scale. Most systems use approximate indexes, such as graph-based or cluster-based ones, that check only a small part of the data. This trades a little recall for much lower latency.</p>
         <p>In practice, retrieval quality depends less on the database than on the embedding model, the chunking and the filters. Metadata filters, for example by tenant, date or document type, are essential for access control and relevance. The index must be updated when sources change, or answers go stale. Some teams use a vector extension of an ordinary database to avoid running a separate system.</p>
@@ -146,6 +151,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -168,6 +174,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>

@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -129,6 +130,9 @@
         <p>Give the chef a set number of tries at a dish with a clear pass mark, and count how often at least one try passes. The gap from first-try success shows what repeating buys.</p>
         <h2>Definition</h2>
         <p>A score for tasks with checkable answers, such as code with tests: the chance that at least one of k attempts succeeds. Pass@1 is success on the first try, and the gap between pass@1 and pass@k shows how much repeated attempts help.</p>
+        <h2>Try it</h2>
+        <h3>One try or many</h3>
+        <p>Set how often an agent succeeds on one try and how many times you run it. See the chance that at least one run works, and the chance that every run works. This demo needs JavaScript.</p>
         <h2>Detailed technical description</h2>
         <p>To estimate it, generate n samples for each problem, count the c that pass, and compute the chance that a random choice of k of the n contains at least one pass. This uses an unbiased formula and is more reliable than simply running k attempts once. With k equal to one, it is the average success rate. Higher k rewards models that are sometimes right even when they are usually wrong.</p>
         <p>Pass@k says what is possible if something can pick the right attempt, such as a test suite. In production there is often no such check, so pass@1 or a majority vote reflects real behaviour better. Sampling settings matter, since high temperature makes attempts more varied and raises pass@k. Report n, k and settings alongside the score, and beware weak tests, which let wrong code count as a pass.</p>
@@ -146,6 +150,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -168,6 +173,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>

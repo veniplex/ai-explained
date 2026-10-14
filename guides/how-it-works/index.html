@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -140,11 +141,22 @@
         <p>There is no fixed exchange rate between words and tokens. IBM gives roughly 1.5 tokens per word as a general estimate, while OpenAI's rule of thumb for English text is about three quarters of a word per token, which is roughly 1.3 tokens per word. Both are rough. Other languages and rare words often need more tokens for the same content, and tokenizers differ: Anthropic reports that Claude models from version 4.7 onward produce about 30 per cent more tokens for the same text than earlier ones (October 2026). A budget measured on one model therefore does not carry over to another.</p>
         <p>Tokens matter because everything is counted in them. The context window, the most that one request and its reply can hold, is a number of tokens: one million on every current Claude model, with up to 128,000 of them for the reply (October 2026). Prices are quoted per million input tokens and per million output tokens, and output costs more. Anthropic lists Claude Opus 5.5 at $4 per million input tokens and $20 per million output tokens (October 2026).</p>
         <p>Tokenization also explains some odd behaviour: the model sees a word as one or a few numbered pieces, not as letters, so counting the letters in a word can trip it up.</p>
+        <h3>Try it</h3>
+        <h4>Cut text into tokens</h4>
+        <p>First train a tiny tokenizer on a few lines of your own text and watch it learn its pieces. Then load the real one of GPT-2 and see how ordinary text, other languages, code and numbers are cut. This demo needs JavaScript.</p>
+        <h4>Try it elsewhere</h4>
+        <ul>
+          <li><a href="https://tiktokenizer.vercel.app/">Tiktokenizer</a>, dqbd: Pick an OpenAI model and see how it cuts your text, with the token count. OpenAI's tokenizers only.</li>
+          <li><a href="https://huggingface.co/spaces/Xenova/the-tokenizer-playground">The Tokenizer Playground</a>, Xenova, on Hugging Face: Paste text and see the tokens and their numbers, and compare tokenizers of different model families.</li>
+        </ul>
         <h2>What one request contains</h2>
         <p>Each time the program asks the model something, it sends one package: standing instructions, the list of tools and the whole conversation so far. The model remembers nothing between two packages.</p>
         <p>An agent run starts with a request to a model through an api, a programming interface reached over the internet. The request is more than the person's message. It is the whole context: the system prompt (the developer's standing instructions), the definitions of the available tools, any instruction files that were loaded, and the message history, which at the start holds only the task. The model takes every one of these tokens into account each time it produces a new token.</p>
         <p>The history is a list of messages, and each message has a role that says who wrote it. In Anthropic's Messages API the system prompt is a separate top-level field, the list holds user and assistant messages (newer models such as Claude Opus 5.5, Sonnet 5.5 and Haiku 5.5 also accept a system message after a user turn, for instructions that only become relevant later), and the results of tools travel back inside a user message. OpenAI's Responses API keeps tool calls and their outputs as separate items in the same list, and OpenAI's Model Spec ranks instructions in a chain of command, platform before developer before user, with instructions found inside tool results treated as information rather than commands by default. The names differ; the structure is the same everywhere: who said what, in what order.</p>
         <p>The API is stateless. Anthropic's documentation puts it plainly: you always send the full conversational history. The model keeps nothing between calls, so the harness, the program that calls the model and runs everything around it, rebuilds the complete input every time. What feels like a continuous conversation is a list of messages sent again with one more entry at the end. Every cost and every limit later in this guide follows from that fact.</p>
+        <h3>Try it</h3>
+        <h4>The request is sent again every turn</h4>
+        <p>Step through four turns of one task. Each turn sends everything so far again. Switch on caching, change the prices, and see what the bill does. This demo needs JavaScript.</p>
         <h2>What the model sends back</h2>
         <p>The model writes its reply one token at a time and then states why it stopped: it finished, it ran out of room, it was refused, or it wants a tool to be run.</p>
         <p>The model turns the whole input into a probability for every token in its vocabulary. A sampling step picks one, the token is appended to the input, and the process repeats until the model ends its turn or reaches a limit. Settings such as temperature make the pick more or less adventurous, but sampling is random by design, so the same request can produce different answers. That matters later, when an agent has to be tested. The input is processed in one pass, while the reply is produced token by token, so long replies take noticeably longer than long inputs.</p>
@@ -158,6 +170,9 @@
         <p>One reply can contain several tool calls. Claude 4 and later models make such parallel calls by default when the calls are independent, for example three fare searches for three dates. The harness may run them at the same time: the Claude Agent SDK runs read-only tools concurrently and tools that change something one after the other. All results go back together in the next user message, each matched to its call by id. Sending each result as a separate message is a documented mistake, because it teaches the model to stop making parallel calls.</p>
         <p>Two settings shape the call. tool_choice decides whether the model may answer without a tool (auto, the default) or must not use one (none), and on models that support it, whether it must call some tool or one named tool. Strict mode makes the provider guarantee that every call matches the schema exactly, which removes a whole class of parsing errors. OpenAI suggests keeping fewer than 20 functions available at the start of a turn.</p>
         <p>The Model Context Protocol standardises how a harness reaches tools it did not write. An MCP client in the harness talks to an mcp-server, which lists its tools and runs them on request. On the wire to the model the shapes above stay the same.</p>
+        <h3>Try it</h3>
+        <h4>Who does what in a tool call</h4>
+        <p>Step through one tool call. The model only writes the call; the harness checks it and runs the tool. Try a broken call and see where it stops. This demo needs JavaScript.</p>
         <h2>The loop that ties it together</h2>
         <p>The agent is a simple cycle run by ordinary code: ask the model, run the tools it asks for, add the results, ask again, until the model answers without asking for a tool.</p>
         <p>The agent loop is a cycle that the harness runs. It assembles the context, calls the model and reads the stop reason. If the model asked for tools, the harness checks the permission policy, runs them, appends the results and calls the model again. If the model returned plain text, the loop ends. One pass is a turn. The model chooses each next step; the harness does everything else.</p>
@@ -168,6 +183,9 @@
         <p>Left alone, the loop ends only when the model decides to answer without a tool, and nothing guarantees that it will. A model can retry a failing tool with the same arguments, alternate between two states, or keep researching an open-ended goal such as “improve this”. Each of those turns is billed, and each costs more than the last, because the history keeps growing. A stop-condition enforced in code ends it: a turn cap, a token or money budget, a time limit, or an interruption by the person. The model's own sense of being done is useful, but it is not a limit.</p>
         <p>Frameworks provide these limits but do not always switch them on. In the Claude Agent SDK, max_turns counts tool-use turns and max_budget_usd stops at an estimated spend; both default to no limit, and hitting one ends the run with a result such as error_max_turns. Spend is checked after each response, so a run can overshoot the cap by the cost of one reply. The OpenAI Agents SDK raises a MaxTurnsExceeded error when its cap is passed. Treat a hit limit as a result to report, not as a crash, and save the state so that the run can resume.</p>
         <p>Errors also compound. If every step is right 95 per cent of the time, a ten-step job is right only about 60 per cent of the time (0.95 to the tenth power). A long job therefore needs checks along the way, and the strongest checks come from outside the model. A model that reviews its own work in the same context has no new information; research on self-correction found that models often fail to fix their own reasoning without external feedback. Claude Code's best practices put it simply: give the agent a check it can run, such as tests, a build or a screenshot to compare.</p>
+        <h3>Try it</h3>
+        <h4>Break the loop</h4>
+        <p>An agent whose fix does not work keeps trying. Choose which safeguards are on, run it, and see where it stops and what it costs. This demo needs JavaScript.</p>
         <h2>Where the guardrails sit</h2>
         <p>Rules that must always hold are enforced by the program around the model, not by asking the model nicely: permission rules, an isolated sandbox, and scripts that run at fixed moments.</p>
         <p>Permissions sit in the Act step. The harness matches each tool call against a policy with three outcomes: allow, ask the person, or deny, and deny wins when rules conflict. Because this is code, the model cannot talk its way past it. A sandbox adds isolation underneath: the tool runs in a container or virtual machine with limited files and a restricted network.</p>
@@ -179,12 +197,20 @@
         <p>Every turn adds the model's reply and the tool results to the history, so the context only grows. When it nears the window, the harness has three options. Compaction replaces older turns with a summary and keeps recent turns word for word; the Claude Agent SDK does this automatically near the limit and marks the point in its message stream. Memory writes facts and progress to files outside the context, to be read back later. A sub-agent takes one sub-task in a fresh context and returns a short summary, so the main context never receives its intermediate results.</p>
         <p>Each option loses something. A summary can drop a detail that a later step needs, such as an exact error message, so rules that must survive belong in a project file such as CLAUDE.md, which the SDK sends again with every request. A sub-agent knows only what its brief says. Multi-agent runs also use many more tokens: Anthropic's research system, a lead agent with parallel sub-agents, beat a single agent by 90.2 per cent on an internal research evaluation but used about 15 times the tokens of a chat (2025). They pay off for work that splits into independent parts, not for strictly sequential work.</p>
         <p>For jobs that span many sessions, Anthropic's harness for long coding runs keeps a feature list and a progress log that every new session reads first. It guards against two documented failures: trying to build everything at once and declaring victory too early.</p>
+        <h3>Try it</h3>
+        <h4>One worker or several</h4>
+        <p>Split six equal jobs across more workers and see what happens to the time and to the number of tokens used. This demo needs JavaScript.</p>
         <h2>What a run costs, and how to know it works</h2>
         <p>Because the whole conversation is sent again on every step, the amount of text processed grows much faster than the conversation itself. Caching cuts the bill, and repeated tests on recorded tasks show whether the agent works.</p>
         <p>Because the whole history is re-sent on every turn, the input processed grows much faster than the final context. Suppose the first request is 5,000 tokens and each turn adds 2,000. Ten turns process 140,000 input tokens in total, although the last request is only 23,000 tokens long. The total grows with the square of the number of turns: a hundred turns process 10.4 million tokens. The table puts a price on it at $4 per million input tokens.</p>
         <p>Prompt caching is the main remedy. The provider keeps the processed form of a request's beginning, the KV cache, for a few minutes, and a new request that starts with exactly the same tokens reads it back at a fraction of the price. At Anthropic a cache read costs a tenth of the normal input price or less, and writing an entry costs 1.25 times for the five-minute lifetime (October 2026). In the ten-turn example, 117,000 of the 140,000 tokens are reads and 23,000 are writes, which, at a tenth of the input price for reads, bills like about 40,000 tokens if every turn hits the cache. Agents read far more than they write: Manus reports about 100 input tokens for every output token, so the cache hit rate decides most of the bill.</p>
         <p>Evals measure a run against tasks with a defined pass or fail rule, scored by code, by a model following a rubric, or by a person. Anthropic's guide (January 2026) suggests starting with 20 to 50 tasks taken from real failures and grading the outcome rather than the exact path. Each task runs several times, because results vary: pass@k counts a task as solved if any of k tries works, pass^k only if all k do.</p>
         <p>A trace, the timeline of every model call and tool call with arguments, results, token counts and timing, shows which step failed and what each step cost. See cost and governance for the money and the rules around a live agent.</p>
+        <h3>Try it elsewhere</h3>
+        <ul>
+          <li><a href="https://models.dev/">models.dev</a>, an open-source project: A table of models with their prices, context limits and features. Prices change, so read the current ones there.</li>
+          <li><a href="https://artificialanalysis.ai/">Artificial Analysis</a>, Artificial Analysis: Independent comparisons of models and providers: quality, price and speed.</li>
+        </ul>
         <h2>A working mental model</h2>
         <p>An agent is a model that remembers nothing, inside a program that rebuilds its input, runs its requests and decides when to stop. Most design questions are about that program.</p>
         <p>An agent is a stateless model inside a program that rebuilds its input, executes its requests and decides when to stop. Most design questions reduce to what that program puts in the input and what it refuses to execute.</p>
@@ -202,6 +228,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -214,6 +241,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>
   <script src="../../assets/js/github.js"></script>

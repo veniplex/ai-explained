@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -130,6 +131,13 @@
         <h2>Definition</h2>
         <p>The context is everything the model sees in one request; the context window is its size limit.</p>
         <p>The context holds your message, attached files, the app's standing instructions and the chat so far. The model remembers nothing between requests, so the app sends it all again each time. Context is measured in tokens, small pieces of words. Answers get worse as the window fills with clutter, an effect called context rot. Choosing what goes in, and what stays out, is context engineering.</p>
+        <h2>Try it</h2>
+        <h3>Fill a context window</h3>
+        <p>Step through a coding task and watch what takes up room in the window. Then switch on a remedy and run it again. This demo needs JavaScript.</p>
+        <h3>Try it elsewhere</h3>
+        <ul>
+          <li><a href="https://models.dev/">models.dev</a>, an open-source project: A table of models with their prices, context limits and features. Prices change, so read the current ones there.</li>
+        </ul>
         <h2>Detailed technical description</h2>
         <p>In English, one token is roughly three quarters of a word. The window is the maximum number of tokens one request can hold, including the reply. In 2026 about one million tokens is standard for frontier models (the most capable ones); many smaller and older models offer 128,000 to 200,000.</p>
         <p>On every turn the harness, the app around the model, sends the whole conversation again: system prompt, tool definitions, history and tool results. Longer contexts cost more, run slower and lose quality, effects researchers call “lost in the middle” and “context rot”, so a bigger window is not automatically better. Prompt caching makes a repeated beginning cheap and fast (cost): put stable content first, changing content last. Use long context for a whole document, and retrieval (looking up only what is needed) for large or changing collections. Do not dump all your code, whole inboxes or logs in, and do not assume the model remembers earlier chats unless the harness re-sends them (memory).</p>
@@ -149,6 +157,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -171,6 +180,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>

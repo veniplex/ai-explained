@@ -93,20 +93,30 @@ function pageFor(shell, kind, id, title, description, noscript) {
   return html;
 }
 
+// "Try it" for a reader without JavaScript: what each demo is and the links to the tools of other people (data/demos.js).
+function tryText(D, spec) {
+  if (!spec) return [];
+  const m = D.demos || { list: {}, links: {} };
+  const parts = (spec.demos || []).map((id) => "<h3>" + esc(m.list[id].title) + "</h3>\n        " + para(m.list[id].lede + " This demo needs JavaScript."));
+  const links = (spec.links || []).map((id) => '<li><a href="' + esc(m.links[id].url) + '">' + esc(m.links[id].title) + "</a>, " + esc(m.links[id].by) + ": " + esc(m.links[id].note) + "</li>");
+  return (parts.length ? ["<h2>Try it</h2>"].concat(parts) : []).concat(links.length ? [(parts.length ? "<h3>Try it elsewhere</h3>" : "<h2>Try it elsewhere</h2>"), "<ul>\n          " + links.join("\n          ") + "\n        </ul>"] : []);
+}
+
 // The text of a term for a reader without JavaScript: the kitchen sentence, the definition, and the longer text.
 function termText(x, t) {
   const kitchen = (x.K.glossary || {})[t.id];
-  if (!t.main) return ["<h1>" + esc(t.name) + "</h1>", "<h2>Where it sits in the kitchen</h2>", para(kitchen), "<h2>Definition</h2>", para(t.raw.def),
+  if (!t.main) return ["<h1>" + esc(t.name) + "</h1>", "<h2>Where it sits in the kitchen</h2>", para(kitchen), "<h2>Definition</h2>", para(t.raw.def), ...tryText(x.D, x.D.demos && x.D.demos.terms[t.id]),
     "<h2>Detailed technical description</h2>", ...(t.raw.more || []).map(para)].join("\n        ");
   const e = x.D.entries[t.id], d = e.deeper || {};
-  return ["<h1>" + esc(e.name) + "</h1>", "<h2>Where it sits in the kitchen</h2>", para(kitchen), "<h2>Definition</h2>", para(e.short), ...(e.how || []).map(para),
+  return ["<h1>" + esc(e.name) + "</h1>", "<h2>Where it sits in the kitchen</h2>", para(kitchen), "<h2>Definition</h2>", para(e.short), ...(e.how || []).map(para), ...tryText(x.D, x.D.demos && x.D.demos.terms[t.id]),
     "<h2>Detailed technical description</h2>", ...(d.details || []).map(para), ...(d.includes || []).map((i) => para(i.name + ": " + i.text))].join("\n        ");
 }
 
 // A guide as text: the lede, who it is for, what to expect, and every section's headline, short line and paragraphs.
-function articleText(g, title) {
+function articleText(g, title, D, id) {
+  const place = (D.demos && D.demos.guides[id]) || {};
   return ["<h1>" + esc(title) + "</h1>", para(g.lede), para(g.audience), "<ul>\n" + g.expect.map((l) => "          <li>" + esc(plain(l)) + "</li>").join("\n") + "\n        </ul>"]
-    .concat(g.sections.flatMap((s) => ["<h2>" + esc(s.title) + "</h2>", para(s.short)].concat(s.text.map(para)))).join("\n        ");
+    .concat(g.sections.flatMap((s) => ["<h2>" + esc(s.title) + "</h2>", para(s.short)].concat(s.text.map(para), tryText(D, place[s.id]).map((l) => l.replace(/^<h([23])>/, (m, n) => "<h" + (+n + 1) + ">").replace(/<\/h([23])>/, (m, n) => "</h" + (+n + 1) + ">"))))).join("\n        ");
 }
 const ABOUT = {
   description: "What AI explained is, how its pages are made, where the facts come from and what it keeps private.",
@@ -124,7 +134,7 @@ function pages(root) {
     "<h1>Glossary</h1>\n        <ul>\n" + x.terms.map((t) => '          <li><a href="' + t.id + '/">' + esc(t.name) + "</a>: " + esc(plain(t.main ? x.D.entries[t.id].short : t.raw.def)) + "</li>").join("\n") + "\n        </ul>");
   x.D.guideList.forEach((g) => {
     const long = x.T.longGuides[g.id];
-    out["guides/" + g.id + "/index.html"] = pageFor(shell, "guide", g.id, g.title + " · Guide", oneLine(long.lede || g.hint, 200), articleText(long, g.title));
+    out["guides/" + g.id + "/index.html"] = pageFor(shell, "guide", g.id, g.title + " · Guide", oneLine(long.lede || g.hint, 200), articleText(long, g.title, x.D, g.id));
   });
   out["guides/index.html"] = pageFor(shell, "guides", "", "Guides",
     "Long guides on how agents work, how to give them context, build, secure and test them, plus short ones on what is easily confused and where to learn more.",
@@ -160,7 +170,8 @@ function serviceWorker(root, out) {
     hash.update(f + "\0");
     hash.update(f in out ? out[f] : fs.readFileSync(path.join(root, f)));
   });
-  const assets = files.filter((f) => f.startsWith("assets/") && !/\.(txt|md)$/.test(f) && !/og\.png$/.test(f)).sort();
+  // (the vocabulary of the tokenizer demo, about 1 MB, is kept the first time a visitor loads it, not on install)
+  const assets = files.filter((f) => f.startsWith("assets/") && !/\.(txt|md)$/.test(f) && !/og\.png$/.test(f) && !/data\/gpt2\.js$/.test(f)).sort();
   const pages = ["./", "story/", "technical/", "glossary/", "guides/", "about/"].concat(Object.keys(out).filter((f) => /^guides\/[^/]+\/index\.html$/.test(f)).map((f) => f.replace(/index\.html$/, "")).sort());
   const list = pages.concat(["manifest.webmanifest"], assets, ["versions/versions.js", "versions/version-switcher.js", "versions/version-switcher.css", "versions/favicon.svg"]);
   const prefix = "ae-" + release() + "-";

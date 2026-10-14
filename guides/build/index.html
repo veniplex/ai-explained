@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -174,6 +175,13 @@
         <p>Three of them matter for a first build. MCP connects an agent to tools and data: an MCP server lists its tools and runs them on request over JSON-RPC. Its revision of 28 July 2026 made the core stateless. Use it when a tool is shared by several agents or provided by someone else; for one function inside your own program, plain function calling is simpler. AGENTS.md is a plain Markdown file of instructions in a repository; the nearest file in the folder tree wins. Agent Skills are folders with a SKILL.md whose only required fields are a name and a description; the agent loads the rest only when a task matches the description.</p>
         <p>A2A connects one agent with another, across vendors and organisations. Each agent publishes an Agent Card that describes what it can do and how to reach it, and version 1.0 (March 2026) signs those cards. MCP gives an agent tools; A2A lets it delegate to another agent it does not control. You need it only at the top rung, when work crosses team or company lines. The OpenTelemetry conventions for generative AI define standard spans for model calls, agent steps and tool calls; they are still marked as in development (October 2026), so pin the version you use. The payment protocols are young and best treated as experimental.</p>
         <p>Every server, skill or plugin you connect is code that runs with your credentials. A tool description can carry hidden instructions, which is called tool poisoning, and a server can change after you approved it. Review third-party servers and skills before use, pin their versions, give each one the least privilege it needs, and re-review on update. The checklist below asks for exactly this.</p>
+        <h3>Try it</h3>
+        <h4>A conversation between client and server</h4>
+        <p>Step through the messages a client and an MCP server exchange, from the first greeting to a tool call. This demo needs JavaScript.</p>
+        <h4>Try it elsewhere</h4>
+        <ul>
+          <li><a href="https://modelcontextprotocol.io/docs/tools/inspector">MCP Inspector</a>, Model Context Protocol: The official tool for testing an MCP server: list its tools and call them. It runs on your own computer (Node 22.19 or newer), not in the browser.</li>
+        </ul>
         <h2>The pre-launch checklist</h2>
         <p>Sixteen statements that should all be true before an agent works for real users or runs without supervision. Each one maps to a step earlier in this guide.</p>
         <p>Tick the boxes as you go. The ticks are stored only in your own browser and nowhere else, and Clear all resets them. The items follow the order of the twelve steps, from the written task to a named owner. The list is not a certification. Each box left empty is a known risk, and launching anyway should be an explicit decision by the person who owns the agent.</p>
@@ -193,6 +201,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -205,6 +214,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>
   <script src="../../assets/js/github.js"></script>

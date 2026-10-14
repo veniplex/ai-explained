@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -129,6 +130,9 @@
         <p>Several chefs cooperating on one order, usually a head chef who splits the work among specialists.</p>
         <h2>Definition</h2>
         <p>Several agents cooperating on a task, typically a lead agent coordinating specialists. It helps when work splits into independent parts or needs fresh context, and it costs more tokens than a single agent.</p>
+        <h2>Try it</h2>
+        <h3>One worker or several</h3>
+        <p>Split six equal jobs across more workers and see what happens to the time and to the number of tokens used. This demo needs JavaScript.</p>
         <h2>Detailed technical description</h2>
         <p>The usual structure is a lead that breaks the task up, starts specialist agents with focused instructions and tools, and combines their results. Each worker has its own context window, which keeps long material out of the lead's context and lets independent work run in parallel. The lead's brief matters a great deal, since workers know only what they are told.</p>
         <p>The costs are tokens, coordination and harder debugging. Agents can duplicate work, disagree, pass on errors or lose detail when summarising for each other. Start with one agent and add more only when a measured problem, such as context overflow or clearly parallel work, calls for it. Keep a trace of each agent so that a failure can be followed through the handoffs (handoff).</p>
@@ -146,6 +150,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -168,6 +173,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>

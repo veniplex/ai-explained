@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -140,6 +141,9 @@
         <p>Treat the window as a budget with hard rules. Everything counts: the system prompt, the tool definitions, every message including tool results, images and documents, and the reply with any thinking. Tokens served from a cache count as well; caching changes their price, not the space they take. If the input alone is larger than the window, the API refuses the request; if the reply runs into the limit, it stops with a stop reason that says so.</p>
         <p>The parts behave differently, which decides how to manage them. Instructions and tool definitions are written once and sent again on every turn: in one Anthropic example, five MCP servers with 58 tools used about 55,000 tokens of definitions before any work started. History and tool results only grow, and tool results are often the largest part, because one file read or search can return thousands of tokens. Claude Code cuts a single tool response at 25,000 tokens by default.</p>
         <p>You cannot manage what you do not measure. API replies report the input and output tokens of each request, and how many input tokens were read from or written to the cache (cache_read_input_tokens and cache_creation_input_tokens at Anthropic, cached_tokens at OpenAI). Logging these per turn, together with the size of each part of the request, shows quickly which part is crowding the window.</p>
+        <h3>Try it</h3>
+        <h4>Fill a context window</h4>
+        <p>Step through a coding task and watch what takes up room in the window. Then switch on a remedy and run it again. This demo needs JavaScript.</p>
         <h2>Why more context is not better</h2>
         <p>A model does not use a long input evenly. Facts in the middle are easily overlooked, and quality drops as the input grows, even when the window is far from full.</p>
         <p>The model's attention mechanism relates every token to every other token, which Anthropic's engineers describe as n² pairwise relationships for n tokens. The work grows with the square of the length: double the input and the attention work roughly quadruples. More important than the cost is the dilution. Attention is a budget, every added token takes a share of it, and a relevant line competes with everything around it.</p>
@@ -158,6 +162,9 @@
         <p>OpenAI caches automatically from 1,024 tokens on its newest models, keeps a prefix for at least 30 minutes after its last use there, and charges a tenth of the input price or less for a read. The details differ between providers; the rule does not: only an identical beginning is reused. So put what never changes first and what changes last. In an agent loop this works well, since each turn repeats the previous request and adds a little at the end.</p>
         <p>Anything that changes an earlier part invalidates everything after it. Common causes are a timestamp or request id near the top, tools added, removed or reordered mid-run, settings that alter the system prompt or the messages (see the table), JSON written with keys in a different order each time, and edits to earlier messages, including clearing old tool results. Manus therefore keeps its context append-only and hides unavailable tools by masking them during generation instead of removing their definitions.</p>
         <p>Compaction rewrites the history, so the cache is rebuilt once after it; a breakpoint at the end of the system prompt keeps that part cached. A pause longer than the entry's lifetime means a full re-read on the next turn.</p>
+        <h3>Try it</h3>
+        <h4>The request is sent again every turn</h4>
+        <p>Step through four turns of one task. Each turn sends everything so far again. Switch on caching, change the prices, and see what the bill does. This demo needs JavaScript.</p>
         <h2>Keeping the window lean</h2>
         <p>Most of what crowds the window arrives through tools: their descriptions and what they return. Smaller tool sets, shorter results and instructions that load only when needed keep it clear.</p>
         <p>Keep the tool set small and give each tool a precise description, because every definition is paid for on every turn. Claude's documentation notes that picking the right tool degrades beyond 30 to 50 tools. Tool search keeps rarely used definitions out of the context until the model looks for them, and loads only the three to five it needs. Anthropic reported that its tool search (November 2025) cut tokens spent on tool definitions by about 85 per cent and raised accuracy for Opus 4 on an MCP evaluation from 49 to 74 per cent. Because a found definition is added at the end of the conversation, the cached beginning stays intact.</p>
@@ -201,6 +208,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -213,6 +221,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>
   <script src="../../assets/js/github.js"></script>

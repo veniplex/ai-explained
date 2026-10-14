@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -131,6 +132,13 @@
         <p>Prompt injection hides instructions in text an agent reads, to hijack what it does.</p>
         <p>Agents read text from strangers, such as web pages and emails, while holding real permissions. A model cannot reliably tell your instructions from an attacker's. The dangerous mix is private data, text from strangers and a way to send data out: with all three, an attacker can trick the agent into sending your data away.</p>
         <p>There is no complete fix yet, so protections are layered: narrow permissions, a sandbox (a sealed-off computer) and your approval for risky steps.</p>
+        <h2>Try it</h2>
+        <h3>The lethal trifecta</h3>
+        <p>Tick what your agent can do and see whether it has all three of the abilities that make a hidden instruction dangerous. This demo needs JavaScript.</p>
+        <h3>Try it elsewhere</h3>
+        <ul>
+          <li><a href="https://promptairlines.com/">Prompt Airlines</a>, Wiz: Try to talk an airline's chatbot into giving you a free ticket. No sign-up to start.</li>
+        </ul>
         <h2>Detailed technical description</h2>
         <p>Prompt injection happens when instructions hidden in content the agent reads (a web page, an email, an issue, a PDF, a tool result) hijack its behaviour. No current model is immune, and a line in the prompt such as “ignore malicious instructions” is no defence.</p>
         <p>Simon Willison's lethal trifecta names the dangerous combination: access to private data, exposure to untrusted content and the ability to communicate externally. An agent with all three can be tricked into sending your data to an attacker. Meta's Rule of Two is a related design rule: without human approval, one chat or job should combine at most two of untrusted input, access to sensitive data or systems, and the ability to change state or communicate externally.</p>
@@ -150,6 +158,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -172,6 +181,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>

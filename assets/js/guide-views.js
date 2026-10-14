@@ -231,6 +231,7 @@
         s.table ? tableOf(s.table) : null,
         s.code ? codeBlock(s.code) : null,
         view ? h("div", { class: "gd-view gd-view-" + (s.view || "reading") }, view) : null,
+        V3.demos ? V3.demos.forSection(id, s.id) : null,
         s.callout ? h("aside", { class: "gd-callout" }, h("b", null, rich(s.callout.t)), h("span", null, rich(s.callout.d))) : null,
         s.example ? V3.pages.exampleBlock(u.ex, s.example) : null,
         sourceMarks(s.src, src));

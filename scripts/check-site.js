@@ -81,7 +81,7 @@ function bridgeChecks(root) {
 const STARS_API = "https://api.github.com/repos/veniplex/ai-explained";
 function outsideChecks(root) {
   const errors = [], all = siteFiles(root);
-  all.filter((f) => /assets\/css\/.*\.css$/.test(f) || /assets\/js\/[^/]+\.js$/.test(f)).forEach((f) => {
+  all.filter((f) => /assets\/css\/.*\.css$/.test(f) || /assets\/js\/[^/]+\.js$/.test(f) || /assets\/js\/demos\/[^/]+\.js$/.test(f)).forEach((f) => {
     const rel = path.relative(root, f), isStars = rel === "assets/js/github.js";
     let src = fs.readFileSync(f, "utf8").replace(/http:\/\/www\.w3\.org\/2000\/svg/g, "");
     if (isStars) {

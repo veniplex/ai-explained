@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -129,6 +130,9 @@
         <p>A job that takes a whole day of steps, each one depending on the last. Small slips pile up, so the chef needs a plan, notes, snapshots and regular tasting.</p>
         <h2>Definition</h2>
         <p>A task that takes many steps, often hours of work, with later steps depending on earlier ones. Small errors compound over such a task, so it needs planning, memory, checkpoints and regular checks, and it is where agents most often fail.</p>
+        <h2>Try it</h2>
+        <h3>Break the loop</h3>
+        <p>An agent whose fix does not work keeps trying. Choose which safeguards are on, run it, and see where it stops and what it costs. This demo needs JavaScript.</p>
         <h2>Detailed technical description</h2>
         <p>The core problem is compounding. If each step succeeds with a probability slightly below one, the chance of getting through hundreds of steps falls steeply. Context also fills with old output, so the model may forget early constraints, repeat work or lose the goal. Many such tasks outlast a single context window and must carry state between windows.</p>
         <p>Common remedies are a written plan and progress file, checkpoints, regular tests that give an objective signal, and compaction or long-term-memory to carry what matters across windows. Splitting the work into parts for sub-agents helps when parts are independent. Review points matter too, since a run that has quietly gone wrong for hours is expensive to untangle.</p>
@@ -146,6 +150,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -168,6 +173,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>

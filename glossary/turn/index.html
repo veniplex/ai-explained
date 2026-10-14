@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -129,6 +130,9 @@
         <p>One round at the pass: the owner sends a ticket, the chef sends back a reply. In an agent, a single round can hold many tool uses before the reply goes out.</p>
         <h2>Definition</h2>
         <p>One round of a conversation: a message from the person and the model's reply. In an agent a single turn may contain several model calls and tool calls before the reply is complete, and limits are often set in turns.</p>
+        <h2>Try it</h2>
+        <h3>The request is sent again every turn</h3>
+        <p>Step through four turns of one task. Each turn sends everything so far again. Switch on caching, change the prices, and see what the bill does. This demo needs JavaScript.</p>
         <h2>Detailed technical description</h2>
         <p>The word is used in two senses, and limits depend on which one a harness means. In the chat sense a turn is one user message and one reply. In the API sense each model call is a turn, so one user request can span many turns while the agent calls tools. Check the definition before setting a maximum, or a limit meant to be generous may stop a run too early.</p>
         <p>Every turn adds to the context: the model's output, the tool call and its result. Because the whole history is usually sent again on each call, long runs grow in cost faster than in turn count, and old turns may need compaction. Counting turns is a cheap proxy for effort, and a sudden rise in turns per task is a useful warning sign.</p>
@@ -146,6 +150,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -168,6 +173,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>

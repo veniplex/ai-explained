@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -129,6 +130,10 @@
         <p>Before each next word the chef glances across everything on the counter and decides which pieces matter most for the next step, like linking 'it' back to the right ingredient.</p>
         <h2>Definition</h2>
         <p>The mechanism in a transformer that lets each token weigh every other token in the context when deciding what comes next. It is how a model links a pronoun to its noun, or an instruction to a detail far earlier in the text.</p>
+        <h2>Try it elsewhere</h2>
+        <ul>
+          <li><a href="https://poloclub.github.io/transformer-explainer/">Transformer Explainer</a>, Georgia Tech, Polo Club: A small GPT-2 runs live in your browser: type a sentence, watch the attention and the next-token chances, and change temperature, top-k and top-p.</li>
+        </ul>
         <h2>Detailed technical description</h2>
         <p>For each token the model computes how strongly it should look at each earlier token, then blends their information by those weights. Doing this in many parallel heads and many layers lets the model track grammar, facts and instructions at once.</p>
         <p>The cost of attention grows with the length of the context, which is why long inputs are slower and dearer, and why tricks such as the kv-cache matter.</p>
@@ -146,6 +151,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -168,6 +174,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>

@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -129,6 +130,11 @@
         <p>The chef's way of thinking: every part of the order on the counter is weighed against every other part before each next guess.</p>
         <h2>Definition</h2>
         <p>The neural-network architecture behind modern language models, built on attention. It reads all tokens of its input in parallel and learns which ones matter for each other, which made training at very large scale practical.</p>
+        <h2>Try it elsewhere</h2>
+        <ul>
+          <li><a href="https://poloclub.github.io/transformer-explainer/">Transformer Explainer</a>, Georgia Tech, Polo Club: A small GPT-2 runs live in your browser: type a sentence, watch the attention and the next-token chances, and change temperature, top-k and top-p.</li>
+          <li><a href="https://bbycroft.net/llm">LLM Visualization</a>, bbycroft.net: A 3D animated walk through a small language model, layer by layer.</li>
+        </ul>
         <h2>Detailed technical description</h2>
         <p>A transformer stacks many layers, each with attention followed by a feed-forward network, plus residual connections and normalisation. Positions are encoded explicitly because attention itself ignores order. For text generation the model is causal: each token can attend only to earlier ones, so output is produced one token at a time.</p>
         <p>Training parallelises well on accelerators, because all positions of a sequence are processed together. The cost is that attention work grows with the square of the sequence length, which limits context size and makes long inputs expensive. Most of the variation between current models is in details such as how attention is organised, how experts are used and how positions are encoded.</p>
@@ -146,6 +152,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -168,6 +175,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>

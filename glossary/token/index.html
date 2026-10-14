@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -129,6 +130,13 @@
         <p>A bite-sized piece of the order, a little shorter than a word, which the chef reads one piece at a time and the bill counts.</p>
         <h2>Definition</h2>
         <p>The unit models read and write, roughly three quarters of an English word. Context limits, prices and speed are all counted in tokens.</p>
+        <h2>Try it</h2>
+        <h3>Cut text into tokens</h3>
+        <p>First train a tiny tokenizer on a few lines of your own text and watch it learn its pieces. Then load the real one of GPT-2 and see how ordinary text, other languages, code and numbers are cut. This demo needs JavaScript.</p>
+        <h3>Try it elsewhere</h3>
+        <ul>
+          <li><a href="https://tiktokenizer.vercel.app/">Tiktokenizer</a>, dqbd: Pick an OpenAI model and see how it cuts your text, with the token count. OpenAI's tokenizers only.</li>
+        </ul>
         <h2>Detailed technical description</h2>
         <p>A tokenizer splits text into pieces from a fixed vocabulary, often common words, parts of words, single characters or bytes. Common words are usually one token, while rare words, names, code, numbers and many non-English languages need more. Each token is turned into a vector, and the model produces the next token one at a time.</p>
         <p>Token counts differ between model families, so cost and context use cannot be compared by word count. Models also see tokens, not letters, which explains weak spelling, counting letters and some arithmetic errors. In agents, tool results, file contents and the history all consume tokens, so budgeting them is a main part of context-engineering.</p>
@@ -146,6 +154,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -168,6 +177,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>

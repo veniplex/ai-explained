@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -129,6 +130,14 @@
         <p>The countless tiny dials inside the chef's head, set during training; together they hold everything it has learned. More dials usually mean more skill, and a bigger kitchen and bill.</p>
         <h2>Definition</h2>
         <p>The numbers inside a neural network that training adjusts; together they hold everything the model has learned. Modern language models have billions or trillions of them, and size is a rough guide to capability, memory needs and running cost.</p>
+        <h2>Try it</h2>
+        <h3>Fewer bits, smaller model</h3>
+        <p>Pick a model size and the number of bits per weight. See how much memory the weights need, and what rounding does to a row of weights. This demo needs JavaScript.</p>
+        <h3>Try it elsewhere</h3>
+        <ul>
+          <li><a href="https://playground.tensorflow.org/">TensorFlow Playground</a>, TensorFlow: Train a small neural network in the browser and change its layers, features and learning rate.</li>
+          <li><a href="https://bbycroft.net/llm">LLM Visualization</a>, bbycroft.net: A 3D animated walk through a small language model, layer by layer.</li>
+        </ul>
         <h2>Detailed technical description</h2>
         <p>Most parameters are the weights in matrices that multiply the activations in each layer, plus embeddings and biases. At inference the weights must be held in accelerator memory, so memory needed is roughly the parameter count times the bytes per number. quantisation reduces that by storing each number with fewer bits, at some cost in quality.</p>
         <p>Parameter count is a poor single measure of ability. Training data, training length and design matter as much, and a well-trained smaller model can beat a larger one. In a mixture-of-experts model only a fraction of the parameters is active for each token, so total and active counts differ. Compare models by testing them on your own tasks.</p>
@@ -146,6 +155,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -168,6 +178,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>

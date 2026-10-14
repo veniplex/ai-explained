@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -129,6 +130,9 @@
         <p>What one plate costs to make against what it sells for, counting ingredients, wasted attempts, supplier fees and the time a person spends tasting. It tells the owner whether the dish is worth cooking.</p>
         <h2>Definition</h2>
         <p>What one unit of work costs against what it earns, for example the cost per resolved support ticket against its value. For agents it shows whether automation pays off once model calls, retries, tool fees and human review are all counted.</p>
+        <h2>Try it</h2>
+        <h3>The request is sent again every turn</h3>
+        <p>Step through four turns of one task. Each turn sends everything so far again. Switch on caching, change the prices, and see what the bill does. This demo needs JavaScript.</p>
         <h2>Detailed technical description</h2>
         <p>The calculation starts with a unit, such as one ticket resolved or one document processed, and adds every cost that unit incurs: input and output tokens over all steps, retries, tool and search fees, hosting, monitoring and the time of people who review or fix results. Divide by the number of units that actually succeed, not by the number attempted. Compare that figure with the value of the unit or with the cost of the current process.</p>
         <p>Common mistakes are counting only the price of a single call, ignoring failed runs and rework, and assuming costs stay flat as volume grows. Costs per task vary widely, so look at the distribution, not just the mean, and watch the expensive tail. Levers include model-routing, prompt-caching, batch-processing and a token-budget. Re-check regularly, as model prices and quality change.</p>
@@ -146,6 +150,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -168,6 +173,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>

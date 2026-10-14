@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -129,6 +130,9 @@
         <p>The rule for when the shift ends: the chef says the dish is done, a checklist passes, or the clock, the budget or the step count runs out. Without a rule the chef would fiddle for ever.</p>
         <h2>Definition</h2>
         <p>The rule that ends an agent loop: the model says it is done, a goal check passes, or a limit on steps, time or budget is reached. Without a firm limit an agent can loop for ever, so harnesses always add one.</p>
+        <h2>Try it</h2>
+        <h3>Break the loop</h3>
+        <p>An agent whose fix does not work keeps trying. Choose which safeguards are on, run it, and see where it stops and what it costs. This demo needs JavaScript.</p>
         <h2>Detailed technical description</h2>
         <p>There are usually several conditions at once, and the first to fire ends the run. The model may emit a final answer with no further tool call. The harness may enforce a maximum number of turns, a wall-clock time limit, a token or money budget, or a repeat detector that notices the same call and result appearing again. A goal check, such as a passing test suite, is the strongest signal.</p>
         <p>Relying on the model to say it is finished is risky, because it may stop early and report success on unfinished work, or never stop. Hard limits should end the run in a clean state and report why, so that a person can tell a finished run from a cut-off one. Set the limits from observed runs, not guesses.</p>
@@ -146,6 +150,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -168,6 +173,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>

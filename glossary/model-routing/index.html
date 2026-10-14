@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -129,6 +130,10 @@
         <p>A host sends simple orders to the quick young chef and tricky ones to the master. Done well, the bill and the wait fall and the plates hardly suffer.</p>
         <h2>Definition</h2>
         <p>Sending each request to the model best suited to it, usually a small, fast model for easy cases and a larger one for hard cases. Done well it cuts cost and latency with little loss of quality, but it needs a reliable way to judge difficulty.</p>
+        <h2>Try it elsewhere</h2>
+        <ul>
+          <li><a href="https://models.dev/">models.dev</a>, an open-source project: A table of models with their prices, context limits and features. Prices change, so read the current ones there.</li>
+        </ul>
         <h2>Detailed technical description</h2>
         <p>A router sees the request and picks a model. Simple approaches use rules, such as input length or task type. More flexible ones use a small classifier or a cheap model to estimate difficulty, or send the request to the cheap model first and escalate if a confidence check or validator fails. This last pattern is called a cascade, and it keeps the cost of easy cases low.</p>
         <p>Routing needs evidence. Build a labelled set, measure quality and cost per route, and choose thresholds from the data. Failure modes are routing a hard request to a weak model, which gives a poor answer that looks fine, and the added latency of an extra call or a failed first try. Differences between models in format and tool use can also break a pipeline when the route changes. Related: routing.</p>
@@ -146,6 +151,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -168,6 +174,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>

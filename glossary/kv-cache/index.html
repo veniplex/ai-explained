@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -129,6 +130,9 @@
         <p>The chef's scribbled working notes on every ticket line already read, kept within reach so that each next step does not mean rereading the whole counter from the top.</p>
         <h2>Definition</h2>
         <p>Memory in which a model keeps the intermediate attention results, the keys and values, of tokens it has already processed, so it does not recompute them for every new token. It makes generation fast, and it is what prompt-caching reuses across requests.</p>
+        <h2>Try it</h2>
+        <h3>The request is sent again every turn</h3>
+        <p>Step through four turns of one task. Each turn sends everything so far again. Switch on caching, change the prices, and see what the bill does. This demo needs JavaScript.</p>
         <h2>Detailed technical description</h2>
         <p>In attention, each token produces a key and a value for every layer. Without a cache these would be recomputed for the whole history at each new token. With the cache they are stored and only the new token is processed. The price is memory, which grows with context length, layers and the number of requests served at once.</p>
         <p>Cache size is a main limit on how many long conversations a server can hold. Techniques such as sharing keys and values across heads, quantising the cache and evicting old entries reduce it. A cache is only reusable if the beginning of the input is identical, so changing early text invalidates everything after it. This is why stable prefixes make prompt-caching work.</p>
@@ -146,6 +150,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -168,6 +173,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>
