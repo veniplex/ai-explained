@@ -66,8 +66,9 @@
 [data-sec="about"]     { --pz: var(--z-control); --pz-tint: var(--t-control); --pz-mid: var(--m-control); }
 .pico { width: 18px; height: 18px; flex: none; --pi-fill: var(--pz-tint, transparent); --pi-accent: var(--pz, currentColor); transform-origin: 50% 70%; }
 .bar-links .pico { display: none; margin-left: -2px; }
-.pico-squig { display: none; position: absolute; left: 6px; right: 6px; bottom: 1px; width: calc(100% - 12px); height: 8px; color: var(--clay); pointer-events: none; }
+.pico-squig { display: none; position: absolute; left: 6px; right: 6px; bottom: 1px; width: calc(100% - 12px); height: 8px; color: var(--pz, var(--clay)); pointer-events: none; }
 .bar-links a[aria-current] .pico-squig { display: block; }
+.bar-links a[aria-current]:hover .pico-squig { display: none; } /* the hover tint and the line never show together */
 @media (min-width: 1440px) {
   .bar-links a { padding: 0 11px 0 10px; }
   .bar-links .pico { display: block; }
