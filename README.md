@@ -8,7 +8,7 @@
 </p>
 
 <p align="center">
-  <strong>How AI agents work, drawn by hand, for people who are new to it and for people who build with it.</strong><br>
+  <strong>How AI agents work, for people who are new to it and people who build with it.</strong><br>
   A free, static website. No account, no cookies, no tracking.
 </p>
 
