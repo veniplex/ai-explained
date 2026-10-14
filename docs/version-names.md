@@ -18,7 +18,6 @@ The upcoming candidates in order. A release takes the **first** row and removes 
 <!-- queue:start -->
 | Name | Year | Key contribution |
 | --- | --- | --- |
-| Radford | 2018 | GPT-1: generative pre-training of a language model |
 | Devlin | 2018 | BERT: bidirectional pre-training for language understanding |
 | Lewis | 2020 | Retrieval-augmented generation (RAG) |
 | Dosovitskiy | 2020 | The Vision Transformer: transformers for images |

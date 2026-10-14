@@ -1,0 +1,654 @@
+/* ==========================================================================
+   AI explained: stylesheet
+   One hand-drawn kitchen on a single screen that builds itself piece by piece.
+   Look: warm paper, slate ink, a clay accent and hand-drawn shapes (rough.js).
+   Every colour is a token; dark mode redefines the tokens only.
+   The tokens, base and top bar are the same as in v6; the kitchen starts at "The kitchen".
+   ========================================================================== */
+
+/* ---------- Fonts (self-hosted, SIL Open Font License) ------------------- */
+@font-face {
+  font-family: "Source Serif 4";
+  font-style: normal;
+  font-weight: 200 900;
+  font-display: swap;
+  src: url("../fonts/source-serif-4-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Source Serif 4";
+  font-style: italic;
+  font-weight: 200 900;
+  font-display: swap;
+  src: url("../fonts/source-serif-4-italic-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "DM Sans";
+  font-style: normal;
+  font-weight: 100 1000;
+  font-display: swap;
+  src: url("../fonts/dm-sans-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "DM Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../fonts/dm-mono-400-latin.woff2") format("woff2");
+}
+@font-face {
+  font-family: "DM Mono";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("../fonts/dm-mono-500-latin.woff2") format("woff2");
+}
+
+/* ---------- Tokens -------------------------------------------------------- */
+/* Light values sit on :root, dark values on [data-theme="dark"]. The script in
+   the <head> of index.html always sets data-theme (the saved choice, else the
+   system setting), so every value is written once per theme. DESIGN.md lists
+   what each token is for. */
+:root {
+  color-scheme: light;
+
+  /* Surfaces and ink */
+  --paper: #faf9f5;
+  --paper-2: #f0eee6;
+  --paper-3: #e8e5da;
+  --surface: #ffffff;
+  --ink: #141413;
+  --ink-2: #3d3d3a;
+  --ink-3: #6b6a65;
+  --ink-hover: #2f2e2b;
+  --rule: #e3e1d8;
+  --rule-strong: #cfccc0;
+  --focus: #2c6fbb;
+  --shadow: 0 2px 6px rgba(20, 20, 19, 0.06), 0 18px 48px rgba(20, 20, 19, 0.14);
+
+  /* Accent. --clay is for fills and graphics; accent text always uses --clay-ink. */
+  --clay: #d97757;
+  --clay-ink: #9e4a2d;
+  --clay-soft: #f6e0d4;
+  --clay-mid: #e9a385;
+
+  /* Sketch layer (rough.js) */
+  --sk-ink: #141413;
+  --sk-paper: #fffdf8;
+
+  /* Status: own values, so recolouring a zone never recolours a status. */
+  --ok: #4d6b2f;   --ok-soft: #e5e9d3;
+  --bad: #983e5c;  --bad-soft: #f4dee5;
+  --part: #855628; --part-soft: #f2e6cd;
+  --warn: var(--clay-ink); --warn-soft: var(--clay-soft);
+
+  /* Zones: label ink (--z), tint (--t), mid (--m). Source-type badges borrow these hues too. */
+  --z-start: #5f5d57;   --t-start: #ebe7dc;   --m-start: #cdc5b2;
+  --z-model: #5b5486;   --t-model: #e4e1f0;   --m-model: #b9b3d8;
+  --z-harness: #9e4a2d; --t-harness: #f7e3d8; --m-harness: #e9a385;
+  --z-control: #983e5c; --t-control: #f4dee5; --m-control: #dfa6b9;
+  --z-know: #56652c;    --t-know: #e5e9d3;    --m-know: #b8c38a;
+  --z-tools: #855628;   --t-tools: #f2e6cd;   --m-tools: #dbb586;
+  --z-orch: #2f6190;    --t-orch: #dce8f3;    --m-orch: #9cc0df;
+  --z-ops: #386857;     --t-ops: #dceae3;     --m-ops: #a3c8b8;
+  /* How much of the zone mid a text highlight uses; the rest is paper. */
+  --hl-mix: 100%;
+
+  /* Type */
+  --serif: "Source Serif 4", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  --sans: "DM Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: "DM Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --fs-2xs: 11px;    /* mono badges, kbd */
+  --fs-xs: 12px;     /* eyebrows, captions */
+  --fs-sm: 13.5px;   /* meta, chips, notes */
+  --fs-md: 15px;     /* UI text, lists, tables */
+  --fs-base: 16px;   /* body and reading text */
+  --fs-lg: 17.5px;   /* ledes, small headings */
+  --fs-xl: 19.5px;   /* zone and card titles */
+  --fs-2xl: 22px;    /* section headings */
+  --fs-3xl: 26px;    /* large headings, numerals */
+  --fs-4xl: 30px;    /* page titles */
+  --fs-5xl: 38px;    /* display numerals, guide title */
+  --track-caps: 0.09em;
+  --track-mono: 0.05em;
+
+  /* Shape */
+  --r-xs: 4px;
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 14px;
+  --r-xl: 18px;
+  --r-pill: 999px;
+  --dot: 9px;
+  --dot-ring: 1.6px;
+
+  /* Motion */
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --dur-fast: 0.15s;    /* hover and colour changes */
+  --dur-base: 0.25s;    /* small moves and fades */
+  --dur-slow: 0.35s;    /* panels sliding in */
+  --dur-reveal: 0.6s;   /* first-paint fades */
+  --dur-draw: 0.9s;     /* sketch strokes, connector flow */
+  --dur-boil: 0.42s;    /* one line-boil cycle */
+
+  /* Layers */
+  --z-bar: 30;
+  --z-rail: 35;
+  --z-menu: 45;
+  --z-skip: 100;
+
+  /* Layout */
+  --bar-h: 58px;
+  --gutter: clamp(16px, 2.4vw, 36px);
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --paper: #1f1e1d;
+  --paper-2: #262624;
+  --paper-3: #30302d;
+  --surface: #2a2927;
+  --ink: #f2f0e8;
+  --ink-2: #d4d1c7;
+  --ink-3: #a7a49a;
+  --ink-hover: #ffffff;
+  --rule: #383733;
+  --rule-strong: #4c4a45;
+  --focus: #7fb0ea;
+  --shadow: 0 2px 6px rgba(0, 0, 0, 0.3), 0 18px 48px rgba(0, 0, 0, 0.45);
+  --clay: #e0896a;
+  --clay-ink: #ef9f7d;
+  --clay-soft: #45302a;
+  --clay-mid: #a9654a;
+  --sk-ink: #e9e6dc;
+  --sk-paper: #34332f;
+  --ok: #b4c98a;   --ok-soft: #323624;
+  --bad: #f0abc1;  --bad-soft: #432b34;
+  --part: #ecc69c; --part-soft: #403527;
+  --z-start: #d3cfc4;   --t-start: #33312d;   --m-start: #6f6a5e;
+  --z-model: #c8c2ee;   --t-model: #312e44;   --m-model: #6f6898;
+  --z-harness: #f2a787; --t-harness: #432e27; --m-harness: #a9654a;
+  --z-control: #f0abc1; --t-control: #432b34; --m-control: #a65c76;
+  --z-know: #cdd7a0;    --t-know: #323624;    --m-know: #7b884e;
+  --z-tools: #ecc69c;   --t-tools: #403527;   --m-tools: #a17a50;
+  --z-orch: #a9cbec;    --t-orch: #273645;    --m-orch: #5a84ab;
+  --z-ops: #a9d6c4;     --t-ops: #283a33;     --m-ops: #5d8d7b;
+  /* Light ink on a full mid falls to 3.3:1; three quarters mid keeps it above 4.5:1. */
+  --hl-mix: 75%;
+}
+
+/* Zone helpers: any element with data-zone gets its colours. --zh is the text highlight. */
+[data-zone="start"]   { --zc: var(--z-start);   --zt: var(--t-start);   --zm: var(--m-start); }
+[data-zone="model"]   { --zc: var(--z-model);   --zt: var(--t-model);   --zm: var(--m-model); }
+[data-zone="harness"] { --zc: var(--z-harness); --zt: var(--t-harness); --zm: var(--m-harness); }
+[data-zone="control"] { --zc: var(--z-control); --zt: var(--t-control); --zm: var(--m-control); }
+[data-zone="know"]    { --zc: var(--z-know);    --zt: var(--t-know);    --zm: var(--m-know); }
+[data-zone="tools"]   { --zc: var(--z-tools);   --zt: var(--t-tools);   --zm: var(--m-tools); }
+[data-zone="orch"]    { --zc: var(--z-orch);    --zt: var(--t-orch);    --zm: var(--m-orch); }
+[data-zone="ops"]     { --zc: var(--z-ops);     --zt: var(--t-ops);     --zm: var(--m-ops); }
+[data-zone]           { --zh: color-mix(in srgb, var(--zm) var(--hl-mix), var(--paper)); }
+
+/* ---------- Base ----------------------------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; scroll-padding-top: calc(var(--bar-h) + 16px); }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: var(--fs-base);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+h1, h2, h3, h4 { font-family: var(--serif); font-weight: 600; line-height: 1.2; margin: 0; text-wrap: balance; letter-spacing: -0.005em; }
+p { margin: 0; }
+a { color: var(--clay-ink); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+a:hover { text-decoration-thickness: 2px; }
+button { font: inherit; color: inherit; }
+code { font-family: var(--mono); font-size: 0.88em; background: var(--paper-2); border: 1px solid var(--rule); border-radius: var(--r-sm); padding: 0.05em 0.35em; overflow-wrap: anywhere; }
+strong, b { font-weight: 650; }
+svg { display: block; }
+img { max-width: 100%; }
+[hidden] { display: none !important; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: var(--r-sm); }
+
+.visually-hidden {
+  position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+.skip-link {
+  position: absolute; left: 12px; top: -60px; z-index: var(--z-skip);
+  background: var(--ink); color: var(--paper); padding: 10px 14px; border-radius: var(--r-md); text-decoration: none;
+}
+.skip-link:focus { top: calc(env(safe-area-inset-top, 0px) + 10px); }
+
+/* ---------- Shared pieces --------------------------------------------------- */
+/* Buttons. Variants are suffixes (-ink, -ghost, -sm, -outline). Every button
+   has hover, active, focus-visible and disabled states. */
+.btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  min-height: 42px; padding: 10px 18px;
+  border: 1px solid var(--rule-strong); border-radius: var(--r-pill);
+  background: var(--surface); color: var(--ink);
+  font: 500 var(--fs-md)/1.2 var(--sans); letter-spacing: 0.005em;
+  cursor: pointer; text-decoration: none; white-space: nowrap;
+  transition: background-color var(--dur-fast), border-color var(--dur-fast), color var(--dur-fast), transform var(--dur-fast) var(--ease);
+}
+.btn:hover { background: var(--paper-2); border-color: var(--ink-3); }
+.btn svg { width: 16px; height: 16px; flex: none; }
+.btn-ink { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.btn-ink:hover { background: var(--ink-hover); border-color: var(--ink-hover); }
+.btn-ghost { background: transparent; border-color: transparent; color: var(--ink-2); }
+.btn-ghost:hover, .btn-ghost[aria-expanded="true"] { background: var(--paper-2); border-color: transparent; color: var(--ink); }
+.btn-sm { min-height: 34px; padding: 6px 14px; font-size: var(--fs-sm); }
+.icon-btn {
+  display: inline-grid; place-items: center; width: 40px; height: 40px; flex: none; padding: 0;
+  border: 1px solid transparent; border-radius: var(--r-pill); background: transparent; color: var(--ink-2); cursor: pointer;
+  transition: background-color var(--dur-fast), border-color var(--dur-fast), color var(--dur-fast), transform var(--dur-fast) var(--ease);
+}
+.icon-btn:hover { background: var(--paper-2); color: var(--ink); }
+.icon-btn svg { width: 20px; height: 20px; }
+.icon-btn-outline { border-color: var(--rule-strong); background: var(--surface); color: var(--ink); }
+.icon-btn-outline svg, .icon-btn-ink svg { width: 18px; height: 18px; }
+.icon-btn-ink { border-color: var(--ink); background: var(--ink); color: var(--paper); }
+.icon-btn-ink:hover { border-color: var(--ink-hover); background: var(--ink-hover); color: var(--paper); }
+.btn:active, .icon-btn:active { transform: translateY(1px); }
+/* No pointer events, so a disabled button never shows a hover state. */
+.btn:disabled, .icon-btn:disabled, .btn[aria-disabled="true"] { opacity: 0.35; }
+.btn:disabled, .icon-btn:disabled { pointer-events: none; }
+.link-btn {
+  border: 0; background: none; padding: 0; cursor: pointer;
+  color: var(--clay-ink); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px;
+  font: inherit; text-align: left;
+}
+.link-btn:hover { text-decoration-thickness: 2px; }
+
+/* Eyebrow: the small uppercase label above or inside a block. */
+.eyebrow, thead th, .proto .grp th {
+  font: 600 var(--fs-xs)/1.2 var(--sans); letter-spacing: var(--track-caps); text-transform: uppercase; color: var(--ink-3);
+}
+
+/* Badge: a small mono label. -clay marks steps and counts. */
+.badge {
+  display: inline-block; padding: 4px 8px; border-radius: var(--r-sm);
+  font: 500 var(--fs-2xs)/1 var(--mono); letter-spacing: var(--track-mono);
+  background: var(--paper-2); color: var(--ink-2);
+}
+.badge-clay { background: var(--clay-soft); color: var(--clay-ink); }
+
+/* Card: a bordered panel on the surface colour. Padding belongs to each use. */
+.card { border: 1px solid var(--rule); border-radius: var(--r-lg); background: var(--surface); }
+
+/* Zone dot: marks which zone a block belongs to. Needs a data-zone ancestor. */
+.zdot {
+  flex: none; width: var(--dot); height: var(--dot); border-radius: 50%;
+  background: var(--zm); box-shadow: inset 0 0 0 var(--dot-ring) var(--zc);
+}
+
+/* ---------- Top bar ------------------------------------------------------- */
+.bar {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: var(--z-bar);
+  height: var(--bar-h);
+  display: flex; align-items: center; gap: 16px;
+  padding-inline: var(--gutter);
+  background: color-mix(in srgb, var(--paper) 92%, transparent);
+  -webkit-backdrop-filter: saturate(1.2) blur(10px);
+  backdrop-filter: saturate(1.2) blur(10px);
+  border-bottom: 1px solid var(--rule);
+}
+.brand { display: flex; align-items: center; gap: 12px; min-width: 0; color: var(--ink); text-decoration: none; }
+.brand-mark { width: 30px; height: 30px; flex: none; }
+.brand-line { fill: none; stroke: var(--ink); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.brand-node-fill { fill: var(--surface); stroke: none; }
+.brand-core { fill: var(--clay); stroke: none; }
+.brand-core-edge { fill: none; stroke: var(--clay); stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round; }
+.brand-title { font: 600 var(--fs-xl)/1.1 var(--serif); letter-spacing: -0.01em; white-space: nowrap; margin: 0; }
+.brand-title em { font-style: italic; font-weight: 500; }
+.brand-sub {
+  font: 400 var(--fs-sm)/1.2 var(--sans); color: var(--ink-3); white-space: nowrap;
+  padding-left: 14px; border-left: 1px solid var(--rule-strong);
+}
+.bar-actions { margin-left: auto; display: flex; align-items: center; gap: 6px; }
+.bar-actions .btn { min-height: 40px; padding: 0 14px; gap: 8px; }
+/* The theme button shows the choice, not the colours in use: System (a screen), Light (a sun) or Dark (a moon); theme.js sets data-theme-pref. */
+.theme-icon-light, .theme-icon-dark { display: none; }
+:root[data-theme-pref="light"] .theme-icon-light, :root[data-theme-pref="dark"] .theme-icon-dark { display: block; }
+:root[data-theme-pref="light"] .theme-icon-system, :root[data-theme-pref="dark"] .theme-icon-system { display: none; }
+
+
+
+/* ---------- The kitchen ---------------------------------------------------- */
+/* One screen, no scrolling: the top bar, a row of chapter chips, the stage with the kitchen, and a console with the words and the
+   buttons. The kitchen is an SVG (the room, the things) plus a layer of HTML on top (speech, the real names), both inside one
+   "world" that is moved and scaled together: that is the camera. On a big screen the whole kitchen is always in view; on a small
+   one the camera zooms in on the place where the chef is. */
+:root {
+  --t: 1;                                  /* how long things take; shorter when the story plays fast */
+  --wall-c: color-mix(in srgb, var(--clay-soft) var(--wall-warm, 34%), var(--paper-2));
+  --floor-c: var(--paper-3);
+  --night-wash: #1b2447;
+  --console-h: 124px;
+}
+:root[data-theme="dark"] { --night-wash: #05081a; }
+:root[data-theme="dark"] { --wall-warm: 12%; }  /* how much of the warm tone the back wall has: a little in the dark theme */
+html, body { height: 100%; }
+/* The room of the scrollbar is kept on every page (nav.css); the story has nothing to scroll, so its scrollbar is only shown, and not an empty strip. */
+html { overflow-y: scroll; }
+body { display: flex; flex-direction: column; height: 100vh; height: 100dvh; overflow: hidden; }
+.bar { position: relative; flex: none; top: auto; z-index: calc(var(--z-menu) + 1); }
+
+/* Chapter chips */
+.chapbar { flex: none; position: relative; z-index: var(--z-rail); background: color-mix(in srgb, var(--paper) 92%, transparent); border-bottom: 1px solid var(--rule); }
+.pages { display: flex; gap: 0; align-items: center; justify-content: safe center; flex-wrap: nowrap; padding: 6px max(var(--gutter), env(safe-area-inset-right, 0px)) 6px max(var(--gutter), env(safe-area-inset-left, 0px)); overflow-x: auto; scrollbar-width: none; }
+.pages::-webkit-scrollbar { display: none; }
+.pg {
+  flex: none; min-width: 38px; height: 34px; padding: 0 11px; display: inline-grid; place-items: center;
+  border: 1px solid var(--rule-strong); border-radius: var(--r-pill); background: var(--surface); color: var(--ink-2);
+  font: 600 var(--fs-xs)/1 var(--mono); letter-spacing: var(--track-mono); text-decoration: none; cursor: pointer;
+  transition: background-color var(--dur-fast), border-color var(--dur-fast), transform var(--dur-fast) var(--ease);
+}
+.pg { margin-inline: 3px; }
+.pg:hover { background: var(--paper-2); border-color: var(--ink-3); }
+.pg[aria-current] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.pg.is-seen:not([aria-current]) { background: var(--clay-soft); border-color: var(--clay-mid); color: var(--clay-ink); }
+.pg.is-map:not([aria-current]) { border-style: dashed; }
+/* The steps of a chapter: small dots that make room after its chip, only for the chapter you are in. */
+.pg-steps {
+  flex: none; display: inline-flex; align-items: center; overflow: hidden; max-width: 0; opacity: 0; visibility: hidden;
+  transition: max-width var(--dur-base) var(--ease), opacity var(--dur-base), visibility 0s linear var(--dur-base);
+}
+.pg-steps.is-open { max-width: calc(var(--n) * 22px + 6px); opacity: 1; visibility: visible; transition: max-width var(--dur-base) var(--ease), opacity var(--dur-base), visibility 0s; }
+.pgs { flex: none; position: relative; width: 22px; height: 34px; padding: 0; border: 0; background: transparent; cursor: pointer; }
+.pgs::before {
+  content: ""; position: absolute; left: 50%; top: 50%; width: 9px; height: 9px; margin: -4.5px 0 0 -4.5px; border-radius: 50%;
+  border: 1.5px solid var(--ink-3); background: transparent; transition: transform var(--dur-fast), background-color var(--dur-fast), border-color var(--dur-fast);
+}
+.pgs:hover::before { transform: scale(1.3); border-color: var(--ink); }
+.pgs.is-seen::before { background: var(--clay); border-color: var(--clay); }
+.pgs[aria-current]::before { background: var(--ink); border-color: var(--ink); transform: scale(1.25); }
+.pgs:focus-visible { outline: 2px solid var(--focus); outline-offset: -2px; border-radius: var(--r-sm); }
+@media (prefers-reduced-motion: reduce) { .pg-steps, .pg-steps.is-open { transition: none; } .pgs::before { transition: none; } }
+@media (forced-colors: active) { .pgs[aria-current]::before { background: Highlight; border-color: Highlight; } .pgs.is-seen::before { background: CanvasText; } }
+
+/* The stage */
+.stage { position: relative; flex: 1 1 auto; min-height: 0; overflow: hidden; background: var(--wall-c); user-select: none; -webkit-user-select: none; cursor: pointer; touch-action: pan-y; }
+.stage:focus { outline: none; }
+.sk { position: absolute; inset: 0; width: 100%; height: 100%; display: block; overflow: hidden; }
+#world, .hworld { transform-origin: 0 0; transition: transform calc(1.1s * var(--t)) cubic-bezier(0.45, 0.05, 0.25, 1); will-change: transform; }
+.hworld { position: absolute; left: 0; top: 0; width: 0; height: 0; --bfs: 16px; --lfs: 15px; }
+.stage.is-narrow .hworld { --sign: 0.92; }
+.stage.is-jump #world, .stage.is-jump .hworld, .stage.is-jump * { transition-duration: 0.001ms !important; animation-duration: 0.001ms !important; animation-delay: 0s !important; }
+
+.room .wall { fill: var(--wall-c); }
+.room .floor { fill: var(--floor-c); }
+.night-wash { fill: var(--night-wash); opacity: 0; pointer-events: none; transition: opacity calc(1.2s * var(--t)); }
+.stage.is-night .night-wash { opacity: 0.5; }
+#kitchen { transition: opacity calc(1s * var(--t)), filter calc(1s * var(--t)); }
+.stage.is-map #kitchen { opacity: 0.3; filter: saturate(0.55); }
+
+/* Things of the kitchen: hidden until a step shows them */
+.actor { opacity: 0; pointer-events: none; transition: transform calc(1s * var(--t)) cubic-bezier(0.45, 0.05, 0.25, 1), opacity calc(0.35s * var(--t)); }
+.actor.on { opacity: 1; }
+.el { transform-box: fill-box; transform-origin: 50% 100%; }
+.pose { display: none; }
+.pose.on { display: inline; }
+.actor.walking .el { animation: waddle calc(0.5s * var(--t)) ease-in-out infinite; }
+.sk-line { stroke-dasharray: 1; stroke-dashoffset: 0; }
+
+/* The speech of a step */
+.bub { animation: bub-in calc(0.4s * var(--t)) var(--ease) both; animation-delay: calc(0.5s * var(--t) + var(--b, 0) * 0.5s * var(--t)); }
+
+/* The first thing a visitor sees: Next is the button to press */
+@media (prefers-reduced-motion: no-preference) {
+  .btn.is-hint { animation: next-nudge 1.8s var(--ease) 1.2s infinite; }
+  @keyframes next-nudge { 0%, 70%, 100% { box-shadow: 0 0 0 0 transparent; } 35% { box-shadow: 0 0 0 7px color-mix(in srgb, var(--clay) 28%, transparent); } }
+}
+
+/* Chapter banner: shown on the first step of a chapter */
+.banner {
+  position: absolute; left: 50%; top: 12px; z-index: 6; transform: translate(-50%, -8px); opacity: 0; pointer-events: none;
+  display: flex; align-items: center; gap: 12px; max-width: calc(100% - 24px); padding: 8px 18px 9px 10px; background: var(--zt, var(--surface)); color: var(--ink);
+  border: 2.5px solid var(--sk-ink); border-radius: 8px 18px 10px 16px / 16px 9px 18px 10px; box-shadow: 4px 5px 0 color-mix(in srgb, var(--sk-ink) 14%, transparent);
+  transition: opacity calc(0.4s * var(--t)), transform calc(0.5s * var(--t)) var(--ease);
+}
+.banner.is-on { opacity: 1; transform: translate(-50%, 0); }
+.banner-n { flex: none; display: grid; place-items: center; min-width: 38px; height: 38px; padding: 0 6px; border-radius: 50%; border: 2px solid var(--zc, var(--ink-3)); background: var(--surface); font: 600 var(--fs-xl)/1 var(--serif); }
+.banner-n:empty { display: none; }
+.banner-t { font: 600 clamp(18px, 2.4vw, 28px)/1.1 var(--serif); letter-spacing: -0.01em; }
+
+/* The real names, laid over the faded kitchen */
+.halo { opacity: 0; pointer-events: none; transition: opacity calc(0.3s * var(--t)); }
+.halo .sk-fill { opacity: var(--hf, 0.45); }
+.stage.is-map .halo { opacity: 1; transition: opacity calc(0.6s * var(--t)) var(--hd, 0s); }
+.stage.is-map .halo.dim { opacity: 0.14; }
+.lab {
+  position: absolute; z-index: 4; display: inline-flex; align-items: center; gap: 0.45em; max-width: none; padding: 0.28em 0.7em 0.32em 0.3em;
+  background: var(--zt, var(--surface)); color: var(--ink); border: 2px solid var(--zc, var(--sk-ink)); border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+  font: 650 var(--lfs, 15px)/1.15 var(--sans); white-space: nowrap; cursor: pointer; opacity: 0; pointer-events: none;
+  transform: translate(-50%, -50%) scale(0.85); box-shadow: 2px 3px 0 color-mix(in srgb, var(--sk-ink) 16%, transparent);
+  visibility: hidden;
+  transition: opacity calc(0.4s * var(--t)), transform calc(0.4s * var(--t)) var(--ease), visibility 0s linear calc(0.4s * var(--t));
+}
+.lab::after { content: ""; position: absolute; inset: -4px; }
+.lab:hover { z-index: 5; border-color: var(--ink); }
+.stage.is-map .lab {
+  opacity: 1; pointer-events: auto; transform: translate(-50%, -50%); visibility: visible;
+  transition: opacity calc(0.5s * var(--t)) var(--ld, 0s), transform calc(0.5s * var(--t)) var(--ease) var(--ld, 0s), visibility 0s;
+}
+.stage.is-map .lab.dim { opacity: 0.32; }
+.stage.is-map .lab.is-open { opacity: 1; z-index: 6; background: var(--zm, var(--clay-soft)); }
+/* A term in focus (the pointer rests on it, or its card is pinned): the others step back. */
+.stage.is-map.has-open .halo:not(.is-open) { opacity: 0.16; }
+.stage.is-map.has-open .lab:not(.is-open) { opacity: 0.5; }
+.stage.is-map.is-quick .lab, .stage.is-map.is-quick .halo { transition-delay: 0s; transition-duration: 0.2s; }
+.stage.is-map .halo.is-open .sk-fill { opacity: calc(var(--hf, 0.45) + 0.2); }
+.lab-n { flex: none; display: grid; place-items: center; width: 1.55em; height: 1.55em; border-radius: 50%; background: var(--zc, var(--ink)); color: var(--paper); font: 700 0.78em/1 var(--mono); }
+.stage.is-narrow .lab { padding: 0.12em; }
+.stage.is-narrow .lab::after { inset: -12px; }
+.stage.is-narrow .lab-t { display: none; }
+.stage.is-narrow.is-zoom .lab { padding: 0.28em 0.7em 0.32em 0.3em; }
+.stage.is-narrow.is-zoom .lab-t { display: inline; }
+.stage.is-narrow.is-zoom .lab-n { font-size: 0.78em; }
+.stage.is-narrow.is-zoom .lab.dim { padding: 0.12em; }
+.stage.is-narrow.is-zoom .lab.dim .lab-t { display: none; }
+.stage.is-narrow .lab-n { font-size: 0.95em; }
+
+.defcard {
+  position: absolute; z-index: 8; width: min(340px, calc(100% - 20px)); max-height: calc(100% - 16px); overflow-y: auto; overscroll-behavior: contain; padding: 12px 16px 14px; background: var(--surface); color: var(--ink); cursor: default;
+  border: 2.5px solid var(--zc, var(--sk-ink)); border-radius: 8px 18px 10px 16px / 16px 9px 18px 10px; box-shadow: var(--shadow);
+}
+.defcard h2 { font: 600 var(--fs-xl)/1.2 var(--serif); margin: 2px 0 6px; padding-right: 22px; }
+.defcard h2:focus { outline: none; }
+.defcard .eyebrow { padding-right: 36px; }
+.defcard .eyebrow { color: var(--zc, var(--ink-3)); }
+.defcard .def-text { font-size: var(--fs-md); line-height: 1.5; color: var(--ink-2); }
+.defcard .def-more { display: inline-block; margin-top: 8px; font: 500 var(--fs-2xs)/1 var(--mono); letter-spacing: var(--track-mono); text-transform: uppercase; }
+.defcard-x { position: absolute; right: 2px; top: 0; width: 44px; height: 44px; border: 0; background: none; font-size: 22px; line-height: 1; color: var(--ink-3); cursor: pointer; border-radius: 50%; }
+.defcard-x:hover { background: var(--paper-2); color: var(--ink); }
+
+/* The console: where you are, what is said, and the buttons */
+.console {
+  flex: none; position: relative; display: flex; align-items: center; gap: 20px; min-height: var(--console-h);
+  padding: 14px max(var(--gutter), env(safe-area-inset-right, 0px)) max(12px, env(safe-area-inset-bottom, 0px)) max(var(--gutter), env(safe-area-inset-left, 0px));
+  background: var(--surface); border-top: 1px solid var(--rule-strong); z-index: var(--z-menu);
+}
+.narr { flex: 1 1 auto; min-width: 0; max-width: 62rem; }
+.where { display: flex; align-items: baseline; gap: 8px; margin-bottom: 4px; font: 600 var(--fs-xs)/1.2 var(--sans); letter-spacing: var(--track-caps); text-transform: uppercase; color: var(--zc, var(--ink-3)); }
+.where .dotsep { color: var(--ink-3); }
+.where #chno { flex: none; white-space: nowrap; }
+.where #chname { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.where .stepn { margin-left: auto; padding-left: 12px; font: 500 var(--fs-2xs)/1 var(--mono); letter-spacing: var(--track-mono); color: var(--ink-3); white-space: nowrap; }
+.cap { min-height: max(2.84em, var(--cap-h, 0px)); font: 400 clamp(16px, 1.45vw, 21px)/1.42 var(--serif); color: var(--ink); text-wrap: pretty; }
+.cap-hint { color: var(--ink-2); font-style: italic; }
+.cap strong { font-weight: 650; background: linear-gradient(transparent 58%, var(--zh, var(--clay-soft)) 58%); padding: 0 2px; }
+.cap.is-new { animation: cap-in calc(0.45s * var(--t)) var(--ease) both; }
+.ctrl { flex: none; display: flex; align-items: center; gap: 6px; }
+.ctrl .btn { min-height: 44px; }
+.ctrl .btn-ghost { color: var(--ink); }
+.ctrl .btn.is-on { background: var(--clay-soft); color: var(--clay-ink); }
+.speed { gap: 6px; padding-inline: 10px; }
+.speed svg { width: 30px; height: 20px; }
+.speed .chev { opacity: 0.25; transition: opacity var(--dur-fast); }
+.speed[data-speed="3"] .c1, .speed[data-speed="2"] .c1, .speed[data-speed="2"] .c2, .speed[data-speed="1"] .chev { opacity: 1; }
+.speed-n { min-width: 2.2em; text-align: center; font: 500 var(--fs-sm)/1 var(--mono); letter-spacing: var(--track-mono); }
+.scrub {
+  position: absolute; left: 8px; right: 8px; top: -14px; width: calc(100% - 16px); height: 28px; margin: 0; padding: 0; background: transparent; cursor: pointer; -webkit-appearance: none; appearance: none;
+}
+.scrub::-webkit-slider-runnable-track { height: 4px; background: linear-gradient(to right, var(--clay) var(--p, 0%), var(--ink-3) var(--p, 0%)); border-radius: 2px; }
+.scrub::-moz-range-track { height: 4px; background: var(--ink-3); border-radius: 2px; }
+.scrub::-moz-range-progress { height: 4px; background: var(--clay); border-radius: 2px; }
+.scrub::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; margin-top: -6px; border-radius: 50%; background: var(--ink); border: 2px solid var(--surface); }
+.scrub::-moz-range-thumb { width: 12px; height: 12px; border-radius: 50%; background: var(--ink); border: 2px solid var(--surface); }
+.scrub:focus-visible { outline-offset: 0; }
+
+/* Fingers: bigger chips, a bigger grip on the scrubber and a bigger target for the link under the caption. */
+@media (pointer: coarse) {
+  .pages { padding-block: 4px; }
+  .pg { min-width: 40px; height: 40px; }
+  .pg-steps.is-open { max-width: calc(var(--n) * 30px + 6px); }
+  .pgs { width: 30px; height: 40px; }
+  .scrub { height: 36px; top: -18px; }
+  .scrub::-webkit-slider-thumb { width: 22px; height: 22px; margin-top: -9px; }
+  .scrub::-moz-range-thumb { width: 18px; height: 18px; }
+  .console .cap a.cap-more { display: inline-block; padding-block: 9px; margin-block: -9px; font-size: 0.9em; }
+}
+
+.noscript { position: absolute; z-index: 9; left: 0; right: 0; top: 0; max-width: 40rem; margin: 40px auto; padding: 0 var(--gutter); color: var(--ink-2); background: var(--paper); }
+
+/* ---------- Motion ---------------------------------------------------------- */
+@media (prefers-reduced-motion: no-preference) {
+  .actor.is-new .el { animation: el-in calc(0.6s * var(--t)) var(--ease) both; animation-delay: var(--rd, 0s); }
+  .actor.is-new .sk-line { animation: ink-draw calc(0.8s * var(--t)) ease-out both; animation-delay: var(--rd, 0s); }
+  .actor.on .amb-blink { animation: blink 4.6s infinite; }
+  .actor.on .amb-bob { animation: bob 3.2s ease-in-out infinite; }
+  .actor.on .amb-steam { animation: steam 2.6s ease-in-out infinite; }
+  .actor.on .amb-ring { animation: wiggle 0.5s ease-in-out infinite; }
+  .actor.on .amb-shake { animation: shake 0.28s linear infinite; }
+  .actor.on .amb-flicker { animation: flicker 0.9s ease-in-out infinite; }
+  .actor.on .amb-spin { animation: spin 14s linear infinite; }
+  .actor.on .amb-spin-slow { animation: spin 22s linear infinite; }
+  .actor.on .amb-pulse { animation: pulse 1.8s ease-in-out infinite; }
+}
+@keyframes ink-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes cap-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@keyframes el-in {
+  from { opacity: 0; transform: translate(var(--fx, 0px), calc(var(--fy, 0px) - 18px)) scale(0.92); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes bub-in { from { opacity: 0; transform: scale(0.8) translateY(6px); } to { opacity: 1; transform: none; } }
+@keyframes waddle { 0%, 100% { transform: rotate(-2.4deg) translateY(0); } 25% { transform: rotate(0deg) translateY(-6px); } 50% { transform: rotate(2.4deg) translateY(0); } 75% { transform: rotate(0deg) translateY(-6px); } }
+@keyframes blink { 0%, 94%, 100% { transform: scaleY(1); } 96.5% { transform: scaleY(0.12); } }
+@keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+@keyframes steam { 0% { opacity: 0; transform: translateY(6px) scaleY(0.8); } 40% { opacity: 1; } 100% { opacity: 0; transform: translateY(-8px) scaleY(1.1); } }
+@keyframes wiggle { 0%, 100% { transform: rotate(-4deg); } 50% { transform: rotate(4deg); } }
+@keyframes shake { 0%, 100% { transform: translateX(-1.5px); } 50% { transform: translateX(1.5px); } }
+@keyframes flicker { 0%, 100% { transform: scaleY(1) scaleX(1); } 50% { transform: scaleY(1.1) scaleX(0.94); } }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition-duration: 0.01ms !important; transition-delay: 0s !important; animation: none !important; }
+}
+
+/* ---------- Responsive ------------------------------------------------------ */
+/* The version tab hangs under the right end of the bar from 761px: the chips keep out of its way. */
+@media (min-width: 761px) and (max-width: 1100px) { .pages { padding-right: calc(var(--gutter) + 124px); } }
+@media (max-width: 900px) {
+  :root { --console-h: 0px; }
+  .console { flex-wrap: wrap; gap: 8px; align-items: stretch; padding-top: 16px; }
+  .narr { flex: 1 1 100%; max-width: none; }
+  .ctrl { flex: 1 1 100%; justify-content: space-between; }
+  .brand-sub { display: none; }
+}
+@media (max-width: 560px) {
+  .ctrl .btn-label-long { display: none; }
+  .ctrl .btn { padding-inline: 14px; }
+  .cap { font-size: 16px; }
+  .banner { top: 8px; }
+}
+@media (max-width: 380px) { .cap { font-size: 15px; } }
+/* A stage that is not much taller than the card (a small phone): the card gets compact, whatever the screen. */
+.stage.is-short .defcard { padding: 8px 14px 10px; }
+.stage.is-short .defcard .eyebrow { display: none; }
+.stage.is-short .defcard h2 { margin-bottom: 2px; }
+.stage.is-short .defcard .def-text { font-size: var(--fs-md); line-height: 1.4; }
+.stage.is-short .defcard .def-links { margin-top: 6px; gap: 2px 14px; }
+.stage.is-short .defcard .def-links .btn { min-height: 36px; }
+@media (max-height: 520px) {
+  .chapbar { display: none; }
+  .banner { display: none; }
+  .defcard { padding: 8px 14px 10px; width: min(600px, calc(100% - 20px)); }
+  .defcard .eyebrow { display: none; }
+  .defcard .def-text { font-size: 14px; line-height: 1.4; }
+  .defcard .def-links { margin-top: 6px; gap: 2px 14px; }
+  .defcard .def-links .btn { min-height: 32px; padding: 2px 10px; font-size: 14px; }
+  .console { padding-top: 8px; padding-bottom: max(8px, env(safe-area-inset-bottom, 0px)); }
+  .cap { font-size: 15px; }
+}
+
+/* A phone on its side: the buttons sit beside the words, so the picture gets the height. */
+@media (max-height: 520px) and (min-width: 600px) {
+  .console { flex-wrap: nowrap; align-items: center; gap: 16px; }
+  .narr { flex: 1 1 auto; }
+  .ctrl { flex: none; }
+  .ctrl .btn-label-long { display: none; }
+  .ctrl .btn { padding-inline: 14px; }
+}
+
+/* ---------- Forced colours and print ----------------------------------------- */
+@media (forced-colors: active) {
+  .bub, .lab, .banner, .defcard { border-color: CanvasText; }
+  .pg[aria-current], .btn.is-on { forced-color-adjust: none; background: Highlight; color: HighlightText; }
+  .scrub::-webkit-slider-runnable-track { background: CanvasText; }
+  .scrub::-moz-range-track { background: CanvasText; }
+}
+@media print {
+  .bar, .chapbar, .console, .skip-link { display: none !important; }
+  body { height: auto; overflow: visible; }
+}
+
+/* Speech, thoughts, signs and sound effects sit on top of the drawing and scale with it */
+.bub {
+  position: absolute; z-index: 2; width: max-content; max-width: max(var(--mw, 220px), var(--bmin, 0px));
+  padding: 0.45em 0.75em 0.5em; background: var(--surface); color: var(--ink);
+  border: 2px solid var(--sk-ink); border-radius: 255px 16px 225px 16px / 16px 225px 16px 255px;
+  font: italic 600 var(--bfs, 16px)/1.28 var(--serif); text-wrap: balance;
+}
+.bub strong { font-weight: 750; }
+.bub::before, .bub::after { content: ""; position: absolute; width: 0; height: 0; border-style: solid; border-color: transparent; }
+/* tails: bl = down and left, br = down and right, tl / tr = up */
+.bub.t-bl::before { left: 18%; top: 100%; border-width: 16px 11px 0 0; border-top-color: var(--sk-ink); margin-top: -1px; }
+.bub.t-bl::after { left: calc(18% + 2.5px); top: 100%; border-width: 11px 7px 0 0; border-top-color: var(--surface); margin-top: -3px; }
+.bub.t-br::before { right: 18%; top: 100%; border-width: 16px 0 0 11px; border-top-color: var(--sk-ink); margin-top: -1px; }
+.bub.t-br::after { right: calc(18% + 2.5px); top: 100%; border-width: 11px 0 0 7px; border-top-color: var(--surface); margin-top: -3px; }
+.bub.t-tl::before { left: 18%; bottom: 100%; border-width: 0 11px 16px 0; border-bottom-color: var(--sk-ink); margin-bottom: -1px; }
+.bub.t-tl::after { left: calc(18% + 2.5px); bottom: 100%; border-width: 0 7px 11px 0; border-bottom-color: var(--surface); margin-bottom: -3px; }
+.bub.t-tr::before { right: 18%; bottom: 100%; border-width: 0 0 16px 11px; border-bottom-color: var(--sk-ink); margin-bottom: -1px; }
+.bub.t-tr::after { right: calc(18% + 2.5px); bottom: 100%; border-width: 0 0 11px 7px; border-bottom-color: var(--surface); margin-bottom: -3px; }
+.bub.t-l::before { right: 100%; top: 40%; border-width: 8px 15px 8px 0; border-right-color: var(--sk-ink); margin-right: -1px; }
+.bub.t-l::after { right: 100%; top: calc(40% + 3px); border-width: 5px 10px 5px 0; border-right-color: var(--surface); margin-right: -3px; }
+.bub.t-r::before { left: 100%; top: 40%; border-width: 8px 0 8px 15px; border-left-color: var(--sk-ink); margin-left: -1px; }
+.bub.t-r::after { left: 100%; top: calc(40% + 3px); border-width: 5px 0 5px 10px; border-left-color: var(--surface); margin-left: -3px; }
+/* thought: a cloud with two small bubbles */
+.bub.think { border-radius: 40% 46% 42% 48% / 52% 44% 50% 46%; text-align: center; padding: 0.6em 0.95em 0.65em; }
+.bub.think::before, .bub.think::after { border: 2px solid var(--sk-ink); background: var(--surface); border-radius: 50%; }
+.bub.think::before { width: 0.7em; height: 0.7em; left: 16%; top: calc(100% + 0.2em); }
+.bub.think::after { width: 0.4em; height: 0.4em; left: 10%; top: calc(100% + 1em); margin: 0; }
+.bub.think.t-br::before { left: auto; right: 16%; border-width: 2px; border-top-color: var(--sk-ink); margin: 0; }
+.bub.think.t-br::after { left: auto; right: 10%; border-width: 2px; border-top-color: var(--sk-ink); margin: 0; }
+.bub.think.t-bl::before, .bub.think.t-bl::after { border-width: 2px; border-top-color: var(--sk-ink); margin: 0; }
+.bub.think.t-bl::before { width: 0.7em; height: 0.7em; }
+/* sign or note: square, mono */
+.bub.sign { border-radius: 3px 5px 3px 6px; background: var(--part-soft); font: 500 calc(var(--bfs, 16px) * var(--sign, 0.85))/1.3 var(--mono); font-style: normal; transform: rotate(-1.2deg); }
+.bub.sign::before, .bub.sign::after { display: none; }
+/* shout: loud */
+.bub.shout { background: var(--clay-soft); border-width: 2.5px; font-style: normal; font-weight: 750; letter-spacing: 0.01em; }
+/* sound effect: letters only */
+.bub.sfx { background: none; border: 0; padding: 0; border-radius: 0; font: italic 800 calc(var(--bfs, 16px) * 1.6)/1 var(--serif); color: var(--clay-ink); transform: rotate(-6deg); }
+.bub.sfx::before, .bub.sfx::after { display: none; }
+.bub.right-align { text-align: right; }

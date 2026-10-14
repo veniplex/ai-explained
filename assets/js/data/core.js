@@ -6,7 +6,7 @@ window.AE3 = window.AE3 || {};
 (function (AE3) {
   "use strict";
 
-  AE3.meta = { updated: "2026-10-13", snapshot: "October 2026", repo: "https://github.com/veniplex/ai-explained" };
+  AE3.meta = { updated: "2026-10-14", snapshot: "October 2026", repo: "https://github.com/veniplex/ai-explained" };
 
   AE3.hero = { title: "How an AI agent works", minutes: 9 };
 

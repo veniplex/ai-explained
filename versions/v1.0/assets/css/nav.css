@@ -1,0 +1,364 @@
+/* ==========================================================================
+   AI explained: the top bar, the same on every page, and the pieces that belong to it. Loaded after the stylesheet of the page
+   (style.css or kitchen.css), so it settles what they leave open. Tokens only, as in DESIGN.md.
+     - the bar: the brand, the search (a field-like button in the middle), the GitHub button with its star count, the theme button (System, Light, Dark); from 1340px
+       the six places sit on the same row, below that they move into a menu (the hamburger). Nothing in it moves from one page to the next.
+     - the version tab: a small tab that hangs from the right edge of the bar and goes with it (on a phone the version button is at the foot of the menu)
+     - the search: the button in the bar and the window it opens, with the field and the hits (search.js; the story has no search styles of its own)
+     - the hover card of a term (popover.js), the button back to the top (totop.js)
+     - the lists of the glossary and of guides (glossary, notes and guide pages: pages.css)
+   ========================================================================== */
+
+:root {
+  --bar-main-h: 60px;
+  --actions-w: 232px; /* the room of the GitHub button, the theme button and the menu */
+  --inset-l: env(safe-area-inset-left, 0px);  /* the notch of a phone held sideways (the page is set to cover the screen) */
+  --inset-r: env(safe-area-inset-right, 0px);
+  --bar-h: var(--bar-main-h);
+  --z-search: 60;   /* the list of hits, above the menus */
+  --z-pop: 70;      /* the hover card, above everything but the skip link */
+  --scrim: rgba(20, 20, 19, 0.5); /* what dims the page behind the search window */
+}
+:root[data-theme="dark"] { --scrim: rgba(0, 0, 0, 0.62); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --scrim: rgba(0, 0, 0, 0.62); } }
+@media (max-width: 760px) {
+  :root { --bar-main-h: 54px; }
+}
+
+/* ---------- The bar: brand, places, search, actions ------------------------------ */
+/* Nothing in the bar changes place from one page to the next: the scrollbar's room is always kept (see the end of this file), the current place is marked without
+   changing the width of its word, and the actions at the right have a width of their own, so the star count arriving late moves nothing else. */
+.bar { display: block; height: auto; padding: 0; gap: 0; background: var(--paper); -webkit-backdrop-filter: none; backdrop-filter: none; }
+.bar-main {
+  position: relative; height: var(--bar-main-h); padding-inline: max(var(--gutter), var(--inset-l)) max(var(--gutter), var(--inset-r));
+  display: grid; grid-template-columns: auto auto minmax(0, 1fr) var(--actions-w); align-items: center; column-gap: 16px;
+}
+.bar-main .brand { justify-self: start; }
+/* The deep dive and the story each shrink the brand and the menu button in their own way on a narrow window; here they are one, so the bar is the same on every page. */
+.bar .brand-mark { width: 30px; height: 30px; }
+/* A hit area of 44px for the brand and the GitHub pill (the mark alone is 30px, the pill 36px), without moving anything. */
+.bar .brand, .gh-pill { position: relative; }
+.bar .brand::after { content: ""; position: absolute; inset: -7px -8px; }
+.gh-pill::after { content: ""; position: absolute; inset: -4px -2px; }
+.bar .brand-title { font-size: var(--fs-xl); letter-spacing: -0.01em; line-height: 1.1; }
+.bar .site-menu > summary { padding-inline: 12px; }
+.bar-main .search { justify-self: center; width: 100%; max-width: 380px; min-width: 0; }
+.bar-main .bar-actions { justify-self: end; margin-left: 0; gap: 4px; justify-content: flex-end; width: 100%; }
+/* Each place is a pill of its own, so a long label with a colon in it ("AI Agents: Technical Deep Dive") reads as one item and not as several. The current
+   place is the ink pill (as in the menu); its weight does not change, so no word changes width. */
+.bar-links { display: flex; align-items: center; gap: 6px; }
+.bar-links a {
+  position: relative; display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 12px; border: 1px solid transparent; border-radius: var(--r-pill); background: transparent; color: var(--ink-2); text-decoration: none; white-space: nowrap;
+  font: 500 var(--fs-sm)/1.2 var(--sans); transition: background-color var(--dur-fast), color var(--dur-fast), border-color var(--dur-fast);
+}
+.bar-links a:hover { background: var(--pz-tint, var(--paper-3)); border-color: var(--pz, var(--rule-strong)); color: var(--ink); }
+.bar-links a:focus-visible { outline: 2px solid var(--focus); outline-offset: 1px; }
+.bar-links a[aria-current] { color: var(--ink); }
+
+/* ---------- The bar with some life: a small drawing for each place (no boxes round them), a squiggle under the current one, a little bounce on hover ----------------------------- */
+/* The drawings are one sprite in the shell (docs/logo/nav-icons.js); each place has the colours of one of the map's zones (the same as on the start page), the lines are the
+   text colour. The bar stays one row of one height: the drawings only appear where the centred middle has room for them (from 1440px) and in the menu. */
+[data-sec="start"]     { --pz: var(--z-harness); --pz-tint: var(--t-harness); --pz-mid: var(--m-harness); }
+[data-sec="story"]     { --pz: var(--z-tools);   --pz-tint: var(--t-tools);   --pz-mid: var(--m-tools); }
+[data-sec="technical"] { --pz: var(--z-orch);    --pz-tint: var(--t-orch);    --pz-mid: var(--m-orch); }
+[data-sec="guides"]    { --pz: var(--z-know);    --pz-tint: var(--t-know);    --pz-mid: var(--m-know); }
+[data-sec="glossary"]  { --pz: var(--z-model);   --pz-tint: var(--t-model);   --pz-mid: var(--m-model); }
+[data-sec="about"]     { --pz: var(--z-control); --pz-tint: var(--t-control); --pz-mid: var(--m-control); }
+.pico { width: 18px; height: 18px; flex: none; --pi-fill: var(--pz-tint, transparent); --pi-accent: var(--pz, currentColor); transform-origin: 50% 70%; }
+.bar-links .pico { display: none; margin-left: -2px; }
+.pico-squig { display: none; position: absolute; left: 6px; right: 6px; bottom: 1px; width: calc(100% - 12px); height: 8px; color: var(--pz, var(--clay)); pointer-events: none; }
+.bar-links a[aria-current] .pico-squig { display: block; }
+.bar-links a[aria-current]:hover .pico-squig { display: none; } /* the hover tint and the line never show together */
+@media (min-width: 1440px) {
+  .bar-links a { padding: 0 11px 0 10px; }
+  .bar-links .pico { display: block; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .bar-links a { transition: background-color var(--dur-fast), color var(--dur-fast), border-color var(--dur-fast), transform 0.32s cubic-bezier(0.34, 1.7, 0.5, 1); }
+  .bar-links a:hover { transform: translateY(-2px) rotate(-1.2deg); }
+  .bar-links a:nth-child(even):hover { transform: translateY(-2px) rotate(1.2deg); }
+  .bar-links a:active { transform: translateY(0) scale(0.96); transition-duration: 0.08s; }
+  .bar-links a:hover .pico { animation: pico-wiggle 0.5s ease-in-out; }
+  .bar-links a[aria-current] .pico-squig { animation: squig-draw 0.55s ease-out both; }
+  .brand:hover .brand-mark { animation: pico-wiggle 0.6s ease-in-out; }
+  .gh-pill:hover .gh-stars svg { animation: star-spin 0.6s cubic-bezier(0.34, 1.4, 0.5, 1); }
+  .search-trigger:hover svg { animation: pico-wiggle 0.5s ease-in-out; }
+  .icon-btn:hover svg { animation: pico-wiggle 0.5s ease-in-out; }
+}
+@keyframes pico-wiggle { 0% { transform: none; } 25% { transform: rotate(-12deg) scale(1.12); } 55% { transform: rotate(9deg) scale(1.12); } 80% { transform: rotate(-4deg); } 100% { transform: none; } }
+@keyframes star-spin { from { transform: rotate(0) scale(1); } 50% { transform: rotate(180deg) scale(1.35); } to { transform: rotate(360deg) scale(1); } }
+@keyframes squig-draw { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+@media (forced-colors: active) { .bar-links a:hover { border-color: CanvasText; } .bar-links a[aria-current] .pico-squig { color: Highlight; forced-color-adjust: none; } }
+@media (max-width: 1339px) {
+  .bar-links { display: none; }
+  .bar-main { grid-template-columns: minmax(auto, 1fr) minmax(0, 380px) minmax(auto, 1fr); }
+}
+/* The menu is the way to the places where the bar has no room for them. */
+@media (min-width: 1340px) { .site-menu { display: none; } }
+/* From 1340px up everything is on one row: the brand at the left, the six places exactly in the middle of the window, and the search and the buttons at the right.
+   The two outer columns are equal (1fr each), so the places stay centred; the search takes the room the right column has left and turns into a plain magnifier
+   when that is little (the container queries below). Below 1340px the places are in the menu and the search is in the middle. */
+.bar-right { display: contents; }
+@media (min-width: 1340px) {
+  .bar-main { grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); }
+  .bar-main .brand { grid-column: 1; grid-row: 1; }
+  .bar-links { grid-column: 2; grid-row: 1; justify-self: center; }
+  .bar-right { display: flex; grid-column: 3; grid-row: 1; align-items: center; justify-content: flex-end; gap: 12px; min-width: 0; }
+  .bar-right .search { flex: 0 1 270px; width: auto; min-width: 40px; max-width: none; container-type: inline-size; }
+  .bar-right .bar-actions { flex: none; width: auto; }
+  .bar-right .search-trigger { height: 36px; }
+}
+@container (max-width: 199px) { .search-trigger kbd { display: none; } }
+@container (max-width: 104px) { .search-trigger { width: 36px; margin-left: auto; padding: 0; justify-content: center; } .search-trigger .st-text { display: none; } }
+
+/* ---------- The GitHub button: a pill with the name and the number of stars -------------------- */
+.gh-pill {
+  display: inline-flex; align-items: center; gap: 7px; height: 36px; padding: 0 12px; margin-right: 4px; border: 1px solid var(--rule-strong); border-radius: var(--r-pill);
+  background: var(--surface); color: var(--ink); text-decoration: none; font: 500 var(--fs-sm)/1 var(--sans);
+  transition: background-color var(--dur-fast), border-color var(--dur-fast);
+}
+.gh-pill { justify-content: center; min-width: 140px; } /* the width it has with the count, so the count arriving (or not) changes nothing */
+.gh-pill:hover { background: var(--paper-2); border-color: var(--ink-3); }
+.gh-pill:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.gh-mark { width: 17px; height: 17px; flex: none; }
+.gh-stars { display: inline-flex; align-items: center; gap: 4px; margin-left: 1px; padding-left: 8px; border-left: 1px solid var(--rule-strong); color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.gh-stars[hidden] { display: none; }
+.gh-stars svg { width: 13px; height: 13px; flex: none; color: var(--clay); }
+@media (max-width: 1339px) { .gh-name { display: none; } .gh-pill { padding: 0 10px; min-width: 84px; } }
+@media (max-width: 400px) { .gh-stars { display: none; } .gh-pill { min-width: 0; } }
+
+/* ---------- The menu: below 1340px it holds the places the bar has no room for ----------------- */
+.site-menu { position: relative; }
+.site-menu > summary { list-style: none; cursor: pointer; gap: 6px; user-select: none; }
+.site-menu > summary::-webkit-details-marker { display: none; }
+.site-menu > summary::marker { content: ""; }
+.site-menu > summary svg { width: 18px; height: 18px; flex: none; }
+.site-menu[open] > summary { background: var(--paper-2); color: var(--ink); }
+.site-menu > summary:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.site-menu-panel {
+  position: absolute; top: calc(100% + 8px); right: 0; z-index: var(--z-menu, 45);
+  width: min(380px, calc(100vw - 32px)); max-height: calc(100vh - var(--bar-main-h) - 24px); max-height: calc(100dvh - var(--bar-main-h) - 24px);
+  overflow-y: auto; overscroll-behavior: contain; padding: 8px;
+  background: var(--surface); border: 1px solid var(--rule-strong); border-radius: var(--r-lg); box-shadow: var(--shadow);
+  transform-origin: top right; animation: menu-in 0.16s ease-out;
+}
+.site-menu-panel ul { margin: 0; padding: 0; list-style: none; }
+.site-menu-panel li { margin: 0; }
+.menu-head { padding: 10px 10px 4px; font: 500 var(--fs-2xs)/1.2 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--clay-ink); }
+.menu-head:first-child { padding-top: 4px; }
+.site-menu-panel a:not(.vs-item) {
+  display: grid; gap: 2px; padding: 9px 10px; border-radius: var(--r-md); color: var(--ink); text-decoration: none;
+  transition: background-color var(--dur-fast);
+}
+.site-menu-panel a:not(.vs-item) { grid-template-columns: 34px minmax(0, 1fr); column-gap: 10px; align-items: center; }
+.site-menu-panel a:not(.vs-item) .pico { grid-row: 1 / span 2; width: 34px; height: 34px; padding: 5px; border-radius: 50%; background: var(--pz-tint); box-sizing: border-box; }
+.site-menu-panel a:not(.vs-item) b { font: 600 var(--fs-base)/1.3 var(--sans); }
+.site-menu-panel a:not(.vs-item) span { font: 400 var(--fs-sm)/1.4 var(--sans); color: var(--ink-3); }
+.site-menu-panel a:not(.vs-item):hover, .site-menu-panel a:not(.vs-item):focus-visible { background: var(--paper-2); }
+.site-menu-panel a:not(.vs-item):focus-visible { outline: 2px solid var(--focus); outline-offset: -2px; }
+.site-menu-panel a:not(.vs-item)[aria-current] { background: var(--pz-tint); box-shadow: inset 0 0 0 1px var(--pz); }
+.site-menu-panel a:not(.vs-item)[aria-current] .pico { background: var(--paper); }
+@keyframes menu-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .site-menu-panel { animation: none; } }
+@media (prefers-reduced-motion: no-preference) { .site-menu-panel a:not(.vs-item):hover .pico { animation: pico-wiggle 0.5s ease-in-out; } }
+@media (max-width: 760px) {
+  .site-menu { position: static; }
+  .site-menu-panel { left: 12px; right: 12px; width: auto; top: calc(var(--bar-main-h) + env(safe-area-inset-top, 0px) - 4px); position: fixed; }
+}
+@media (max-width: 640px) { .site-menu-label { display: none; } .bar .site-menu > summary { padding-inline: 10px; } }
+@media (forced-colors: active) { .site-menu-panel a:not(.vs-item)[aria-current] { forced-color-adjust: none; background: Highlight; } .site-menu-panel a:not(.vs-item)[aria-current] b, .site-menu-panel a:not(.vs-item)[aria-current] span { color: HighlightText; } }
+
+/* The version button in the foot of the menu (a phone: the tab would cover the page there): quiet, and the list opens in place, inside the panel. */
+.menu-foot { margin-top: 6px; padding-top: 6px; border-top: 1px solid var(--rule); }
+.menu-foot:empty { display: none; }
+.menu-foot .vs { display: block; position: static; }
+.menu-foot .vs-btn { width: 100%; justify-content: space-between; min-height: 44px; padding: 0 10px; font: 400 var(--fs-sm)/1 var(--sans); color: var(--ink-3); }
+.menu-foot .vs-btn .vs-label::before { content: "Version\00a0"; }
+.menu-foot .vs-btn.is-old { color: var(--clay-ink); }
+.menu-foot .vs .vs-menu, .menu-foot .vs.is-right .vs-menu { position: static; width: auto; max-height: min(320px, 42dvh); margin-top: 6px; padding: 4px; box-shadow: none; transform: none; border-color: var(--rule); }
+.menu-foot .vs .vs-full { display: inline; }
+.menu-foot .vs .vs-short { display: none; }
+
+/* ---------- The version tab: a small tab that hangs from the right edge of the bar and goes with it --------- */
+.version-tab { position: absolute; top: 100%; right: max(var(--gutter), var(--inset-r)); z-index: 1; margin-top: -1px; }
+.version-tab .vs { display: block; }
+.version-tab .vs-btn {
+  min-height: 0; height: 26px; padding: 0 10px 0 11px; gap: 5px; border: 1px solid var(--rule); border-top: 0; border-radius: 0 0 var(--r-md) var(--r-md);
+  background: var(--paper); color: var(--ink-3); font: 500 var(--fs-xs)/1 var(--mono); letter-spacing: 0.02em;
+}
+.version-tab .vs-btn:hover, .version-tab .vs-btn[aria-expanded="true"] { background: var(--paper-2); color: var(--ink); }
+.version-tab .vs-btn.is-old { color: var(--clay-ink); }
+.version-tab .vs-btn:focus-visible { outline: 2px solid var(--focus); outline-offset: 1px; }
+.version-tab .vs-chevron { width: 12px; height: 12px; }
+.version-tab .vs { position: relative; }
+.version-tab .vs .vs-full { display: inline; }
+.version-tab .vs .vs-short { display: none; }
+.version-tab .vs .vs-menu, .version-tab .vs.is-right .vs-menu { left: auto; right: 0; top: calc(100% + 6px); width: min(320px, calc(100vw - 24px)); transform-origin: top right; }
+
+/* ---------- Search ------------------------------------------------------------------ */
+.search { position: relative; }
+.search-field {
+  display: flex; align-items: center; gap: 8px; height: 40px; width: 100%; padding: 0 14px;
+  border: 1px solid var(--rule-strong); border-radius: var(--r-pill); background: var(--surface);
+  transition: border-color var(--dur-fast), box-shadow var(--dur-fast);
+}
+.search-field:focus-within { border-color: var(--ink-3); box-shadow: 0 0 0 3px color-mix(in srgb, var(--focus) 22%, transparent); }
+.search-field svg { width: 17px; height: 17px; color: var(--ink-3); flex: none; }
+.search-field input {
+  flex: 1; min-width: 0; border: 0; background: transparent; color: var(--ink); outline: none;
+  font: 400 var(--fs-md)/1 var(--sans);
+}
+.search-field input::placeholder { color: var(--ink-3); }
+.search-field input::-webkit-search-cancel-button { display: none; }
+.search-field kbd {
+  font: 500 var(--fs-2xs)/1 var(--mono); color: var(--ink-3); border: 1px solid var(--rule-strong);
+  border-radius: var(--r-sm, 6px); padding: 3px 6px; background: var(--paper);
+}
+.search-field:focus-within kbd { display: none; }
+/* The button in the bar looks like a field and opens the search window (search.js). */
+.search-trigger {
+  display: flex; align-items: center; gap: 8px; width: 100%; height: 40px; padding: 0 12px 0 14px; cursor: text; text-align: left;
+  border: 1px solid var(--rule-strong); border-radius: var(--r-pill); background: var(--surface); color: var(--ink-3);
+  font: 400 var(--fs-md)/1 var(--sans); transition: border-color var(--dur-fast), background-color var(--dur-fast);
+}
+.search-trigger:hover { border-color: var(--ink-3); }
+.search-trigger:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.search-trigger svg { width: 17px; height: 17px; flex: none; }
+.search-trigger .st-text { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.search-trigger kbd, .sm-close, .sm-keys kbd {
+  font: 500 var(--fs-2xs)/1 var(--mono); color: var(--ink-3); border: 1px solid var(--rule-strong); border-radius: var(--r-sm, 6px); padding: 3px 6px; background: var(--paper);
+}
+
+/* The window: over the page, dimmed behind it; full screen on a phone. */
+.sm { position: fixed; inset: 0; z-index: calc(var(--z-pop) + 10); display: flex; justify-content: center; align-items: flex-start; padding: max(8vh, 24px) 16px 16px; }
+.sm[hidden] { display: none; }
+.sm-backdrop { position: absolute; inset: 0; background: var(--scrim); -webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px); animation: sm-fade var(--dur-fast) ease-out; }
+.sm-panel {
+  position: relative; display: flex; flex-direction: column; width: min(680px, 100%); max-height: min(620px, 100%); overflow: hidden;
+  background: var(--surface); border: 1px solid var(--rule); border-radius: var(--r-xl); box-shadow: var(--shadow); animation: sm-in var(--dur-base) ease-out;
+}
+.sm-field { display: flex; align-items: center; gap: 10px; flex: none; height: 56px; padding: 0 14px 0 18px; border-bottom: 1px solid var(--rule); }
+.sm-field svg { width: 19px; height: 19px; flex: none; color: var(--ink-3); }
+.sm-field input { flex: 1; min-width: 0; height: 100%; border: 0; background: transparent; color: var(--ink); outline: none; font: 400 var(--fs-lg)/1 var(--sans); }
+.sm-field input::placeholder { color: var(--ink-3); }
+.sm-field input::-webkit-search-cancel-button { display: none; }
+.sm-close { cursor: pointer; min-height: 28px; min-width: 40px; }
+.sm-close:hover { color: var(--ink); border-color: var(--ink-3); }
+.sm-close:focus-visible { outline: 2px solid var(--focus); outline-offset: 1px; }
+.sm .search-results {
+  position: static; transform: none; width: auto; margin: 0; padding: 6px; list-style: none; overflow: auto; flex: 1 1 auto; min-height: 0;
+  max-height: none; background: transparent; border: 0; border-radius: 0; box-shadow: none;
+}
+.sm .search-results[hidden] { display: none; }
+.sm-hint { margin: 0; padding: 22px 20px 26px; color: var(--ink-3); font-size: var(--fs-sm); }
+.sm-hint[hidden] { display: none; }
+.sm-keys { display: flex; flex: none; gap: 16px; margin: 0; padding: 10px 18px; border-top: 1px solid var(--rule); color: var(--ink-3); font-size: var(--fs-xs); }
+.sm-keys span { display: inline-flex; align-items: center; gap: 4px; }
+.sm-keys kbd { padding: 2px 5px; }
+html.sm-open { overflow: hidden; }
+@keyframes sm-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes sm-in { from { opacity: 0; transform: translateY(-8px) scale(0.98); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .sm-backdrop, .sm-panel { animation: none; } }
+.search-results a {
+  display: grid; grid-template-columns: 10px 1fr; column-gap: 10px; align-items: baseline;
+  width: 100%; padding: 10px; border-radius: var(--r-md); background: transparent; text-align: left; color: inherit; text-decoration: none;
+}
+.search-results li { margin: 0; }
+.search-results a:hover, .search-results a:focus-visible, .sm-field:focus-within ~ .search-results a.is-first { background: var(--paper-2); }
+.search-results a:focus-visible { outline: 2px solid var(--focus); outline-offset: -2px; }
+.search-results .zdot {
+  align-self: center; flex: none; width: var(--dot); height: var(--dot); border-radius: 50%;
+  background: var(--zm, var(--m-start)); box-shadow: inset 0 0 0 var(--dot-ring) var(--zc, var(--z-start));
+}
+.search-results b { font: 600 var(--fs-md)/1.25 var(--sans); color: var(--ink); }
+.search-results .sr-kind { font: 400 var(--fs-sm)/1 var(--sans); font-style: normal; color: var(--ink-3); }
+.search-results span { grid-column: 2; font-size: var(--fs-sm); line-height: 1.35; color: var(--ink-3); }
+.search-results .sr-empty { display: block; padding: 12px; color: var(--ink-3); font-size: var(--fs-sm); }
+@media (forced-colors: active) { .sm-panel { border-color: CanvasText; } .search-results a:hover, .search-results a:focus-visible { outline: 2px solid Highlight; } }
+
+/* A phone: the window fills the screen, and the bar's field is a plain magnifier. */
+@media (max-width: 900px) {
+  .bar-main { grid-template-columns: minmax(0, 1fr) auto auto; column-gap: 6px; }
+  .bar-main .search { width: auto; max-width: none; justify-self: end; }
+  .bar .brand-title { display: none; }
+  .search-trigger { width: 40px; padding: 0; justify-content: center; cursor: pointer; border-color: transparent; background: transparent; color: var(--ink-2); }
+  .search-trigger:hover { background: var(--paper-2); color: var(--ink); border-color: transparent; }
+  .search-trigger svg { width: 20px; height: 20px; }
+  .search-trigger .st-text, .search-trigger kbd { display: none; }
+}
+@media (max-width: 640px) {
+  .sm { padding: 0; }
+  .sm-panel { width: 100%; max-height: none; height: 100%; border: 0; border-radius: 0; box-shadow: none; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+  .sm-keys { display: none; }
+}
+@media (max-width: 900px) and (min-width: 561px) { .bar .brand-title { display: block; } }
+/* 16px keeps a phone from zooming into the field. */
+@media (max-width: 900px), (pointer: coarse) { .sm-field input, .search-field input { font-size: 16px; } }
+@media (pointer: coarse) { .sm-keys { display: none; } }
+
+/* ---------- The hover card ------------------------------------------------------------ */
+.pop {
+  position: fixed; z-index: var(--z-pop); width: min(320px, calc(100vw - 16px)); padding: 12px 14px 12px 16px;
+  background: var(--surface); color: var(--ink); border: 1px solid var(--rule-strong); border-left: 4px solid var(--zm, var(--clay)); border-radius: var(--r-md);
+  box-shadow: var(--shadow); animation: pop-in 0.14s ease-out;
+}
+.pop[hidden] { display: none; }
+.pop p { margin: 0; }
+.pop-eyebrow { font: 500 var(--fs-2xs)/1.3 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); }
+.pop-title { margin-top: 3px !important; font: 600 var(--fs-lg)/1.25 var(--serif); }
+.pop-text { margin-top: 6px !important; font: 400 var(--fs-md)/1.45 var(--sans); color: var(--ink-2); }
+.pop-link { display: inline-block; margin-top: 8px; font: 500 var(--fs-sm)/1.3 var(--sans); color: var(--clay-ink); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+.pop-link:hover { text-decoration-thickness: 2px; }
+@keyframes pop-in { from { opacity: 0; transform: translateY(-3px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .pop { animation: none; } }
+@media (forced-colors: active) {
+  .pop { border-color: CanvasText; }
+}
+
+/* ---------- The lists of the glossary and guides ----------------------------------------- */
+.page-list { max-width: 1040px; }
+.ref-group { margin-top: 36px; }
+.ref-group-title { display: flex; align-items: center; gap: 10px; font: 600 var(--fs-2xl)/1.2 var(--serif); }
+.ref-group-title a { color: inherit; text-decoration: none; }
+.ref-group-title a:hover { text-decoration: underline; text-underline-offset: 4px; }
+.ref-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; margin: 14px 0 0; padding: 0; list-style: none; }
+.page-list > .ref-grid { margin-top: 28px; }
+.ref-grid li { margin: 0; }
+.ref-card {
+  display: grid; align-content: start; gap: 4px; height: 100%; padding: 14px 16px; color: inherit; text-decoration: none;
+  background: var(--surface); border: 1px solid var(--rule-strong); border-left: 4px solid var(--zm, var(--rule-strong)); border-radius: var(--r-lg);
+  transition: border-color var(--dur-fast), box-shadow var(--dur-fast);
+}
+.ref-card:hover { border-color: var(--zc, var(--ink-3)); box-shadow: var(--shadow); }
+.ref-card:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.ref-card b { font: 600 var(--fs-lg)/1.25 var(--serif); }
+.ref-card span { font: 400 var(--fs-md)/1.45 var(--sans); color: var(--ink-3); }
+.ref-card .eyebrow { font: 500 var(--fs-xs)/1.3 var(--mono); }
+.guide-card { border-left-color: var(--rule-strong); }
+
+/* ---------- Print -------------------------------------------------------------------------- */
+@media print { .pop, .site-menu { display: none !important; } }
+
+/* ---------- The room of the scrollbar is always kept ------------------------------------------------ */
+/* A page that scrolls and a page that does not would otherwise be a scrollbar's width apart, and the bar, the search and the buttons would move by half of it
+   when you go from one to the other. */
+html { scrollbar-gutter: stable; }
+
+/* ---------- The notch: the text of a page keeps clear of it (the story is a picture and goes under it) ---------- */
+body:not([data-page="kitchen"]) > .stage:not(:has(.side-layout)) { padding-inline: max(var(--gutter), var(--inset-l)) max(var(--gutter), var(--inset-r)); }
+
+/* ---------- The button back to the top (totop.js) ------------------------------------------------------- */
+.to-top {
+  position: fixed; z-index: 40; right: max(18px, env(safe-area-inset-right, 0px)); bottom: max(18px, env(safe-area-inset-bottom, 0px));
+  display: grid; place-items: center; width: 46px; height: 46px; padding: 0; cursor: pointer;
+  border: 1px solid var(--rule-strong); border-radius: 50%; background: var(--surface); color: var(--ink); box-shadow: var(--shadow);
+  opacity: 0; transform: translateY(8px); transition: opacity 0.18s var(--ease, ease), transform 0.18s var(--ease, ease), background-color var(--dur-fast);
+}
+.to-top[hidden] { display: none; }
+.to-top.is-on { opacity: 1; transform: none; }
+.to-top:hover { background: var(--paper-2); }
+.to-top:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
+.to-top svg { width: 22px; height: 22px; }
+@media (max-width: 640px) { .to-top { width: 44px; height: 44px; right: max(14px, env(safe-area-inset-right, 0px)); bottom: max(14px, env(safe-area-inset-bottom, 0px)); } }
+@media (prefers-reduced-motion: reduce) { .to-top { transition: none; transform: none; } }
+@media print { .to-top { display: none !important; } }
