@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Agent teams · Glossary · AI explained</title>
-  <meta name="description" content="Several full agents coordinated by a lead that share a task list and message each other, unlike sub-agents, which only report back to their caller.">
+  <meta name="description" content="Several full agents coordinated by a lead that share a task list and message each other, unlike sub-agents, which only report back to their caller. In Claude Code they are experimental (October…">
   <meta name="theme-color" content="#faf9f5" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#1f1e1d" media="(prefers-color-scheme: dark)">
   <link rel="canonical" href="https://veniplex.github.io/ai-explained/glossary/agent-teams/">
@@ -16,7 +16,7 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Agent teams · Glossary">
-  <meta property="og:description" content="Several full agents coordinated by a lead that share a task list and message each other, unlike sub-agents, which only report back to their caller.">
+  <meta property="og:description" content="Several full agents coordinated by a lead that share a task list and message each other, unlike sub-agents, which only report back to their caller. In Claude Code they are experimental (October…">
   <meta property="og:url" content="https://veniplex.github.io/ai-explained/glossary/agent-teams/">
   <meta property="og:image" content="https://veniplex.github.io/ai-explained/assets/og.png">
   <meta property="og:image:width" content="1200">
@@ -103,15 +103,15 @@
           <nav class="site-menu-panel" aria-label="Menu">
             <p class="menu-head">Ways in</p>
             <ul>
-              <li><a href="../../" data-sec="start"><svg class="pico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ni-start"/></svg><b>Start</b><span>The first page: choose the kitchen story or the deep dive.</span></a></li>
-              <li><a href="../../story/" data-sec="story"><svg class="pico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ni-story"/></svg><b>ELI5: AI as Kitchen Chef</b><span>One drawn kitchen on one screen. No jargon.</span></a></li>
-              <li><a href="../../technical/" data-sec="technical"><svg class="pico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ni-tech"/></svg><b>AI Agents: Technical Deep Dive</b><span>Eight chapters in precise terms, with dated facts and sources.</span></a></li>
+              <li><a href="../../" data-sec="start"><svg class="pico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ni-start"/></svg><b>Start</b><span>Watch an AI agent work on a goal, then choose how deep to go.</span></a></li>
+              <li><a href="../../story/" data-sec="story"><svg class="pico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ni-story"/></svg><b>ELI5: AI as Kitchen Chef</b><span>How an agent works, told as a kitchen you can follow without jargon.</span></a></li>
+              <li><a href="../../technical/" data-sec="technical"><svg class="pico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ni-tech"/></svg><b>AI Agents: Technical Deep Dive</b><span>How agents work, chapter by chapter, in exact terms with dated facts and sources.</span></a></li>
             </ul>
             <p class="menu-head">Look things up</p>
             <ul>
-              <li><a href="../../guides/" data-sec="guides"><svg class="pico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ni-guides"/></svg><b>Guides</b><span>Long explainers: how agents work, and how to build, secure and test them.</span></a></li>
-              <li><a href="../../glossary/" data-sec="glossary" aria-current="page"><svg class="pico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ni-glossary"/></svg><b>Glossary</b><span>Every AI term with a short definition and where it fits.</span></a></li>
-              <li><a href="../../about/" data-sec="about"><svg class="pico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ni-about"/></svg><b>About</b><span>What this site is, its sources and privacy.</span></a></li>
+              <li><a href="../../guides/" data-sec="guides"><svg class="pico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ni-guides"/></svg><b>Guides</b><span>Long reads on how agents work and how to build, secure and test them.</span></a></li>
+              <li><a href="../../glossary/" data-sec="glossary" aria-current="page"><svg class="pico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ni-glossary"/></svg><b>Glossary</b><span>Look up any AI term: a short definition, related terms and sources.</span></a></li>
+              <li><a href="../../about/" data-sec="about"><svg class="pico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ni-about"/></svg><b>About</b><span>What this site is, where its facts come from and how it treats your privacy.</span></a></li>
             </ul>
             <div class="menu-foot" data-version-menu></div>
           </nav>
@@ -129,7 +129,7 @@
         <h2>Where it sits in the kitchen</h2>
         <p>A brigade of full chefs under one head chef, sharing a list of jobs and talking to each other, unlike helpers who only hand a finished bowl back to whoever asked.</p>
         <h2>Definition</h2>
-        <p>Several full agents coordinated by a lead that share a task list and message each other, unlike sub-agents, which only report back to their caller.</p>
+        <p>Several full agents coordinated by a lead that share a task list and message each other, unlike sub-agents, which only report back to their caller. In Claude Code they are experimental (October 2026) and off by default.</p>
         <h2>Detailed technical description</h2>
         <p>In a team, each member is a full agent with its own context window, tools and loop. The members share a task list in which work can be claimed, finished or blocked, and they exchange messages directly. A lead assigns work, resolves conflicts and combines results. This differs from sub-agents, which are started by one caller, work in isolation and only return a result.</p>
         <p>Teams suit work where parts need discussion, such as reviewing a design from several angles or investigating competing explanations of a bug. The costs are high: every member uses its own tokens, and messages add more. Members can edit the same file and conflict, or duplicate effort. Give each a clear area of ownership and a definition of done, and use a single agent when the task does not split.</p>

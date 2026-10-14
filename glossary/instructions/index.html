@@ -103,15 +103,15 @@
           <nav class="site-menu-panel" aria-label="Menu">
             <p class="menu-head">Ways in</p>
             <ul>
-              <li><a href="../../" data-sec="start"><svg class="pico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ni-start"/></svg><b>Start</b><span>The first page: choose the kitchen story or the deep dive.</span></a></li>
-              <li><a href="../../story/" data-sec="story"><svg class="pico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ni-story"/></svg><b>ELI5: AI as Kitchen Chef</b><span>One drawn kitchen on one screen. No jargon.</span></a></li>
-              <li><a href="../../technical/" data-sec="technical"><svg class="pico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ni-tech"/></svg><b>AI Agents: Technical Deep Dive</b><span>Eight chapters in precise terms, with dated facts and sources.</span></a></li>
+              <li><a href="../../" data-sec="start"><svg class="pico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ni-start"/></svg><b>Start</b><span>Watch an AI agent work on a goal, then choose how deep to go.</span></a></li>
+              <li><a href="../../story/" data-sec="story"><svg class="pico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ni-story"/></svg><b>ELI5: AI as Kitchen Chef</b><span>How an agent works, told as a kitchen you can follow without jargon.</span></a></li>
+              <li><a href="../../technical/" data-sec="technical"><svg class="pico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ni-tech"/></svg><b>AI Agents: Technical Deep Dive</b><span>How agents work, chapter by chapter, in exact terms with dated facts and sources.</span></a></li>
             </ul>
             <p class="menu-head">Look things up</p>
             <ul>
-              <li><a href="../../guides/" data-sec="guides"><svg class="pico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ni-guides"/></svg><b>Guides</b><span>Long explainers: how agents work, and how to build, secure and test them.</span></a></li>
-              <li><a href="../../glossary/" data-sec="glossary" aria-current="page"><svg class="pico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ni-glossary"/></svg><b>Glossary</b><span>Every AI term with a short definition and where it fits.</span></a></li>
-              <li><a href="../../about/" data-sec="about"><svg class="pico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ni-about"/></svg><b>About</b><span>What this site is, its sources and privacy.</span></a></li>
+              <li><a href="../../guides/" data-sec="guides"><svg class="pico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ni-guides"/></svg><b>Guides</b><span>Long reads on how agents work and how to build, secure and test them.</span></a></li>
+              <li><a href="../../glossary/" data-sec="glossary" aria-current="page"><svg class="pico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ni-glossary"/></svg><b>Glossary</b><span>Look up any AI term: a short definition, related terms and sources.</span></a></li>
+              <li><a href="../../about/" data-sec="about"><svg class="pico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ni-about"/></svg><b>About</b><span>What this site is, where its facts come from and how it treats your privacy.</span></a></li>
             </ul>
             <div class="menu-foot" data-version-menu></div>
           </nav>
@@ -133,7 +133,7 @@
         <p>They are written in Markdown, plain text with a little formatting for headings and lists. Agents that write code read files such as AGENTS.md or CLAUDE.md; chat apps offer the same idea as custom instructions. Typical contents are house rules, how a project is organised and your preferences. They sit in the context on every request, so every line takes up room: keep them short.</p>
         <h2>Detailed technical description</h2>
         <p>Instruction files are a standing briefing: how to build and test, conventions, a map of the project, what to avoid. AGENTS.md is the open format shared across agent apps, now stewarded by the Agentic AI Foundation under the Linux Foundation. Many harnesses also read their own file, such as CLAUDE.md, GEMINI.md, Cursor rules or Copilot instructions.</p>
-        <p>Files can be layered: a global file for personal preferences, a project file the team shares in its code repository, and files in sub-folders for local rules. They load at the start of every chat or job, so every line costs context on every turn.</p>
+        <p>Files can be layered: a global file for personal preferences, a project file the team shares in its code repository, and files in sub-folders for local rules. Files above the working folder load at the start of every chat or job; some harnesses load sub-folder files only when the agent works in that folder. Either way, every line costs context.</p>
         <p>Keep them short and specific; models skim past long or auto-generated files. Put task-specific procedures into skills, which load only when needed, and link to documentation instead of pasting it in. Treat the file like code: review it, prune it and test whether it actually changes behaviour.</p>
         <p>Measure the effect. A 2026 study found that generic overviews of a repository add cost without improving results, while precise instructions are followed.</p>
       </article>

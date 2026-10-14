@@ -13,7 +13,7 @@
 
 /* build:start */
 const PREFIX = "ae-v1.0-";
-const BUILD = PREFIX + "8fa3a48bf6";
+const BUILD = PREFIX + "a7e1c2155d";
 const PRECACHE = [
   "./",
   "story/",
@@ -29,7 +29,6 @@ const PRECACHE = [
   "guides/learn/",
   "guides/secure/",
   "manifest.webmanifest",
-  "assets/css/demos.css",
   "assets/css/kitchen.css",
   "assets/css/nav.css",
   "assets/css/pages.css",
@@ -50,7 +49,6 @@ const PRECACHE = [
   "assets/js/app.js",
   "assets/js/data/bridges.js",
   "assets/js/data/core.js",
-  "assets/js/data/demos.js",
   "assets/js/data/entries.js",
   "assets/js/data/glance.js",
   "assets/js/data/glossary-refs.js",
@@ -72,19 +70,6 @@ const PRECACHE = [
   "assets/js/data/voice-guides-long-tech-d.js",
   "assets/js/data/voice-tech.js",
   "assets/js/data/voice-ui-tech.js",
-  "assets/js/demos.js",
-  "assets/js/demos/context-window.js",
-  "assets/js/demos/fan-out.js",
-  "assets/js/demos/loop-break.js",
-  "assets/js/demos/mcp-conversation.js",
-  "assets/js/demos/oauth-flow.js",
-  "assets/js/demos/pass-k.js",
-  "assets/js/demos/permissions.js",
-  "assets/js/demos/quantisation.js",
-  "assets/js/demos/request-growth.js",
-  "assets/js/demos/tokenizer.js",
-  "assets/js/demos/tool-call.js",
-  "assets/js/demos/trifecta.js",
   "assets/js/draw.js",
   "assets/js/github.js",
   "assets/js/guide-views.js",

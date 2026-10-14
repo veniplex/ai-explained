@@ -103,15 +103,15 @@
           <nav class="site-menu-panel" aria-label="Menu">
             <p class="menu-head">Ways in</p>
             <ul>
-              <li><a href="../../" data-sec="start"><svg class="pico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ni-start"/></svg><b>Start</b><span>The first page: choose the kitchen story or the deep dive.</span></a></li>
-              <li><a href="../../story/" data-sec="story"><svg class="pico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ni-story"/></svg><b>ELI5: AI as Kitchen Chef</b><span>One drawn kitchen on one screen. No jargon.</span></a></li>
-              <li><a href="../../technical/" data-sec="technical"><svg class="pico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ni-tech"/></svg><b>AI Agents: Technical Deep Dive</b><span>Eight chapters in precise terms, with dated facts and sources.</span></a></li>
+              <li><a href="../../" data-sec="start"><svg class="pico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ni-start"/></svg><b>Start</b><span>Watch an AI agent work on a goal, then choose how deep to go.</span></a></li>
+              <li><a href="../../story/" data-sec="story"><svg class="pico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ni-story"/></svg><b>ELI5: AI as Kitchen Chef</b><span>How an agent works, told as a kitchen you can follow without jargon.</span></a></li>
+              <li><a href="../../technical/" data-sec="technical"><svg class="pico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ni-tech"/></svg><b>AI Agents: Technical Deep Dive</b><span>How agents work, chapter by chapter, in exact terms with dated facts and sources.</span></a></li>
             </ul>
             <p class="menu-head">Look things up</p>
             <ul>
-              <li><a href="../../guides/" data-sec="guides"><svg class="pico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ni-guides"/></svg><b>Guides</b><span>Long explainers: how agents work, and how to build, secure and test them.</span></a></li>
-              <li><a href="../../glossary/" data-sec="glossary" aria-current="page"><svg class="pico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ni-glossary"/></svg><b>Glossary</b><span>Every AI term with a short definition and where it fits.</span></a></li>
-              <li><a href="../../about/" data-sec="about"><svg class="pico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ni-about"/></svg><b>About</b><span>What this site is, its sources and privacy.</span></a></li>
+              <li><a href="../../guides/" data-sec="guides"><svg class="pico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ni-guides"/></svg><b>Guides</b><span>Long reads on how agents work and how to build, secure and test them.</span></a></li>
+              <li><a href="../../glossary/" data-sec="glossary" aria-current="page"><svg class="pico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ni-glossary"/></svg><b>Glossary</b><span>Look up any AI term: a short definition, related terms and sources.</span></a></li>
+              <li><a href="../../about/" data-sec="about"><svg class="pico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ni-about"/></svg><b>About</b><span>What this site is, where its facts come from and how it treats your privacy.</span></a></li>
             </ul>
             <div class="menu-foot" data-version-menu></div>
           </nav>
@@ -134,8 +134,8 @@
         <h3>A conversation between client and server</h3>
         <p>Step through the messages a client and an MCP server exchange, from the first greeting to a tool call. This demo needs JavaScript.</p>
         <h2>Detailed technical description</h2>
-        <p>The client starts the connection, negotiates which protocol version and capabilities both sides support, then asks the server for its list of tools, resources and prompts. When the model requests a tool, the client forwards the call as a json-rpc message, waits for the reply and returns it. It also manages the transport, such as a local process or a remote HTTP connection.</p>
-        <p>Because the client sits between the model and the server, it is a natural place for controls: timeouts, size limits on results, logging and approval of calls. Servers can also ask the client to do things, for example to request a model completion or ask the person for input, and the client must decide whether to allow it. A one-to-one link keeps each server isolated from the others.</p>
+        <p>Since the 2026-07-28 revision there is no separate handshake: the client sends its protocol version and capabilities with every request, and may first call server/discover to learn what the server offers. Earlier revisions negotiated this once, at the start. The client then asks the server for its list of tools, resources and prompts. When the model requests a tool, the client forwards the call as a json-rpc message, waits for the reply and returns it. It also manages the transport, such as a local process or a remote HTTP connection.</p>
+        <p>Because the client sits between the model and the server, it is a natural place for controls: timeouts, size limits on results, logging and approval of calls. A server that needs more information, such as an answer from the person, replies with an input_required result and the client retries with the answer. Older revisions let servers send requests such as sampling directly, which is now deprecated. Either way the client decides whether to allow it. A one-to-one link keeps each server isolated from the others.</p>
       </article>
       <p class="noscript">This page is interactive and needs JavaScript. All of its text is also in <code>assets/js/data/</code> in the <a href="https://github.com/veniplex/ai-explained">GitHub repository</a>.</p>
     </noscript>

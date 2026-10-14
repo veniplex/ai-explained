@@ -103,15 +103,15 @@
           <nav class="site-menu-panel" aria-label="Menu">
             <p class="menu-head">Ways in</p>
             <ul>
-              <li><a href="../../" data-sec="start"><svg class="pico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ni-start"/></svg><b>Start</b><span>The first page: choose the kitchen story or the deep dive.</span></a></li>
-              <li><a href="../../story/" data-sec="story"><svg class="pico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ni-story"/></svg><b>ELI5: AI as Kitchen Chef</b><span>One drawn kitchen on one screen. No jargon.</span></a></li>
-              <li><a href="../../technical/" data-sec="technical"><svg class="pico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ni-tech"/></svg><b>AI Agents: Technical Deep Dive</b><span>Eight chapters in precise terms, with dated facts and sources.</span></a></li>
+              <li><a href="../../" data-sec="start"><svg class="pico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ni-start"/></svg><b>Start</b><span>Watch an AI agent work on a goal, then choose how deep to go.</span></a></li>
+              <li><a href="../../story/" data-sec="story"><svg class="pico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ni-story"/></svg><b>ELI5: AI as Kitchen Chef</b><span>How an agent works, told as a kitchen you can follow without jargon.</span></a></li>
+              <li><a href="../../technical/" data-sec="technical"><svg class="pico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ni-tech"/></svg><b>AI Agents: Technical Deep Dive</b><span>How agents work, chapter by chapter, in exact terms with dated facts and sources.</span></a></li>
             </ul>
             <p class="menu-head">Look things up</p>
             <ul>
-              <li><a href="../../guides/" data-sec="guides"><svg class="pico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ni-guides"/></svg><b>Guides</b><span>Long explainers: how agents work, and how to build, secure and test them.</span></a></li>
-              <li><a href="../../glossary/" data-sec="glossary" aria-current="page"><svg class="pico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ni-glossary"/></svg><b>Glossary</b><span>Every AI term with a short definition and where it fits.</span></a></li>
-              <li><a href="../../about/" data-sec="about"><svg class="pico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ni-about"/></svg><b>About</b><span>What this site is, its sources and privacy.</span></a></li>
+              <li><a href="../../guides/" data-sec="guides"><svg class="pico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ni-guides"/></svg><b>Guides</b><span>Long reads on how agents work and how to build, secure and test them.</span></a></li>
+              <li><a href="../../glossary/" data-sec="glossary" aria-current="page"><svg class="pico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ni-glossary"/></svg><b>Glossary</b><span>Look up any AI term: a short definition, related terms and sources.</span></a></li>
+              <li><a href="../../about/" data-sec="about"><svg class="pico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ni-about"/></svg><b>About</b><span>What this site is, where its facts come from and how it treats your privacy.</span></a></li>
             </ul>
             <div class="menu-foot" data-version-menu></div>
           </nav>
@@ -132,7 +132,7 @@
         <p>When test questions or their answers have leaked into a model's training data, so that its score reflects memory and not ability. It inflates public benchmark results, and is one reason to evaluate on private examples of your own.</p>
         <h2>Detailed technical description</h2>
         <p>Contamination happens when benchmark items appear in the web text, code repositories or forum posts used for pre-training, or when later training data are built from outputs that already include them. A model can then reproduce an answer from memory. Even partial leakage, such as the questions without the answers, can help. Because training sets are large and often undisclosed, it is hard to prove or rule out.</p>
-        <p>Detection methods include searching for overlapping text, checking whether a model can complete an item verbatim, and comparing scores on original items against freshly written variants. A large gap suggests memory. Defences are private or regularly refreshed test sets, items created after the model's knowledge-cutoff, and your own golden-set that has never been published. Treat public scores of unknown provenance with care.</p>
+        <p>Detection methods include searching for overlapping text, checking whether a model can complete an item verbatim, and comparing scores on original items against freshly written variants. A large gap suggests memory. Defences are private or regularly refreshed test sets, items created after the model's knowledge-cutoff, and your own golden-set that has never been published. Treat public scores of unknown provenance with care. A documented case: in February 2026 OpenAI stopped reporting SWE-bench Verified scores after finding that frontier models could reproduce original fixes (see swe-bench).</p>
       </article>
       <p class="noscript">This page is interactive and needs JavaScript. All of its text is also in <code>assets/js/data/</code> in the <a href="https://github.com/veniplex/ai-explained">GitHub repository</a>.</p>
     </noscript>

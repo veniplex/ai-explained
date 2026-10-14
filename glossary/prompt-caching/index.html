@@ -103,15 +103,15 @@
           <nav class="site-menu-panel" aria-label="Menu">
             <p class="menu-head">Ways in</p>
             <ul>
-              <li><a href="../../" data-sec="start"><svg class="pico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ni-start"/></svg><b>Start</b><span>The first page: choose the kitchen story or the deep dive.</span></a></li>
-              <li><a href="../../story/" data-sec="story"><svg class="pico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ni-story"/></svg><b>ELI5: AI as Kitchen Chef</b><span>One drawn kitchen on one screen. No jargon.</span></a></li>
-              <li><a href="../../technical/" data-sec="technical"><svg class="pico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ni-tech"/></svg><b>AI Agents: Technical Deep Dive</b><span>Eight chapters in precise terms, with dated facts and sources.</span></a></li>
+              <li><a href="../../" data-sec="start"><svg class="pico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ni-start"/></svg><b>Start</b><span>Watch an AI agent work on a goal, then choose how deep to go.</span></a></li>
+              <li><a href="../../story/" data-sec="story"><svg class="pico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ni-story"/></svg><b>ELI5: AI as Kitchen Chef</b><span>How an agent works, told as a kitchen you can follow without jargon.</span></a></li>
+              <li><a href="../../technical/" data-sec="technical"><svg class="pico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ni-tech"/></svg><b>AI Agents: Technical Deep Dive</b><span>How agents work, chapter by chapter, in exact terms with dated facts and sources.</span></a></li>
             </ul>
             <p class="menu-head">Look things up</p>
             <ul>
-              <li><a href="../../guides/" data-sec="guides"><svg class="pico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ni-guides"/></svg><b>Guides</b><span>Long explainers: how agents work, and how to build, secure and test them.</span></a></li>
-              <li><a href="../../glossary/" data-sec="glossary" aria-current="page"><svg class="pico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ni-glossary"/></svg><b>Glossary</b><span>Every AI term with a short definition and where it fits.</span></a></li>
-              <li><a href="../../about/" data-sec="about"><svg class="pico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ni-about"/></svg><b>About</b><span>What this site is, its sources and privacy.</span></a></li>
+              <li><a href="../../guides/" data-sec="guides"><svg class="pico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ni-guides"/></svg><b>Guides</b><span>Long reads on how agents work and how to build, secure and test them.</span></a></li>
+              <li><a href="../../glossary/" data-sec="glossary" aria-current="page"><svg class="pico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ni-glossary"/></svg><b>Glossary</b><span>Look up any AI term: a short definition, related terms and sources.</span></a></li>
+              <li><a href="../../about/" data-sec="about"><svg class="pico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ni-about"/></svg><b>About</b><span>What this site is, where its facts come from and how it treats your privacy.</span></a></li>
             </ul>
             <div class="menu-foot" data-version-menu></div>
           </nav>
@@ -135,7 +135,7 @@
         <p>Step through four turns of one task. Each turn sends everything so far again. Switch on caching, change the prices, and see what the bill does. This demo needs JavaScript.</p>
         <h2>Detailed technical description</h2>
         <p>When a request arrives, the provider checks whether the start of the prompt matches a prefix it has already processed. If so, it reuses the stored attention state, the kv-cache, instead of recomputing it, and only the new tail is processed. The match must be exact and from the beginning, so a changed character early in the prompt breaks the reuse for everything after it. Cached entries expire after a short time unless refreshed by use.</p>
-        <p>Order the prompt for reuse: system instructions, tool definitions and reference material first, then the conversation, then the latest message. Do not put a timestamp, a user name or a random id near the top. Changing the tool list or the model also invalidates the cache. Some providers need explicit markers to say where the cached prefix ends, others detect it automatically, so check the documentation of the one you use.</p>
+        <p>Order the prompt for reuse: system instructions, tool definitions and reference material first, then the conversation, then the latest message. Do not put a timestamp, a user name or a random id near the top. Changing the tool list or the model also invalidates the cache. Some providers need explicit markers for the cached prefix, others detect it automatically. Writing a cache entry can cost extra (October 2026): Anthropic bills 1.25 times the input price for the 5-minute cache and 2 times for the 1-hour cache.</p>
       </article>
       <p class="noscript">This page is interactive and needs JavaScript. All of its text is also in <code>assets/js/data/</code> in the <a href="https://github.com/veniplex/ai-explained">GitHub repository</a>.</p>
     </noscript>

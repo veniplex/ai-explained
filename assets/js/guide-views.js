@@ -249,9 +249,9 @@
   function about() {
     var count = T.list.length, main = Object.keys(D.entries).length;
     var what = [
-      h("p", null, "A free, open-source explanation of AI as of ", h("strong", null, D.meta.snapshot), ", for people who are new to it and for people who build with it."),
+      h("p", null, "A free explanation of AI, with its source public, as of ", h("strong", null, D.meta.snapshot), ", for people who are new to it and for people who build with it."),
       h("p", null, h("a", { href: sk.url.kitchen() }, "The kitchen story"), " is one hand-drawn restaurant kitchen that builds itself on a single screen. Every part of it is a real part of an AI agent, and at the end the real names are laid over the kitchen."),
-      h("p", null, h("a", { href: sk.url.home() }, "The technical deep dive"), " goes through eight chapters and " + main + " main terms in plain technical words, with no pictures at all: the mechanism, the details and checked sources.")
+      h("p", null, h("a", { href: sk.url.home() }, "The technical deep dive"), " goes through eight chapters and " + main + " main terms in plain technical words, with no kitchen pictures: the mechanism, the details and checked sources.")
     ];
     return h("div", { class: "about" },
       h("div", null,
@@ -280,7 +280,7 @@
           h("li", null, "Fonts and scripts are self-hosted. The one request to anyone else is the star count on the GitHub button: a plain request to GitHub's public API for this repository, with no cookies and nothing about you. If it fails, the count stays hidden."),
           h("li", null, "Videos are plain links rather than embeds."),
           h("li", null, "If you install the site or just visit it, your browser keeps a copy of its files and of the pages you open, so it also works offline. That copy stays on your device."),
-          h("li", null, "Your theme (System, Light or Dark), how you sort the glossary and your checklist are stored only in your own browser.")),
+          h("li", null, "Your theme (Light or Dark; System stores nothing), how you sort the glossary, your checklist and the speed of the kitchen story are stored only in your own browser. The star count is kept for ten minutes in the tab.")),
         h("h2", null, "Credits"),
         h("p", null, "Typefaces: Source Serif 4, DM Sans and DM Mono, under the SIL Open Font License. Hand-drawn shapes: rough.js by Preet Shihn, MIT licence."),
         h("p", null, "An independent project, not affiliated with any company or product mentioned on this page.")));
