@@ -131,7 +131,7 @@
         <p>A setting that controls how random a model's choice of the next token is. Low values make output more predictable and repeatable; high values make it more varied. Related settings, such as top-p, limit which candidate tokens may be picked at all.</p>
         <h2>Detailed technical description</h2>
         <p>At every step the model scores all possible next tokens. The sampler then picks one: temperature reshapes the scores, top-k keeps only the k best, and top-p keeps the smallest set whose probabilities add up to p.</p>
-        <p>A temperature of zero makes the choice nearly deterministic, but identical output is still not guaranteed, because of how computation is done on shared hardware. Some reasoning models fix these settings and do not let you change them.</p>
+        <p>A temperature of zero makes the choice nearly deterministic, but identical output is still not guaranteed, because of how computation is done on shared hardware. Some newer models fix these settings and do not let you change them: several current Claude models return an error for a non-default temperature, top_p or top_k, and recent Gemini models ignore custom values.</p>
       </article>
       <p class="noscript">This page is interactive and needs JavaScript. All of its text is also in <code>assets/js/data/</code> in the <a href="https://github.com/veniplex/ai-explained">GitHub repository</a>.</p>
     </noscript>

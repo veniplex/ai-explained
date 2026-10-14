@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Batch processing · Glossary · AI explained</title>
-  <meta name="description" content="Sending many requests together for asynchronous processing instead of waiting for each answer. Providers often offer batch interfaces at a discount, with results returned within hours, which suits…">
+  <meta name="description" content="Sending many requests together for asynchronous processing instead of waiting for each answer. Providers often offer batch interfaces at a discount, with results returned within a stated window,…">
   <meta name="theme-color" content="#faf9f5" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#1f1e1d" media="(prefers-color-scheme: dark)">
   <link rel="canonical" href="https://veniplex.github.io/ai-explained/glossary/batch-processing/">
@@ -16,7 +16,7 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Batch processing · Glossary">
-  <meta property="og:description" content="Sending many requests together for asynchronous processing instead of waiting for each answer. Providers often offer batch interfaces at a discount, with results returned within hours, which suits…">
+  <meta property="og:description" content="Sending many requests together for asynchronous processing instead of waiting for each answer. Providers often offer batch interfaces at a discount, with results returned within a stated window,…">
   <meta property="og:url" content="https://veniplex.github.io/ai-explained/glossary/batch-processing/">
   <meta property="og:image" content="https://veniplex.github.io/ai-explained/assets/og.png">
   <meta property="og:image:width" content="1200">
@@ -128,9 +128,9 @@
         <h2>Where it sits in the kitchen</h2>
         <p>Instead of serving each ticket at once, the owner hands in a whole crate of orders for the night shift. Cheaper, but slower: the results come back by morning.</p>
         <h2>Definition</h2>
-        <p>Sending many requests together for asynchronous processing instead of waiting for each answer. Providers often offer batch interfaces at a discount, with results returned within hours, which suits large jobs that are not urgent, such as classifying a backlog.</p>
+        <p>Sending many requests together for asynchronous processing instead of waiting for each answer. Providers often offer batch interfaces at a discount, with results returned within a stated window, usually up to 24 hours, which suits large jobs that are not urgent, such as classifying a backlog.</p>
         <h2>Detailed technical description</h2>
-        <p>You upload a file of requests, each with an identifier, and the provider processes them in the background when capacity is free. When finished, you download a results file and match each result to its request by identifier. The requests are independent, so results may come back in any order. Batch jobs normally have a stated completion window and sit outside the live rate-limit for interactive traffic.</p>
+        <p>You upload a file of requests, each with an identifier, and the provider processes them in the background when capacity is free. When finished, you download a results file and match each result to its request by identifier. The requests are independent, so results may come back in any order. Batch jobs have a stated completion window of up to 24 hours, though many finish sooner. Some providers, such as OpenAI, count them against a separate pool from the live rate-limit; others apply limits to batch requests as well.</p>
         <p>Batch suits work with no one waiting: classification of a backlog, bulk summaries, embedding a corpus or running a large eval. It does not suit chats or agents that need the result of one step to decide the next. Some requests in a batch can fail while others succeed, so collect failures and resubmit only those. Combining batch with prompt-caching can lower cost further, where the provider allows it.</p>
       </article>
       <p class="noscript">This page is interactive and needs JavaScript. All of its text is also in <code>assets/js/data/</code> in the <a href="https://github.com/veniplex/ai-explained">GitHub repository</a>.</p>

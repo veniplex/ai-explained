@@ -131,7 +131,7 @@
         <p>Putting a few worked examples of the task into the prompt so that the model copies their format and style. With no examples it is called zero-shot, with one, one-shot. Examples often steer output more reliably than a description alone.</p>
         <h2>Detailed technical description</h2>
         <p>The examples set the pattern for input, output and style, and the model continues it. Choose examples that cover the real range of inputs, including hard and edge cases, and keep their format identical. Order can matter, and the model often copies the last example. For structured tasks, examples work well together with a schema or structured-output.</p>
-        <p>Examples cost tokens on every call and can narrow behaviour too much, so the model may copy surface details, such as length or a repeated label, instead of the underlying rule. Wrong or inconsistent labels in the examples hurt results. Reasoning models often need fewer examples. Test with and without them, and rotate examples if one skews the output.</p>
+        <p>Examples cost tokens on every call and can narrow behaviour too much, so the model may copy surface details, such as length or a repeated label, instead of the underlying rule. Inconsistent format or labels in the examples can hurt results, so keep them correct and uniform. Reasoning models often need fewer examples. Test with and without them, and rotate examples if one skews the output.</p>
       </article>
       <p class="noscript">This page is interactive and needs JavaScript. All of its text is also in <code>assets/js/data/</code> in the <a href="https://github.com/veniplex/ai-explained">GitHub repository</a>.</p>
     </noscript>
