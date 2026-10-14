@@ -197,7 +197,7 @@
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(queue);
     // The dots sit just left of the text column, wherever the layout puts it. The name that opens on hover goes
     // to the left of them, into the strip kept free there; where that strip is too narrow, the names stay shut.
-    var under = $$(".hero-text, .hub-head, .kmap-hub");
+    var under = $$(".hero > *, .hub > *");
     function place() {
       var ch = document.querySelector(".chapter");
       if (!ch) return;
