@@ -195,13 +195,14 @@
     listen("scroll", queue, { passive: true });
     listen("resize", queue);
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(queue);
-    // The dots sit just left of the text column, wherever the layout puts it. The name that opens on hover goes
-    // to the left of them, into the strip kept free there; where that strip is too narrow, the names stay shut.
+    // The dots sit just left of the page's content container (the same one every text page has), one gap from its edge. The name that opens on hover goes
+    // to the left of them, into the margin there; where that margin is too narrow, the names stay shut.
     var under = $$(".hero > *, .hub > *");
     function place() {
-      var ch = document.querySelector(".chapter");
-      if (!ch) return;
-      var x = Math.max(railEl.offsetWidth + 8, ch.getBoundingClientRect().left - 18);
+      var box = document.querySelector(".story");
+      if (!box) return;
+      var gap = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--side-gap")) || 24;
+      var x = Math.max(railEl.offsetWidth + 8, box.getBoundingClientRect().left - gap + 6);
       railEl.style.setProperty("--rail-x", Math.round(x) + "px");
       var room = railEl.getBoundingClientRect().left - 8 - 14;
       railEl.style.setProperty("--rail-label-w", Math.max(0, Math.min(room, 200)) + "px");
