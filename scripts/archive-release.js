@@ -4,7 +4,7 @@
    id      the folder name for the release being archived (default: the id of the main entry in versions/versions.js, e.g. v1.0).
    --out   write the copy to this folder instead of versions/<id>/ (for trying it out; nothing else is touched).
    What it does: copies the site files of the root (the pages, assets/, the manifest, the service worker, DESIGN.md) and writes a README for the folder, then
-   - points the dropdown scripts at the shared files of versions/ (one more ../ in front of versions.js and version-switcher.js); the icon stays the release's own favicon.svg, so an archived release keeps its mark,
+   - points the scripts and the icon at the shared files of versions/ (one more ../ in front of versions.js, version-switcher.js and favicon.svg),
    - points canonical and og: addresses at the new place (/versions/<id>/),
    - points the service worker at the shared files too.
    It does not edit versions/versions.js: after archiving, take main: true off the old entry and add the new release at the top (see .claude/skills/new-version/SKILL.md).
@@ -17,8 +17,8 @@ var vm = require("vm");
 
 var ROOT = path.resolve(__dirname, "..");
 var SITE = "https://veniplex.github.io/ai-explained/";
-var ITEMS = ["index.html", "story", "technical", "glossary", "guides", "about", "assets", "manifest.webmanifest", "sw.js", "DESIGN.md", "favicon.svg"];
-var SHARED = "(versions\\.js|version-switcher\\.js|version-switcher\\.css)";
+var ITEMS = ["index.html", "story", "technical", "glossary", "guides", "about", "assets", "manifest.webmanifest", "sw.js", "DESIGN.md"];
+var SHARED = "(versions\\.js|version-switcher\\.js|version-switcher\\.css|favicon\\.svg)";
 
 function mainId() {
   var sandbox = { window: {} };
@@ -48,7 +48,6 @@ function fixHtml(t, id) {
 
 function fixSw(t, id) {
   t = t.replace(new RegExp('"versions/' + SHARED + '"', "g"), '"../$1"');
-  t = t.replace(/"versions\/favicon\.svg"/g, '"favicon.svg"'); // the mark of the release itself, not the one of the alpha versions
   return "/* Archived release " + id + ": this copy sits in versions/" + id + "/, so its scope is this folder only. Where the comment below says the root of the site, it means that folder. */\n" + t;
 }
 

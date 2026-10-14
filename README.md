@@ -20,7 +20,7 @@
   <a href="https://veniplex.github.io/ai-explained/glossary/">Glossary</a>
 </p>
 
-<p align="center"><sub>Release 1.1 · facts as of October 2026</sub></p>
+<p align="center"><sub>Release 1.0 · facts as of October 2026</sub></p>
 
 ---
 
@@ -99,11 +99,11 @@ How the pieces fit together is written down in [docs/how-it-is-built.md](docs/ho
 
 ## Releases and older versions
 
-The root of this repository is the current release, **1.1**. It is what the address `veniplex.github.io/ai-explained/` shows. Release 1.0 is kept, unchanged, in [`versions/v1.0/`](versions/v1.0/).
+The root of this repository is the current release, **1.0**. It is what the address `veniplex.github.io/ai-explained/` shows.
 
 The site grew through sixteen earlier alpha versions: a first interactive map, a guided path, side-by-side voices, a comic, a growing storyline, and finally the kitchen on one screen. They are kept, unchanged, in [`versions/`](versions/) and stay online at `…/ai-explained/versions/<name>/`. Old addresses such as `…/v0.12-alpha/` still work: they forward to the new place.
 
-Every page has a version dropdown in its top bar. It lists all releases by number and codename (v1.1 is Radford, v1.0 is Vaswani, named after the last name of a researcher whose work shaped AI; the older versions run back through history to Lovelace), with the current one marked, and takes you to the same page in another release when that page exists there. The list lives in one file, [`versions/versions.js`](versions/versions.js).
+Every page has a version dropdown in its top bar. It lists all releases by number and codename (v1.0 is Vaswani, named after the last name of a researcher whose work shaped AI; the older versions run back through history to Lovelace), with the current one marked, and takes you to the same page in another release when that page exists there. The list lives in one file, [`versions/versions.js`](versions/versions.js).
 
 ## How it is made
 

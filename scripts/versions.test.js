@@ -193,7 +193,7 @@ test("archiving the release at the root leaves a folder whose pages still find t
   const cp = require("node:child_process");
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "ae-archive-"));
   try {
-    for (const f of ["versions.js", "version-switcher.js", "version-switcher.css"]) {
+    for (const f of ["versions.js", "version-switcher.js", "version-switcher.css", "favicon.svg"]) {
       fs.mkdirSync(path.join(tmp, "versions"), { recursive: true });
       fs.writeFileSync(path.join(tmp, "versions", f), "/* stand-in */");
     }
@@ -206,7 +206,7 @@ test("archiving the release at the root leaves a folder whose pages still find t
     assert.ok(pages.length > 100, "the archived site has its pages");
     for (const p of pages) {
       const html = fs.readFileSync(p, "utf8");
-      for (const m of html.matchAll(/(?:src|href)="((?:\.\.\/)*)(versions\.js|version-switcher\.js|version-switcher\.css)"/g)) {
+      for (const m of html.matchAll(/(?:src|href)="((?:\.\.\/)*)(versions\.js|version-switcher\.js|version-switcher\.css|favicon\.svg)"/g)) {
         assert.ok(fs.existsSync(path.resolve(path.dirname(p), m[1] + m[2])), path.relative(out, p) + " cannot find " + m[1] + m[2]);
       }
       assert.ok(!/(?:src|href)="(?:\.\.\/)*versions\//.test(html), path.relative(out, p) + " still names versions/ as in the root");
@@ -215,10 +215,6 @@ test("archiving the release at the root leaves a folder whose pages still find t
     const sw = fs.readFileSync(path.join(out, "sw.js"), "utf8");
     assert.ok(sw.includes('"../versions.js"') && !sw.includes('"versions/versions.js"'), "the worker names the shared files one level up");
     assert.ok(fs.existsSync(path.join(out, "README.md")));
-    // the archived release keeps its own mark: favicon.svg is copied, and its pages point at that copy
-    assert.equal(fs.readFileSync(path.join(out, "favicon.svg"), "utf8"), fs.readFileSync(path.join(root, "favicon.svg"), "utf8"));
-    assert.ok(/href="favicon\.svg"/.test(fs.readFileSync(path.join(out, "index.html"), "utf8")), "the start page points at the copy of the mark");
-    assert.ok(!sw.includes('"versions/favicon.svg"'), "the worker does not name the shared mark");
   } finally {
     fs.rmSync(tmp, { recursive: true, force: true });
   }

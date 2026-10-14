@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/* Content checks for the site (the main version, v1.1, at the root of the repository): the kitchen story and the technical deep dive, with a glossary, guides and an about page shared by both.
+/* Content checks for the site (the main version, v1.0, at the root of the repository): the kitchen story and the technical deep dive, with a glossary, guides and an about page shared by both.
    - the content: the rules of check-v4.js for the technical voice (word budgets, links, sources), without the kitchen voice of the chapters, the guides
      and the small texts (the kitchen is only in the story and in the glossary);
    - the story: the rules of check-v9.js (steps, things, voice of every caption, names over the kitchen);
