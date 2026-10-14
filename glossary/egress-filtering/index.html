@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -129,6 +130,9 @@
         <p>A doorman at the back door with a short list of approved addresses: parcels leave only for those. Even a fooled chef cannot post the owner's books to a stranger.</p>
         <h2>Definition</h2>
         <p>Controlling which destinations a system may send traffic to, usually with an allowlist of approved domains. For an agent in a sandbox it closes the main route for stolen information to leave, even when the agent has been tricked.</p>
+        <h2>Try it</h2>
+        <h3>The lethal trifecta</h3>
+        <p>Tick what your agent can do and see whether it has all three of the abilities that make a hidden instruction dangerous. This demo needs JavaScript.</p>
         <h2>Detailed technical description</h2>
         <p>The filter sits at the network edge of the sandbox, in a proxy or firewall, and checks each outbound connection against a list of allowed domains and ports. Everything else is refused. A typical allowlist covers the package registry, the model API and the services the task needs. Filtering by domain name is more precise than by address, since many sites share addresses.</p>
         <p>Gaps remain. An allowed domain can itself be a way out if it lets anyone upload data, such as a public paste service or a shared storage bucket, so allow narrowly. Encoded traffic over DNS can slip past filters that watch only web requests. Log every blocked attempt: a blocked request from an agent is a strong signal that something tried to send data out.</p>
@@ -146,6 +150,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -168,6 +173,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>

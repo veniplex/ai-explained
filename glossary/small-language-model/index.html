@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -129,6 +130,9 @@
         <p>A young chef with a small head and a small kitchen: quick and cheap, able to work in a food truck, and good enough for simple, well-practised jobs.</p>
         <h2>Definition</h2>
         <p>A language model small enough to run cheaply, quickly or on a laptop or phone, typically from under one billion to a few billion parameters. On narrow tasks, especially after fine-tuning, it can match a larger model, so agents often use one for simple steps.</p>
+        <h2>Try it</h2>
+        <h3>Fewer bits, smaller model</h3>
+        <p>Pick a model size and the number of bits per weight. See how much memory the weights need, and what rounding does to a row of weights. This demo needs JavaScript.</p>
         <h2>Detailed technical description</h2>
         <p>Small models are made by training on well-chosen data, by distillation from a larger model, and by quantisation so the weights fit in little memory. Their limits show in broad world knowledge, long multi-step reasoning and following complex instructions. They run with low latency and can stay on the device, which keeps data private and works offline.</p>
         <p>They suit classification, extraction, routing, short rewriting and well-defined tool calls, particularly after fine-tuning on the task. An agent system often puts a large model on planning and small models on frequent, simple steps, which cuts cost and delay. The risk is that a small model fails silently on an unusual input, so test them on realistic edge cases.</p>
@@ -146,6 +150,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -168,6 +173,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>

@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -129,6 +130,10 @@
         <p>A chef who specialises in the kitchen's own written procedures: reads them, edits them, runs trial batches and hands back a proposed change for the owner to approve.</p>
         <h2>Definition</h2>
         <p>An agent specialised in software work: it reads and edits code, runs commands and tests, and opens pull requests. Tests give it a clear signal of success, which is one reason coding was an early use for agents.</p>
+        <h2>Try it elsewhere</h2>
+        <ul>
+          <li><a href="https://www.swebench.com/">SWE-bench</a>, the SWE-bench team: The leaderboard of the benchmark in which a coding agent has to fix real issues from open-source projects.</li>
+        </ul>
         <h2>Detailed technical description</h2>
         <p>It works in a loop over a code repository: search and read files, edit them, run the build, tests and linters, read the failures and try again. Project instructions in a file such as agents-md tell it how the project works. Many run in an isolated copy of the repository, so a change can be reviewed as a diff or pull request before merging.</p>
         <p>Common failures are changes that pass the tests but miss the intent, edits beyond the requested scope, invented library functions and getting stuck repeating a failing fix. Weak tests let wrong code through, so the quality of the checks sets the quality of the result. Keep tasks small, review every diff, limit what commands it may run and keep credentials out of its environment.</p>
@@ -146,6 +151,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -168,6 +174,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>

@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -129,6 +130,12 @@
         <p>A public set of standard test dishes that many different chefs are all asked to cook, so their results can be compared fairly.</p>
         <h2>Definition</h2>
         <p>A public, standardised set of tasks used to compare models or agents. Scores are useful for a first shortlist but say little about how a model will do on your own work, so test candidates on your own examples.</p>
+        <h2>Try it elsewhere</h2>
+        <ul>
+          <li><a href="https://www.swebench.com/">SWE-bench</a>, the SWE-bench team: The leaderboard of the benchmark in which a coding agent has to fix real issues from open-source projects.</li>
+          <li><a href="https://arena.ai/">Arena</a>, Arena (formerly LMArena): Compare two anonymous models side by side and see the leaderboard built from people's votes.</li>
+          <li><a href="https://artificialanalysis.ai/">Artificial Analysis</a>, Artificial Analysis: Independent comparisons of models and providers: quality, price and speed.</li>
+        </ul>
         <h2>Detailed technical description</h2>
         <p>A benchmark pairs a fixed set of tasks with a scoring rule, such as exact match, passing unit tests or a grade by a judge. Running different models on the same tasks under the same settings gives numbers that can be compared. Results depend on details: the prompt format, the number of examples shown, the sampling settings and the tools allowed. Two scores are comparable only if these match.</p>
         <p>Benchmarks go stale. Once a test is public, models can be tuned toward it, its answers can leak into training data (see benchmark-contamination), and top scores bunch up near the ceiling so differences stop meaning anything. In February 2026, OpenAI stopped reporting SWE-bench Verified, citing training-data contamination and tests that rejected correct fixes. Tasks may also differ from real work in length, tools and messiness. Use public scores to build a shortlist, then decide with a private golden-set drawn from your own cases.</p>
@@ -146,6 +153,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -168,6 +176,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>

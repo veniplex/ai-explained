@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -129,6 +130,9 @@
         <p>Another name for using tools: the chef writes out a precise, fixed-form request, such as 'use the phone, ask this stall', and the kitchen carries it out.</p>
         <h2>Definition</h2>
         <p>Another name for tool use: the model returns a structured request to call a named function with arguments, which your code executes, and the result is sent back to the model.</p>
+        <h2>Try it</h2>
+        <h3>Who does what in a tool call</h3>
+        <p>Step through one tool call. The model only writes the call; the harness checks it and runs the tool. Try a broken call and see where it stops. This demo needs JavaScript.</p>
         <h2>Detailed technical description</h2>
         <p>The developer sends the tool definitions with the request. If the model decides a tool is needed, it stops and returns the tool name and arguments, and the application validates them, runs the function and sends the result in a new message. The model never executes anything itself. Some models can return several calls at once so independent ones run in parallel.</p>
         <p>Errors usually come from arguments that are missing, of the wrong type or invented, from choosing the wrong tool among similar ones, and from results too large for the context. Validate every argument as untrusted input, return clear error messages the model can act on, and keep the tool-schema precise. The calls are the interface between the model and any real system.</p>
@@ -146,6 +150,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -168,6 +173,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>

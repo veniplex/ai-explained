@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -129,6 +130,10 @@
         <p>A label made of numbers that captures what a passage means, so the chef can find cookbook pages that mean the same thing without matching the exact words.</p>
         <h2>Definition</h2>
         <p>A vector of numbers that represents the meaning of a piece of text, an image or code, placed so that similar meanings lie close together. It lets software compare meaning by measuring distance.</p>
+        <h2>Try it elsewhere</h2>
+        <ul>
+          <li><a href="https://projector.tensorflow.org/">Embedding Projector</a>, TensorFlow: Explore embeddings as points in space and see which ones sit close together.</li>
+        </ul>
         <h2>Detailed technical description</h2>
         <p>An embedding model reads a piece of text and returns a fixed-length list of numbers, often hundreds or thousands long. Texts with similar meaning get vectors that point in similar directions, and closeness is measured with cosine similarity or a dot product. The vector is a learned summary and is not meant to be turned back into words, but research shows that much of the original text can sometimes be recovered from it, so treat stored embeddings as sensitive data.</p>
         <p>Quality depends on the model chosen and on the text embedded. Vectors from different models are not comparable, so changing the model means re-embedding everything. Long passages blur several topics into one vector, which is why text is split by chunking first. Embeddings capture topic well but can miss exact identifiers, negation and numbers, which is a reason to pair them with keyword search.</p>
@@ -146,6 +151,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -168,6 +174,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>

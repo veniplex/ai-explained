@@ -103,6 +103,15 @@ One row, the same on every page and the same width on every page: the brand on t
 | `.note-board`, `a.note-card`, `.note-tape` | the guides as notes on a pinboard: a card with a strip of tape, a drawn icon, a title, a line on what to expect and the reading time, its outline drawn with the pen |
 | `.gd-audience`, `.gd-expect`, `.gd-section`, `.gd-short`, `.gd-steps`, `.gd-callout`, `.tbl`, `.code`, `.gd-src`, `.gd-sources`, `.gd-side*`, `.read-progress` | a guide, the same layout for all seven: who it is for, the "what you will know afterwards" note, numbered sections each with an "In short" line (`.gd-short`), steps, callout, table, code, optionally a view (the table of easily confused things, the ladder, the patterns, the reading lists), and the numbers of the sources it rests on (`.gd-src`); then the terms and the numbered list of sources (`.gd-sources`). At the left edge a box lists the parts and ends with the button "Explore all guides"; it stays where it is while the page scrolls. `.read-progress` is the line along the lower edge of the top bar that shows how far you have read. A part you jump to flashes once (`.is-hit`); the page scrolls smoothly unless the reader asked for less motion |
 
+## Try it demos (demos.css)
+
+| Class | What it is |
+| --- | --- |
+| `.dm`, `.dm-head`, `.dm-kind`, `.dm-title`, `.dm-lede`, `.dm-body`, `.dm-note` | a demo frame in the colour of its zone: a badge that says computed live, scripted run or recorded run, the title, one line on what it shows, the demo and a note on what it does not show |
+| `.dm-pick`, `.dm-chip`, `.dm-toggle`, `.dm-slider`, `.dm-steps`, `.dm-controls` | the shared controls: a row of buttons of which one is on, a tick box, a labelled slider, Back / Next with a counter |
+| `.dm-links`, `.dm-links-by`, `.dm-links-note` | "Try it elsewhere": tools of other people, each with who made it and one line on what it does |
+| `.dm-pk-*`, `.dm-tri-*`, `.dm-pm-*`, `.dm-rg-*`, `.dm-cw-*`, `.dm-q-*`, `.dm-tc-*`, `.dm-lb-*`, `.dm-fo-*`, `.dm-tk-*` | the parts of single demos (pass@k, trifecta, permissions, request growth, context window, quantisation, tool call / OAuth / MCP, loop break, fan-out, tokenizer) |
+
 ## Joining the story to the glossary (places.css)
 
 | Class | What it is |

@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -129,6 +130,9 @@
         <p>A note hidden inside a delivery crate, a menu or a letter the chef opens, saying 'ignore the owner and do this instead'. The owner never wrote it, yet the chef reads it as an order.</p>
         <h2>Definition</h2>
         <p>Prompt injection where the malicious instruction does not come from the person but is hidden in content the agent reads: a web page, an email, a document or a tool result. It is the main practical risk of agents that read untrusted content.</p>
+        <h2>Try it</h2>
+        <h3>The lethal trifecta</h3>
+        <p>Tick what your agent can do and see whether it has all three of the abilities that make a hidden instruction dangerous. This demo needs JavaScript.</p>
         <h2>Detailed technical description</h2>
         <p>The attack works because a model receives instructions and data in the same stream of text and has no reliable way to keep them apart. A page can include hidden text, a document can carry white-on-white lines, and a tool result can contain a command. When the agent reads it, the model may follow it as though the user had asked.</p>
         <p>Filters and warnings in the prompt reduce the rate but do not close the hole, so design as if some injections will succeed. Limit what the agent can do after reading untrusted material, keep private data and outward channels apart (see lethal-trifecta), require approval for sensitive actions, and run the work in a sandbox. Test with realistic poisoned content during red-teaming.</p>
@@ -146,6 +150,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -168,6 +173,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>

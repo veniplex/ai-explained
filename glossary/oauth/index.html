@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -129,6 +130,14 @@
         <p>A signed pass the owner hands over at the market door: it lets the chef fetch only certain goods for a limited time, and the owner can cancel it without changing the master key.</p>
         <h2>Definition</h2>
         <p>A standard that lets a person grant an application limited access to their account on another service without sharing their password. The application receives a token with specific scopes that can expire or be revoked, and the MCP specification uses it for remote servers.</p>
+        <h2>Try it</h2>
+        <h3>Signing in without sharing a password</h3>
+        <p>Step through the authorisation-code flow with PKCE: how an app gets a short-lived token for one task without ever seeing a password. This demo needs JavaScript.</p>
+        <h3>Try it elsewhere</h3>
+        <ul>
+          <li><a href="https://www.oauth.com/playground/">OAuth 2.0 Playground</a>, oauth.com: Run the real flows (authorisation code, PKCE, device code and more) against a test server and see every request.</li>
+          <li><a href="https://jwt.io/">JWT Debugger</a>, Auth0: Decode a JSON Web Token and see its parts. Use test tokens only, never a real one.</li>
+        </ul>
         <h2>Detailed technical description</h2>
         <p>In the common authorisation code flow, the person is sent to the service's own sign-in page, approves a list of scopes, and the application receives a short-lived access token and often a refresh token. The application never sees the password. Modern practice adds PKCE, which protects the exchange for clients that cannot keep a secret.</p>
         <p>For agents, the token is the real credential, so store it securely, request the narrowest scopes and expect it to expire. Mistakes include broad scopes, tokens logged or placed in prompts, and one shared token that hides who did what. A tool using a user's token acts with that user's rights, which creates confused-deputy risk, so check what each action is allowed to do.</p>
@@ -146,6 +155,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -168,6 +178,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>

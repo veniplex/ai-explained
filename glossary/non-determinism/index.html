@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -129,6 +130,11 @@
         <p>The same order given twice to the same chef comes out a little different each time, even on a calm evening, so every taste test is repeated and averaged.</p>
         <h2>Definition</h2>
         <p>A model can give a different answer to the same prompt on different runs, even when randomness is switched off. This makes one run of a test unreliable, so evaluations repeat each task and report the average and the spread.</p>
+        <h2>Try it</h2>
+        <h3>From scores to a pick</h3>
+        <p>A model scores every possible next word. Move the temperature and watch the scores turn into chances, then draw ten words from them. This demo needs JavaScript.</p>
+        <h3>One try or many</h3>
+        <p>Set how often an agent succeeds on one try and how many times you run it. See the chance that at least one run works, and the chance that every run works. This demo needs JavaScript.</p>
         <h2>Detailed technical description</h2>
         <p>Sampling adds randomness on purpose, see temperature. Variation remains at temperature 0. Thinking Machines (September 2025) traced much of it to a lack of batch invariance: the numeric result of a computation depends on how requests are batched, which changes with server load. With one model at temperature 0, 1,000 completions gave 80 different outputs, and none differed with batch-invariant kernels, at a speed cost. A 2024 study of five models saw accuracy vary by up to 15% across runs. Agents add more variation, since each step changes what follows.</p>
         <p>Providers say so plainly. OpenAI's seed parameter asks for a best-effort deterministic sample, and its cookbook (November 2023) states that determinism is not guaranteed. Anthropic's Claude Sonnet 5.5 returns an error for non-default temperature, top_p and top_k, according to its migration guide, so those settings cannot be used to force repeatability.</p>
@@ -147,6 +153,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -169,6 +176,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>

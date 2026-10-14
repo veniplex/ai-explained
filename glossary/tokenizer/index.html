@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -129,6 +130,14 @@
         <p>The cutting board that chops every order into small standard bite pieces (tokens) and numbers them, and later glues the chef's pieces back into readable words. Each kitchen has its own board.</p>
         <h2>Definition</h2>
         <p>The component that splits text into tokens and maps each to a number before the model reads it, and turns the model's output numbers back into text. Each model family has its own tokenizer, so the same text can cost a different number of tokens in different models.</p>
+        <h2>Try it</h2>
+        <h3>Cut text into tokens</h3>
+        <p>First train a tiny tokenizer on a few lines of your own text and watch it learn its pieces. Then load the real one of GPT-2 and see how ordinary text, other languages, code and numbers are cut. This demo needs JavaScript.</p>
+        <h3>Try it elsewhere</h3>
+        <ul>
+          <li><a href="https://tiktokenizer.vercel.app/">Tiktokenizer</a>, dqbd: Pick an OpenAI model and see how it cuts your text, with the token count. OpenAI's tokenizers only.</li>
+          <li><a href="https://huggingface.co/spaces/Xenova/the-tokenizer-playground">The Tokenizer Playground</a>, Xenova, on Hugging Face: Paste text and see the tokens and their numbers, and compare tokenizers of different model families.</li>
+        </ul>
         <h2>Detailed technical description</h2>
         <p>The vocabulary is built before training, commonly by merging the most frequent byte or character pairs repeatedly until a set size is reached. Encoding is deterministic: the same text always gives the same tokens. Special tokens mark boundaries such as the start of a message, a role or a tool call, and the model is trained to use them.</p>
         <p>Use the matching tokenizer to count tokens and budget the context, because a different one gives different counts. Odd splits explain trouble with exact spelling, rare names, long numbers and unusual scripts. Whitespace and casing can change the tokens and so the model's behaviour. Text that tries to imitate special tokens should be escaped, since it can confuse a poorly built harness.</p>
@@ -146,6 +155,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -168,6 +178,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>

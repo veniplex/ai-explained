@@ -65,7 +65,7 @@
     ALIAS = { map: map, re: new RegExp("(^|[^A-Za-z0-9-])(" + names.map(escapeRe).join("|") + ")(?:s|es)?(?![A-Za-z0-9-])", "gi") };
     return ALIAS;
   }
-  var SKIP_IN = "a, code, pre, svg, button, h1, h2, h3, h4, h5, h6, .links, .gd-sources, .link-meta, .chips, .locator, .pager, .term-aka, .mini-map, .kmap, .fig, .formula, .note-grid, .gl-card, .side, .code, .eyebrow, label";
+  var SKIP_IN = "a, code, pre, svg, button, h1, h2, h3, h4, h5, h6, .links, .gd-sources, .link-meta, .chips, .locator, .pager, .term-aka, .mini-map, .kmap, .fig, .formula, .note-grid, .gl-card, .side, .code, .eyebrow, label, .dm";
   function linkBlock(block, selfId) {
     var A = aliases(), seen = {}, walker = document.createTreeWalker(block, NodeFilter.SHOW_TEXT, null), nodes = [], n;
     while ((n = walker.nextNode())) { if (n.parentNode && !n.parentNode.closest(SKIP_IN)) nodes.push(n); }
@@ -299,6 +299,11 @@
       }))) : null);
     return section("Detailed technical description", body);
   }
+  // "Try it": a small demo and links to tools of other people (demos.js, data/demos.js), when the term has any.
+  function tryIt(id) {
+    var b = V3.demos ? V3.demos.forTerm(id) : null;
+    return b ? section("Try it", b) : null;
+  }
   function termPage(id) {
     var t = T.get(id), c = T.cats.filter(function (x) { return x.id === t.cat; })[0];
     var i = T.list.indexOf(t), prev = T.list[(i + T.list.length - 1) % T.list.length], next = T.list[(i + 1) % T.list.length];
@@ -307,12 +312,13 @@
     var body = h("div", { class: "bd", "data-zone": t.zone },
       V3.locator ? V3.locator.section(t) : null,
       definition(t),
+      tryIt(t.id),
       relatedChips(t.related),
       detail(t),
       referencesOf(T.refs(id), "References"));
     autolink(body, id);
     // The parts of the page get an address, so the list at the left edge can jump to them.
-    var PART_ID = { "Where it sits in the kitchen": "t-kitchen", "Definition": "t-definition", "Related terms": "t-related", "Detailed technical description": "t-details", "References": "t-references" };
+    var PART_ID = { "Where it sits in the kitchen": "t-kitchen", "Definition": "t-definition", "Try it": "t-try", "Related terms": "t-related", "Detailed technical description": "t-details", "References": "t-references" };
     sk.$$(".bd-section", body).forEach(function (sec) { var hd = sec.querySelector("h2"), pid = hd && PART_ID[hd.textContent]; if (pid) sec.id = pid; });
     var article = h("article", { class: "page page-entry", "data-zone": t.zone },
       h("header", { class: "page-head term-head" },

@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -130,6 +131,13 @@
         <h2>Definition</h2>
         <p>MCP, the Model Context Protocol, is an open standard for connecting AI apps to other software.</p>
         <p>Anthropic, the company behind Claude, introduced MCP in November 2024. Since December 2025 it has been governed by the Agentic AI Foundation, part of the non-profit Linux Foundation. A company builds one MCP server, a program that offers its tools, data and ready-made prompts. Every app that supports MCP can then use it. Many apps call such servers connectors. Each server can reach the accounts you connect it to, so you must trust whoever made it.</p>
+        <h2>Try it</h2>
+        <h3>A conversation between client and server</h3>
+        <p>Step through the messages a client and an MCP server exchange, from the first greeting to a tool call. This demo needs JavaScript.</p>
+        <h3>Try it elsewhere</h3>
+        <ul>
+          <li><a href="https://modelcontextprotocol.io/docs/tools/inspector">MCP Inspector</a>, Model Context Protocol: The official tool for testing an MCP server: list its tools and call them. It runs on your own computer (Node 22.19 or newer), not in the browser.</li>
+        </ul>
         <h2>Detailed technical description</h2>
         <p>MCP defines how a host (the app running the agent, see harness) connects, through MCP clients (the part of the host that talks to one server), to MCP servers. Servers offer tools (actions), resources (data) and prompts (templates). They run on your own computer or remotely over the web (HTTP), with access granted through OAuth, the standard behind “allow this app access” screens.</p>
         <p>Since its launch, MCP, an open standard (a public format any app can use), has been adopted across the industry. The current revision (2026-07-28) simplified the core so that a server no longer has to remember each client between requests, which lets remote servers spread across many machines. It moved long-running tasks out of the core into a formal extension. Interactive interfaces (MCP Apps) are another official extension.</p>
@@ -148,6 +156,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -170,6 +179,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>

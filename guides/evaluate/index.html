@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -160,15 +161,27 @@
         <p>One run of one task shows little. Run each task several times, and report two numbers. pass@k counts a task as solved if at least one of k tries passes. It measures whether the agent can do the task at all, which suits a setting where a person picks the best of several attempts. pass^k counts it as solved only if all k tries pass. It measures reliability, which is what matters when the agent runs unattended and every run counts. The metric was proposed with τ-bench (2024), a benchmark of agents serving simulated customers, which found that even strong agents of the time solved under half of the tasks and that pass^8 fell below 25 per cent in its retail domain.</p>
         <p>The two diverge quickly. If a single run succeeds with probability p and runs are independent, pass@k is 1 − (1 − p)^k and pass^k is p^k. Anthropic's guide gives the example of an agent that succeeds 75 per cent of the time: it passes all three of three trials only about 42 per cent of the time. Setting the temperature to zero does not remove the variation in agent runs, because tool results change and a small difference early in the run sends it down another path.</p>
         <p>Mind the size of the set as well. With twenty tasks, one task is worth five points, so a change of a few points between two runs of the set may be noise. Repeat runs until the difference you care about is larger than the spread between repeats, report the number of trials next to every score, and do not report one lucky pass.</p>
+        <h3>Try it</h3>
+        <h4>One try or many</h4>
+        <p>Set how often an agent succeeds on one try and how many times you run it. See the chance that at least one run works, and the chance that every run works. This demo needs JavaScript.</p>
         <h2>Regression sets, benchmarks and the eval loop</h2>
         <p>Every bug that was fixed becomes a test, so it cannot come back unnoticed. Public benchmarks help to compare models, but your own tasks decide.</p>
         <p>Anthropic's guide distinguishes two kinds of eval. A capability eval should start with a low pass rate: it measures what the agent cannot do yet and gives you something to climb. A regression eval should pass nearly 100 per cent of the time: it protects what already works. Tasks move from the first kind to the second once they pass reliably, and a capability set that the agent passes completely is saturated and needs harder tasks. Every incident adds a regression task, so a fix stays fixed. Run the whole set whenever the model, the system prompt, a tool, a skill or the provider changes, and treat a drop as a reason to hold the release.</p>
         <p>A public benchmark compares models or agents on a standard set of tasks. SWE-bench, for example, uses 2,294 real software issues, and its Verified subset 500 issues checked by people. A benchmark tells you how models rank on that task type, and little about your agent. Benchmarks also saturate, leak into training data and depend on the harness: the same model scores differently in different harnesses, so keep one constant when you compare the other. Use benchmarks to shortlist and your own set to decide. Open frameworks such as Inspect, developed by the UK AI Security Institute and Meridian Labs, provide the plumbing for both: datasets, sandboxed tool use, graders and logs.</p>
+        <h3>Try it elsewhere</h3>
+        <ul>
+          <li><a href="https://www.swebench.com/">SWE-bench</a>, the SWE-bench team: The leaderboard of the benchmark in which a coding agent has to fix real issues from open-source projects.</li>
+          <li><a href="https://arena.ai/">Arena</a>, Arena (formerly LMArena): Compare two anonymous models side by side and see the leaderboard built from people's votes.</li>
+        </ul>
         <h2>Traces and spans: seeing inside a run</h2>
         <p>A trace is a detailed recording of one run: every model call and every tool call, with timings, inputs, outputs and costs. It turns “it failed” into “it failed here, for this reason”.</p>
         <p>observability means recording enough of each run to explain it afterwards. A trace is the record of one run. It is a tree of spans, timed operations that nest inside each other: the whole run, each model call, each tool call, each sub-agent and each guardrail check. A span carries attributes such as the input and output, the model name, token counts, duration, cost and any error.</p>
         <p>OpenTelemetry, the open standard for collecting traces, has conventions for generative AI that give these spans standard names, so different tools can read them (still marked “Development” in October 2026). An agent run is an invoke_agent span, a tool call an execute_tool span, and attributes such as gen_ai.request.model, gen_ai.usage.input_tokens and gen_ai.usage.output_tokens carry the details. Recording the full text of messages is opt-in, because it can contain personal data. Agent frameworks and coding agents export such data: the OpenAI Agents SDK traces runs by default, and Claude Code exports metrics for tokens, cost and sessions, with prompt text redacted by default.</p>
         <p>A trace turns “the agent failed” into “the second search returned an empty list, and the model wrote the row anyway”. Trace from the first prototype, redact secrets and personal data before storage, and keep the same trace identifier in the audit log. Read traces regularly: error analysis, described above, runs on them. Recorded traces can also be replayed, which helps with failures that do not reproduce on demand.</p>
+        <h3>Try it elsewhere</h3>
+        <ul>
+          <li><a href="https://langfuse.com/docs/demo">Langfuse demo project</a>, Langfuse: A shared project with example traces of model runs, to click through before setting anything up.</li>
+        </ul>
         <h2>Cost and latency</h2>
         <p>An agent pays for every piece of text it reads and writes, and it waits for every step. Measure the cost and the time of a successful task, and cap both in code.</p>
         <p>cost follows tokens. A rough model is tokens per turn, times turns, times price, and input and output are priced separately, with output costing more per token. It grows fast, because the whole context is sent again on every turn, so input tokens pile up as the job goes on. The Lisbon trace above reads about 20,100 input tokens and writes 480 output tokens over four calls. At $2 per million input tokens and $10 per million output tokens, the list price of a mid-sized model (October 2026), that is about 4.5 cents. Cost per successful task is the number to track: at a success rate of 80 per cent it is about 5.6 cents. A cheaper model that needs three attempts is not cheaper, and a failed run costs as much as one that succeeds.</p>
@@ -199,6 +212,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -211,6 +225,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>
   <script src="../../assets/js/github.js"></script>

@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -129,6 +130,10 @@
         <p>A senior chef tastes plates from other chefs and scores them against a written rubric. It can judge what no stopwatch can, but it needs checking against real guests, since judges love big portions.</p>
         <h2>Definition</h2>
         <p>Using a language model to grade another model's output against a rubric, for example for correctness, helpfulness or tone. It scales to cases that no exact check can score, but it needs calibration against human ratings, since judges tend to favour longer answers and their own style.</p>
+        <h2>Try it elsewhere</h2>
+        <ul>
+          <li><a href="https://arena.ai/">Arena</a>, Arena (formerly LMArena): Compare two anonymous models side by side and see the leaderboard built from people's votes.</li>
+        </ul>
         <h2>Detailed technical description</h2>
         <p>A judge prompt contains the task, the answer to be graded and a rubric with clear levels, and asks for a short reason followed by a score or a verdict. Pairwise comparison, where the judge picks the better of two answers, is usually more stable than absolute scores. Asking for the reason before the score, using low temperature and giving a few worked examples all tend to improve consistency.</p>
         <p>Known biases include a preference for longer answers, for the first answer shown, and for text that resembles the judge's own writing. A judge may also be fooled by confident but wrong answers. Check agreement with human labels on a sample, swap the order of pairs, and use a different model family as judge where possible. Keep a human-rated golden-set to detect when the judge itself drifts.</p>
@@ -146,6 +151,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -168,6 +174,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>

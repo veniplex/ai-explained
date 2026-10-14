@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -131,6 +132,9 @@
         <p>The cycle that turns a model into an agent: look, act, see the result, repeat.</p>
         <p>The model looks at its context and picks a tool to use. The harness (the app around the model) runs it and adds the result. The model looks again, until it reaches the goal and answers, or hits a limit on steps, time or money.</p>
         <p>On long jobs, agents keep a to-do list. They should check their work, because errors add up: if each step goes right 95% of the time, a 10-step job goes right only about 60% of the time.</p>
+        <h2>Try it</h2>
+        <h3>Break the loop</h3>
+        <p>An agent whose fix does not work keeps trying. Choose which safeguards are on, run it, and see where it stops and what it costs. This demo needs JavaScript.</p>
         <h2>Detailed technical description</h2>
         <p>Research introduced the loop as ReAct (reasoning plus acting). On each turn the model either answers or asks for a tool call; the harness runs the tool and appends the result, called the observation. The loop ends with a final answer, a stop hook, a person interrupting, or a budget for turns, tokens, time or money running out. Current models think between tool calls and can make several calls in one turn.</p>
         <p>Agents plan explicitly (a written plan a person approves) or implicitly (choosing the next step each turn). Many harnesses offer plan mode: read-only exploring that ends in a plan you review before anything changes. A to-do list keeps long tasks on track and survives when older steps are summarised (compaction). Skip plans for small tasks, and update them when reality changes.</p>
@@ -152,6 +156,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -174,6 +179,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>

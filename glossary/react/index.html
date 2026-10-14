@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -129,6 +130,9 @@
         <p>A 2022 research idea: the chef alternates between thinking aloud and acting, one step at a time. It became the pattern for taste, adjust, taste again.</p>
         <h2>Definition</h2>
         <p>Reason plus act: the 2022 research pattern of interleaving written reasoning with tool actions and observations. It is the template for today's agent loop.</p>
+        <h2>Try it</h2>
+        <h3>Break the loop</h3>
+        <p>An agent whose fix does not work keeps trying. Choose which safeguards are on, run it, and see where it stops and what it costs. This demo needs JavaScript.</p>
         <h2>Detailed technical description</h2>
         <p>In each cycle the model writes a short thought, names an action and its input, the harness runs the action, and the result is added as an observation. The model then reasons about it and chooses the next action, until it decides to give a final answer. The written thoughts help it plan, notice errors and keep track of what has been tried.</p>
         <p>Modern models have tool calling and reasoning built in, so the original text format is rarely used, but the loop is the same. Typical failures are repeating the same action, following a wrong early assumption, losing the goal as the history grows and never stopping. Put a cap on steps and cost in the harness, and log each thought, action and observation so you can debug a run.</p>
@@ -146,6 +150,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -168,6 +173,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>

@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -129,6 +130,10 @@
         <p>Cameras that record every step of the chef's shift, with timings and costs, so the owner can replay what happened and fix what went wrong.</p>
         <h2>Definition</h2>
         <p>Recording traces, metrics and logs of agent runs so you can inspect and improve them. It shows what an agent did and why, what each run cost, and where it is slow or failing.</p>
+        <h2>Try it elsewhere</h2>
+        <ul>
+          <li><a href="https://langfuse.com/docs/demo">Langfuse demo project</a>, Langfuse: A shared project with example traces of model runs, to click through before setting anything up.</li>
+        </ul>
         <h2>Detailed technical description</h2>
         <p>Instrumentation wraps each model call, tool call and decision, and records what went in, what came out, how long it took and how many tokens it used. These records are linked into a trace per run, and aggregated into metrics such as error rate, cost per task and latency percentiles. Logs of prompts and outputs let you replay a failure with the same inputs. Many teams use standard tracing formats so tools can be swapped.</p>
         <p>Because traces hold user data, decide what to store, redact personal data, and set retention limits. Averages hide problems, so look at the slowest and the most expensive runs, and sample failures for review. Observability shows what happened, not whether it was good, so pair it with evals that score outputs. Alerts on cost spikes and on runs that loop catch many faults early.</p>
@@ -146,6 +151,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -168,6 +174,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>

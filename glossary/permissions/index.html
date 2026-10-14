@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -131,6 +132,9 @@
         <p>Permissions decide what an agent may do alone, what needs your approval and what is forbidden.</p>
         <p>The harness, the app around the model, checks every action: allowed, ask first, or denied. Approval modes range from asking every time to approving routine actions automatically. You can step in at chosen points to approve, correct or take over. Anything that cannot be undone or that reaches the outside world, such as a payment or an email, should wait for a person.</p>
         <p>Too many approval questions backfire: people start clicking yes without reading.</p>
+        <h2>Try it</h2>
+        <h3>Allow, ask or deny</h3>
+        <p>Write the rules, and see what happens to each action an agent proposes. Then switch on the hook and see what a rule outside the model adds. This demo needs JavaScript.</p>
         <h2>Detailed technical description</h2>
         <p>Harnesses check every tool call against a policy of allow, ask or deny, often by tool and argument pattern: allow running tests, ask before pushing code, deny reading .env, a file that often holds secret keys. Unlike a prompt, these rules are enforced by code, so the model cannot talk its way past them.</p>
         <p>Permission modes range from read-only planning, through asking every time, to automatic approval inside a sandbox. Some harnesses let a classifier, a separate model, approve routine actions and stop risky ones. Start from least privilege, the fewest rights the task needs. Loosen it for trusted, reversible work in a sandbox; tighten it for production systems, money and secrets. Separate reading from writing, scope credentials per task and share permission settings with the team in version control.</p>
@@ -151,6 +155,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -173,6 +178,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>

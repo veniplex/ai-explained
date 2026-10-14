@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -129,6 +130,9 @@
         <p>The chef grows sloppier as the counter fills with more and messier clutter, so the notes that matter are harder to find and follow.</p>
         <h2>Definition</h2>
         <p>The decline in a model's accuracy as its context grows longer and noisier. Relevant details get harder to find among the clutter, so more context is not always better.</p>
+        <h2>Try it</h2>
+        <h3>Fill a context window</h3>
+        <p>Step through a coding task and watch what takes up room in the window. Then switch on a remedy and run it again. This demo needs JavaScript.</p>
         <h2>Detailed technical description</h2>
         <p>Attention is spread over every token in the window, so irrelevant material competes with relevant material, and similar but wrong passages can distract the model. Accuracy often falls well before the stated context limit, and it falls faster when the task needs reasoning over the content than when it only needs a word looked up. Position matters too, as in lost-in-the-middle.</p>
         <p>In long agent runs it builds up from stale tool output, abandoned plans and repeated attempts. Remedies are to keep the context small and relevant, to clear or compact old results, to store notes outside the window and to hand sub-tasks to fresh sub-agents. Measuring accuracy at several context lengths on your own task shows where the decline starts.</p>
@@ -146,6 +150,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -168,6 +173,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>

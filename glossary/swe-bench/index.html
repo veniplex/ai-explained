@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -129,6 +130,10 @@
         <p>A set of real repair jobs taken from busy restaurants: the chef is handed a broken dish and its notes, fixes it, and a taster checks the result with the original test.</p>
         <h2>Definition</h2>
         <p>A benchmark of real GitHub issues from open-source projects. An agent gets the code and an issue text and must write a patch, which counts only if the project's tests then pass. It became the standard way to compare coding agents.</p>
+        <h2>Try it elsewhere</h2>
+        <ul>
+          <li><a href="https://www.swebench.com/">SWE-bench</a>, the SWE-bench team: The leaderboard of the benchmark in which a coding agent has to fix real issues from open-source projects.</li>
+        </ul>
         <h2>Detailed technical description</h2>
         <p>The original set (Jimenez et al., October 2023) has 2,294 tasks from 12 Python repositories. The score is the share of tasks resolved. Variants followed: Lite (300 tasks, March 2024), Verified (500 tasks, August 2024), Multimodal (480 tasks with images), Multilingual (300 tasks in 9 languages), Live (1,319 tasks from issues created since 2024, May 2025) and Pro (1,865 tasks from 41 repositories, September 2025, with public, held-out and commercial parts).</p>
         <p>Verified was made with OpenAI: 93 developers screened 1,699 samples and 68.3% were removed because the issue was underspecified or the tests unfair. In February 2026 OpenAI said it no longer reports Verified scores. It audited 138 problems that a model failed to solve consistently, found 59.4% had flawed tests or descriptions, and found that frontier models could reproduce original patches, so gains partly reflect exposure to the data. It points to Pro's public split as less contaminated.</p>
@@ -147,6 +152,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -169,6 +175,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>
