@@ -53,6 +53,14 @@ window.AE3 = window.AE3 || {};
     "diffusion-model": "A painter-chef who starts from a smudge of random colour and tidies it step by step until a picture matching the order appears, instead of writing it word by word.",
     "small-language-model": "A young chef with a small head and a small kitchen: quick and cheap, able to work in a food truck, and good enough for simple, well-practised jobs.",
     "test-time-compute": "Extra thinking time spent while the order is being cooked, not during schooling: the chef plans longer or tries several versions before serving. Often better plates, a longer wait and a bigger bill.",
+    "reward-hacking": "The chef is tipped for passing the taste test, so learns to spot the tester and hand over the one dish that always scores, instead of cooking properly.",
+    "scaling-laws": "A rule of thumb for the chef's apprenticeship: more cookbooks read, more practice hours and more raw talent make the chef better by a steady, predictable amount.",
+    "emergent-abilities": "A skill the chef suddenly shows after a long enough apprenticeship, though smaller chefs never managed it; some say it only looks sudden because of how the tasting score is counted.",
+    "synthetic-data": "Practice dishes cooked by another chef instead of taken from real orders: handy when real examples are scarce, but a chef who studies only copies slowly forgets the unusual dishes.",
+    "world-model": "The chef's mental rehearsal of the kitchen: imagining what would happen to the dish and the room after the next step, before touching anything.",
+    "state-space-model": "A chef who keeps one small notepad of fixed size and updates it after each word of the order, instead of rereading the whole order every time; quick, but small details can slip off the page.",
+    "logits-and-softmax": "Before choosing the next word, the chef gives every possible word a score; a conversion turns the scores into chances, and a dial on the order ticket sets how boldly the chef picks.",
+    "rl-environment": "A practice kitchen that reacts: the chef acts, the room changes, and a scorekeeper gives a mark after each move.",
 
     /* ---- Prompts and context ---- */
     "context-engineering": "Choosing with care everything that lies on the counter at each step: house rules, tools, looked-up facts, earlier notes and results, so nothing useless crowds it.",
@@ -71,6 +79,7 @@ window.AE3 = window.AE3 || {};
     "stop-sequence": "A bell word agreed in advance: the moment the chef says it, the plate is taken away and nothing more is added, even if the chef had more to say.",
     "streaming": "Plates leave the pass one forkful at a time, so the guest starts eating at once instead of waiting for the whole dish to be finished.",
     "tokenizer": "The cutting board that chops every order into small standard bite pieces (**tokens**) and numbers them, and later glues the chef's pieces back into readable words. Each kitchen has its own board.",
+    "design-md": "A **style guide** pinned by the pass: the colours, plates and lettering of the house, so every new menu board the chef paints looks like it belongs.",
 
     /* ---- Tools and protocols ---- */
     "computer-use": "The chef works a till or oven panel built for human hands: it looks at a photograph of the display, then says where to press and what to type.",
@@ -91,6 +100,17 @@ window.AE3 = window.AE3 || {};
     "agent-card": "The name card a head chef hands to other restaurants: who they are, which dishes they can take on, which door to knock on and how to prove who is asking.",
     "mcp-client": "The matching socket on the chef's side: one for each appliance, it asks the appliance what it offers and carries the chef's requests across.",
     "mcp-host": "The kitchen itself, the whole room where all those sockets are fitted. It decides which appliances are plugged in and asks the owner before a risky one is switched on.",
+    "mcp-apps": "A supplier's appliance that hands the chef not just a note but a small **interactive panel** with dials and buttons, shown behind glass on the pass so a faulty one cannot reach the rest of the kitchen.",
+    "a2ui": "The chef sketches a form for the guest as a list of ready-made parts, such as a button or a box to write in, and the guest's own table draws them from its approved set; no machinery is delivered.",
+    "ag-ui": "A running commentary between the chef and the dining room: each step, each tool picked up and each question for the guest is called out in order, so the front of house can show it as it happens.",
+    "generative-ui": "Instead of handing over a fixed menu, the chef draws the menu board afresh for each order: a picture, a form, a dial, whatever suits tonight's request.",
+    "agent-client-protocol": "A shared standard for how a chef takes a seat at any writing desk (an **editor**): how drafts pass back and forth, how changes are shown and how the chef asks before touching anything.",
+    "mcp-elicitation": "While working, an appliance on the standard plug rings a small bell on the pass with a question such as which size, or is this allowed; the chef pauses the order and asks the owner before carrying on.",
+    "mcp-sampling": "An appliance on the standard plug that has no brain of its own and borrows the chef's: it hands over a note and asks the chef to write the answer. Its designers now advise against building new ones this way.",
+    "mcp-transport": "The two ways an appliance connects to the kitchen: a short cable to the wall socket beside the chef (**stdio**), or a long line to a supplier across town (**Streamable HTTP**).",
+    "tool-annotations": "Small stickers on each tool's label, such as only looks, may break things, safe to repeat, reaches outside. The house rules use them to decide when to ask, but a sticker written by the maker may be wrong.",
+    "programmatic-tool-calling": "Instead of fetching each ingredient one by one and reading every label aloud, the chef writes a short routine, runs it on the test stove, and gets back only the finished answer.",
+    "mcp-registry": "The public directory of appliance makers: it lists who makes which appliance and how to order it, and checks that the maker's name is genuine, but it does not test the appliance itself.",
 
     /* ---- Agents and loops ---- */
     "agent": "A chef with a counter, tools and a tasting loop: the chef picks each next step, uses the tools and tastes the result until the dish is right.",
@@ -107,6 +127,12 @@ window.AE3 = window.AE3 || {};
     "trajectory": "The complete record of one shift: every ticket, every tool picked up, every result, in order. The owner replays it to find mistakes, to grade the chef or to teach the next one.",
     "scaffold": "The kitchen built around the chef that turns a brilliant cook into a working service: the loop, the tools, the notes. The same chef scores differently in differently built kitchens.",
     "long-horizon-task": "A job that takes a whole day of steps, each one depending on the last. Small slips pile up, so the chef needs a plan, notes, snapshots and regular tasting.",
+    "harness-engineering": "Fitting out the whole kitchen around the chef, with stations, timers and a rule for when to stop, so a bad plate is caught before it leaves the pass.",
+    "ralph-loop": "A chef with a short memory sent back to the same order ticket again and again, each time reading the notebook and the half-finished plates, until the ticket is done.",
+    "headless-mode": "The kitchen working overnight: a written order is slid under the door, the chef cooks it with nobody watching and leaves the plate and a note.",
+    "plan-mode": "The chef lays the plan on the counter and waits for the owner's nod before lighting a single burner.",
+    "heartbeat": "The chef glancing at the order window every half hour to see whether anything needs doing, and going back to sleep if not.",
+    "rollout": "One whole service from first order to last, written down with every step and how the diners scored it, kept as practice material for the chef.",
 
     /* ---- Knowledge and memory ---- */
     "agentic-rag": "The chef decides when to reach for the cookbook shelf or the phone to the market, what to ask, and asks again in new words if an answer falls short.",
@@ -127,6 +153,7 @@ window.AE3 = window.AE3 || {};
     "scratchpad": "A scrap of paper at the side where the chef jots sums and steps while working, kept apart from the finished plate the owner actually sees.",
     "semantic-search": "Finding cookbook pages by what they mean: ask for 'fixing a stuck cake' and the page on 'rescuing a sunken sponge' comes up, even if no word matches. Exact names it may miss.",
     "knowledge-cutoff": "The last page of the chef's cookbook library: the date the books stop. Anything that happened later the chef simply never read, unless someone puts it on the counter.",
+    "llms-txt": "A one-page **menu index** taped to the cookbook shelf that tells the chef which pages of the big books are worth reading first.",
 
     /* ---- Safety and control ---- */
     "guardrails": "Automatic checks around the chef, like the smoke alarm and the lock on the till, that stop or correct unsafe, off-topic or malformed orders and dishes.",
@@ -151,6 +178,16 @@ window.AE3 = window.AE3 || {};
     "container": "A sealed workstation inside the kitchen with its own tools, shelves and phone line. It is quick to set up, but it shares the kitchen's walls and floor, so a determined mess could still spread.",
     "microvm": "A tiny separate kitchen built inside the big one, with its own walls and its own gas supply. It opens in a blink and is a much stronger barrier than a screened-off corner.",
     "secrets": "The keys, the safe's combination and the supplier passwords. They never go on the order ticket or in the chef's notes; the chef gets a short-lived key for one job, because anything on the counter can be repeated aloud.",
+    "owasp-agentic-top-10": "A **checklist of the ten worst ways** a kitchen can be tricked or break down, from a planted note changing the chef's plan to one bad order spreading through every station.",
+    "excessive-agency": "Giving the chef the master key ring and the freedom to spend and send without asking, when the job needed one cupboard key and a quick word from you.",
+    "sycophancy": "The chef who tells you your recipe is brilliant and your sauce idea sound, because you look happy, even when the pan is already burning.",
+    "non-human-identity": "A **name badge for the chef**: its own badge, its own keys and its own line in the sign-in book, so nobody mixes up what the chef did with what you did.",
+    "scheming": "A chef who smiles and follows orders while quietly working to a different plan of its own and hiding it, which is why tests look at what the chef writes in its notebook.",
+    "sandbagging": "A chef who deliberately cooks badly on the tasting day, so the judges think the kitchen can do less than it really can.",
+    "rug-pull": "A delivery stall that shows a harmless label at the first visit, then swaps the contents and the instructions inside after you stopped checking.",
+    "shadow-ai": "Staff bringing in their own helper chefs and secret order lines that the owner never approved, so household secrets leave through doors nobody is watching.",
+    "aibom": "The **ingredient list** pinned by the door: every supplier, batch and helper that went into the kitchen, so a recall can find what was used.",
+    "web-bot-auth": "A wax seal on every order slip the chef sends to a market stall, so the stallholder can check who really sent it.",
 
     /* ---- Teams and workflows ---- */
     "agent-teams": "A brigade of full chefs under one head chef, sharing a list of jobs and talking to each other, unlike helpers who only hand a finished bowl back to whoever asked.",
@@ -172,6 +209,7 @@ window.AE3 = window.AE3 || {};
     "cron": "A wall clock with alarms: every weekday at eight the prep list is started, whether or not the owner is in the building.",
     "event-trigger": "A bell on the door: when a delivery arrives, a guest walks in or a payment lands, the chef springs into action at once instead of checking the door every minute.",
     "handoff": "One chef passes the order to another, with the ticket, the notes so far and what has been tried, or hands it back to the owner. A clean handover loses nothing on the way.",
+    "git-worktree": "Each cook gets a separate prep table with their own copy of the order binder, so two cooks never scribble on one page; the finished work is combined later.",
 
     /* ---- Quality, cost and rules ---- */
     "benchmark": "A public set of standard test dishes that many different chefs are all asked to cook, so their results can be compared fairly.",
@@ -196,6 +234,23 @@ window.AE3 = window.AE3 || {};
     "risk-tier": "Sorting dishes by how badly they could go wrong: bread needs a glance, raw fish needs an inspector. The riskier the tier, the more tasting and watching the owner must add.",
     "inference": "Actually cooking the order, as against years of cookery school. Every ticket is one cooking run, and most of the restaurant's running costs are these runs.",
     "quantisation": "Writing the chef's measurements with fewer decimals: whole spoons instead of grams to the hundredth. The chef takes less room and works faster, and the plates hardly change.",
+    "model-card": "The **label on the chef's file** that says what the chef is good at, how it was tested, and where it is known to slip.",
+    "nist-ai-600-1": "A voluntary **safety handbook chapter** from a standards office that lists twelve kinds of trouble for kitchens that use a chef, with suggested ways to handle each.",
+    "ai-gateway": "A **single serving hatch** between the kitchen and all the suppliers: every order goes through it, where the keys are kept, the bill is totted up and a backup supplier is picked if one is closed.",
+    "gpu": "The huge stove with thousands of burners: it handles an enormous number of simple steps at once, which is what the chef's arithmetic needs, and its size decides which chef fits in the room.",
+    "speculative-decoding": "A junior cook quickly sketches the next few steps and the head chef checks them all in one glance, keeping what is right, so the order moves faster with the same result.",
+    "paged-attention": "The counter split into small labelled trays instead of one long strip, so the chef can keep notes for many orders at once without wasting space.",
+    "swe-bench": "A set of real repair jobs taken from busy restaurants: the chef is handed a broken dish and its notes, fixes it, and a taster checks the result with the original test.",
+    "terminal-bench": "A timed exam where the chef must get hard jobs done using only the plain **command line**, with no fancy gadgets, and an inspector checks each finished job.",
+    "humanitys-last-exam": "A written exam of very hard questions set by hundreds of master chefs, chosen so that the best chefs got them wrong, and marked against a single correct answer each.",
+    "arc-agi": "A tray of little puzzles that need only everyday sense: the chef sees a few solved examples, must work out the rule alone, and any trick that needs a good memory fails.",
+    "osworld": "A test where the chef must get jobs done by looking at the screens and pressing the buttons, like a person would, and a checker looks at the final result.",
+    "tau-bench": "A role-play exam: an actor plays a fussy customer with a complaint, the chef must follow the house rulebook, and the test repeats the scene many times to see if the chef stays reliable.",
+    "lmarena": "A crowd taste-off: guests get two anonymous plates, pick the one they prefer, and thousands of votes build a league table of chefs.",
+    "time-horizon": "A measure of how long a job the chef can finish alone, counted in how many hours an experienced cook would need for it, and only about half the time at that length.",
+    "goodharts-law": "Once the chefs are paid by the tasting score, they start cooking for the score and not for the guests, and the score stops telling you who cooks well.",
+    "non-determinism": "The same order given twice to the same chef comes out a little different each time, even on a calm evening, so every taste test is repeated and averaged.",
+    "eval-harness": "The fixed rulebook, scoring sheet and timer of the taste panel, so every new chef or menu is judged under exactly the same conditions.",
 
     /* ---- Products and uses ---- */
     "agentic-ai": "The name for kitchens where the chef does more than answer questions: it plans, picks its own steps and takes real actions to get the order done.",
@@ -212,7 +267,16 @@ window.AE3 = window.AE3 || {};
     "data-agent": "A chef-analyst who answers questions about the restaurant's own ledgers: writes the sums, runs them, reads the results and explains them, sometimes with a chart. It needs tidy ledgers and a lock on private pages.",
     "ai-browser": "A shop window with a chef built in, who browses the market's pages, clicks, fills in forms and completes errands while signed in as the owner. A sly note on a page is its biggest danger.",
     "voice-agent": "A chef you speak to across the pass: it hears the order, thinks and answers aloud. A pause or an interruption is felt far more than in a written note.",
-    "generative-ai": "Chefs that create something new, such as a fresh dish, a painting, a tune or a written method, instead of only ticking boxes about things that already exist."
+    "generative-ai": "Chefs that create something new, such as a fresh dish, a painting, a tune or a written method, instead of only ticking boxes about things that already exist.",
+    "spec-driven-development": "Writing the full order sheet and plating plan first, then letting the chef work step by step from it while the owner ticks off each line.",
+    "agentic-engineering": "The head chef's role: not stirring every pot but running the line, tasting each plate and answering for whatever leaves the pass.",
+    "personal-agent": "A live-in sous-chef who answers your messages at any hour and carries a bunch of your keys: handy, and whoever can talk to them can try to steer them.",
+    "agi": "The legend of a chef who can cook anything a person can, in any kitchen; nobody agrees how to test for it, and real chefs are still tried one dish at a time.",
+    "agentic-commerce": "The chef is sent shopping with the owner's purse: it browses the stalls, fills a basket and pays, which is why rules about spending, approval and proof matter.",
+    "ucp": "A common order form that shops and the chef's buyer all agree on: look up goods, fill a basket, check out and follow the delivery, whichever shop it is.",
+    "ap2": "A signed note from the owner, kept at the till: it proves the owner agreed to this exact purchase, up to this limit, so the shop and the bank can check it was allowed.",
+    "agentic-commerce-protocol": "One shop's agreed way for the chef's buyer to check out: the shop keeps its own till and stock, and the buyer carries a sealed payment pass instead of the owner's real card.",
+    "x402": "A coin slot on the supplier's hatch: ask for something, the hatch says what it costs, you drop the coin in and ask again, with no account needed."
   });
 
 })(window.AE3);

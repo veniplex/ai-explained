@@ -60,6 +60,10 @@
   // The section "Where it sits in the kitchen" of a glossary page: the kitchen of the story, small, with the spot this term belongs to outlined, a sentence on
   // what that spot is, and one way into the story (the labelled kitchen, #e-<id>). A main term has a spot of its own; every other term sits at the spot of the
   // main term it belongs to.
+  // **bold bridges** of the kitchen sentence (a technical word the kitchen voice may use) become <strong>.
+  function bold(text) {
+    return String(text || "").split(/\*\*([^*]+)\*\*/).map(function (part, i) { return i % 2 ? h("strong", null, part) : part; });
+  }
   function section(t) {
     var nm = null, spot = t.entry || t.id;
     NAMES.forEach(function (n) { if (n.id === spot) nm = n; });
@@ -72,7 +76,7 @@
       h("div", { class: "loc-text" },
         h("h3", { class: "loc-title", id: "loc-title" }, nm.kw.charAt(0).toUpperCase() + nm.kw.slice(1)),
         t.main ? null : h("p", { class: "loc-part" }, "Part of ", h("a", { href: url.entry(spot), "data-entry": spot }, main.name)),
-        h("p", { class: "loc-line" }, line),
+        h("p", { class: "loc-line" }, bold(line)),
         h("div", { class: "loc-actions" },
           h("a", { class: "btn btn-sm", href: url.kitchen("e-" + spot) }, "See it in the kitchen"))));
     // The drawing takes a moment; the page does not wait for it.
