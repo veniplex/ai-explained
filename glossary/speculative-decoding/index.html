@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -129,6 +130,9 @@
         <p>A junior cook quickly sketches the next few steps and the head chef checks them all in one glance, keeping what is right, so the order moves faster with the same result.</p>
         <h2>Definition</h2>
         <p>A way to make a large model generate faster: a small draft model guesses several next tokens, and the large model checks them all in one pass. Tokens that pass are kept, so the output follows the same distribution as normal decoding.</p>
+        <h2>Try it</h2>
+        <h3>A small model drafts, a big one checks</h3>
+        <p>Step through three rounds in which a small model drafts a few words and the big model checks them all at once. This demo needs JavaScript.</p>
         <h2>Detailed technical description</h2>
         <p>Normally K tokens take K sequential passes. With speculation, a cheaper draft proposes a short run of tokens and the large model scores them in parallel at roughly the cost of one. Tokens that match are accepted; everything after the first mismatch is discarded and regenerated. A rejection-sampling step keeps the large model's output distribution, up to numerical precision. Leviathan et al. (November 2022) reported 2 to 3 times speedup on T5-XXL; Chen et al. (February 2023) reported 2 to 2.5 times on a 70-billion-parameter model.</p>
         <p>The gain depends on how often the draft is right and on the workload. The vLLM docs say speculative decoding is meant to reduce inter-token latency under medium-to-low request rates in memory-bound workloads, not to raise peak throughput, and that real gains depend on model family, traffic pattern, hardware and sampling settings. Methods include a draft model, EAGLE, multi-token prediction heads and cheap n-gram or suffix matching.</p>
@@ -147,6 +151,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -169,6 +174,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>

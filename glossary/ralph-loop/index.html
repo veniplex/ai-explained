@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -129,6 +130,9 @@
         <p>A chef with a short memory sent back to the same order ticket again and again, each time reading the notebook and the half-finished plates, until the ticket is done.</p>
         <h2>Definition</h2>
         <p>A technique in which a coding agent is run in a plain loop on the same prompt file, over and over, each pass with a fresh context, until the work is done. Progress lives in files and git history, not in the conversation. Also called the Ralph Wiggum loop.</p>
+        <h2>Try it</h2>
+        <h3>Break the loop</h3>
+        <p>An agent whose fix does not work keeps trying. Choose which safeguards are on, run it, and see where it stops and what it costs. This demo needs JavaScript.</p>
         <h2>Detailed technical description</h2>
         <p>Geoffrey Huntley described it in July 2025 in its purest form as a shell loop: while :; do cat PROMPT.md | claude-code ; done. Each pass starts with an empty context window, reads the project files, does one task and leaves its results in the code and notes for the next pass. Tests, type checkers and linters act as 'backpressure' that rejects bad output. It works with any agent that does not cap tool calls.</p>
         <p>Huntley advises one task per loop and warns that agents may write placeholder code or wrongly conclude that a feature is missing; he says it suits new projects and he would not use it on an existing codebase. A loop with no stop condition runs until money or patience ends, so cap iterations and spend. The Register (January 2026) reported an estimate of about 10 US dollars per hour, and that Anthropic published a Ralph Wiggum plugin for Claude Code.</p>
@@ -146,6 +150,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -168,6 +173,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>

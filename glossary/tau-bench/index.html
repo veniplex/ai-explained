@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -129,6 +130,9 @@
         <p>A role-play exam: an actor plays a fussy customer with a complaint, the chef must follow the house rulebook, and the test repeats the scene many times to see if the chef stays reliable.</p>
         <h2>Definition</h2>
         <p>A benchmark from Sierra that tests an agent in a conversation with a simulated customer, using tools and following a written policy. It scores whether the final state of the system is right, and it introduced pass^k, a measure of how reliably the agent repeats a success.</p>
+        <h2>Try it</h2>
+        <h3>One try or many</h3>
+        <p>Set how often an agent succeeds on one try and how many times you run it. See the chance that at least one run works, and the chance that every run works. This demo needs JavaScript.</p>
         <h2>Detailed technical description</h2>
         <p>The paper (Yao et al., June 2024) has two domains: retail (115 tasks) and airline (50 tasks). A language model plays the customer, and an episode scores 1 only if the final database state matches the goal and the required information was given. Pass^k is the chance that all k trials of a task succeed. The authors found that gpt-4o solved under half the tasks and that its pass^8 in retail was below 25%.</p>
         <p>Later versions: τ²-bench (2025) adds a setting where the user also acts in the environment, and τ³-bench adds voice and a knowledge-retrieval banking domain, with more than 75 task fixes. Version 1.0.1 (July 2026) fixed errors in the banking tasks, so earlier banking results are not comparable and affected leaderboard entries were re-graded.</p>
@@ -147,6 +151,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -169,6 +174,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>

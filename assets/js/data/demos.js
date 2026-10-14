@@ -13,6 +13,16 @@ window.AE3 = window.AE3 || {};
   AE3.demos = {
 
     list: {
+      "softmax": {
+        title: "From scores to a pick", kind: "live", zone: "model",
+        lede: "A model scores every possible next word. Move the temperature and watch the scores turn into chances, then draw ten words from them.",
+        note: "The scores are made up for one sentence; a real model scores tens of thousands of tokens. The draws use your browser's random numbers, so they change every time."
+      },
+      "speculative-decoding": {
+        title: "A small model drafts, a big one checks", kind: "scripted", zone: "harness",
+        lede: "Step through three rounds in which a small model drafts a few words and the big model checks them all at once.",
+        note: "A hand-written run with made-up words. It shows the mechanism, not the speed of any real system. With the usual sampling rule the final text has the same distribution as plain decoding."
+      },
       "tokenizer": {
         title: "Cut text into tokens", kind: "live", zone: "harness",
         lede: "First train a tiny tokenizer on a few lines of your own text and watch it learn its pieces. Then load the real one of GPT-2 and see how ordinary text, other languages, code and numbers are cut.",
@@ -93,6 +103,7 @@ window.AE3 = window.AE3 || {};
       "models-dev": { title: "models.dev", url: "https://models.dev/", by: "an open-source project", note: "A table of models with their prices, context limits and features. Prices change, so read the current ones there." },
       "artificial-analysis": { title: "Artificial Analysis", url: "https://artificialanalysis.ai/", by: "Artificial Analysis", note: "Independent comparisons of models and providers: quality, price and speed." },
       "swe-bench": { title: "SWE-bench", url: "https://www.swebench.com/", by: "the SWE-bench team", note: "The leaderboard of the benchmark in which a coding agent has to fix real issues from open-source projects." },
+      "arc-play": { title: "ARC Prize: play", url: "https://arcprize.org/play", by: "ARC Prize Foundation", note: "Solve ARC-AGI puzzles in the browser yourself, to feel what the benchmark asks of a model." },
       "arena": { title: "Arena", url: "https://arena.ai/", by: "Arena (formerly LMArena)", note: "Compare two anonymous models side by side and see the leaderboard built from people's votes." },
       "langfuse-demo": { title: "Langfuse demo project", url: "https://langfuse.com/docs/demo", by: "Langfuse", note: "A shared project with example traces of model runs, to click through before setting anything up." },
       "nist-playbook": { title: "NIST AI RMF Playbook", url: "https://airc.nist.gov/AI_RMF_Knowledge_Base/Playbook", by: "NIST", note: "Suggested actions for the four functions of the framework, as a web page and as PDF, CSV, Excel and JSON downloads." },
@@ -151,7 +162,16 @@ window.AE3 = window.AE3 || {};
       "multi-agent-system": { demos: ["fan-out"] },
       "transformer": { links: ["transformer-explainer", "llm-visualization"] },
       "attention": { links: ["transformer-explainer"] },
-      "temperature": { links: ["transformer-explainer"] },
+      "temperature": { demos: ["softmax"], links: ["transformer-explainer"] },
+      "logits-and-softmax": { demos: ["softmax"], links: ["transformer-explainer"] },
+      "non-determinism": { demos: ["softmax", "pass-k"] },
+      "speculative-decoding": { demos: ["speculative-decoding"] },
+      "tau-bench": { demos: ["pass-k"] },
+      "ralph-loop": { demos: ["loop-break"] },
+      "excessive-agency": { demos: ["permissions"] },
+      "arc-agi": { links: ["arc-play"] },
+      "swe-bench": { links: ["swe-bench"] },
+      "lmarena": { links: ["arena"] },
       "inference": { links: ["transformer-explainer"] },
       "embedding": { links: ["embedding-projector"] },
       "semantic-search": { links: ["embedding-projector"] },

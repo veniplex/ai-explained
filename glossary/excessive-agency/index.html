@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -129,6 +130,9 @@
         <p>Giving the chef the master key ring and the freedom to spend and send without asking, when the job needed one cupboard key and a quick word from you.</p>
         <h2>Definition</h2>
         <p>A weakness in which an AI system is given more functions, access or freedom to act than its task needs, so that a wrong, confused or manipulated model output can cause real damage. It is an OWASP risk for LLM applications.</p>
+        <h2>Try it</h2>
+        <h3>Allow, ask or deny</h3>
+        <p>Write the rules, and see what happens to each action an agent proposes. Then switch on the hook and see what a rule outside the model adds. This demo needs JavaScript.</p>
         <h2>Detailed technical description</h2>
         <p>OWASP describes three root causes. Excessive functionality: the model can call tools the task does not need. Excessive permissions: those tools hold more access on other systems than required. Excessive autonomy: high-impact actions run without independent checking or approval. The trigger can be a hallucination, a direct or indirect prompt-injection, or a compromised tool or peer agent. OWASP's example is a mail summariser whose plugin can also send mail, which a malicious message turns into a leak.</p>
         <p>Its guidance is to limit tools to what is necessary, prefer narrow tools over open-ended ones such as arbitrary shell access, grant minimum permissions in the user's own security context, require human approval for high-impact actions, and enforce authorisation in the downstream system instead of trusting the model. Logging and rate limits do not prevent it but limit the damage.</p>
@@ -147,6 +151,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -169,6 +174,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>

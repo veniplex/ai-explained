@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="../../assets/css/places.css">
   <link rel="stylesheet" href="../../assets/css/nav.css">
   <link rel="stylesheet" href="../../assets/css/pages.css">
+  <link rel="stylesheet" href="../../assets/css/demos.css">
   <script src="../../assets/js/theme.js"></script>
 
 </head>
@@ -129,6 +130,13 @@
         <p>Before choosing the next word, the chef gives every possible word a score; a conversion turns the scores into chances, and a dial on the order ticket sets how boldly the chef picks.</p>
         <h2>Definition</h2>
         <p>Logits are the raw scores a model gives to every possible next token. Softmax turns them into probabilities that add up to 1, and a logprob is the logarithm of one of those probabilities. Temperature rescales the logits before softmax, and some APIs return logprobs.</p>
+        <h2>Try it</h2>
+        <h3>From scores to a pick</h3>
+        <p>A model scores every possible next word. Move the temperature and watch the scores turn into chances, then draw ten words from them. This demo needs JavaScript.</p>
+        <h3>Try it elsewhere</h3>
+        <ul>
+          <li><a href="https://poloclub.github.io/transformer-explainer/">Transformer Explainer</a>, Georgia Tech, Polo Club: A small GPT-2 runs live in your browser: type a sentence, watch the attention and the next-token chances, and change temperature, top-k and top-p.</li>
+        </ul>
         <h2>Detailed technical description</h2>
         <p>For each step the model produces one logit per token in its vocabulary, from a final multiplication by the unembedding matrix. Softmax raises e to each logit and divides by the sum, so larger logits get probabilities near 1 and smaller ones near 0. Temperature T sits in the exponents: a larger T spreads the probabilities out, a smaller T lets the largest logit dominate, and at 0 all weight goes to the maximum, which is greedy decoding. The sampler then picks a token; see temperature and token.</p>
         <p>A logprob is log(p), so it is 0 or negative, and exp turns it back into a probability: about -0.028 is roughly 97%. In OpenAI's Chat Completions API, setting logprobs returns the log probability of each output token, and top_logprobs returns the most likely alternatives at each position. OpenAI's cookbook shows uses such as confidence thresholds for classification, autocomplete, and perplexity, the exponent of the negative average logprob.</p>
@@ -147,6 +155,7 @@
   <script src="../../assets/js/data/voice-tech.js"></script>
   <script src="../../assets/js/data/glossary.js"></script>
   <script src="../../assets/js/data/glossary-refs.js"></script>
+  <script src="../../assets/js/data/demos.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-a.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-b.js"></script>
   <script src="../../assets/js/data/voice-guides-long-tech-c.js"></script>
@@ -169,6 +178,7 @@
   <script src="../../assets/js/map.js"></script>
   <script src="../../assets/js/story.js"></script>
   <script src="../../assets/js/guide-views.js"></script>
+  <script src="../../assets/js/demos.js"></script>
   <script src="../../assets/js/locator.js"></script>
   <script src="../../assets/js/pages.js"></script>
   <script src="../../assets/js/app.js"></script>
