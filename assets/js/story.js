@@ -178,6 +178,12 @@
       railEl.style.setProperty("--rail-p", ((cur + frac) / (list.length - 1)).toFixed(4));
       var doc = document.documentElement, max = Math.max(1, doc.scrollHeight - window.innerHeight);
       fill.style.transform = "scaleX(" + Math.max(0, Math.min(1, window.scrollY / max)).toFixed(4) + ")";
+      // The start screen and the whole-system map are laid out on their own; where one would sit under the dots, they fade out.
+      var rb = railEl.getBoundingClientRect();
+      railEl.classList.toggle("is-faded", under.some(function (el) {
+        var b = el.getBoundingClientRect();
+        return b.width > 0 && b.left < rb.right + 6 && b.right > rb.left && b.top < rb.bottom && b.bottom > rb.top;
+      }));
       if (cur === last) return;
       last = cur;
       items.forEach(function (a2, i) {
@@ -189,12 +195,17 @@
     listen("scroll", queue, { passive: true });
     listen("resize", queue);
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(queue);
-    // The dots sit just left of the text column, wherever the layout puts it.
+    // The dots sit just left of the text column, wherever the layout puts it. The name that opens on hover goes
+    // to the left of them, into the strip kept free there; where that strip is too narrow, the names stay shut.
+    var under = $$(".hero > *, .hub > *");
     function place() {
       var ch = document.querySelector(".chapter");
       if (!ch) return;
       var x = Math.max(railEl.offsetWidth + 8, ch.getBoundingClientRect().left - 18);
       railEl.style.setProperty("--rail-x", Math.round(x) + "px");
+      var room = railEl.getBoundingClientRect().left - 8 - 14;
+      railEl.style.setProperty("--rail-label-w", Math.max(0, Math.min(room, 200)) + "px");
+      railEl.classList.toggle("no-labels", room < 90);
     }
     listen("resize", place);
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(place);

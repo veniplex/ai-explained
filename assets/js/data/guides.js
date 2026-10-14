@@ -1189,7 +1189,7 @@ window.AE3.guides = {
       {
         "group": "Observability",
         "name": "OpenTelemetry GenAI conventions",
-        "url": "https://opentelemetry.io/docs/specs/semconv/gen-ai/",
+        "url": "https://github.com/open-telemetry/semantic-conventions-genai",
         "connects": "Agents ↔ observability tools",
         "origin": "OpenTelemetry project",
         "governance": "Cloud Native Computing Foundation (CNCF)",
@@ -1243,7 +1243,7 @@ window.AE3.guides = {
         "connects": "Agent ↔ paid API or website, via the HTTP 402 status code",
         "origin": "Coinbase",
         "governance": "x402 Foundation under the Linux Foundation, since July 2026",
-        "status": "Pay-per-request payments: a server answers with HTTP 402 and the client pays and retries. Stablecoin payments are the primary use case.",
+        "status": "Pay-per-request payments: a server answers with HTTP 402 and the client pays and retries. Stablecoin payments are one of the supported payment methods.",
         "sources": [
           "https://www.x402.org/",
           "https://www.linuxfoundation.org/press/linux-foundation-announces-operational-launch-of-x402-foundation-to-standardize-internet-native-payments-for-ai-agents-and-applications"
