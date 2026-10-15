@@ -195,18 +195,23 @@
     listen("scroll", queue, { passive: true });
     listen("resize", queue);
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(queue);
-    // The dots sit just left of the page's content container (the same one every text page has), one gap from its edge. The name that opens on hover goes
-    // to the left of them, into the margin there; where that margin is too narrow, the names stay shut.
+    // The dots sit left of everything on the page, the wide parts too (the opening and the whole-system map reach past the content container on big windows), one gap
+    // from the leftmost edge, so they never lie over a wide part and sit well clear of the text. The name that opens on hover goes to the left of them, into the margin
+    // there; where that margin is too narrow, the names stay shut.
     var under = $$(".hero > *, .hub > *");
     function place() {
-      var box = document.querySelector(".story");
-      if (!box) return;
+      var edge = Infinity;
+      $$(".hero, .story, .kmap-hub").forEach(function (el) {
+        var r = el.getBoundingClientRect();
+        if (r.width > 0) edge = Math.min(edge, r.left);
+      });
+      if (edge === Infinity) return;
       var gap = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--side-gap")) || 24;
-      var x = Math.max(railEl.offsetWidth + 8, box.getBoundingClientRect().left - gap + 6);
+      var x = Math.max(railEl.offsetWidth + 8, edge - gap - 16);
       railEl.style.setProperty("--rail-x", Math.round(x) + "px");
       var room = railEl.getBoundingClientRect().left - 8 - 14;
       railEl.style.setProperty("--rail-label-w", Math.max(0, Math.min(room, 200)) + "px");
-      railEl.classList.toggle("no-labels", room < 90);
+      railEl.classList.toggle("no-labels", room < 64);
     }
     listen("resize", place);
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(place);
