@@ -748,7 +748,7 @@ tbody th { font-weight: 600; }
 
 /* Hero */
 .hero {
-  width: var(--content-w); margin: 0 auto; min-height: calc(100svh - var(--bar-h));
+  width: var(--wide-w); margin: 0 auto; min-height: calc(100svh - var(--bar-h));
   display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: clamp(24px, 5vw, 72px); align-items: center;
   padding-block: 32px;
 }
@@ -804,8 +804,8 @@ tbody th { font-weight: 600; }
   grid-template-areas: "you you" "chef tools" "kitchen kitchen" "recipes helpers" "ops ops";
 }
 .kmap-hub {
-  margin: 0 auto; row-gap: 18px; column-gap: 0;
-  grid-template-columns: minmax(200px, 1fr) 96px minmax(0, 2.1fr) 96px minmax(200px, 1fr);
+  margin: 0 calc(-1 * var(--wide-extra)); row-gap: 18px; column-gap: 0;
+  grid-template-columns: minmax(170px, 1fr) clamp(92px, 7.5vw, 116px) minmax(0, 2.1fr) clamp(92px, 7.5vw, 116px) minmax(170px, 1fr);
   grid-template-areas:
     ".       .  you     .  ."
     "chef    cA kitchen cB tools"
@@ -977,7 +977,7 @@ tbody th { font-weight: 600; }
 @media (max-width: 1240px) {
   .brand-sub { display: none; }
 }
-@media (max-width: 1079px) {
+@media (max-width: 1279px) {
   .kmap-hub {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 14px;
     grid-template-areas: "you you" "chef tools" "kitchen kitchen" "recipes helpers" "ops ops";

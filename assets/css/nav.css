@@ -23,6 +23,8 @@
   --side-gap: 24px;                          /* between that list (or the dots) and the container */
   --lead: 0px;
   --content-w: min(var(--page-w), calc(100% - var(--lead)));  /* as wide as the page's own box: write it only for a child of .stage */
+  --wide-extra: 0px;                         /* how far a wide part (the opening of the Start page and of the deep dive, the whole-system map) may reach past the container on each side; the dots of the deep dive stay clear of it */
+  --wide-w: calc(var(--content-w) + 2 * var(--wide-extra));
   --prose-w: 780px;                          /* a line of running text stays this long inside the wider container */
   --z-search: 60;   /* the list of hits, above the menus */
   --z-pop: 70;      /* the hover card, above everything but the skip link */
@@ -34,6 +36,10 @@
   :root { --bar-main-h: 54px; }
 }
 @media (min-width: 960px) { :root { --lead: calc(var(--side-w) + var(--side-gap)); } }
+@media (min-width: 1400px) { :root { --wide-extra: 30px; } }
+@media (min-width: 1600px) { :root { --wide-extra: 50px; } }
+@media (min-width: 1800px) { :root { --wide-extra: 80px; } }
+@media (min-width: 2000px) { :root { --wide-extra: 110px; } }
 
 /* ---------- The bar: brand, places, search, actions ------------------------------ */
 /* Nothing in the bar changes place from one page to the next: the scrollbar's room is always kept (see the end of this file), the current place is marked without
