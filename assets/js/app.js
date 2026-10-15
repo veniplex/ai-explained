@@ -75,7 +75,7 @@
     clear(main);
     if (page === "home") {
       V3.story.render(main);
-      $$(".chapter, .recap", main).forEach(function (el) { V3.pages.autolink(el); });
+      $$(".chapter", main).forEach(function (el) { V3.pages.autolink(el); });
     }
     else if (page === "term" && hasTerm(pageId)) main.appendChild(V3.pages.term(pageId));
     else if (page === "glossary") main.appendChild(V3.pages.glossary());

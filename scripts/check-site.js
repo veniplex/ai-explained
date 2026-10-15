@@ -32,6 +32,7 @@ const SECTIONS = ["start", "story", "technical", "guides", "glossary", "about"];
 const PLACES = SECTIONS;
 // The guides: the four long ones, the table, the build guide and the reading list (v4 allowed five).
 v4.LIMITS.guides = 7;
+v4.LIMITS.recap = 0;          // the deep dive has no closing list of ideas
 
 const walk = (d) => fs.readdirSync(d, { withFileTypes: true }).flatMap((e) => e.isDirectory() ? (e.name === "vendor" ? [] : walk(path.join(d, e.name))) : [path.join(d, e.name)]);
 

@@ -1,4 +1,4 @@
-/* AI explained: the smaller texts of the technical voice: the hero line, the five things to remember, the labels of the figures and of the map, and the headings of the page. It uses no picture at all. Inline markup: `code`, **bold**, [[entry-id|label]], [text](https://…). */
+/* AI explained: the smaller texts of the technical voice: the hero line, the labels of the figures and of the map, and the headings of the page. It uses no picture at all. Inline markup: `code`, **bold**, [[entry-id|label]], [text](https://…). */
 window.AE3 = window.AE3 || {};
 (function (AE3) {
   "use strict";
@@ -10,13 +10,6 @@ window.AE3 = window.AE3 || {};
     task: "Find the three cheapest flights to Lisbon in May, put them in my travel sheet, and book the best one once I say OK.",
     short: "the Lisbon flights"
   };
-  T.recap = [
-    { t: "The model is stateless.", d: "It sees only the context of the current request, plus what it learned in training. The application resends whatever it needs with every call." },
-    { t: "Context is the bottleneck.", d: "Quality drops as the window fills with irrelevant text. Skills, retrieval and memory bring the right material at the right time; sub-agents keep the main context clean." },
-    { t: "Prompts suggest; code enforces.", d: "Instructions guide the model, but injected text can override them. Permissions, hooks and sandboxes are enforced by code in the harness." },
-    { t: "Start simple.", d: "A single prompt beats a fixed workflow, and a fixed workflow beats an agent that picks its own steps, until evals show you need more." },
-    { t: "Verify the output.", d: "Tests, checks and a second pass turn plausible answers into verified ones." }
-  ];
   T.figures = {
     contextBars: [
       {

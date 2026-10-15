@@ -578,14 +578,6 @@ img { max-width: 100%; }
 .subhead:first-child { margin-top: 0; }
 .sub-lede { font: 400 var(--fs-base)/1.55 var(--serif); color: var(--ink-2); max-width: 70ch; margin: -6px 0 16px; }
 
-/* Five ideas */
-.ideas { list-style: none; margin: 0; padding: 0; display: grid; gap: 18px; max-width: 860px; counter-reset: idea; }
-.ideas li { position: relative; display: grid; grid-template-columns: 54px 1fr; column-gap: 18px; padding: 18px 0; border-top: 1px solid var(--rule); }
-.ideas li:first-child { border-top: 0; }
-.ideas .idea-num { grid-row: span 3; font: 500 var(--fs-5xl)/1 var(--serif); color: var(--clay-ink); }
-.ideas h3 { font: 600 var(--fs-2xl)/1.3 var(--serif); }
-.ideas p { margin-top: 6px; font: 400 var(--fs-lg)/1.55 var(--serif); color: var(--ink-2); max-width: 62ch; }
-.ideas .chips { margin-top: 10px; }
 
 /* Context window bars */
 .ctx-wrap { display: grid; gap: 34px; max-width: 1000px; }
@@ -748,7 +740,7 @@ tbody th { font-weight: 600; }
 
 /* Hero */
 .hero {
-  width: var(--wide-w); margin: 0 auto; min-height: calc(100svh - var(--bar-h));
+  width: var(--content-w); margin: 0 auto; min-height: calc(100svh - var(--bar-h));
   display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: clamp(24px, 5vw, 72px); align-items: center;
   padding-block: 32px;
 }
@@ -784,7 +776,7 @@ tbody th { font-weight: 600; }
 .ch-example p:not(.eyebrow) { font: 400 var(--fs-lg)/1.55 var(--serif); color: var(--ink); }
 .ch-terms .chip { padding: 6px 13px 6px 10px; font-size: var(--fs-md); }
 .fig { margin-top: 28px; }
-.fig-loop .loop { max-width: 520px; margin: 0; }
+.fig-loop .loop { max-width: min(520px, calc(100% - 28px)); margin: 0 0 0 28px; } /* its labels reach out to the left of the drawing: keep them inside the column */
 .fig-cap { margin-top: 4px; font: italic 400 var(--fs-sm)/1.4 var(--serif); color: var(--ink-3); }
 .ctx-wrap { gap: 24px; }
 .ctx-title { margin-bottom: 8px; font: 600 var(--fs-lg)/1.3 var(--serif); }
@@ -879,17 +871,13 @@ tbody th { font-weight: 600; }
 .kmap-mini .zone-you { padding: 4px 12px; }
 .kmap-mini .you-text, .kmap-mini .you-text b { font-size: var(--fs-sm); }
 
-/* Hub, recap and stamp */
+/* The whole-system map at the end */
 .hub { width: var(--content-w); margin: 0 auto; padding-block: clamp(56px, 10vh, 120px) 40px; border-top: 1px solid var(--rule); }
 .hub:focus { outline: none; }
 .hub-head { margin: 0 0 28px; }
 .hub-head .eyebrow { color: var(--clay-ink); }
 .hub-title { margin-top: 10px; font: 600 clamp(var(--fs-4xl), 3.6vw, calc(var(--fs-5xl) * 1.2))/1.1 var(--serif); letter-spacing: -0.02em; }
 .hub-lede { margin-top: 10px; font: italic 400 var(--fs-lg)/1.5 var(--serif); color: var(--ink-3); }
-.recap { margin: clamp(56px, 9vh, 96px) 0 0; }
-.recap-title { margin-bottom: 18px; font: 600 clamp(var(--fs-3xl), 3vw, var(--fs-5xl))/1.15 var(--serif); }
-.stamp { margin: 48px 0 0; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; font: 400 var(--fs-sm)/1.5 var(--sans); color: var(--ink-3); }
-.stamp .badge { transform: rotate(-2deg); text-transform: uppercase; }
 
 /* Drawer additions: the example, "go deeper", sources */
 .bd-example { padding: 12px 14px; border-radius: var(--r-md); background: var(--paper-2); border: 1px dashed var(--rule-strong); font: 400 var(--fs-base)/1.55 var(--serif); color: var(--ink); }
@@ -1009,8 +997,6 @@ tbody th { font-weight: 600; }
   .links .link-type { grid-row: auto; margin-bottom: 4px; }
   .menu { left: 12px; right: 12px; width: auto; }
   .build-grid, .about { grid-template-columns: 1fr; }
-  .ideas li { grid-template-columns: 40px 1fr; column-gap: 12px; }
-  .ideas .idea-num { font-size: var(--fs-4xl); }
   .hero { grid-template-columns: 1fr; min-height: 0; padding-block: 24px 40px; }
   .hero .pic { max-width: 360px; order: -1; }
   .ch-problem { font-size: var(--fs-lg); }
@@ -1115,7 +1101,6 @@ a.formula-part:hover { color: var(--ink); }
   .hub .kmap .blk { min-height: 40px; }
   .hub .kmap .zone-title { min-height: 40px; display: inline-flex; align-items: center; }
   .chip { min-height: 40px; }
-  .stamp a { display: inline-block; padding-block: 12px; margin-block: -12px; }
 }
 /* The small map of a chapter is a picture (it cannot be tapped), but its words still have to be readable. */
 @media (max-width: 760px) {
