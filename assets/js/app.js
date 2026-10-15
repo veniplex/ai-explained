@@ -42,6 +42,7 @@
     // The story calls the last chapter ch-8; here its heading is ch-e.
     if (id === "ch-8") id = "ch-e";
     var el = id && document.getElementById(id);
+    if (el && V3.guides && V3.guides.openRefs) V3.guides.openRefs(el); // a source inside the closed part of a list of references
     if (el) el.scrollIntoView({ block: "start" });
   }
 

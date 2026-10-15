@@ -26,6 +26,21 @@
     }));
   }
 
+  /* ---------- Long lists of references ---------- */
+  // Every list of references (a term's, a guide's) shows its first three; the rest sit behind one toggle. A link that points at an entry inside the closed part (a number at the
+  // end of a guide's section) opens it first: openRefs(el) is called by the page's own link handling and once on load for an address with such a hash.
+  var SHOWN = 3;
+  function collapsed(list, build) {
+    if (list.length <= SHOWN) return build(list, 0);
+    var rest = list.length - SHOWN;
+    return h("div", { class: "refs" }, build(list.slice(0, SHOWN), 0),
+      h("details", { class: "more-sources" }, h("summary", null, "Show " + rest + " more " + (rest === 1 ? "reference" : "references")), build(list.slice(SHOWN), SHOWN)));
+  }
+  function openRefs(el) {
+    var d = el && el.closest ? el.closest("details.more-sources") : null;
+    if (d) d.open = true;
+  }
+
   /* ---------- Pieces the build guide uses ---------- */
   /* ---------- Easily confused ---------- */
   var KIND_FILL = { io: "paper", llm: "model", tool: "tools", gate: "control", human: "start", agent: "harness" };
@@ -201,8 +216,12 @@
         return [i ? " " : "", h("a", { href: "#src-" + n, class: "gd-src-n", "data-nopop": "", title: l ? l.title : null, "aria-label": "Source " + n + (l ? ": " + l.title : "") }, String(n))];
       }));
   }
-  function sourceList(list) {
-    return h("ol", { class: "gd-sources" }, list.map(function (l, i) {
+  function sourceList(all) {
+    return collapsed(all, function (list, from) { return sourceItems(list, from); });
+  }
+  function sourceItems(list, from) {
+    return h("ol", { class: "gd-sources", style: from ? "counter-reset: src " + from : null }, list.map(function (l, j) {
+      var i = from + j;
       var m = [l.by, l.year].filter(Boolean).join(" · ");
       return h("li", { id: "src-" + (i + 1) },
         h("span", { class: "badge link-type" + (l.type ? " link-type-" + l.type : "") }, TYPE_LABEL[l.type] || l.type || "Link"),
@@ -288,5 +307,5 @@
 
   var ALL = ["how-it-works", "context", "build", "secure", "evaluate", "compare", "learn"], render = {};
   ALL.forEach(function (id) { render[id] = function () { return renderArticle(id); }; });
-  V3.guides = { render: render, about: about, linkList: linkList, chip: chip };
+  V3.guides = { render: render, about: about, linkList: linkList, chip: chip, collapsed: collapsed, openRefs: openRefs };
 })();

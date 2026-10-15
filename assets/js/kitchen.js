@@ -71,7 +71,7 @@
     chno: $("#chno"), chname: $("#chname"), stepn: $("#stepn"), cap: $("#cap"), banner: $("#banner"), bannerN: $("#banner-n"), bannerT: $("#banner-t"),
     card: $("#defcard"), cardKw: $("#def-kw"), cardTerm: $("#def-term"), cardText: $("#def-text"), cardMore: $("#def-more"), cardChapter: $("#def-chapter"), cardClose: $("#def-close"), console: $("#console")
   };
-  var BASE = "How an AI agent works · AI explained";
+  var BASE = "ELI5: AI as a Kitchen Chef · AI explained";
 
   /* ---------- Build the kitchen ------------------------------------------------ */
   var byId = {}, actors = [];
