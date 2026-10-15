@@ -3,7 +3,7 @@
    version dropdown. What it does:
      - on install it keeps the files every page needs (styles, scripts, fonts, the data, icons) and the main pages in one cache that has the build's name;
      - on activation it deletes the caches of earlier builds;
-     - a page is fetched from the network first, so a visit always shows the current text, and the copy in the cache is used when there is no network (a page seen
+     - a page is fetched from the network first (and checked with the server, not taken from the browser's cache), so a visit always shows the current text, and the copy in the cache is used when there is no network (a page seen
        once is kept; with nothing for the page, the start page opens instead);
      - a file of the site comes from the cache first (it cannot differ from the build that wrote it); the files of the version dropdown (versions/versions.js and the
        script and style next to it) come from the cache while a fresh copy is fetched behind them.
@@ -145,9 +145,10 @@ function keep(request, response) {
 }
 
 // A page: the network first, the cache when there is none, and a way to the start page when the cache has nothing either (the start page itself is not
-// served under another address: its styles and scripts are found by relative paths, so it would show unstyled).
+// served under another address: its styles and scripts are found by relative paths, so it would show unstyled). The browser's own cache is asked to check with
+// the server first (no-cache): GitHub Pages lets a page be reused for ten minutes, and a visitor would see the old title and text of a build that is already online.
 function page(request) {
-  return fetch(request).then((response) => keep(request, response)).catch(() =>
+  return fetch(new Request(request, { cache: "no-cache" })).then((response) => keep(request, response)).catch(() =>
     caches.match(request, { ignoreSearch: true }).then((hit) => hit || caches.match(SCOPE, { ignoreSearch: true }).then((home) => (home ? Response.redirect(SCOPE, 302) : Response.error())))
   );
 }
