@@ -1,5 +1,5 @@
 /* AI explained: the start page of the deep dive (technical/). Renders the hero, the chapters, the map that grows beside them, the "map so far"
-   sketches for narrow screens, and the whole map with the recap at the end, in plain technical words (voice.js). Clicks are handled in app.js. */
+   sketches for narrow screens, and the whole map at the end, in plain technical words (voice.js). Clicks are handled in app.js. */
 (function () {
   "use strict";
 
@@ -85,33 +85,14 @@
   }
 
   function hub() {
-    var u = voice.ui(), recap = voice.recap();
+    var u = voice.ui();
     var map = V3.map.create({ layout: "hub", ring: true, stage: 8 });
-    var count = Object.keys(D.entries).length;
-    // Count each source once, however many entries cite it.
-    var seen = {};
-    Object.keys(D.sources).forEach(function (id) { D.sources[id].sources.forEach(function (s) { seen[s.url] = true; }); });
-    var sources = Object.keys(seen).length;
     return h("section", { class: "hub", id: "map", "aria-labelledby": "hub-title", tabindex: "-1" },
       h("div", { class: "hub-head" },
         h("p", { class: "eyebrow" }, u.hub),
         h("h2", { class: "hub-title", id: "hub-title" }, "Everything on one map"),
         h("p", { class: "hub-lede" }, "Tap any word to open it. Tap a heading to go back to its chapter.")),
-      map.el,
-      h("div", { class: "recap" },
-        h("h2", { class: "recap-title" }, "5 things to remember"),
-        h("ol", { class: "ideas" }, D.recap.map(function (it, i) {
-          var r = recap[i];
-          return h("li", null, h("span", { class: "idea-num", "aria-hidden": "true" }, String(i + 1)), h("h3", null, r.t), h("p", null, rich(r.d)),
-            h("div", { class: "chips" }, it.entries.map(chip)));
-        }))),
-      h("footer", { class: "stamp" },
-        h("span", { class: "badge badge-clay" }, "Snapshot · " + D.meta.snapshot),
-        h("span", null, count + " entries · " + sources + " checked sources"),
-        h("span", null,
-          h("a", { href: sk.url.about() }, "About this page"), " · ",
-          h("a", { href: sk.url.glossary() }, "Glossary"), " · ",
-          h("a", { href: D.meta.repo, target: "_blank", rel: "noopener" }, "GitHub"))));
+      map.el);
   }
 
   // Listeners on the window and observers are undone when the page is drawn again (a change of voice).

@@ -230,7 +230,7 @@ function voiceChecks(v3, chapterIds, ids, err, opts) {
   [["kitchen", K], ["tech", T]].filter(([name]) => !(opts.techOnly && name === "kitchen")).forEach(([name, V]) => {
     const lint = name === "kitchen" ? voice.lintKitchenText : voice.lintTechText;
     if (!V.hero || !V.hero.line || !V.hero.task) err(name + ".hero: needs line and task");
-    if (!Array.isArray(V.recap) || V.recap.length !== LIMITS.recap) err(name + ".recap: expected " + LIMITS.recap + " items");
+    if (LIMITS.recap && (!Array.isArray(V.recap) || V.recap.length !== LIMITS.recap)) err(name + ".recap: expected " + LIMITS.recap + " items");
     ["ui", "map", "figures", "hero", "recap"].forEach((f) => { if (V[f]) lint(V[f], name + "." + f, err); });
     const fig = (V.figures || {}).contextBars || [], want = (v3.figures || {}).contextBars || [];
     want.forEach((segs, i) => { if (!fig[i] || (fig[i].segs || []).length !== segs.length) err(name + ".figures.contextBars[" + i + "]: needs " + segs.length + " labels"); });

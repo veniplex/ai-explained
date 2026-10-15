@@ -29,6 +29,6 @@
       expect: long.expect || [], sections: long.sections || [], terms: long.terms || [], sources: long.sources || [] };
   }
 
-  V3.voice = { ui: ui, chapter: chapter, entry: entry, guide: guide, recap: function () { return T.recap; }, hero: function () { return T.hero; },
+  V3.voice = { ui: ui, chapter: chapter, entry: entry, guide: guide, hero: function () { return T.hero; },
     figure: function (i) { return T.figures.contextBars[i]; }, map: function () { return T.map; } };
 })();

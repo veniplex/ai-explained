@@ -1,5 +1,4 @@
-/* AI explained: the core path. The shape of it: the eight chapters with their entries, what the recap
-   points to, the figures' proportions and the guide titles. The words are in voice-tech.js and voice-ui-tech.js (plain
+/* AI explained: the core path. The shape of it: the eight chapters with their entries, the figures' proportions and the guide titles. The words are in voice-tech.js and voice-ui-tech.js (plain
    technical words, AE3.tech); the kitchen sentences of the glossary are in voice-glossary-kitchen.js (AE3.kitchen). Entries live in entries.js; sources and facts in sources.js; guides in guides.js.
    Inline markup in strings: `code`, **bold**, [[entry-id]] or [[entry-id|label]], [text](https://…). */
 window.AE3 = window.AE3 || {};
@@ -20,15 +19,6 @@ window.AE3 = window.AE3 || {};
     { id: "locks", n: 6, zone: "control", figure: null, entries: ["permissions", "sandbox", "hooks", "security"] },
     { id: "helpers", n: 7, zone: "orch", figure: null, entries: ["team", "background"] },
     { id: "kitchen-ops", n: 8, zone: "ops", figure: null, entries: ["evals", "cost", "governance"] }
-  ];
-
-  // Each of the five ideas points to the entries behind it; the text is AE3.tech.recap.
-  AE3.recap = [
-    { entries: ["model", "context"] },
-    { entries: ["context", "skills", "knowledge", "memory", "team"] },
-    { entries: ["instructions", "permissions", "hooks", "sandbox"] },
-    { entries: ["team", "agent-loop", "evals"] },
-    { entries: ["agent-loop", "evals"] }
   ];
 
   // The proportions of the two bars; their labels and captions are in AE3.tech.figures.
