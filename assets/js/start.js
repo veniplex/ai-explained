@@ -42,7 +42,7 @@
   /* ---------- The scribble under the title ---------------------------------------------------- */
   var word = sk.$(".start-word"), scribble = sk.$(".start-scribble");
   if (scribble) {
-    sk.sketchInto(scribble, [{ t: "path", a: "M3 9C50 3 96 13 150 7S258 10 297 4", sw: 3.2, line: "clay", r: 1.1, single: true }], 7, { anim: !reduced, delay: 0.5, stagger: 0 });
+    sk.sketchInto(scribble, [{ t: "curve", a: [[3, 9], [50, 4], [96, 11], [150, 7], [204, 3.5], [258, 9], [297, 4]], sw: 3.2, line: "clay", r: 1.1, single: true }], 7, { anim: !reduced, delay: 0.5, stagger: 0 });
     if (word && !reduced) word.classList.add("is-drawing");
   }
 
