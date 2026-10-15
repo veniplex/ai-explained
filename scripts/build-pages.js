@@ -23,6 +23,17 @@ const v9 = require("./check-v9.js");
 
 const SITE = "https://veniplex.github.io/ai-explained/";
 const TAIL = " · AI explained";
+// The tab title of a page is its own part first, then the name of the site. A guide's own part is shorter than its headline (a tab shows about 60 characters);
+// a guide that has no entry here uses its headline. Never put a count in a title: the glossary and the guides grow.
+const GUIDE_TAB = {
+  "how-it-works": "How an AI agent works, from request to answer",
+  context: "Context engineering: what the model sees",
+  build: "Build an AI agent, step by step",
+  secure: "Securing AI agents: permissions and prompt injection",
+  evaluate: "Testing AI agents and running them in production",
+  compare: "Skill, tool, MCP server, plugin, hook: which is which?",
+  learn: "Where to go deeper: a reading list on AI agents"
+};
 const GLANCE = "assets/js/data/glance.js", INDEX = "assets/js/data/search-index.js";
 
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -127,19 +138,19 @@ function pages(root) {
   const x = context(root), out = {};
   const shell = fs.readFileSync(path.join(root, "technical", "index.html"), "utf8");
   x.terms.forEach((t) => {
-    out["glossary/" + t.id + "/index.html"] = pageFor(shell, "term", t.id, t.name + " · Glossary", oneLine(t.main ? x.D.entries[t.id].short : t.raw.def, 200), termText(x, t));
+    out["glossary/" + t.id + "/index.html"] = pageFor(shell, "term", t.id, t.name + " · AI glossary", oneLine(t.main ? x.D.entries[t.id].short : t.raw.def, 200), termText(x, t));
   });
-  out["glossary/index.html"] = pageFor(shell, "glossary", "", "Glossary of AI terms: " + x.terms.length + " terms explained",
-    "Every one of " + x.terms.length + " AI terms has a page: where it sits in the kitchen of the story, a definition, related terms, a detailed technical description and references.",
+  out["glossary/index.html"] = pageFor(shell, "glossary", "", "AI glossary: every term in plain words",
+    "Every AI term has a page: where it sits in the kitchen of the story, a definition, related terms, a detailed technical description and references.",
     "<h1>Glossary</h1>\n        <ul>\n" + x.terms.map((t) => '          <li><a href="' + t.id + '/">' + esc(t.name) + "</a>: " + esc(plain(t.main ? x.D.entries[t.id].short : t.raw.def)) + "</li>").join("\n") + "\n        </ul>");
   x.D.guideList.forEach((g) => {
     const long = x.T.longGuides[g.id];
-    out["guides/" + g.id + "/index.html"] = pageFor(shell, "guide", g.id, g.title + " · Guide", oneLine(long.lede || g.hint, 200), articleText(long, g.title, x.D, g.id));
+    out["guides/" + g.id + "/index.html"] = pageFor(shell, "guide", g.id, (GUIDE_TAB[g.id] || g.title), oneLine(long.lede || g.hint, 200), articleText(long, g.title, x.D, g.id));
   });
-  out["guides/index.html"] = pageFor(shell, "guides", "", "Guides",
+  out["guides/index.html"] = pageFor(shell, "guides", "", "Guides: build, secure and test AI agents",
     "Long guides on how agents work, how to give them context, build, secure and test them, plus short ones on what is easily confused and where to learn more.",
     "<h1>Guides</h1>\n        <ul>\n" + x.D.guideList.map((g) => '          <li><a href="' + g.id + '/">' + esc(g.title) + "</a>: " + esc(g.hint) + "</li>").join("\n") + "\n        </ul>");
-  out["about/index.html"] = pageFor(shell, "about", "", "About", ABOUT.description, ABOUT.text);
+  out["about/index.html"] = pageFor(shell, "about", "", "About this site: sources, privacy and how it is made", ABOUT.description, ABOUT.text);
   out[GLANCE] = glance(x);
   out[INDEX] = searchIndex(x);
   out[SW] = serviceWorker(root, out);

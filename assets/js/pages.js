@@ -32,7 +32,7 @@
   function icon(name, cls, seed) { return sk.glyph ? sk.glyph(name, cls, seed, sk.reduced() ? null : 0.1) : null; }
   function referencesOf(list, title) {
     if (!list || !list.length) return null;
-    return section(title || "References", V3.guides.linkList(list));
+    return section(title || "References", V3.guides.collapsed(list, function (part) { return V3.guides.linkList(part); }));
   }
 
   /* ---------- Links to the glossary ------------------------------------------------------------ */
@@ -274,6 +274,7 @@
       if (!a || e.defaultPrevented || e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
       var id = decodeURIComponent(a.getAttribute("href").slice(1)), el = id ? document.getElementById(id) : null;
       if (!el || !body.contains(el)) return;
+      V3.guides.openRefs(el);
       e.preventDefault();
       // On a narrow screen the list is a box above the text: it closes when you pick a part, so the part is not pushed down by it.
       var box = a.closest(".gl-side-box");
@@ -355,7 +356,7 @@
   }
   function glossaryPage() {
     var count = T.list.length, catFilter = "all";
-    var lede = count + " terms from the world of AI, from model to governance. Every term has the same page: where it sits in the kitchen of the story, a definition, related terms, a detailed technical description and references.";
+    var lede = "Terms from the world of AI, from model to governance. Every term has the same page: where it sits in the kitchen of the story, a definition, related terms, a detailed technical description and references.";
     var input = h("input", { id: "gl-search", type: "search", placeholder: "Filter the glossary", autocomplete: "off", spellcheck: "false" });
     // The number of terms shown is announced to screen readers and not shown.
     var countEl = h("span", { class: "visually-hidden", "aria-live": "polite" });

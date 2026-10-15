@@ -204,7 +204,12 @@
 .gd-callout { display: grid; gap: 4px; margin-top: 18px; padding: 14px 16px; border-left: 4px solid var(--clay); border-radius: 0 var(--r-md) var(--r-md) 0; background: var(--clay-soft); }
 .gd-callout b { font: 650 var(--fs-md)/1.4 var(--sans); color: var(--clay-ink); }
 .gd-callout span { font: 400 var(--fs-base)/1.55 var(--serif); color: var(--ink); }
-.gd-section .bd-section { margin-top: 20px; }
+/* A box is as wide as the container; only running text keeps its shorter line (--prose-w, below). A part's own sub-headings (Example, Try it elsewhere) have clear space above
+   and a rule over them, so they read as the start of something new and not as a line of the text before. */
+.gd-section .bd-section { margin-top: 40px; padding-top: 22px; border-top: 1px solid var(--rule); }
+.gd-section .bd-section > h2 { margin-bottom: 12px; font: 600 var(--fs-xl)/1.3 var(--serif); }
+.bd-section > p.bd-example { max-width: none; }
+.gd-section > .dm-block { margin-top: 32px; }
 .gd-terms { margin-top: 56px; padding-top: 22px; border-top: 1px solid var(--rule-strong); }
 .gd-terms h2 { margin-bottom: 12px; font: 600 var(--fs-xl)/1.3 var(--serif); }
 @media (max-width: 860px) { .gd-section h2 { font-size: var(--fs-2xl); } .gd-section > p { font-size: var(--fs-base); } }
@@ -249,8 +254,7 @@
 .gd-view .patterns { grid-template-columns: minmax(0, 1fr); }
 .gd-view .flows { grid-template-columns: minmax(0, 1fr); }
 .gd-view .checklist { grid-template-columns: minmax(0, 1fr); }
-.gd-view-compare-table, .gd-view-protocols { margin-inline: calc(-1 * clamp(0px, 4vw, 60px)); }
-@media (max-width: 959px) { .gd-view-compare-table, .gd-view-protocols { margin-inline: calc(-1 * var(--gutter)); } } /* no further out than the gutter, or the page scrolls sideways */
+/* (the wide views used to stick out of the column on both sides; every box now has the width of the container, and a table that needs more scrolls inside its box) */
 .reading-intro { margin: 0 0 8px; font: italic 400 var(--fs-md)/1.45 var(--serif); color: var(--ink-3); }
 /* The sources a part rests on, and the list of all of them at the end. */
 .gd-section > p.gd-src { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 18px; font: 500 var(--fs-2xs)/1 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); }
