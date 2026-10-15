@@ -741,12 +741,12 @@ tbody th { font-weight: 600; }
 /* Hero */
 .hero {
   width: var(--content-w); margin: 0 auto; min-height: calc(100svh - var(--bar-h));
-  display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: clamp(24px, 5vw, 72px); align-items: center;
+  display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: clamp(24px, 3.5vw, 56px); align-items: center;
   padding-block: 32px;
 }
 .hero .eyebrow { color: var(--clay-ink); }
 .hero-title { margin-top: 14px; font: 600 clamp(var(--fs-5xl), 5.4vw, calc(var(--fs-5xl) * 1.7))/1.05 var(--serif); letter-spacing: -0.025em; }
-.hero-line { margin-top: 18px; max-width: 36ch; font: 400 clamp(var(--fs-xl), 1.9vw, var(--fs-2xl))/1.5 var(--serif); color: var(--ink-2); }
+.hero-line { margin-top: 18px; max-width: 48ch; font: 400 clamp(var(--fs-xl), 1.9vw, var(--fs-2xl))/1.5 var(--serif); color: var(--ink-2); }
 .hero-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
 .hero-actions .btn { min-height: 48px; padding-inline: 22px; font-size: var(--fs-base); }
 .hero .pic { max-width: 520px; width: 100%; justify-self: center; }
@@ -1012,7 +1012,7 @@ tbody th { font-weight: 600; }
 
 /* ---------- The technical hero (the formula) and the way from a kitchen page to the technical one ----------------- */
 .formula { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 14px 12px; max-width: 520px; width: 100%; justify-self: center; }
-.formula-part { display: inline-flex; padding: 14px 20px; font: 600 var(--fs-2xl)/1.2 var(--serif); color: var(--zc); text-decoration: none; }
+.formula-part { display: inline-flex; padding: 12px 16px; font: 600 var(--fs-2xl)/1.2 var(--serif); color: var(--zc); text-decoration: none; }
 .formula-agent { color: var(--ink); }
 .formula-op { font: 400 var(--fs-3xl)/1 var(--serif); color: var(--ink-3); }
 a.formula-part:hover { color: var(--ink); }
