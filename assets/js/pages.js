@@ -312,13 +312,13 @@
     var body = h("div", { class: "bd", "data-zone": t.zone },
       V3.locator ? V3.locator.section(t) : null,
       definition(t),
-      tryIt(t.id),
       relatedChips(t.related),
       detail(t),
+      tryIt(t.id),
       referencesOf(T.refs(id), "References"));
     autolink(body, id);
     // The parts of the page get an address, so the list at the left edge can jump to them.
-    var PART_ID = { "Where it sits in the kitchen": "t-kitchen", "Definition": "t-definition", "Try it": "t-try", "Related terms": "t-related", "Detailed technical description": "t-details", "References": "t-references" };
+    var PART_ID = { "Where it sits in the kitchen": "t-kitchen", "Definition": "t-definition", "Related terms": "t-related", "Detailed technical description": "t-details", "Try it": "t-try", "References": "t-references" };
     sk.$$(".bd-section", body).forEach(function (sec) { var hd = sec.querySelector("h2"), pid = hd && PART_ID[hd.textContent]; if (pid) sec.id = pid; });
     var article = h("article", { class: "page page-entry", "data-zone": t.zone },
       h("header", { class: "page-head term-head" },

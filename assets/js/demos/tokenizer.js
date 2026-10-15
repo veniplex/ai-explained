@@ -132,14 +132,42 @@
       return new TextDecoder("utf-8").decode(new Uint8Array(bytes));
     }
 
+    // The tokens of the real tokenizer. A token that holds only some of the bytes of a character is shown as its bytes, with the characters it belongs to above.
+    function realChips(toks) {
+      var bytes = toks.map(function (t) { return Array.from(t).map(function (ch) { return u2b[ch]; }); });
+      var all = [], starts = [];
+      bytes.forEach(function (b) { starts.push(all.length); all = all.concat(b); });
+      starts.push(all.length);
+      function boundary(i) { return i >= all.length || (all[i] & 192) !== 128; }
+      function hex(b) { return b.map(function (x) { return (x < 16 ? "0" : "") + x.toString(16).toUpperCase(); }).join(" "); }
+      var row = h("div", { class: "dm-tk-row" }), groups = 0, i = 0;
+      while (i < toks.length) {
+        if (boundary(starts[i]) && boundary(starts[i + 1])) {
+          var one = decode(toks[i]).replace(/\n/g, "↵").replace(/\t/g, "→");
+          row.appendChild(h("span", { class: "dm-tk dm-tk-" + (i % 4) }, h("span", { class: "dm-tk-t" }, show(one)), h("small", null, String(ids[toks[i]]))));
+          i++; continue;
+        }
+        var from = i;
+        while (i < toks.length && !boundary(starts[i + 1])) i++;
+        i = Math.min(i + 1, toks.length);
+        var parts = [];
+        for (var k = from; k < i; k++) parts.push(h("span", { class: "dm-tk dm-tk-part dm-tk-" + (k % 4) }, h("span", { class: "dm-tk-t dm-tk-hex" }, hex(bytes[k])), h("small", null, String(ids[toks[k]]))));
+        var chars = new TextDecoder("utf-8").decode(new Uint8Array(all.slice(starts[from], starts[i])));
+        groups++;
+        row.appendChild(h("span", { class: "dm-tk-grp", role: "group", "aria-label": "The character" + (Array.from(chars).length === 1 ? "" : "s") + " " + chars + ", split into " + parts.length + " tokens" }, h("span", { class: "dm-tk-chars" }, chars), h("span", { class: "dm-tk-grp-in" }, parts)));
+      }
+      return { row: row, groups: groups };
+    }
+
     var rIn = h("textarea", { class: "dm-tk-in", rows: "3", maxlength: "2000", "aria-label": "Text to cut into tokens", spellcheck: "false" });
     rIn.value = PRESETS[0][2];
     var rOut = h("div", { class: "dm-tk-out", "aria-live": "polite" }), rStats = h("ul", { class: "dm-stats" });
     function drawReal() {
       c.sk.clear(rOut); c.sk.clear(rStats);
       var text = rIn.value, toks = encode(text);
-      var shown = toks.map(function (t) { return decode(t).replace(/\n/g, "↵").replace(/\t/g, "→"); });
-      rOut.appendChild(chips(shown, toks.map(function (t) { return ids[t]; })));
+      var split = realChips(toks);
+      rOut.appendChild(split.row);
+      if (split.groups) rOut.appendChild(h("p", { class: "dm-tk-help dm-tk-split-note" }, "A character is stored as one to four bytes, and this tokenizer cuts bytes, not letters. So one character, such as many Japanese ones, can be split across several tokens. Such pieces show their bytes (in hex) under the whole character; alone they are not a letter, and the model only ever sees them as separate numbers."));
       var nChars = Array.from(text).length, nWords = (text.match(/\S+/g) || []).length;
       [[num(nChars), "characters"], [num(nWords), nWords === 1 ? "word" : "words"], [num(toks.length), toks.length === 1 ? "token" : "tokens"]].forEach(function (x) { rStats.appendChild(h("li", null, h("b", null, x[0]), h("span", null, x[1]))); });
       if (nWords) rStats.appendChild(h("li", null, h("b", null, (toks.length / nWords).toFixed(1)), h("span", null, "tokens per word")));
