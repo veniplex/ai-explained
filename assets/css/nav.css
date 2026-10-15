@@ -23,7 +23,7 @@
   --side-gap: 24px;                          /* between that list (or the dots) and the container */
   --lead: 0px;
   --content-w: min(var(--page-w), calc(100% - var(--lead)));  /* as wide as the page's own box: write it only for a child of .stage */
-  --wide-extra: 0px;                         /* how far a wide part (the opening of the Start page and of the deep dive, the whole-system map) may reach past the container on each side; the dots of the deep dive stay clear of it */
+  --wide-extra: 0px;                         /* how far a wide part (the opening of the deep dive, the whole-system map) may reach past the container on each side; the dots of the deep dive stay clear of it */
   --wide-w: calc(var(--content-w) + 2 * var(--wide-extra));
   --prose-w: 780px;                          /* a line of running text stays this long inside the wider container */
   --z-search: 60;   /* the list of hits, above the menus */
