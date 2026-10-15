@@ -872,7 +872,7 @@ tbody th { font-weight: 600; }
 .kmap-mini .you-text, .kmap-mini .you-text b { font-size: var(--fs-sm); }
 
 /* The whole-system map at the end */
-.hub { width: var(--content-w); margin: 0 auto; padding-block: clamp(56px, 10vh, 120px) 40px; border-top: 1px solid var(--rule); }
+.hub { width: var(--content-w); margin: 0 auto; padding-block: clamp(40px, 7vh, 88px); border-top: 1px solid var(--rule); min-height: calc(100svh - var(--bar-h) - 16px - var(--stick-h, 0px)); display: flex; flex-direction: column; justify-content: center; } /* jumping to the map puts it in the middle of the room under the bar */
 .hub:focus { outline: none; }
 .hub-head { margin: 0 0 28px; }
 .hub-head .eyebrow { color: var(--clay-ink); }
@@ -938,7 +938,9 @@ tbody th { font-weight: 600; }
   background: var(--paper); box-shadow: inset 0 0 0 2px var(--ink-3);
   transition: transform var(--dur-base) var(--ease), background-color var(--dur-base), box-shadow var(--dur-base);
 }
-.rail-dot:empty { width: 12px; height: 12px; margin: 3px; }
+.rail-dot.has-mark { color: var(--ink-2); }
+.rail-mark { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; overflow: visible; }
+.rail-item.is-past .rail-mark, .rail-item[aria-current] .rail-mark { fill: currentColor; fill-opacity: 0.18; }
 .rail-item.is-past .rail-dot { background: var(--clay-mid); box-shadow: inset 0 0 0 2px var(--clay); color: var(--ink); }
 .rail-item[aria-current] .rail-dot { background: var(--zc, var(--clay)); box-shadow: inset 0 0 0 2px var(--zc, var(--clay)); transform: scale(1.25); color: var(--paper); }
 .rail-label {

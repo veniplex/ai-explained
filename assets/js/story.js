@@ -130,19 +130,31 @@
   }
 
   // Where you are: a vertical row of dots beside the text of wide screens (one per stop on the page, the chapter
-  // number inside its dot, the name on hover or focus), and a thin line under the top bar on narrower
+  // number inside its dot, a small mark for the start, the epilogue and the map, the name on hover or focus), and a thin line under the top bar on narrower
   // ones. Both follow the scroll position.
   function stops() {
-    var list = [{ id: "start", num: "", label: "Start", zone: "start" }];
-    D.chapters.forEach(function (c) { list.push({ id: anchor(c), num: c.n === 8 ? "E" : String(c.n), label: (c.n === 8 ? "Epilogue" : c.n) + " · " + voice.chapter(c).title, zone: c.zone }); });
-    list.push({ id: "map", num: "", label: voice.ui().hub, zone: "start" });
+    var list = [{ id: "start", num: "", icon: "start", label: "Start", zone: "start" }];
+    D.chapters.forEach(function (c) { list.push({ id: anchor(c), num: c.n === 8 ? "" : String(c.n), icon: c.n === 8 ? "epilogue" : "", label: (c.n === 8 ? "Epilogue" : c.n) + " · " + voice.chapter(c).title, zone: c.zone }); });
+    list.push({ id: "map", num: "", icon: "map", label: voice.ui().hub, zone: "start" });
     return list;
+  }
+  // The three stops that are not chapters get a small mark in the pen's hand instead of a number: a play triangle for the
+  // start, a four-pointed spark for the epilogue and a map pin for the whole-system map. The lines are a little off true.
+  var MARKS = {
+    start: ["M7 5.4 L13.2 9.1 L6.8 13 Z"],
+    epilogue: ["M9 3.2 C9.5 6.4 11.4 8.3 14.8 9 C11.4 9.7 9.4 11.6 9 14.9 C8.5 11.6 6.6 9.7 3.2 9.1 C6.6 8.3 8.5 6.4 9 3.2 Z"],
+    map: ["M9 15 C6.2 11.9 4.9 10 4.9 7.9 C4.9 5.5 6.7 3.8 9 3.8 C11.3 3.8 13.1 5.5 13.1 7.9 C13.1 10 11.8 11.9 9 15 Z", "M9 6.4 C9.8 6.4 10.4 7 10.4 7.8 C10.4 8.6 9.8 9.2 9 9.2 C8.2 9.2 7.6 8.6 7.6 7.8 C7.6 7 8.2 6.4 9 6.4 Z"]
+  };
+  function mark(kind) {
+    var svg = sk.s("svg", { viewBox: "0 0 18 18", class: "rail-mark", "aria-hidden": "true", focusable: "false" });
+    MARKS[kind].forEach(function (d) { svg.appendChild(sk.s("path", { d: d })); });
+    return svg;
   }
   function rail(list) {
     return h("nav", { class: "rail", "aria-label": "Where you are on the page" },
       h("ol", { class: "rail-list" }, list.map(function (st) {
         return h("li", null, h("a", { class: "rail-item", href: "#" + st.id, "data-go": st.id, "data-zone": st.zone },
-          h("span", { class: "rail-dot", "aria-hidden": "true" }, st.num), h("span", { class: "rail-label" }, st.label)));
+          h("span", { class: "rail-dot" + (st.icon ? " has-mark" : ""), "aria-hidden": "true" }, st.icon ? mark(st.icon) : st.num), h("span", { class: "rail-label" }, st.label)));
       })));
   }
   function followScroll(list, railEl, line) {
