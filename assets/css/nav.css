@@ -377,3 +377,22 @@ body:not([data-page="kitchen"]) > .stage { padding-inline: max(var(--gutter), va
 @media (max-width: 640px) { .to-top { width: 44px; height: 44px; right: max(14px, env(safe-area-inset-right, 0px)); bottom: max(14px, env(safe-area-inset-bottom, 0px)); } }
 @media (prefers-reduced-motion: reduce) { .to-top { transition: none; transform: none; } }
 @media print { .to-top { display: none !important; } }
+
+/* ---------- Moving from one page to the next (cross-document view transition; transitions.js names the bar) ----------
+   The bar stays where it is and just takes the new page's marking; the page under it lifts away and the next one settles in, a hair off-square, like a sheet laid on the table.
+   Short on purpose: 120 ms out, 260 ms in. Nothing for reduced motion, and a browser without the feature navigates as before. */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition { navigation: auto; }
+
+  ::view-transition { background: var(--paper); }
+  ::view-transition-old(root), ::view-transition-new(root) { mix-blend-mode: normal; animation-fill-mode: both; }
+  ::view-transition-old(root) { animation: page-leave 120ms cubic-bezier(0.4, 0, 1, 1) both; }
+  ::view-transition-new(root) { animation: page-arrive 260ms cubic-bezier(0.2, 0.7, 0.2, 1) 70ms both; transform-origin: 50% 0; }
+
+  ::view-transition-group(site-bar) { animation: none; }
+  ::view-transition-old(site-bar) { display: none; }
+  ::view-transition-new(site-bar) { animation: none; }
+
+  @keyframes page-leave { to { opacity: 0; transform: translateY(-6px); } }
+  @keyframes page-arrive { from { opacity: 0; transform: translateY(14px) rotate(0.35deg); } }
+}

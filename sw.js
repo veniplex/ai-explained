@@ -13,7 +13,7 @@
 
 /* build:start */
 const PREFIX = "ae-v1.0-";
-const BUILD = PREFIX + "71409afd67";
+const BUILD = PREFIX + "3b8ff7ffdb";
 const PRECACHE = [
   "./",
   "story/",
@@ -107,6 +107,7 @@ const PRECACHE = [
   "assets/js/terms.js",
   "assets/js/theme.js",
   "assets/js/totop.js",
+  "assets/js/transitions.js",
   "assets/js/voice.js",
   "assets/vendor/rough.js",
   "versions/versions.js",
